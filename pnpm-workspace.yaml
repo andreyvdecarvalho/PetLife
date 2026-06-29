@@ -1,0 +1,26 @@
+packages:
+  # Frontend Web (React 19 + Vite PWA)
+  - "apps/web"
+
+  # Frontend Mobile (React Native 0.76+)
+  - "apps/mobile"
+
+  # Pacotes compartilhados entre web e mobile (design tokens, tipos, utils)
+  - "packages/*"
+
+# =============================================================================
+# Segurança — Idade mínima de pacotes
+# =============================================================================
+# Complemento ao minimum-release-age=14400 do .npmrc.
+# Use minimumReleaseAgeExclude APENAS para casos excepcionais aprovados
+# pelo tech lead (ex: patch de segurança crítico antes dos 10 dias).
+#
+# Exemplo de uso:
+#
+# minimumReleaseAgeExclude:
+#   - "nome-do-pacote"          # pacote específico (qualquer versão)
+#   - "nome-do-pacote@1.2.3"    # versão exata
+#   - "@scope/*"                # todos os pacotes de um escopo interno
+#
+# Cada exceção DEVE ter um comentário justificando o motivo e a data de validade.
+# =============================================================================

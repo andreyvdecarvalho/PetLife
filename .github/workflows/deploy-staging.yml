@@ -1,0 +1,44 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend to Staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - uses: actions/setup-java@v4.2.1
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: apps/backend/pom.xml
+
+      - name: Build JAR
+        working-directory: apps/backend
+        run: mvn package -DskipTests -B
+
+      - name: Run Flyway migrations on staging
+        working-directory: apps/backend
+        run: mvn flyway:migrate -B
+        env:
+          SPRING_DATASOURCE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.STAGING_DB_USER }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.STAGING_DB_PASS }}
+
+      - name: "Deploy JAR (ex: AWS ECS / EC2 / Railway)"
+        run: echo "Deploy step aqui..."
+
+      - name: Notify Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": "✅ Deploy staging: ${{ github.ref_name }} (${{ github.sha }})"
+            }
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
