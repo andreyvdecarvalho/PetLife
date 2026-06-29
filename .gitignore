@@ -1,0 +1,91 @@
+# =============================================================================
+# Customizações da IA (PetLife)
+# =============================================================================
+.agents/
+
+# =============================================================================
+# Dependências do Node & PNPM
+# =============================================================================
+node_modules/
+.pnpm-store/
+pnpm-debug.log*
+
+# Output de build do Frontend (Web/Mobile)
+dist/
+build/
+.expo/
+*.tsbuildinfo
+
+# =============================================================================
+# Java & Maven (Backend)
+# =============================================================================
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.jar
+**/.flattened-pom.xml
+
+# =============================================================================
+# Mobile (Android & iOS)
+# =============================================================================
+# Android específico
+android/.gradle/
+android/app/build/
+android/local.properties
+android/bundle/
+*.keystore
+*.jks
+*.apk
+*.aab
+
+# iOS específico
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcworkspace
+*.xccheckout
+*.xcscmblueprint
+
+# =============================================================================
+# Configurações Locais e Dados Sensíveis
+# =============================================================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+jwt_keys/
+*.pem
+*.der
+*.key
+
+# =============================================================================
+# Editores e IDEs
+# =============================================================================
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+.factorypath
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# =============================================================================
+# Sistema Operacional
+# =============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
