@@ -1,0 +1,26 @@
+.form-field-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 6px;
+  text-align: left;
+  animation: slideDown 0.2s ease-out forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

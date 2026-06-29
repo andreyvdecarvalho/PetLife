@@ -1,0 +1,55 @@
+package com.petlife.modules.auth.entity;
+
+import com.petlife.shared.entity.BaseEntity;
+import com.petlife.modules.pet.entity.Pet;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+public class User extends BaseEntity {
+
+    @Column(name = "name", nullable = false, length = 200)
+    private String name;
+
+    @Column(name = "email", nullable = false, unique = true, length = 255)
+    private String email;
+
+    @Column(name = "password_hash", length = 60)
+    private String passwordHash;
+
+    @Column(name = "avatar_url", length = 500)
+    private String avatarUrl;
+
+    @Column(name = "timezone", nullable = false, length = 50)
+    private String timezone = "America/Sao_Paulo";
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "plan", nullable = false)
+    private UserPlan plan = UserPlan.FREE;
+
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified = false;
+
+    @Column(name = "lgpd_accepted_at")
+    private LocalDateTime lgpdAcceptedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Pet> pets = new ArrayList<>();
+}
