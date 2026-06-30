@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import { ToastProvider } from './components/molecules/Toast/Toast';
+import { ToastProvider } from './components/molecules/Toast';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
-import { PrivateRoute } from './components/atoms/PrivateRoute/PrivateRoute';
+import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
 export const App: React.FC = () => {

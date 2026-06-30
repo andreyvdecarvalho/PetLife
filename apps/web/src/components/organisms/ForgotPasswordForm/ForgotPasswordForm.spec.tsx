@@ -1,12 +1,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { ForgotPasswordForm } from './ForgotPasswordForm';
+import { ForgotPasswordForm } from '.';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { useToast } from '../../molecules/Toast/Toast';
+import { useToast } from '../../molecules/Toast';
 import api from '../../../services/api';
 import React from 'react';
 
-vi.mock('../../molecules/Toast/Toast', () => ({
+vi.mock('../../molecules/Toast', () => ({
   useToast: vi.fn(),
 }));
 

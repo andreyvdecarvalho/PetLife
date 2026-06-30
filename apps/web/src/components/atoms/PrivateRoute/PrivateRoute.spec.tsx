@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { PrivateRoute } from './PrivateRoute';
+import { PrivateRoute } from '.';
 import { useAuth } from '../../../contexts/AuthContext';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi, describe, it, expect, Mock } from 'vitest';

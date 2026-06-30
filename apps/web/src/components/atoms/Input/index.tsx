@@ -1,5 +1,5 @@
 import React from 'react';
-import './Input.css';
+import './styles.css';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean;
@@ -10,7 +10,7 @@ export const Input: React.FC<InputProps> = ({
   className = '',
   ...props
 }) => {
-  const inputClass = `input-glass ${hasError ? 'input-error' : ''} ${className}`;
+  const inputClass = `atom-input ${hasError ? 'atom-input--error' : ''} ${className}`;
 
   return (
     <input

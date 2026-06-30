@@ -1,7 +1,7 @@
 import React from 'react';
-import { Label } from '../../atoms/Label/Label';
-import { Input } from '../../atoms/Input/Input';
-import './FormField.css';
+import { Label } from '../../atoms/Label';
+import { Input } from '../../atoms/Input';
+import './styles.css';
 
 interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -17,7 +17,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   ...props
 }) => {
   return (
-    <div className="form-field-container">
+    <div className="molecule-form-field">
       <Label htmlFor={id} required={required}>
         {label}
       </Label>
@@ -26,7 +26,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         hasError={!!error}
         {...props}
       />
-      {error && <span className="error-message">{error}</span>}
+      {error && <span className="molecule-form-field__error">{error}</span>}
     </div>
   );
 };

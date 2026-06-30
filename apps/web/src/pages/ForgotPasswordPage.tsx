@@ -1,6 +1,6 @@
 import React from 'react';
-import { AuthLayout } from '../components/templates/AuthLayout/AuthLayout';
-import { ForgotPasswordForm } from '../components/organisms/ForgotPasswordForm/ForgotPasswordForm';
+import { AuthLayout } from '../components/templates/AuthLayout';
+import { ForgotPasswordForm } from '../components/organisms/ForgotPasswordForm';
 
 export const ForgotPasswordPage: React.FC = () => {
   return (

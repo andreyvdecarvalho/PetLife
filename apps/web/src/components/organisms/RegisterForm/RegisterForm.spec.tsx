@@ -1,16 +1,16 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { RegisterForm } from './RegisterForm';
+import { RegisterForm } from '.';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useToast } from '../../molecules/Toast/Toast';
+import { useToast } from '../../molecules/Toast';
 import React from 'react';
 
 vi.mock('../../../contexts/AuthContext', () => ({
   useAuth: vi.fn(),
 }));
 
-vi.mock('../../molecules/Toast/Toast', () => ({
+vi.mock('../../molecules/Toast', () => ({
   useToast: vi.fn(),
 }));
 

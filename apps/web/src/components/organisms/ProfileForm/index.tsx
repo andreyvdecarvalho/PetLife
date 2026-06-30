@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useToast } from '../../molecules/Toast/Toast';
-import { FormField } from '../../molecules/FormField/FormField';
-import { Button } from '../../atoms/Button/Button';
-import './ProfileForm.css';
+import { useToast } from '../../molecules/Toast';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
+import './styles.css';
 
 export const ProfileForm: React.FC = () => {
   const { user, updateProfile, deleteAccount } = useAuth();

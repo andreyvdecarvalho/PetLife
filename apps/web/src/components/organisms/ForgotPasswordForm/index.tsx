@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormField } from '../../molecules/FormField/FormField';
-import { Button } from '../../atoms/Button/Button';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
 import api from '../../../services/api';
-import { useToast } from '../../molecules/Toast/Toast';
-import '../LoginForm/LoginForm.css';
+import { useToast } from '../../molecules/Toast';
+import '../LoginForm/styles.css';
 
 export const ForgotPasswordForm: React.FC = () => {
   const [email, setEmail] = useState('');

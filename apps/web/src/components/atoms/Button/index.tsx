@@ -1,20 +1,20 @@
 import React from 'react';
-import './Button.css';
+import './styles.css';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'premium' | 'secondary' | 'danger' | 'google';
+  variant?: 'primary' | 'secondary' | 'danger' | 'google';
   isLoading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'premium',
+  variant = 'primary',
   isLoading = false,
   className = '',
   disabled,
   ...props
 }) => {
-  const buttonClass = `btn-premium btn-${variant} ${className}`;
+  const buttonClass = `atom-button atom-button--${variant} ${className}`;
 
   return (
     <button
@@ -22,7 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading && <div className="spinner" data-testid="button-spinner" />}
+      {isLoading && <div className="atom-button__spinner" data-testid="button-spinner" />}
       {children}
     </button>
   );

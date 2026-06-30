@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import { Button } from '../../atoms/Button/Button';
-import './DashboardLayout.css';
+import { Button } from '../../atoms/Button';
+import './styles.css';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

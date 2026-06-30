@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import './Toast.css';
+import './styles.css';
 
 type ToastType = 'success' | 'error';
 
@@ -34,17 +34,17 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="toast-container" data-testid="toast-container">
+      <div className="molecule-toast" data-testid="toast-container">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`toast-item toast-${toast.type}`}
+            className={`molecule-toast__item molecule-toast__item--${toast.type}`}
             data-testid={`toast-${toast.type}`}
           >
-            <span className="toast-icon">
+            <span className="molecule-toast__icon">
               {toast.type === 'success' ? '✨' : '❌'}
             </span>
-            <span className="toast-message">{toast.message}</span>
+            <span className="molecule-toast__message">{toast.message}</span>
           </div>
         ))}
       </div>

@@ -1,0 +1,17 @@
+.atom-label {
+  display: block;
+  font-family: var(--font-label);
+  font-size: var(--text-label-md-size);
+  font-weight: var(--text-label-md-weight);
+  line-height: var(--text-label-md-line-height);
+  letter-spacing: var(--text-label-md-letter-spacing);
+  color: var(--color-on-surface);
+  margin-bottom: var(--space-base); /* Just a tiny base spacing if needed, but ideally margins should be in Organisms. For a label to input gap, base is ok */
+  width: 100%;
+}
+
+.atom-label--required::after {
+  content: '*';
+  color: var(--color-error);
+  margin-left: var(--space-base);
+}

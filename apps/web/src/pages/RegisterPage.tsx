@@ -1,6 +1,6 @@
 import React from 'react';
-import { AuthLayout } from '../components/templates/AuthLayout/AuthLayout';
-import { RegisterForm } from '../components/organisms/RegisterForm/RegisterForm';
+import { AuthLayout } from '../components/templates/AuthLayout';
+import { RegisterForm } from '../components/organisms/RegisterForm';
 
 export const RegisterPage: React.FC = () => {
   return (

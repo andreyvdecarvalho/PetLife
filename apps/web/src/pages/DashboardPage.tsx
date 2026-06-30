@@ -1,5 +1,5 @@
 import React from 'react';
-import { DashboardLayout } from '../components/templates/DashboardLayout/DashboardLayout';
+import { DashboardLayout } from '../components/templates/DashboardLayout';
 import { useAuth } from '../contexts/AuthContext';
 
 export const DashboardPage: React.FC = () => {

@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FormField } from '../../molecules/FormField/FormField';
-import { Button } from '../../atoms/Button/Button';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useToast } from '../../molecules/Toast/Toast';
-import './LoginForm.css';
+import { useToast } from '../../molecules/Toast';
+import '../LoginForm/styles.css';
 
-export const LoginForm: React.FC = () => {
+export const RegisterForm: React.FC = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, loginWithGoogle } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -21,11 +22,11 @@ export const LoginForm: React.FC = () => {
     try {
       const mockToken = "dummyHeader.eyJlbWFpbCI6Imdvb2dsZS50dXRvckBwZXRsaWZlLmNvbSIsIm5hbWUiOiJHb29nbGUgVHV0b3IiLCJwaWN0dXJlIjoiaHR0cDovL2dvb2dsZS51cmwvYXZhdGFyIn0.dummySignature";
       await loginWithGoogle(mockToken);
-      showToast('Autenticado via Google com sucesso! ✨', 'success');
+      showToast('Conta criada e autenticado via Google! ✨', 'success');
       navigate('/');
     } catch (error: any) {
       console.error(error);
-      const message = error.response?.data?.error?.message || 'Falha ao autenticar com o Google.';
+      const message = error.response?.data?.error?.message || 'Falha ao cadastrar com o Google.';
       showToast(message, 'error');
     } finally {
       setIsLoading(false);
@@ -33,7 +34,13 @@ export const LoginForm: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors: { email?: string; password?: string } = {};
+    const newErrors: { name?: string; email?: string; password?: string } = {};
+
+    if (!name) {
+      newErrors.name = 'O nome é obrigatório.';
+    } else if (name.length < 2) {
+      newErrors.name = 'O nome deve ter no mínimo 2 caracteres.';
+    }
 
     if (!email) {
       newErrors.email = 'O e-mail é obrigatório.';
@@ -43,6 +50,8 @@ export const LoginForm: React.FC = () => {
 
     if (!password) {
       newErrors.password = 'A senha é obrigatória.';
+    } else if (!/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+      newErrors.password = 'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.';
     }
 
     setErrors(newErrors);
@@ -56,12 +65,12 @@ export const LoginForm: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await login(email, password);
-      showToast('Login realizado com sucesso! ✨', 'success');
+      await register(name, email, password);
+      showToast('Conta criada com sucesso! Seja bem-vindo(a) ✨', 'success');
       navigate('/');
     } catch (error: any) {
       console.error(error);
-      const message = error.response?.data?.error?.message || 'E-mail ou senha incorretos.';
+      const message = error.response?.data?.error?.message || 'Erro ao criar conta. Tente novamente.';
       showToast(message, 'error');
     } finally {
       setIsLoading(false);
@@ -69,8 +78,19 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} data-testid="login-form" noValidate>
-      <h2 className="auth-form-title">Entrar na Conta</h2>
+    <form className="auth-form" onSubmit={handleSubmit} data-testid="register-form" noValidate>
+      <h2 className="auth-form-title">Criar uma Conta</h2>
+
+      <FormField
+        label="Nome Completo"
+        type="text"
+        id="name"
+        placeholder="Ex: Camila Silva"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        error={errors.name}
+        required
+      />
 
       <FormField
         label="E-mail"
@@ -87,7 +107,7 @@ export const LoginForm: React.FC = () => {
         label="Senha"
         type="password"
         id="password"
-        placeholder="••••••••"
+        placeholder="Mínimo 8 caracteres, 1 maiúscula, 1 número"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={errors.password}
@@ -95,7 +115,7 @@ export const LoginForm: React.FC = () => {
       />
 
       <Button type="submit" isLoading={isLoading}>
-        Entrar
+        Cadastrar
       </Button>
 
       <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0', color: 'var(--text-muted)' }}>
@@ -105,17 +125,14 @@ export const LoginForm: React.FC = () => {
       </div>
 
       <Button type="button" variant="google" onClick={handleGoogleLogin} isLoading={isLoading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-        <span style={{ fontSize: '18px', fontWeight: 'bold' }}>G</span> Entrar com o Google
+        <span style={{ fontSize: '18px', fontWeight: 'bold' }}>G</span> Cadastrar com o Google
       </Button>
 
       <div className="auth-form-footer">
-        <Link to="/forgot-password" className="auth-link">
-          Esqueceu a senha?
-        </Link>
         <span>
-          Não tem uma conta?{' '}
-          <Link to="/register" className="auth-link">
-            Cadastre-se
+          Já tem uma conta?{' '}
+          <Link to="/login" className="auth-link">
+            Entrar
           </Link>
         </span>
       </div>
