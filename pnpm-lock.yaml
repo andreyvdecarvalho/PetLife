@@ -23,6 +23,9 @@ importers:
         specifier: 6.28.0
         version: 6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
+      '@eslint/js':
+        specifier: 9.16.0
+        version: 9.16.0
       '@playwright/test':
         specifier: 1.49.0
         version: 1.49.0
@@ -65,6 +68,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: 0.4.16
         version: 0.4.16(eslint@9.16.0)
+      globals:
+        specifier: 17.6.0
+        version: 17.6.0
       jsdom:
         specifier: 25.0.1
         version: 25.0.1
@@ -1299,6 +1305,10 @@ packages:
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+
+  globals@17.6.0:
+    resolution: {integrity: sha512-sepffkT8stwnIYbsMBpoCHJuJM5l98FUF2AnE07hfvE0m/qp3R586hw4jF4uadbhvg1ooIdzuu7CsfD2jzCaNA==}
     engines: {node: '>=18'}
 
   gopd@1.2.0:
@@ -3121,6 +3131,8 @@ snapshots:
       path-scurry: 1.11.1
 
   globals@14.0.0: {}
+
+  globals@17.6.0: {}
 
   gopd@1.2.0: {}
 

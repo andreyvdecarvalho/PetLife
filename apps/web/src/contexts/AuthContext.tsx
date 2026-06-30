@@ -117,21 +117,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [logout]);
 
   const updateProfile = useCallback(async (name: string, email: string, avatarUrl: string, timezone: string) => {
-    try {
-      const response = await api.put('/auth/me', { name, email, avatarUrl, timezone });
-      setUser(response.data.data);
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.put('/auth/me', { name, email, avatarUrl, timezone });
+    setUser(response.data.data);
   }, []);
 
   const deleteAccount = useCallback(async () => {
-    try {
-      await api.delete('/auth/me');
-      logout();
-    } catch (error) {
-      throw error;
-    }
+    await api.delete('/auth/me');
+    logout();
   }, [logout]);
 
   const logError = (error: any) => {
