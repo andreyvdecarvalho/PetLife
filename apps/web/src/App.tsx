@@ -13,6 +13,7 @@ import { MedicationsPage } from './pages/MedicationsPage';
 import { RoutinePage } from './pages/RoutinePage';
 import { MemoriesPage } from './pages/MemoriesPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
+import { OnboardingPage } from './pages/OnboardingPage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -23,6 +24,7 @@ export const App: React.FC = () => {
         <BrowserRouter>
           <Routes>
             {/* Rotas Públicas */}
+            <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
