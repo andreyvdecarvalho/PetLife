@@ -1,72 +1,25 @@
-.auth-layout-wrapper {
-  min-height: 100vh;
+.template-auth-layout {
+  min-height: max(884px, 100dvh);
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  padding: 24px;
-  background: var(--bg-gradient);
-  position: relative;
+  align-items: center;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  padding: var(--space-xl) var(--space-margin-mobile);
+  font-family: var(--font-body-lg);
 }
 
-/* Bolhas de Brilho de Fundo (Aesthetic Premium) */
-.auth-glow-1 {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0) 70%);
-  top: 10%;
-  left: 15%;
-  pointer-events: none;
-}
-
-.auth-glow-2 {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0) 70%);
-  bottom: 10%;
-  right: 15%;
-  pointer-events: none;
-}
-
-.auth-card {
-  width: 100%;
-  max-width: 420px;
-  padding: 40px;
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-premium);
-  text-align: center;
-  position: relative;
-  z-index: 10;
-  animation: cardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.auth-logo {
-  font-size: 32px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #a78bfa 0%, #c084fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 8px;
-  letter-spacing: -0.5px;
-}
-
-.auth-tagline {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-}
-
-@keyframes cardEnter {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
+@media (min-width: 640px) {
+  .template-auth-layout {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+}
+
+@media (min-width: 1024px) {
+  .template-auth-layout {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }

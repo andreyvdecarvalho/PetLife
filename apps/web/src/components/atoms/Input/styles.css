@@ -1,39 +1,65 @@
+.atom-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .atom-input {
-  width: 100%; /* Rule: Ocupar 100% da largura, sem margins fixas */
-  padding: var(--space-sm) var(--space-sm);
-  background-color: var(--color-surface-container-low);
+  width: 100%;
+  background-color: #F1F5F9;
   border: 1px solid transparent;
-  border-radius: var(--radius-default);
+  border-radius: var(--radius-lg, 0.5rem);
+  font-family: var(--font-body-md);
+  font-size: var(--text-body-md-size, 16px);
   color: var(--color-on-surface);
-  font-family: var(--font-body);
-  font-size: var(--text-body-md-size);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: none;
+  padding: var(--space-sm, 12px) var(--space-sm, 16px);
+  transition: all 0.2s ease-in-out;
 }
 
 .atom-input::placeholder {
-  color: var(--color-on-surface-variant);
-  opacity: 0.7;
+  color: rgba(86, 67, 57, 0.5); /* on-surface-variant 50% */
 }
 
 .atom-input:focus {
   outline: none;
-  background-color: var(--color-surface-container-lowest);
-  border: 2px solid var(--color-secondary);
-  padding: calc(var(--space-sm) - 1px) calc(var(--space-sm) - 1px); /* Compensate for thicker border */
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 1px var(--color-secondary);
 }
 
 .atom-input--error {
-  border: 2px solid var(--color-error);
-  padding: calc(var(--space-sm) - 1px) calc(var(--space-sm) - 1px); /* Compensate for thicker border */
+  border-color: var(--color-error, #ba1a1a);
 }
 
 .atom-input--error:focus {
-  border-color: var(--color-error);
+  border-color: var(--color-error, #ba1a1a);
+  box-shadow: 0 0 0 1px var(--color-error, #ba1a1a);
 }
 
-.atom-input:disabled {
+/* Left Icon */
+.atom-input__icon-left {
+  position: absolute;
+  top: 50%;
+  left: var(--space-sm, 16px);
+  transform: translateY(-50%);
+  color: var(--color-on-surface-variant);
   opacity: 0.5;
-  cursor: not-allowed;
-  background-color: var(--color-surface-dim);
+  pointer-events: none;
+  font-size: 20px;
+}
+
+.atom-input--with-icon-left {
+  padding-left: 44px; /* pl-10 roughly */
+}
+
+/* Right Element (like password toggle) */
+.atom-input__right-element {
+  position: absolute;
+  top: 50%;
+  right: var(--space-sm, 16px);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.atom-input--with-icon-right {
+  padding-right: 44px;
 }

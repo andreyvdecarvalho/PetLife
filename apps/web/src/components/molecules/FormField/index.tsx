@@ -1,9 +1,9 @@
 import React from 'react';
 import { Label } from '../../atoms/Label';
-import { Input } from '../../atoms/Input';
+import { Input, InputProps } from '../../atoms/Input';
 import './styles.css';
 
-interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FormFieldProps extends InputProps {
   label: string;
   error?: string;
   required?: boolean;

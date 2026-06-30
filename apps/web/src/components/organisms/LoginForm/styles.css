@@ -1,34 +1,208 @@
-.auth-form {
+.organism-login-container {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+/* Header */
+.organism-login-header {
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+.organism-login-header__icon-wrapper {
+  width: 6rem;
+  height: 6rem;
+  background-color: var(--color-primary-container);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-md) auto;
+  box-shadow: 0 10px 15px -3px rgba(var(--color-primary-container-rgb, 255,145,77), 0.2);
+}
+
+.organism-login-header__icon-wrapper .material-symbols-outlined {
+  font-size: 48px;
+  color: var(--color-on-primary-container);
+}
+
+.organism-login-header__title {
+  font-family: var(--font-headline-lg);
+  font-size: var(--text-headline-lg-size, 32px);
+  font-weight: var(--text-headline-lg-weight, 700);
+  line-height: var(--text-headline-lg-line-height, 40px);
+  color: var(--color-on-surface);
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+
+.organism-login-header__subtitle {
+  font-family: var(--font-body-md);
+  font-size: var(--text-body-md-size, 16px);
+  color: var(--color-on-surface-variant);
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Card */
+.organism-login-card-wrapper {
+  margin-top: 2rem;
+}
+
+.organism-login-card {
+  background-color: var(--color-surface-container-lowest);
+  padding: 2rem 1rem;
+  border-radius: var(--radius-xl, 0.75rem);
+  border: 1px solid rgba(224, 227, 229, 0.5); /* surface-variant */
+  box-shadow: 0 4px 20px 0 rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .organism-login-card {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.organism-login-card__decorative {
+  position: absolute;
+  top: -2.5rem;
+  right: -2.5rem;
+  width: 8rem;
+  height: 8rem;
+  background-color: rgba(var(--color-primary-container-rgb, 255, 145, 77), 0.1);
+  border-radius: 9999px;
+  filter: blur(24px);
+  pointer-events: none;
+}
+
+/* Form */
+.organism-login-form {
   display: flex;
   flex-direction: column;
-  text-align: left;
+  gap: 1.5rem;
 }
 
-.auth-form-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.auth-form-footer {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-secondary);
+.organism-login-form__toggle-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-on-surface-variant);
+  opacity: 0.8;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
-.auth-link {
-  color: var(--primary);
+.organism-login-form__toggle-password:hover {
+  color: var(--color-primary);
+}
+
+.organism-login-form__forgot-password {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.organism-login-form__forgot-password a {
+  font-family: var(--font-label-md);
+  font-size: var(--text-label-md-size, 14px);
+  font-weight: var(--text-label-md-weight, 600);
+  color: var(--color-primary);
   text-decoration: none;
-  font-weight: 500;
+  transition: color 0.2s;
 }
 
-.auth-link:hover {
-  color: var(--primary-hover);
-  text-decoration: underline;
+.organism-login-form__forgot-password a:hover {
+  color: var(--color-on-primary-container);
+}
+
+/* Divider */
+.organism-login-divider {
+  margin-top: 1.5rem;
+  position: relative;
+  text-align: center;
+}
+
+.organism-login-divider__line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--color-surface-variant);
+}
+
+.organism-login-divider__text {
+  position: relative;
+  background-color: var(--color-surface-container-lowest);
+  padding: 0 0.5rem;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-label-sm);
+  font-size: var(--text-label-sm-size, 12px);
+  font-weight: var(--text-label-sm-weight, 500);
+}
+
+/* Social Buttons */
+.organism-login-social {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.organism-login-social__btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background-color: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 9999px;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-label-md);
+  font-size: var(--text-label-md-size, 14px);
+  font-weight: var(--text-label-md-weight, 600);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.organism-login-social__btn:hover {
+  background-color: var(--color-surface-container-low);
+}
+
+.organism-login-social__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.organism-login-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.organism-login-footer p {
+  font-family: var(--font-body-md);
+  font-size: var(--text-body-md-size, 16px);
+  color: var(--color-on-surface-variant);
+  margin: 0;
+}
+
+.organism-login-footer a {
+  font-family: var(--font-label-md);
+  font-size: var(--text-label-md-size, 14px);
+  font-weight: var(--text-label-md-weight, 600);
+  color: var(--color-primary);
+  margin-left: 0.25rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.organism-login-footer a:hover {
+  color: var(--color-on-primary-container);
 }

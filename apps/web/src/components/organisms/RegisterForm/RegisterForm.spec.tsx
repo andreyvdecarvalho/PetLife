@@ -42,14 +42,14 @@ describe('RegisterForm Component', () => {
   it('should render correctly', () => {
     render(<MemoryRouter><RegisterForm /></MemoryRouter>);
     expect(screen.getByLabelText(/nome/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^senha/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^cadastrar$/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /criar conta/i })).toBeInTheDocument();
   });
 
   it('should validate empty fields on submit', async () => {
     render(<MemoryRouter><RegisterForm /></MemoryRouter>);
-    fireEvent.click(screen.getByRole('button', { name: /^cadastrar$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /criar conta/i }));
 
     expect(await screen.findByText('O nome é obrigatório.')).toBeInTheDocument();
     expect(await screen.findByText('O e-mail é obrigatório.')).toBeInTheDocument();
@@ -62,9 +62,10 @@ describe('RegisterForm Component', () => {
     render(<MemoryRouter><RegisterForm /></MemoryRouter>);
 
     fireEvent.change(screen.getByLabelText(/nome/i), { target: { value: 'Test User' } });
-    fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: 'test@test.com' } });
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@test.com' } });
     fireEvent.change(screen.getByLabelText(/^senha/i), { target: { value: 'Senha@123' } });
-    fireEvent.click(screen.getByRole('button', { name: /^cadastrar$/i }));
+    fireEvent.click(screen.getByRole('checkbox'));
+    fireEvent.click(screen.getByRole('button', { name: /criar conta/i }));
 
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith('Test User', 'test@test.com', 'Senha@123');

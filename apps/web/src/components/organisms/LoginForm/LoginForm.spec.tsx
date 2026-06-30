@@ -48,7 +48,7 @@ describe('LoginForm Component', () => {
 
     expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^entrar$/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /entrar/i })).toBeInTheDocument();
   });
 
   it('should validate empty fields on submit', async () => {
@@ -58,7 +58,7 @@ describe('LoginForm Component', () => {
       </MemoryRouter>
     );
 
-    const submitBtn = screen.getByRole('button', { name: /^entrar$/i });
+    const submitBtn = screen.getByRole('button', { name: /entrar/i });
     fireEvent.click(submitBtn);
 
     expect(await screen.findByText('O e-mail é obrigatório.')).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('LoginForm Component', () => {
     );
 
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: 'emailinvalido' } });
-    fireEvent.click(screen.getByRole('button', { name: /^entrar$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
     expect(await screen.findByText('Formato de e-mail inválido.')).toBeInTheDocument();
     expect(mockLogin).not.toHaveBeenCalled();
@@ -91,7 +91,7 @@ describe('LoginForm Component', () => {
 
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: 'tutor@petlife.com' } });
     fireEvent.change(screen.getByLabelText(/senha/i), { target: { value: 'Senha@123' } });
-    fireEvent.click(screen.getByRole('button', { name: /^entrar$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith('tutor@petlife.com', 'Senha@123');
@@ -120,7 +120,7 @@ describe('LoginForm Component', () => {
 
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: 'tutor@petlife.com' } });
     fireEvent.change(screen.getByLabelText(/senha/i), { target: { value: 'Senha@123' } });
-    fireEvent.click(screen.getByRole('button', { name: /^entrar$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalled();
@@ -138,7 +138,7 @@ describe('LoginForm Component', () => {
       </MemoryRouter>
     );
 
-    const googleBtn = screen.getByRole('button', { name: /entrar com o google/i });
+    const googleBtn = screen.getByRole('button', { name: /google/i });
     fireEvent.click(googleBtn);
 
     await waitFor(() => {
@@ -168,7 +168,7 @@ describe('LoginForm Component', () => {
       </MemoryRouter>
     );
 
-    const googleBtn = screen.getByRole('button', { name: /entrar com o google/i });
+    const googleBtn = screen.getByRole('button', { name: /google/i });
     fireEvent.click(googleBtn);
 
     await waitFor(() => {

@@ -2,30 +2,28 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xs) var(--space-md);
-  font-family: var(--font-label);
-  font-size: var(--text-label-md-size);
-  font-weight: var(--text-label-md-weight);
-  line-height: var(--text-label-md-line-height);
-  letter-spacing: var(--text-label-md-letter-spacing);
-  border-radius: var(--radius-xl);
+  padding: 12px 16px;
+  font-family: var(--font-label-md);
+  font-size: var(--text-label-md-size, 14px);
+  font-weight: var(--text-label-md-weight, 600);
+  line-height: var(--text-label-md-line-height, 20px);
+  letter-spacing: var(--text-label-md-letter-spacing, 0.01em);
+  border-radius: 9999px;
   color: var(--color-on-primary);
-  border: none;
+  border: 1px solid transparent;
   background: var(--color-primary);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px 0 rgba(155, 69, 0, 0.2);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%; /* Rule: Herdar tamanho ou ocupar 100%, sem margins */
 }
 
 .atom-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  background: var(--color-primary-container);
-  color: var(--color-on-primary-container);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  opacity: 0.9;
+  box-shadow: 0 6px 15px 0 rgba(155, 69, 0, 0.3);
 }
 
 .atom-button:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .atom-button:disabled {
@@ -76,7 +74,7 @@
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-full, 9999px);
   border-top-color: currentColor;
   animation: spin 0.8s linear infinite;
   margin-right: var(--space-xs);
