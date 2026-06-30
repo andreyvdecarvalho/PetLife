@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { FormField } from '../../molecules/FormField';
 import { Button } from '../../atoms/Button';
-import api from '../../../services/api';
+import { authApi } from '../../../infrastructure/http/auth.api';
 import { useToast } from '../../molecules/Toast';
-import '../LoginForm/styles.css';
+import { isValidPassword } from '../../../utils/validators';
+import './styles.css';
 
 export const ResetPasswordForm: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -20,7 +21,7 @@ export const ResetPasswordForm: React.FC = () => {
     if (!password) {
       setError('A nova senha é obrigatória.');
       return false;
-    } else if (!/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    } else if (!isValidPassword(password)) {
       setError('A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.');
       return false;
     }
@@ -40,12 +41,12 @@ export const ResetPasswordForm: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await api.post('/auth/reset-password', { token, newPassword: password });
+      await authApi.resetPassword(token, password);
       showToast('Senha redefinida com sucesso! ✨', 'success');
       navigate('/login');
-    } catch (error: any) {
-      console.error(error);
-      const message = error.response?.data?.error?.message || 'Token inválido ou expirado.';
+    } catch (err: any) {
+      console.error(err);
+      const message = err.response?.data?.error?.message || 'Token inválido ou expirado.';
       showToast(message, 'error');
     } finally {
       setIsLoading(false);
@@ -53,9 +54,9 @@ export const ResetPasswordForm: React.FC = () => {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} data-testid="reset-password-form" noValidate>
-      <h2 className="auth-form-title">Nova Senha</h2>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '14px', lineHeight: '1.5' }}>
+    <form className="organism-reset-password" onSubmit={handleSubmit} data-testid="reset-password-form" noValidate>
+      <h2 className="organism-reset-password-title">Nova Senha</h2>
+      <p className="organism-reset-password-desc">
         Escolha uma nova senha forte contendo pelo menos 8 caracteres, 1 letra maiúscula e 1 número.
       </p>
 
@@ -74,8 +75,8 @@ export const ResetPasswordForm: React.FC = () => {
         Alterar Senha
       </Button>
 
-      <div className="auth-form-footer">
-        <Link to="/login" className="auth-link">
+      <div className="organism-reset-password-footer">
+        <Link to="/login" className="organism-reset-password-link">
           Voltar para o Login
         </Link>
       </div>

@@ -2,11 +2,11 @@
   min-height: max(884px, 100dvh);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background-color: var(--color-surface);
   color: var(--color-on-surface);
-  padding: var(--space-xl) var(--space-margin-mobile);
+  padding: 3rem var(--space-margin-mobile) var(--space-xl) var(--space-margin-mobile);
   font-family: var(--font-body-lg);
 }
 

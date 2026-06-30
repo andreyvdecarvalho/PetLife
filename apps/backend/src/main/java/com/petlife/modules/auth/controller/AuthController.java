@@ -1,5 +1,13 @@
 package com.petlife.modules.auth.controller;
 
+import com.petlife.modules.auth.application.usecase.DeleteUserAccountUseCase;
+import com.petlife.modules.auth.application.usecase.ForgotPasswordUseCase;
+import com.petlife.modules.auth.application.usecase.GetUserProfileUseCase;
+import com.petlife.modules.auth.application.usecase.LoginUserUseCase;
+import com.petlife.modules.auth.application.usecase.LoginWithGoogleUseCase;
+import com.petlife.modules.auth.application.usecase.RegisterUserUseCase;
+import com.petlife.modules.auth.application.usecase.ResetPasswordUseCase;
+import com.petlife.modules.auth.application.usecase.UpdateUserProfileUseCase;
 import com.petlife.modules.auth.dto.ForgotPasswordRequest;
 import com.petlife.modules.auth.dto.GoogleLoginRequest;
 import com.petlife.modules.auth.dto.LoginRequest;
@@ -8,7 +16,6 @@ import com.petlife.modules.auth.dto.ResetPasswordRequest;
 import com.petlife.modules.auth.dto.TokenResponse;
 import com.petlife.modules.auth.dto.UpdateProfileRequest;
 import com.petlife.modules.auth.dto.UserResponse;
-import com.petlife.modules.auth.service.AuthService;
 import com.petlife.shared.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,56 +35,64 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+/**
+ * Controller REST de Autenticação — thin layer.
+ * Responsabilidade: receber request HTTP, delegar ao Use Case, retornar ApiResponse.
+ * Nenhuma lógica de negócio deve existir aqui.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Tag(name = "Autenticação", description = "Endpoints de autenticação, perfil e gerenciamento de conta")
 public class AuthController {
 
-    private final AuthService authService;
+    private final RegisterUserUseCase registerUserUseCase;
+    private final LoginUserUseCase loginUserUseCase;
+    private final LoginWithGoogleUseCase loginWithGoogleUseCase;
+    private final ForgotPasswordUseCase forgotPasswordUseCase;
+    private final ResetPasswordUseCase resetPasswordUseCase;
+    private final GetUserProfileUseCase getUserProfileUseCase;
+    private final UpdateUserProfileUseCase updateUserProfileUseCase;
+    private final DeleteUserAccountUseCase deleteUserAccountUseCase;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Cadastrar novo tutor")
     public ApiResponse<TokenResponse> register(@Valid @RequestBody RegisterRequest request) {
-        var response = authService.register(request);
-        return ApiResponse.of(response);
+        return ApiResponse.of(registerUserUseCase.execute(request));
     }
 
     @PostMapping("/login")
     @Operation(summary = "Autenticar tutor")
     public ApiResponse<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
-        var response = authService.login(request);
-        return ApiResponse.of(response);
+        return ApiResponse.of(loginUserUseCase.execute(request));
     }
 
     @PostMapping("/google")
     @Operation(summary = "Autenticar ou cadastrar tutor via Google OAuth2")
     public ApiResponse<TokenResponse> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
-        var response = authService.loginWithGoogle(request);
-        return ApiResponse.of(response);
+        return ApiResponse.of(loginWithGoogleUseCase.execute(request));
     }
 
     @PostMapping("/forgot-password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Solicitar recuperação de senha")
     public void forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        authService.forgotPassword(request);
+        forgotPasswordUseCase.execute(request);
     }
 
     @PostMapping("/reset-password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Redefinir senha usando token")
     public void resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
-        authService.resetPassword(request);
+        resetPasswordUseCase.execute(request);
     }
 
     @GetMapping("/me")
     @Operation(summary = "Obter dados do tutor autenticado")
     public ApiResponse<UserResponse> me(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        var response = authService.getProfile(userId);
-        return ApiResponse.of(response);
+        return ApiResponse.of(getUserProfileUseCase.execute(userId));
     }
 
     @PutMapping("/me")
@@ -86,8 +101,7 @@ public class AuthController {
             @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody UpdateProfileRequest request) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        var response = authService.updateProfile(userId, request);
-        return ApiResponse.of(response);
+        return ApiResponse.of(updateUserProfileUseCase.execute(userId, request));
     }
 
     @DeleteMapping("/me")
@@ -95,6 +109,6 @@ public class AuthController {
     @Operation(summary = "Excluir conta do tutor e todos os dados associados (LGPD)")
     public void deleteMe(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        authService.deleteAccount(userId);
+        deleteUserAccountUseCase.execute(userId);
     }
 }

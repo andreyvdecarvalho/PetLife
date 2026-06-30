@@ -1,6 +1,6 @@
 .organism-login-container {
   width: 100%;
-  max-width: 28rem;
+  max-width: 25rem;
   margin: 0 auto;
 }
 
@@ -178,6 +178,12 @@
 .organism-login-social__btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.organism-login-social__btn svg {
+  width: 1.25rem; /* 20px (w-5) */
+  height: 1.25rem; /* 20px (h-5) */
+  flex-shrink: 0;
 }
 
 /* Footer */

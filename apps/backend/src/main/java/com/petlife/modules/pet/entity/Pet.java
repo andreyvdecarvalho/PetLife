@@ -12,6 +12,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,6 +32,7 @@ public class Pet extends BaseEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "species", nullable = false)
     private PetSpecies species;
 
@@ -37,6 +40,7 @@ public class Pet extends BaseEntity {
     private String breed;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "sex", nullable = false)
     private PetSex sex;
 
@@ -47,6 +51,7 @@ public class Pet extends BaseEntity {
     private BigDecimal weightKg;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "size")
     private PetSize size;
 
@@ -66,6 +71,7 @@ public class Pet extends BaseEntity {
     private String photoUrl;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false)
     private PetStatus status = PetStatus.ACTIVE;
 }

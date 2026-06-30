@@ -1,16 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import api from '../services/api';
+import React, { createContext, useContext, useCallback } from 'react';
+import type { UserResponse, UpdateProfileData } from '../infrastructure/http/auth.api';
+import { useLogin } from '../application/auth/useLogin';
+import { useRegister } from '../application/auth/useRegister';
+import { useGoogleLogin } from '../application/auth/useGoogleLogin';
+import { useLogout } from '../application/auth/useLogout';
+import { useSession } from '../application/auth/useSession';
+import { useUpdateProfile } from '../application/user/useUpdateProfile';
+import { useDeleteAccount } from '../application/user/useDeleteAccount';
+import { setUnauthorizedCallback } from '../services/api';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl: string;
-  timezone: string;
-  plan: 'FREE' | 'PREMIUM' | 'FAMILY';
-  emailVerified: boolean;
-  createdAt: string;
-}
+// Re-exporta o tipo User para compatibilidade com componentes existentes
+export type User = UserResponse;
 
 interface AuthContextData {
   user: User | null;
@@ -20,128 +20,69 @@ interface AuthContextData {
   loginWithGoogle: (idToken: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  updateProfile: (name: string, email: string, avatarUrl: string, timezone: string) => Promise<void>;
+  updateProfile: (data: UpdateProfileData) => Promise<void>;
   deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
+/**
+ * Provedor de contexto de autenticação — thin layer.
+ * Responsabilidade: gerenciar estado global do usuário e compor hooks de aplicação.
+ * A lógica de negócio está nos hooks em src/application/auth/ e src/application/user/.
+ * Princípio: Single Responsibility (SRP) + Dependency Inversion (DIP).
+ */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Estado gerenciado pelo useSession (reidratação + usuário atual)
+  const { user, setUser, loading } = useSession();
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('@PetLife:accessToken');
-    localStorage.removeItem('@PetLife:refreshToken');
-    setUser(null);
-  }, []);
+  const clearUser = useCallback(() => setUser(null), [setUser]);
 
-  // Reidratação de sessão
-  useEffect(() => {
-    async function loadStorageData() {
-      const token = localStorage.getItem('@PetLife:accessToken');
+  // Hooks de aplicação compostos
+  const { login: loginUseCase } = useLogin();
+  const { register: registerUseCase } = useRegister();
+  const { loginWithGoogle: googleLoginUseCase } = useGoogleLogin();
+  const { logout: logoutUseCase } = useLogout(clearUser);
+  const { updateProfile: updateProfileUseCase } = useUpdateProfile();
+  const { deleteAccount: deleteAccountUseCase } = useDeleteAccount(clearUser);
 
-      if (token) {
-        try {
-          const response = await api.get('/auth/me');
-          setUser(response.data.data);
-        } catch (error) {
-          logError(error);
-          logout();
-        }
-      }
-      setLoading(false);
-    }
-
-    loadStorageData();
-  }, [logout]);
+  // Registra callback para o interceptor de API tratar 401 sem window.location
+  React.useEffect(() => {
+    setUnauthorizedCallback(logoutUseCase);
+  }, [logoutUseCase]);
 
   const login = useCallback(async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      const response = await api.post('/auth/login', { email, password });
-      const { accessToken, refreshToken } = response.data.data;
-
-      localStorage.setItem('@PetLife:accessToken', accessToken);
-      localStorage.setItem('@PetLife:refreshToken', refreshToken);
-
-      // Busca dados do perfil recém-logado
-      const profileResponse = await api.get('/auth/me');
-      setUser(profileResponse.data.data);
-    } catch (error) {
-      logout();
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [logout]);
-
-  const loginWithGoogle = useCallback(async (idToken: string) => {
-    setLoading(true);
-    try {
-      const response = await api.post('/auth/google', { idToken });
-      const { accessToken, refreshToken } = response.data.data;
-
-      localStorage.setItem('@PetLife:accessToken', accessToken);
-      localStorage.setItem('@PetLife:refreshToken', refreshToken);
-
-      // Busca dados do perfil recém-logado
-      const profileResponse = await api.get('/auth/me');
-      setUser(profileResponse.data.data);
-    } catch (error) {
-      logout();
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [logout]);
+    const userProfile = await loginUseCase(email, password);
+    setUser(userProfile);
+  }, [loginUseCase, setUser]);
 
   const register = useCallback(async (name: string, email: string, password: string) => {
-    setLoading(true);
-    try {
-      const response = await api.post('/auth/register', { name, email, password });
-      const { accessToken, refreshToken } = response.data.data;
+    const userProfile = await registerUseCase(name, email, password);
+    setUser(userProfile);
+  }, [registerUseCase, setUser]);
 
-      localStorage.setItem('@PetLife:accessToken', accessToken);
-      localStorage.setItem('@PetLife:refreshToken', refreshToken);
+  const loginWithGoogle = useCallback(async (idToken: string) => {
+    const userProfile = await googleLoginUseCase(idToken);
+    setUser(userProfile);
+  }, [googleLoginUseCase, setUser]);
 
-      // Busca dados do perfil recém-cadastrado
-      const profileResponse = await api.get('/auth/me');
-      setUser(profileResponse.data.data);
-    } catch (error) {
-      logout();
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [logout]);
-
-  const updateProfile = useCallback(async (name: string, email: string, avatarUrl: string, timezone: string) => {
-    const response = await api.put('/auth/me', { name, email, avatarUrl, timezone });
-    setUser(response.data.data);
-  }, []);
-
-  const deleteAccount = useCallback(async () => {
-    await api.delete('/auth/me');
-    logout();
-  }, [logout]);
-
-  const logError = (error: any) => {
-    console.error('Session rehydration failed:', error);
-  };
+  const updateProfile = useCallback(async (data: UpdateProfileData) => {
+    const updatedUser = await updateProfileUseCase(data);
+    setUser(updatedUser);
+  }, [updateProfileUseCase, setUser]);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
-        isAuthenticated: !!user,
+        isAuthenticated: user !== null,
         login,
         loginWithGoogle,
         register,
-        logout,
+        logout: logoutUseCase,
         updateProfile,
-        deleteAccount
+        deleteAccount: deleteAccountUseCase,
       }}
     >
       {children}
@@ -149,10 +90,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextData => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth deve ser usado com um AuthProvider');
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context;
 };

@@ -4,6 +4,7 @@ import { FormField } from '../../molecules/FormField';
 import { Button } from '../../atoms/Button';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
+import { isValidEmail, isValidPassword } from '../../../utils/validators';
 import './styles.css';
 
 export const RegisterForm: React.FC = () => {
@@ -30,13 +31,13 @@ export const RegisterForm: React.FC = () => {
 
     if (!email) {
       newErrors.email = 'O e-mail é obrigatório.';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!isValidEmail(email)) {
       newErrors.email = 'Formato de e-mail inválido.';
     }
 
     if (!password) {
       newErrors.password = 'A senha é obrigatória.';
-    } else if (!/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    } else if (!isValidPassword(password)) {
       newErrors.password = 'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.';
     }
     

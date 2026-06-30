@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FormField } from '../../molecules/FormField';
 import { Button } from '../../atoms/Button';
-import api from '../../../services/api';
+import { authApi } from '../../../infrastructure/http/auth.api';
 import { useToast } from '../../molecules/Toast';
-import '../LoginForm/styles.css';
+import { isValidEmail } from '../../../utils/validators';
+import './styles.css';
 
 export const ForgotPasswordForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export const ForgotPasswordForm: React.FC = () => {
     if (!email) {
       setError('O e-mail é obrigatório.');
       return false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!isValidEmail(email)) {
       setError('Formato de e-mail inválido.');
       return false;
     }
@@ -33,11 +34,11 @@ export const ForgotPasswordForm: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await api.post('/auth/forgot-password', { email });
+      await authApi.forgotPassword(email);
       setIsSuccess(true);
       showToast('Solicitação processada com sucesso! ✨', 'success');
-    } catch (error: any) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
       showToast('Ocorreu um erro ao processar. Tente novamente.', 'error');
     } finally {
       setIsLoading(false);
@@ -46,12 +47,12 @@ export const ForgotPasswordForm: React.FC = () => {
 
   if (isSuccess) {
     return (
-      <div className="auth-form" style={{ textAlign: 'center' }}>
-        <h2 className="auth-form-title">E-mail Enviado!</h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '15px', lineHeight: '1.6' }}>
+      <div className="organism-forgot-password" style={{ textAlign: 'center' }}>
+        <h2 className="organism-forgot-password-title">E-mail Enviado!</h2>
+        <p className="organism-forgot-password-desc">
           Se o e-mail <strong>{email}</strong> estiver cadastrado em nossa plataforma, você receberá instruções para redefinir sua senha em instantes.
         </p>
-        <Link to="/login" className="btn-premium btn-secondary" style={{ textDecoration: 'none' }}>
+        <Link to="/login" className="organism-forgot-password-back-btn">
           Voltar para o Login
         </Link>
       </div>
@@ -59,9 +60,9 @@ export const ForgotPasswordForm: React.FC = () => {
   }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} data-testid="forgot-password-form" noValidate>
-      <h2 className="auth-form-title">Recuperar Senha</h2>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '14px', lineHeight: '1.5' }}>
+    <form className="organism-forgot-password" onSubmit={handleSubmit} data-testid="forgot-password-form" noValidate>
+      <h2 className="organism-forgot-password-title">Recuperar Senha</h2>
+      <p className="organism-forgot-password-desc">
         Insira seu e-mail de cadastro. Enviaremos um link de uso único para redefinição da sua senha.
       </p>
 
@@ -80,10 +81,10 @@ export const ForgotPasswordForm: React.FC = () => {
         Enviar Link
       </Button>
 
-      <div className="auth-form-footer">
+      <div className="organism-forgot-password-footer">
         <span>
           Lembrou a senha?{' '}
-          <Link to="/login" className="auth-link">
+          <Link to="/login" className="organism-forgot-password-link">
             Entrar
           </Link>
         </span>

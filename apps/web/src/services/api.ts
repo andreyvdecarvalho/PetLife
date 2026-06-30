@@ -1,48 +1,45 @@
 import axios from 'axios';
+import { tokenStorage } from '../infrastructure/storage/tokenStorage';
 
+/**
+ * Instância base do cliente HTTP Axios.
+ * Princípio: Single Responsibility — apenas configuração base + interceptors.
+ *
+ * IMPORTANTE:
+ * - window.location NÃO é usado aqui (DIP) — usar setUnauthorizedCallback
+ * - Não importar axios diretamente nas camadas application/domain — usar auth.api.ts
+ */
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api/v1',
+  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para injetar o Access Token automaticamente em cada requisição
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('@PetLife:accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// Callback injetado externamente para tratar 401 sem acoplar window.location
+let onUnauthorizedCallback: (() => void) | null = null;
 
-// Interceptor para tratar expiração de tokens ou desautenticação
+export function setUnauthorizedCallback(callback: () => void): void {
+  onUnauthorizedCallback = callback;
+}
+
+// Interceptor de request: injeta Bearer token
+api.interceptors.request.use((config) => {
+  const token = tokenStorage.getAccessToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Interceptor de response: trata 401 via callback (sem window.location)
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    // Se o erro for 401 (Unauthorized) e não for uma tentativa de login/registro
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest.url.includes('/auth/login') &&
-      !originalRequest.url.includes('/auth/register') &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-
-      // Limpa os dados em caso de desautenticação (ou poderíamos tentar o Refresh Token)
-      localStorage.removeItem('@PetLife:accessToken');
-      localStorage.removeItem('@PetLife:refreshToken');
-      window.location.href = '/login';
+  (error) => {
+    if (error.response?.status === 401) {
+      tokenStorage.clearTokens();
+      onUnauthorizedCallback?.();
     }
-
     return Promise.reject(error);
   }
 );
