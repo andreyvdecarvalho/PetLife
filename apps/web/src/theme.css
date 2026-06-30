@@ -1,0 +1,120 @@
+/* PetLife Design System - Theme Variables */
+
+:root {
+  /* Fonts */
+  --font-headline: 'Quicksand', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-label: 'Plus Jakarta Sans', sans-serif;
+
+  /* Colors */
+  --color-surface: #f7f9fb;
+  --color-surface-dim: #d8dadc;
+  --color-surface-bright: #f7f9fb;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #564339;
+  --color-inverse-surface: #2d3133;
+  --color-inverse-on-surface: #eff1f3;
+  --color-outline: #897267;
+  --color-outline-variant: #dcc1b4;
+  --color-surface-tint: #9b4500;
+  --color-primary: #9b4500;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ff914d;
+  --color-on-primary-container: #6e2f00;
+  --color-inverse-primary: #ffb68e;
+  --color-secondary: #005fac;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #5fa6fd;
+  --color-on-secondary-container: #003a6d;
+  --color-tertiary: #006b55;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #68bda2;
+  --color-on-tertiary-container: #004b3a;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #ffdbc9;
+  --color-primary-fixed-dim: #ffb68e;
+  --color-on-primary-fixed: #331200;
+  --color-on-primary-fixed-variant: #763300;
+  --color-secondary-fixed: #d4e3ff;
+  --color-secondary-fixed-dim: #a4c9ff;
+  --color-on-secondary-fixed: #001c39;
+  --color-on-secondary-fixed-variant: #004884;
+  --color-tertiary-fixed: #9df3d6;
+  --color-tertiary-fixed-dim: #82d7bb;
+  --color-on-tertiary-fixed: #002118;
+  --color-on-tertiary-fixed-variant: #00513f;
+  --color-background: #f7f9fb;
+  --color-on-background: #191c1e;
+  --color-surface-variant: #e0e3e5;
+
+  /* Typography Sizes & Line Heights */
+  /* Display Large */
+  --text-display-lg-size: 48px;
+  --text-display-lg-weight: 700;
+  --text-display-lg-line-height: 56px;
+  --text-display-lg-letter-spacing: -0.02em;
+
+  /* Headline Large */
+  --text-headline-lg-size: 32px;
+  --text-headline-lg-weight: 700;
+  --text-headline-lg-line-height: 40px;
+
+  /* Headline Large Mobile */
+  --text-headline-lg-mobile-size: 28px;
+  --text-headline-lg-mobile-weight: 700;
+  --text-headline-lg-mobile-line-height: 36px;
+
+  /* Headline Medium */
+  --text-headline-md-size: 24px;
+  --text-headline-md-weight: 600;
+  --text-headline-md-line-height: 32px;
+
+  /* Body Large */
+  --text-body-lg-size: 18px;
+  --text-body-lg-weight: 400;
+  --text-body-lg-line-height: 28px;
+
+  /* Body Medium */
+  --text-body-md-size: 16px;
+  --text-body-md-weight: 400;
+  --text-body-md-line-height: 24px;
+
+  /* Label Medium */
+  --text-label-md-size: 14px;
+  --text-label-md-weight: 600;
+  --text-label-md-line-height: 20px;
+  --text-label-md-letter-spacing: 0.01em;
+
+  /* Label Small */
+  --text-label-sm-size: 12px;
+  --text-label-sm-weight: 500;
+  --text-label-sm-line-height: 16px;
+
+  /* Rounded / Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-default: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-base: 4px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+  --space-gutter: 16px;
+  --space-margin-mobile: 20px;
+  --space-margin-desktop: auto;
+  --max-width: 1200px;
+}
