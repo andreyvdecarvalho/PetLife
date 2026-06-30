@@ -37,7 +37,7 @@ public class LoginWithGoogleUseCase {
                 throw BusinessException.badRequest("AUTH_INVALID_GOOGLE_TOKEN", "Token do Google inválido.");
             }
 
-            var payloadJson = new String(java.util.Base64.getUrlDecoder().decode(parts[1]));
+            var payloadJson = new String(java.util.Base64.getUrlDecoder().decode(parts[1]), java.nio.charset.StandardCharsets.UTF_8);
             var payload = objectMapper.readTree(payloadJson);
 
             var email = payload.path("email").asText();

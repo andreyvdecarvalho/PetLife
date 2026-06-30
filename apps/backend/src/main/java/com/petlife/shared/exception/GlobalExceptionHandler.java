@@ -58,6 +58,7 @@ public class GlobalExceptionHandler {
         log.error("Unhandled exception caught: ", ex);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(new ErrorDetail("INTERNAL_SERVER_ERROR", "Ocorreu um erro interno no servidor", List.of())));
+                .body(new ErrorResponse(new ErrorDetail(
+                        "INTERNAL_SERVER_ERROR", "Ocorreu um erro interno no servidor", List.of())));
     }
 }
