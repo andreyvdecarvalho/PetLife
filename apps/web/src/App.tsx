@@ -9,6 +9,7 @@ import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { PetProfilePage } from './pages/PetProfilePage';
+import { MedicationsPage } from './pages/MedicationsPage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -38,6 +39,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <PetProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/medications"
+              element={
+                <PrivateRoute>
+                  <MedicationsPage />
                 </PrivateRoute>
               }
             />
