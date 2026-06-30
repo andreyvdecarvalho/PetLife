@@ -4,32 +4,9 @@
 @import './theme.css';
 
 :root {
-  --font-primary: 'Outfit', sans-serif;
-
-  /* Cores - Paleta Premium Dark/Glassmorphism */
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  --bg-card: rgba(30, 41, 59, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(255, 255, 255, 0.2);
-
-  --primary: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --primary-glow: rgba(139, 92, 246, 0.4);
-
-  --success: #10b981;
-  --success-glow: rgba(16, 185, 129, 0.3);
-
-  --error: #ef4444;
-  --error-glow: rgba(239, 68, 68, 0.3);
-
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-
+  --font-primary: 'Plus Jakarta Sans', sans-serif;
+  --font-secondary: 'Quicksand', sans-serif;
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --radius-lg: 16px;
-  --radius-md: 10px;
 }
 
 /* Reset Global */
@@ -41,8 +18,8 @@
 
 body {
   font-family: var(--font-primary);
-  background: var(--bg-gradient);
-  color: var(--text-primary);
+  background-color: var(--color-background);
+  color: var(--color-on-background);
   min-height: 100vh;
   overflow-x: hidden;
   display: flex;
