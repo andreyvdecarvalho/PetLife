@@ -28,14 +28,19 @@ public class LoginUserUseCase {
     @Transactional(readOnly = true)
     public TokenResponse execute(LoginRequest request) {
         var user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> BusinessException.unauthorized(
-                        "AUTH_INVALID_CREDENTIALS", "E-mail ou senha inválidos."));
+                .orElseGet(() -> {
+                    log.warn("Login falhou: E-mail não encontrado no banco: {}", request.email());
+                    throw BusinessException.unauthorized(
+                            "AUTH_INVALID_CREDENTIALS", "E-mail ou senha inválidos.");
+                });
 
         if (user.getDeletedAt() != null) {
+            log.warn("Login falhou: Usuário soft-deletado no banco: {}", request.email());
             throw BusinessException.unauthorized("AUTH_INVALID_CREDENTIALS", "E-mail ou senha inválidos.");
         }
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            log.warn("Login falhou: Senha não confere com o hash para o e-mail: {}", request.email());
             throw BusinessException.unauthorized("AUTH_INVALID_CREDENTIALS", "E-mail ou senha inválidos.");
         }
 
