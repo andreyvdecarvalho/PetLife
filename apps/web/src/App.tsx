@@ -8,6 +8,7 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { PetProfilePage } from './pages/PetProfilePage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -29,6 +30,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <DashboardPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pets/:id"
+              element={
+                <PrivateRoute>
+                  <PetProfilePage />
                 </PrivateRoute>
               }
             />
