@@ -11,6 +11,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { PetProfilePage } from './pages/PetProfilePage';
 import { MedicationsPage } from './pages/MedicationsPage';
 import { RoutinePage } from './pages/RoutinePage';
+import { MemoriesPage } from './pages/MemoriesPage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -56,6 +57,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <RoutinePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/memories"
+              element={
+                <PrivateRoute>
+                  <MemoriesPage />
                 </PrivateRoute>
               }
             />
