@@ -12,6 +12,7 @@ import { PetProfilePage } from './pages/PetProfilePage';
 import { MedicationsPage } from './pages/MedicationsPage';
 import { RoutinePage } from './pages/RoutinePage';
 import { MemoriesPage } from './pages/MemoriesPage';
+import { AppointmentsPage } from './pages/AppointmentsPage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -65,6 +66,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <MemoriesPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                <PrivateRoute>
+                  <AppointmentsPage />
                 </PrivateRoute>
               }
             />
