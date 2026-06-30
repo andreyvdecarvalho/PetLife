@@ -41,3 +41,5 @@ Entidade `Grooming`:
 - [ ] Gravação do serviço (Banho, Tosa ou Ambos) com a data obrigatória.
 - [ ] Geração do `next_date` automático se preenchida a frequência.
 - [ ] Componente visual suportando 2 imagens interativas.
+
+> **NOTA DE ARQUITETURA FRONTEND:** Para as telas desta Epic, siga rigorosamente o Atomic Design (Atoms, Molecules, Organisms, Templates, Pages). Cada componente em pasta própria com index.tsx e styles.css. Use Vanilla CSS (BEM / namespace semântico) consumindo variáveis do 	heme.css. Atoms não devem possuir margens e devem ocupar 100% (width: 100%), delegando posicionamento aos Organisms/Templates.

@@ -57,3 +57,5 @@ Campos:
 - [ ] Compressão local da foto do pet para <= 500KB.
 - [ ] Arquivamento remove o pet da lista principal mas permite restauração.
 - [ ] Bloqueio de criação do 3º pet para usuários Free.
+
+> **NOTA DE ARQUITETURA FRONTEND:** Para as telas desta Epic, siga rigorosamente o Atomic Design (Atoms, Molecules, Organisms, Templates, Pages). Cada componente em pasta própria com index.tsx e styles.css. Use Vanilla CSS (BEM / namespace semântico) consumindo variáveis do 	heme.css. Atoms não devem possuir margens e devem ocupar 100% (width: 100%), delegando posicionamento aos Organisms/Templates.

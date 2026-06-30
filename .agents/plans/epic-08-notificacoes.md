@@ -48,3 +48,5 @@ Entidade `NotificationPreferences`:
 - [ ] Push é emitido, mesmo com app fechado, via FCM/APNs.
 - [ ] Ação rápida do push chama deep link ou endpoint diretamente, atualizando a dose.
 - [ ] Tela de central de notificações com contador (badge) limpo ao abrir.
+
+> **NOTA DE ARQUITETURA FRONTEND:** Para as telas desta Epic, siga rigorosamente o Atomic Design (Atoms, Molecules, Organisms, Templates, Pages). Cada componente em pasta própria com index.tsx e styles.css. Use Vanilla CSS (BEM / namespace semântico) consumindo variáveis do 	heme.css. Atoms não devem possuir margens e devem ocupar 100% (width: 100%), delegando posicionamento aos Organisms/Templates.

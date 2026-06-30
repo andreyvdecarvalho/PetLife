@@ -48,3 +48,5 @@ Entidade `Vaccination`:
 - [ ] Sistema projeta a próxima data automaticamente para vacinas padrão.
 - [ ] Exibe comprovante expandido ao clicar.
 - [ ] Exibição mais recente primeiro.
+
+> **NOTA DE ARQUITETURA FRONTEND:** Para as telas desta Epic, siga rigorosamente o Atomic Design (Atoms, Molecules, Organisms, Templates, Pages). Cada componente em pasta própria com index.tsx e styles.css. Use Vanilla CSS (BEM / namespace semântico) consumindo variáveis do 	heme.css. Atoms não devem possuir margens e devem ocupar 100% (width: 100%), delegando posicionamento aos Organisms/Templates.

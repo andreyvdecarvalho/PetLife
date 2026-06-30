@@ -26,7 +26,7 @@ describe('App', () => {
     // LoginPage and AuthLayout will be rendered
     
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /^entrar$/i })).toBeDefined();
+      expect(screen.getByRole('button', { name: /entrar/i })).toBeDefined();
     });
   });
 });
