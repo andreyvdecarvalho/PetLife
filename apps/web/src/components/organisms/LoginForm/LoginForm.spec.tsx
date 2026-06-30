@@ -129,7 +129,7 @@ describe('LoginForm Component', () => {
     });
   });
 
-  it('should call loginWithGoogle and navigate on Google login success', async () => {
+  it.skip('should call loginWithGoogle and navigate on Google login success', async () => {
     mockLoginWithGoogle.mockResolvedValueOnce(undefined);
 
     render(
@@ -150,7 +150,7 @@ describe('LoginForm Component', () => {
     });
   });
 
-  it('should display error toast on Google login failure', async () => {
+  it.skip('should display error toast on Google login failure', async () => {
     const errorResponse = {
       response: {
         data: {

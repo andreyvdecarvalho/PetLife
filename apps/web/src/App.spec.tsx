@@ -4,7 +4,7 @@ import { vi, describe, it, expect } from 'vitest';
 import React from 'react';
 
 vi.mock('./services/api', () => ({
-  api: {
+  default: {
     post: vi.fn(),
     get: vi.fn(),
     put: vi.fn(),
@@ -13,7 +13,8 @@ vi.mock('./services/api', () => ({
       request: { use: vi.fn(), eject: vi.fn() },
       response: { use: vi.fn(), eject: vi.fn() }
     }
-  }
+  },
+  setUnauthorizedCallback: vi.fn()
 }));
 
 describe('App', () => {

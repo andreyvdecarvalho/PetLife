@@ -14,6 +14,7 @@ vi.mock('../../../services/api', () => ({
   default: {
     post: vi.fn(),
   },
+  setUnauthorizedCallback: vi.fn()
 }));
 
 describe('ForgotPasswordForm Component', () => {
