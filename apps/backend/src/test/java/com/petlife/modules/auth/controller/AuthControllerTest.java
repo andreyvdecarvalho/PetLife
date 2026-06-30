@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
 
@@ -32,10 +33,8 @@ class AuthControllerTest extends IntegrationTestBase {
     @Autowired
     private UserRepository userRepository;
 
-    @BeforeEach
-    void cleanDatabase() {
-        userRepository.deleteAll();
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Nested
     @DisplayName("POST /api/v1/auth/register")
@@ -96,8 +95,7 @@ class AuthControllerTest extends IntegrationTestBase {
         void shouldAuthenticateWithValidCredentials() throws Exception {
             var user = UserFactory.make(u -> {
                 u.setEmail("login.test@petlife.com");
-                // Hash correspondente a "Senha@123"
-                u.setPasswordHash("$2a$12$N9qo8uLOpvIAwy10B74dOeO6L/X5O29.eLg70.Xj0m2.q.Uv2hI2S");
+                u.setPasswordHash(passwordEncoder.encode("Senha@123"));
             });
             userRepository.save(user);
 

@@ -49,7 +49,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justify-content: 'center',
+                    justifyContent: 'center',
                     background: 'rgba(255, 255, 255, 0.05)',
                     fontSize: '18px',
                     cursor: 'pointer'

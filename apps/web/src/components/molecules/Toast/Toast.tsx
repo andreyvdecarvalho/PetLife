@@ -12,9 +12,7 @@ interface ToastMessage {
 interface ToastContextData {
   showToast: (message: string, type: ToastType) => void;
 }
-
-const ToastContext = createContext<ToastContextData>({} as ToastContextData);
-
+const ToastContext = createContext<ToastContextData | undefined>(undefined);
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 

@@ -16,7 +16,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
-          justify-content: 'center',
+          justifyContent: 'center',
           background: 'var(--bg-gradient)'
         }}
       >

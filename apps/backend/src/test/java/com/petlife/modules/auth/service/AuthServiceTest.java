@@ -283,4 +283,92 @@ class AuthServiceTest {
             then(userRepository).should(never()).save(user);
         }
     }
+
+    @Nested
+    @DisplayName("getProfile")
+    class GetProfile {
+        @Test
+        @DisplayName("Deve retornar perfil com sucesso")
+        void shouldReturnProfile() {
+            var userId = UUID.randomUUID();
+            var user = UserFactory.make(u -> {
+                u.setId(userId);
+                u.setName("Camila");
+            });
+
+            given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+            var response = authService.getProfile(userId);
+            assertThat(response.name()).isEqualTo("Camila");
+        }
+    }
+
+    @Nested
+    @DisplayName("forgotPassword")
+    class ForgotPassword {
+        @Test
+        @DisplayName("Deve gerar link de recuperação (silent se não encontrar)")
+        void shouldHandleForgotPassword() {
+            var request = new com.petlife.modules.auth.dto.ForgotPasswordRequest("camila@petlife.com");
+            var user = UserFactory.make();
+            given(userRepository.findByEmail(request.email())).willReturn(Optional.of(user));
+
+            org.springframework.security.oauth2.jwt.Jwt mockJwt = org.mockito.Mockito.mock(org.springframework.security.oauth2.jwt.Jwt.class);
+            given(mockJwt.getTokenValue()).willReturn("reset-token");
+            given(jwtEncoder.encode(any())).willReturn(mockJwt);
+
+            authService.forgotPassword(request);
+            // Verify silently completes
+            then(jwtEncoder).should().encode(any());
+        }
+
+        @Test
+        @DisplayName("Deve retornar silenciosamente se e-mail não existe")
+        void shouldReturnSilentlyIfEmailDoesNotExist() {
+            var request = new com.petlife.modules.auth.dto.ForgotPasswordRequest("notfound@petlife.com");
+            given(userRepository.findByEmail(request.email())).willReturn(Optional.empty());
+
+            authService.forgotPassword(request);
+
+            then(jwtEncoder).should(never()).encode(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("resetPassword")
+    class ResetPassword {
+        @Test
+        @DisplayName("Deve redefinir senha com sucesso")
+        void shouldResetPassword() {
+            var request = new com.petlife.modules.auth.dto.ResetPasswordRequest("token-valido", "NovaSenha@123");
+            var user = UserFactory.make();
+            
+            org.springframework.security.oauth2.jwt.Jwt mockJwt = org.mockito.Mockito.mock(org.springframework.security.oauth2.jwt.Jwt.class);
+            given(mockJwt.getClaim("action")).willReturn("reset-password");
+            given(mockJwt.getSubject()).willReturn(user.getEmail());
+            
+            given(jwtDecoder.decode(request.token())).willReturn(mockJwt);
+            given(userRepository.findByEmail(user.getEmail())).willReturn(Optional.of(user));
+            given(passwordEncoder.encode("NovaSenha@123")).willReturn("hash-novo");
+
+            authService.resetPassword(request);
+
+            then(userRepository).should().save(user);
+            assertThat(user.getPasswordHash()).isEqualTo("hash-novo");
+        }
+
+        @Test
+        @DisplayName("Deve falhar se token não for de reset-password")
+        void shouldFailIfTokenActionIsInvalid() {
+            var request = new com.petlife.modules.auth.dto.ResetPasswordRequest("token-valido", "NovaSenha@123");
+            
+            org.springframework.security.oauth2.jwt.Jwt mockJwt = org.mockito.Mockito.mock(org.springframework.security.oauth2.jwt.Jwt.class);
+            given(mockJwt.getClaim("action")).willReturn("other-action");
+            
+            given(jwtDecoder.decode(request.token())).willReturn(mockJwt);
+
+            assertThatThrownBy(() -> authService.resetPassword(request))
+                    .isInstanceOf(BusinessException.class);
+        }
+    }
 }

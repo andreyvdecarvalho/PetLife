@@ -42,7 +42,7 @@ jobs:
           DOCKER_HOST: unix:///var/run/docker.sock
           TESTCONTAINERS_RYUK_DISABLED: "true"
 
-      - name: JaCoCo Coverage Gate (≥ 80%)
+      - name: JaCoCo Coverage Gate (≥ 85%)
         working-directory: apps/backend
         run: |
           COVERAGE=$(python3 -c "
@@ -125,11 +125,11 @@ jobs:
       - name: Run component tests with coverage
         run: pnpm vitest run --coverage
 
-      - name: Coverage Gate Frontend (≥ 75%)
+      - name: Coverage Gate Frontend (≥ 85%)
         run: |
           COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-          if (( $(echo "$COVERAGE < 75" | bc -l) )); then
-            echo "❌ Coverage $COVERAGE% below 75%"
+          if (( $(echo "$COVERAGE < 85" | bc -l) )); then
+            echo "❌ Coverage $COVERAGE% below 85%"
             exit 1
           fi
           echo "✅ Coverage $COVERAGE%"

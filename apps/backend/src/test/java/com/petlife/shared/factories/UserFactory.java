@@ -19,7 +19,6 @@ public class UserFactory {
 
     public static User make(Consumer<User> overrides) {
         User user = new User();
-        user.setId(UUID.randomUUID());
         user.setName(faker.name().fullName());
         user.setEmail(faker.internet().emailAddress());
         // Hash de senha BCrypt para "Senha@123"
