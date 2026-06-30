@@ -36,9 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 /**
- * Controller REST de Autenticação — thin layer.
- * Responsabilidade: receber request HTTP, delegar ao Use Case, retornar ApiResponse.
- * Nenhuma lógica de negócio deve existir aqui.
+ * Adaptador de Entrada REST (Driving Adapter / Primary Adapter) na Arquitetura Hexagonal.
+ * Porta de Entrada / Entry Point para o módulo de Autenticação.
+ * Responsabilidade única: receber requests HTTP, delegar aos Use Cases do Core e retornar ApiResponse.
  */
 @RestController
 @RequestMapping("/api/v1/auth")

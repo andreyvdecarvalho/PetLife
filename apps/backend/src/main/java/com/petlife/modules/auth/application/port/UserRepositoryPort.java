@@ -6,9 +6,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Port (interface de domínio) para operações de persistência do User.
- * Use Cases dependem desta interface, nunca do JpaRepository diretamente.
- * Princípio: Dependency Inversion (DIP) — Clean Architecture.
+ * Port (Porta de Saída / Output Port) na Arquitetura Hexagonal.
+ * Define o contrato de persistência do domínio para o User.
+ * O Core da aplicação interage com o banco de dados exclusivamente através desta porta.
+ * Use Cases dependem desta interface, nunca de adaptadores ou repositórios JPA concretos.
+ * Princípios: Dependency Inversion (DIP) e isolamento da Arquitetura Hexagonal.
  */
 public interface UserRepositoryPort {
 

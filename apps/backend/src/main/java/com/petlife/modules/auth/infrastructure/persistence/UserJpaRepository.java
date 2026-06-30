@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 /**
- * Implementação do UserRepositoryPort via Spring Data JPA.
- * Camada de infraestrutura — não deve ser injetada em Use Cases diretamente.
- * Use Cases devem depender de UserRepositoryPort (interface), não desta classe.
+ * Adaptador de Persistência (Persistence Adapter / Output Adapter) na Arquitetura Hexagonal.
+ * Implementa a porta de saída UserRepositoryPort utilizando Spring Data JPA / Hibernate.
+ * Localiza-se na camada de infraestrutura — não deve ser injetado diretamente nos Use Cases.
  */
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, UUID>, UserRepositoryPort {
