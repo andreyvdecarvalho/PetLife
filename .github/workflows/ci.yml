@@ -36,6 +36,7 @@ jobs:
         run: mvn spotbugs:check -B
 
       - name: Run Tests (Unit + Integration com Testcontainers)
+        id: run-tests
         working-directory: apps/backend
         run: mvn verify -B
         env:
@@ -74,11 +75,12 @@ jobs:
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1.9.1
-        if: always()
+        if: always() && steps.run-tests.outcome != 'skipped'
         with:
           name: JUnit Test Results
-          path: apps/backend/target/surefire-reports/*.xml
+          path: 'apps/backend/target/surefire-reports/*.xml,apps/backend/target/failsafe-reports/*.xml'
           reporter: java-junit
+          fail-on-error: false
 
   # ─── FRONTEND WEB ─────────────────────────────────────
   web-quality:
