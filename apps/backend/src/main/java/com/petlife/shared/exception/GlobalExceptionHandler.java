@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
                 .toList();
         log.warn("Validation failed for request: {}", details);
         return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .status(422)
                 .body(new ErrorResponse(new ErrorDetail("VALIDATION_ERROR", "Dados inválidos", details)));
     }
 

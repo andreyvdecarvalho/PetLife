@@ -6,12 +6,11 @@ import net.datafaker.Faker;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class UserFactory {
 
-    private static final Faker faker = new Faker(new Locale("pt", "BR"));
+    private static final Faker faker = new Faker(Locale.of("pt", "BR"));
 
     public static User make() {
         return make(u -> {});

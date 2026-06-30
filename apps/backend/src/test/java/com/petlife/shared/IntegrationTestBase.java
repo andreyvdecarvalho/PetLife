@@ -20,6 +20,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @Transactional
 public abstract class IntegrationTestBase {
 
+    @SuppressWarnings("resource")
     protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.4-alpine")
             .withDatabaseName("petlife_test")
             .withUsername("petlife")

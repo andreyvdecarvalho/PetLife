@@ -4,19 +4,15 @@ import com.petlife.modules.auth.dto.GoogleLoginRequest;
 import com.petlife.modules.auth.dto.LoginRequest;
 import com.petlife.modules.auth.dto.RegisterRequest;
 import com.petlife.modules.auth.dto.UpdateProfileRequest;
-import com.petlife.modules.auth.entity.User;
 import com.petlife.modules.auth.repository.UserRepository;
 import com.petlife.shared.IntegrationTestBase;
 import com.petlife.shared.factories.UserFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
@@ -80,7 +76,7 @@ class AuthControllerTest extends IntegrationTestBase {
             mockMvc.perform(post("/api/v1/auth/register")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(status().is(422))
                     .andExpect(jsonPath("$.error.code").value("VALIDATION_ERROR"))
                     .andExpect(jsonPath("$.error.details[0].field").value("password"));
         }
