@@ -32,6 +32,9 @@ class AuthControllerTest extends IntegrationTestBase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private org.springframework.security.oauth2.jwt.JwtEncoder jwtEncoder;
+
     @Nested
     @DisplayName("POST /api/v1/auth/register")
     class Register {
@@ -145,6 +148,95 @@ class AuthControllerTest extends IntegrationTestBase {
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.error.code").value("AUTH_INVALID_GOOGLE_TOKEN"));
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/v1/auth/forgot-password")
+    class ForgotPassword {
+
+        @Test
+        @DisplayName("Deve solicitar recuperação de senha com e-mail existente (retorna 204)")
+        void shouldRequestPasswordRecoveryWithExistingEmail() throws Exception {
+            var user = UserFactory.make();
+            userRepository.save(user);
+
+            var request = new com.petlife.modules.auth.dto.ForgotPasswordRequest(user.getEmail());
+
+            mockMvc.perform(post("/api/v1/auth/forgot-password")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isNoContent());
+        }
+
+        @Test
+        @DisplayName("Deve retornar 204 silenciosamente se o e-mail não existir")
+        void shouldReturn204SilentlyIfEmailDoesNotExist() throws Exception {
+            var request = new com.petlife.modules.auth.dto.ForgotPasswordRequest("inexistente@petlife.com");
+
+            mockMvc.perform(post("/api/v1/auth/forgot-password")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isNoContent());
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/v1/auth/reset-password")
+    class ResetPassword {
+
+        @Test
+        @DisplayName("Deve redefinir a senha do usuário com token de recuperação válido")
+        void shouldResetPasswordWithValidToken() throws Exception {
+            var user = UserFactory.make(u -> u.setPasswordHash(passwordEncoder.encode("SenhaAntiga@123")));
+            userRepository.save(user);
+
+            var now = java.time.Instant.now();
+            var claims = org.springframework.security.oauth2.jwt.JwtClaimsSet.builder()
+                    .issuer("petlife")
+                    .issuedAt(now)
+                    .expiresAt(now.plus(15, java.time.temporal.ChronoUnit.MINUTES))
+                    .subject(user.getEmail())
+                    .claim("action", "reset-password")
+                    .build();
+
+            var resetToken = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).getTokenValue();
+
+            var request = new com.petlife.modules.auth.dto.ResetPasswordRequest(resetToken, "NovaSenha@123");
+
+            mockMvc.perform(post("/api/v1/auth/reset-password")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isNoContent());
+
+            var updatedUser = userRepository.findById(user.getId()).orElseThrow();
+            assertThat(passwordEncoder.matches("NovaSenha@123", updatedUser.getPasswordHash())).isTrue();
+        }
+
+        @Test
+        @DisplayName("Deve retornar 400 para token com action inválida")
+        void shouldReturn400ForTokenWithInvalidAction() throws Exception {
+            var user = UserFactory.make();
+            userRepository.save(user);
+
+            var now = java.time.Instant.now();
+            var claims = org.springframework.security.oauth2.jwt.JwtClaimsSet.builder()
+                    .issuer("petlife")
+                    .issuedAt(now)
+                    .expiresAt(now.plus(15, java.time.temporal.ChronoUnit.MINUTES))
+                    .subject(user.getEmail())
+                    .claim("action", "invalid-action")
+                    .build();
+
+            var resetToken = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).getTokenValue();
+
+            var request = new com.petlife.modules.auth.dto.ResetPasswordRequest(resetToken, "NovaSenha@123");
+
+            mockMvc.perform(post("/api/v1/auth/reset-password")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.error.code").value("AUTH_INVALID_TOKEN"));
         }
     }
 
