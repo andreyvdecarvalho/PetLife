@@ -21,6 +21,9 @@
         <java.version>21</java.version>
         <springdoc.version>2.6.0</springdoc.version>
         <datafaker.version>2.2.2</datafaker.version>
+        <flyway.url></flyway.url>
+        <flyway.user></flyway.user>
+        <flyway.password></flyway.password>
     </properties>
 
     <dependencies>
@@ -220,6 +223,17 @@
                     <effort>Max</effort>
                     <threshold>High</threshold>
                     <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+            <!-- Flyway -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>10.20.0</version>
+                <configuration>
+                    <url>${flyway.url}</url>
+                    <user>${flyway.user}</user>
+                    <password>${flyway.password}</password>
                 </configuration>
             </plugin>
         </plugins>
