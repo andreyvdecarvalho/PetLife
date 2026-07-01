@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -100,7 +100,7 @@ class PetControllerTest extends IntegrationTestBase {
                             .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail())))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(status().is(422))
                     .andExpect(jsonPath("$.error.code").value("VALIDATION_ERROR"))
                     .andExpect(jsonPath("$.error.details[0].field").value("name"));
         }
