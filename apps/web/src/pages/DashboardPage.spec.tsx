@@ -6,6 +6,11 @@ import { vi, describe, it, expect } from 'vitest';
 import React from 'react';
 
 vi.mock('../contexts/AuthContext');
+vi.mock('../components/molecules/Toast', () => ({
+  useToast: () => ({
+    showToast: vi.fn(),
+  }),
+}));
 
 describe('DashboardPage', () => {
   it('should render correctly with verified email', () => {

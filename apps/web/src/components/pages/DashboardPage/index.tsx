@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useToast } from '../../molecules/Toast';
+import { PetForm } from '../../organisms/PetForm';
 import './styles.css';
 
 interface Pet {
@@ -23,6 +25,8 @@ interface Appointment {
 
 export const DashboardPageContent: React.FC = () => {
   const { user } = useAuth();
+  const { showToast } = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Mock data matching Stitch design
   const [pets, setPets] = useState<Pet[]>([
@@ -45,6 +49,24 @@ export const DashboardPageContent: React.FC = () => {
   ]);
 
   const [activePetId, setActivePetId] = useState<string>('1');
+
+  const handleCreatePetSuccess = (newPet: any) => {
+    setIsModalOpen(false);
+    showToast('Pet cadastrado com sucesso! ✨', 'success');
+    
+    // Adiciona o novo pet na lista superior para feedback imediato
+    setPets(prev => [
+      ...prev,
+      {
+        id: newPet.id,
+        name: newPet.name,
+        species: newPet.species.toLowerCase() as 'dog' | 'cat',
+        breed: newPet.breed || 'SRD',
+        imageUrl: newPet.photoUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCnHN_9BTUOKpIb36hpFqE25LwIGylq8VtlrHjbSrAhgWcSBgVoSTXH_BMmBraiV93TqeZ2ZdWgYjVg7-fUZGPf16xvHpZ1gPOoaBajWM-dc79Xh3ETkTvT0uKw6_LbbTAI7P1n1FCrkGvgvYi-4WVKYEqmihw85_IDBmKe8RphLlmRkpBmiLcHOnESAVKHJYV78g1ZQNwdwNApTfakidYekZzgfDrEj-Pn9OiAs79HAY7c_WsQ9Eo8vsMeD9OmxSAc5nMX25sEWIw',
+        status: 'inactive',
+      }
+    ]);
+  };
 
   const appointments: Appointment[] = [
     {
@@ -119,7 +141,14 @@ export const DashboardPageContent: React.FC = () => {
           ))}
           
           {/* Add Pet Button */}
-          <div className="dashboard-page__add-pet-btn group">
+          <div 
+            className="dashboard-page__add-pet-btn group"
+            onClick={() => setIsModalOpen(true)}
+            role="button"
+            tabIndex={0}
+            aria-label="Cadastrar novo pet"
+            data-testid="btn-abrir-cadastro-pet"
+          >
             <div className="dashboard-page__add-pet-icon-wrapper">
               <span className="material-symbols-outlined">add</span>
             </div>
@@ -211,6 +240,17 @@ export const DashboardPageContent: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {isModalOpen && (
+        <div className="dashboard-page__modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="dashboard-page__modal-content" onClick={e => e.stopPropagation()}>
+            <PetForm 
+              onSuccess={handleCreatePetSuccess}
+              onCancel={() => setIsModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
