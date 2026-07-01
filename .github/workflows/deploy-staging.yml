@@ -25,11 +25,7 @@ jobs:
 
       - name: Run Flyway migrations on staging
         working-directory: apps/backend
-        run: |
-          mvn flyway:migrate -B \
-            -Dflyway.url="${{ secrets.STAGING_DATABASE_URL }}" \
-            -Dflyway.user="${{ secrets.STAGING_DB_USER }}" \
-            -Dflyway.password="${{ secrets.STAGING_DB_PASS }}"
+        run: mvn flyway:migrate -B -Dflyway.url="${{ secrets.STAGING_DATABASE_URL }}" -Dflyway.user="${{ secrets.STAGING_DB_USER }}" -Dflyway.password="${{ secrets.STAGING_DB_PASS }}"
 
       - name: "Deploy JAR (ex: AWS ECS / EC2 / Railway)"
         run: echo "Deploy step aqui..."
