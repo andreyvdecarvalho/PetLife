@@ -1,0 +1,15 @@
+.molecule-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs); /* margin inside molecule, layout rule */
+  width: 100%;
+}
+
+.molecule-form-field__error {
+  color: var(--color-error);
+  font-family: var(--font-label);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-sm-weight);
+  line-height: var(--text-label-sm-line-height);
+  margin-top: 2px;
+}

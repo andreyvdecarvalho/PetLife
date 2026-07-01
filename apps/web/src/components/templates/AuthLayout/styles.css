@@ -1,0 +1,25 @@
+.template-auth-layout {
+  min-height: max(884px, 100dvh);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  padding: 3rem var(--space-margin-mobile) var(--space-xl) var(--space-margin-mobile);
+  font-family: var(--font-body-lg);
+}
+
+@media (min-width: 640px) {
+  .template-auth-layout {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .template-auth-layout {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}

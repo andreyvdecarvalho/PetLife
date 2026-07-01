@@ -1,0 +1,87 @@
+.atom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  font-family: var(--font-label-md);
+  font-size: var(--text-label-md-size, 14px);
+  font-weight: var(--text-label-md-weight, 600);
+  line-height: var(--text-label-md-line-height, 20px);
+  letter-spacing: var(--text-label-md-letter-spacing, 0.01em);
+  border-radius: 9999px;
+  color: var(--color-on-primary);
+  border: 1px solid transparent;
+  background: var(--color-primary);
+  box-shadow: 0 4px 12px 0 rgba(155, 69, 0, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%; /* Rule: Herdar tamanho ou ocupar 100%, sem margins */
+}
+
+.atom-button:hover:not(:disabled) {
+  opacity: 0.9;
+  box-shadow: 0 6px 15px 0 rgba(155, 69, 0, 0.3);
+}
+
+.atom-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.atom-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-surface-dim);
+  color: var(--color-on-surface-variant);
+  box-shadow: none;
+}
+
+.atom-button--secondary {
+  background: transparent;
+  border: 1px solid var(--color-outline);
+  color: var(--color-primary);
+  box-shadow: none;
+}
+
+.atom-button--secondary:hover:not(:disabled) {
+  background: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+  border-color: transparent;
+}
+
+.atom-button--danger {
+  background: var(--color-error);
+  color: var(--color-on-error);
+}
+
+.atom-button--danger:hover:not(:disabled) {
+  background: var(--color-error-container);
+  color: var(--color-on-error-container);
+}
+
+.atom-button--google {
+  background: var(--color-surface-container-lowest);
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-outline-variant);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.atom-button--google:hover:not(:disabled) {
+  background: var(--color-surface-container-low);
+  border-color: var(--color-outline);
+}
+
+/* Spinner de Loading */
+.atom-button__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full, 9999px);
+  border-top-color: currentColor;
+  animation: spin 0.8s linear infinite;
+  margin-right: var(--space-xs);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
