@@ -33,4 +33,12 @@ export const petApi = {
       },
     });
   },
+
+  list: (page = 0, size = 10) =>
+    api.get<{ data: Pet[]; meta?: { page: number; perPage: number; total: number; totalPages: number } }>(
+      `/pets?page=${page}&size=${size}`
+    ),
+
+  getById: (id: string) =>
+    api.get<{ data: Pet }>(`/pets/${id}`),
 };

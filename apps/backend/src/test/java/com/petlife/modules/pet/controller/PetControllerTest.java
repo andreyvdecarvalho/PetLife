@@ -216,4 +216,96 @@ class PetControllerTest extends IntegrationTestBase {
                     .andExpect(jsonPath("$.error.code").value("FILE_TOO_LARGE"));
         }
     }
+
+    @Nested
+    @DisplayName("GET /api/v1/pets")
+    class ListPets {
+
+        @Test
+        @DisplayName("Deve listar pets do usuário logado de forma paginada")
+        void shouldListUserPets() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet pet1 = PetFactory.make(p -> { p.setUser(user); p.setName("Pluto"); });
+            Pet pet2 = PetFactory.make(p -> { p.setUser(user); p.setName("Mimi"); });
+            petRepository.save(pet1);
+            petRepository.save(pet2);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets")
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data").isArray())
+                    .andExpect(jsonPath("$.data.length()").value(2))
+                    .andExpect(jsonPath("$.meta.page").value(0))
+                    .andExpect(jsonPath("$.meta.total").value(2));
+        }
+
+        @Test
+        @DisplayName("Deve filtrar pets arquivados na listagem")
+        void shouldExcludeArchivedPets() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet petActive = PetFactory.make(p -> { p.setUser(user); p.setName("Ativo"); p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); });
+            Pet petArchived = PetFactory.make(p -> { p.setUser(user); p.setName("Arquivado"); p.setStatus(com.petlife.modules.pet.entity.PetStatus.ARCHIVED); });
+            petRepository.save(petActive);
+            petRepository.save(petArchived);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets")
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data.length()").value(1))
+                    .andExpect(jsonPath("$.data[0].name").value("Ativo"));
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /api/v1/pets/{id}")
+    class GetPetById {
+
+        @Test
+        @DisplayName("Deve obter detalhes do pet com sucesso")
+        void shouldGetPetById() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet pet = PetFactory.make(p -> { p.setUser(user); p.setName("Bidu"); });
+            petRepository.save(pet);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets/{id}", pet.getId())
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data.name").value("Bidu"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 404 se o pet não existir")
+        void shouldReturn404IfPetNotFound() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets/{id}", UUID.randomUUID())
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error.code").value("PET_NOT_FOUND"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 403 se o pet pertencer a outro usuário")
+        void shouldReturn403IfPetBelongsToOtherUser() throws Exception {
+            User user = UserFactory.make();
+            User otherUser = UserFactory.make();
+            userRepository.save(user);
+            userRepository.save(otherUser);
+
+            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            petRepository.save(otherPet);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets/{id}", otherPet.getId())
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.error.code").value("FORBIDDEN_PET_ACCESS"));
+        }
+    }
 }
