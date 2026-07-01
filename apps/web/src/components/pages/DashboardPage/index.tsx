@@ -74,13 +74,6 @@ export const DashboardPageContent: React.FC = () => {
   const activePet = pets.find(p => p.id === activePetId) || pets[0];
   const activePetName = activePet?.name || '';
 
-  const handleSelectPet = (id: string) => {
-    setActivePetId(id);
-    setPets(prev => prev.map(p => ({
-      ...p,
-      status: p.id === id ? 'active' : 'inactive'
-    })));
-  };
 
   return (
     <div className="dashboard-page animate-fade-in">
