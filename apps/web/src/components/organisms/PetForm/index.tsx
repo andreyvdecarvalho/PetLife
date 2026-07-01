@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useCreatePet } from '../../../application/pet/useCreatePet';
-import type { PetSex, PetSize, PetSpecies } from '../../../domain/pet/Pet';
+import { useUpdatePet } from '../../../application/pet/useUpdatePet';
+import type { Pet, PetSex, PetSize, PetSpecies } from '../../../domain/pet/Pet';
 import { compressImage } from '../../../utils/imageCompressor';
 import { FormField } from '../../molecules/FormField';
 import { Button } from '../../atoms/Button';
 import './styles.css';
 
 interface PetFormProps {
+  pet?: Pet;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -40,8 +42,12 @@ const BREED_SUGGESTIONS: Record<string, string[]> = {
   FISH: ['Beta', 'Peixinho Dourado', 'Guppy', 'Neon'],
 };
 
-export const PetForm: React.FC<PetFormProps> = ({ onSuccess, onCancel }) => {
-  const { createPet, loading, error: apiError } = useCreatePet();
+export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) => {
+  const { createPet, loading: createLoading, error: createError } = useCreatePet();
+  const { updatePet, loading: updateLoading, error: updateError } = useUpdatePet();
+
+  const loading = createLoading || updateLoading;
+  const apiError = createError || updateError;
 
   // Campos do formulário
   const [name, setName] = useState('');
@@ -65,6 +71,25 @@ export const PetForm: React.FC<PetFormProps> = ({ onSuccess, onCancel }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (pet) {
+      setName(pet.name);
+      setSpecies(pet.species);
+      setBreed(pet.breed || '');
+      setSex(pet.sex);
+      setBirthDate(pet.birthDate || '');
+      setWeightKg(pet.weightKg ? String(pet.weightKg) : '');
+      setSize(pet.size || 'MEDIUM');
+      setNeutered(pet.neutered || false);
+      setMicrochipId(pet.microchipId || '');
+      setAllergies(pet.allergies || '');
+      setNotes(pet.notes || '');
+      if (pet.photoUrl) {
+        setPhotoPreview(pet.photoUrl);
+      }
+    }
+  }, [pet]);
 
   // Carrega raças sugeridas dinamicamente
   const breedSuggestions = BREED_SUGGESTIONS[species] || [];
@@ -130,7 +155,7 @@ export const PetForm: React.FC<PetFormProps> = ({ onSuccess, onCancel }) => {
     if (!validate()) return;
 
     try {
-      await createPet({
+      const data = {
         name,
         species,
         breed: breed.trim() || undefined,
@@ -142,17 +167,27 @@ export const PetForm: React.FC<PetFormProps> = ({ onSuccess, onCancel }) => {
         microchipId: microchipId.trim() || undefined,
         allergies: allergies.trim() || undefined,
         notes: notes.trim() || undefined,
-      }, photoFile || undefined);
+      };
+
+      if (pet) {
+        await updatePet(pet.id, data);
+        if (photoFile) {
+          const { petApi } = await import('../../../infrastructure/http/pet.api');
+          await petApi.uploadPhoto(pet.id, photoFile);
+        }
+      } else {
+        await createPet(data, photoFile || undefined);
+      }
 
       onSuccess();
     } catch (err) {
-      // Erro tratado pelo hook useCreatePet e exposto via apiError
+      // Erro tratado pelos hooks e exposto via apiError
     }
   };
 
   return (
     <form className="organism-pet-form" onSubmit={handleSubmit} data-testid="pet-form">
-      <h2 className="organism-pet-form__title">Cadastrar Novo Pet</h2>
+      <h2 className="organism-pet-form__title">{pet ? 'Editar Pet' : 'Cadastrar Novo Pet'}</h2>
       
       {apiError && (
         <div className="organism-pet-form__alert-error" role="alert">
@@ -384,7 +419,7 @@ export const PetForm: React.FC<PetFormProps> = ({ onSuccess, onCancel }) => {
           disabled={loading || compressing}
           data-testid="btn-salvar-pet"
         >
-          {loading ? 'Cadastrando...' : 'Cadastrar Pet'}
+          {loading ? (pet ? 'Salvando...' : 'Cadastrando...') : (pet ? 'Salvar Alterações' : 'Cadastrar Pet')}
         </Button>
       </div>
     </form>

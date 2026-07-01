@@ -20,6 +20,7 @@ export const DashboardPageContent: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingPet, setEditingPet] = useState<Pet | null>(null);
   const { pets, isLoading, fetchPets } = useGetPets();
   const [activePetId, setActivePetId] = useState<string | null>(null);
 
@@ -35,10 +36,16 @@ export const DashboardPageContent: React.FC = () => {
     }
   }, [pets, activePetId]);
 
-  const handleCreatePetSuccess = () => {
+  const handlePetFormSuccess = () => {
     setIsModalOpen(false);
-    showToast('Pet cadastrado com sucesso! ✨', 'success');
+    showToast(editingPet ? 'Pet atualizado com sucesso! ✨' : 'Pet cadastrado com sucesso! ✨', 'success');
+    setEditingPet(null);
     fetchPets(); // Recarrega os pets da API
+  };
+
+  const handlePetFormCancel = () => {
+    setIsModalOpen(false);
+    setEditingPet(null);
   };
 
   const appointments: Appointment[] = [
@@ -173,7 +180,33 @@ export const DashboardPageContent: React.FC = () => {
 
       {/* Quick Stats Summary */}
       <section className="dashboard-page__stats">
-        <h2 className="dashboard-page__section-title">Resumo de Saúde: {activePetName || 'Seu Pet'}</h2>
+        <div className="dashboard-page__stats-section-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '15px' }}>
+          <h2 className="dashboard-page__section-title" style={{ margin: 0 }}>Resumo de Saúde: {activePetName || 'Seu Pet'}</h2>
+          {activePet && (
+            <button 
+              className="dashboard-page__edit-btn"
+              onClick={() => {
+                setEditingPet(activePet);
+                setIsModalOpen(true);
+              }}
+              title="Editar pet"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--color-primary)',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '6px',
+                borderRadius: '50%',
+                transition: 'background-color 0.2s',
+              }}
+              data-testid="btn-editar-pet"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>edit</span>
+            </button>
+          )}
+        </div>
         {activePetName ? (
           <div className="dashboard-page__stats-card">
             <div className="dashboard-page__stats-header">
@@ -232,11 +265,12 @@ export const DashboardPageContent: React.FC = () => {
       </section>
 
       {isModalOpen && (
-        <div className="dashboard-page__modal-overlay" onClick={() => setIsModalOpen(false)}>
+        <div className="dashboard-page__modal-overlay" onClick={handlePetFormCancel}>
           <div className="dashboard-page__modal-content" onClick={e => e.stopPropagation()}>
             <PetForm 
-              onSuccess={handleCreatePetSuccess}
-              onCancel={() => setIsModalOpen(false)}
+              pet={editingPet || undefined}
+              onSuccess={handlePetFormSuccess}
+              onCancel={handlePetFormCancel}
             />
           </div>
         </div>

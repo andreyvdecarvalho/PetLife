@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { DashboardPage } from './DashboardPage';
 import { useAuth } from '../contexts/AuthContext';
 import { MemoryRouter } from 'react-router-dom';
-import { vi, describe, it, expect } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
 
 vi.mock('../contexts/AuthContext');
@@ -11,6 +11,8 @@ vi.mock('../components/molecules/Toast', () => ({
     showToast: vi.fn(),
   }),
 }));
+
+const mockFetchPets = vi.fn();
 vi.mock('../application/pet/useGetPets', () => ({
   useGetPets: () => ({
     pets: [
@@ -19,11 +21,15 @@ vi.mock('../application/pet/useGetPets', () => ({
     ],
     isLoading: false,
     error: null,
-    fetchPets: vi.fn()
+    fetchPets: mockFetchPets
   })
 }));
 
 describe('DashboardPage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should render correctly with verified email', () => {
     (useAuth as any).mockReturnValue({
       user: {
@@ -67,5 +73,33 @@ describe('DashboardPage', () => {
     );
 
     expect(screen.getByText('⚠️ Por favor, confirme seu e-mail.')).toBeDefined();
+  });
+
+  it('should open edit modal when clicking edit button', () => {
+    (useAuth as any).mockReturnValue({
+      user: {
+        id: '1',
+        name: 'Camila',
+        email: 'camila@example.com',
+        plan: 'FREE',
+        emailVerified: true
+      },
+      logout: vi.fn()
+    });
+
+    render(
+      <MemoryRouter>
+        <DashboardPage />
+      </MemoryRouter>
+    );
+
+    const editBtn = screen.getByTestId('btn-editar-pet');
+    expect(editBtn).toBeDefined();
+
+    fireEvent.click(editBtn);
+
+    // O modal deve ser aberto e exibir "Editar Pet" com o nome pré-preenchido
+    expect(screen.getByText('Editar Pet')).toBeDefined();
+    expect((screen.getByLabelText('Nome do Pet') as HTMLInputElement).value).toBe('Max');
   });
 });

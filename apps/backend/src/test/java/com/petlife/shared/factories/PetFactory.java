@@ -5,14 +5,13 @@ import com.petlife.modules.pet.entity.PetSex;
 import com.petlife.modules.pet.entity.PetSpecies;
 import com.petlife.modules.pet.entity.PetStatus;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class PetFactory {
 
     public static Pet make() {
-        return make(p -> {});
+        return make(p -> {
+        });
     }
 
     public static Pet make(Consumer<Pet> overrides) {
