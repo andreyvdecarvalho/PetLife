@@ -149,6 +149,21 @@ jobs:
     needs: [backend-quality, web-quality]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
+    services:
+      postgres:
+        image: postgres:16.4-alpine
+        env:
+          POSTGRES_DB: petlife_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
 
@@ -185,7 +200,9 @@ jobs:
         run: java -jar target/petlife-backend-*.jar &
         env:
           SPRING_PROFILES_ACTIVE: test
-          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/petlife_test
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
 
       - name: Start web dev server
         working-directory: apps/web

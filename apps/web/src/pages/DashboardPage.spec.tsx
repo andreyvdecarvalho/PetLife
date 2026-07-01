@@ -6,6 +6,22 @@ import { vi, describe, it, expect } from 'vitest';
 import React from 'react';
 
 vi.mock('../contexts/AuthContext');
+vi.mock('../components/molecules/Toast', () => ({
+  useToast: () => ({
+    showToast: vi.fn(),
+  }),
+}));
+vi.mock('../application/pet/useGetPets', () => ({
+  useGetPets: () => ({
+    pets: [
+      { id: '1', name: 'Max', species: 'DOG', breed: 'Golden Retriever', photoUrl: '', status: 'ACTIVE', userId: '1' },
+      { id: '2', name: 'Luna', species: 'CAT', breed: 'Siamês', photoUrl: '', status: 'ACTIVE', userId: '1' }
+    ],
+    isLoading: false,
+    error: null,
+    fetchPets: vi.fn()
+  })
+}));
 
 describe('DashboardPage', () => {
   it('should render correctly with verified email', () => {

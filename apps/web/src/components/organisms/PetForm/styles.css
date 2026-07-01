@@ -1,0 +1,155 @@
+.organism-pet-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+  max-width: 600px;
+  background-color: var(--color-surface-container-lowest);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-ambient-md);
+  padding: var(--spacing-md);
+  animation: fade-in 0.3s ease-out;
+}
+
+.organism-pet-form__title {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  margin-bottom: var(--spacing-xs);
+  text-align: center;
+}
+
+.organism-pet-form__alert-error {
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Foto do Pet */
+.organism-pet-form__photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-xs);
+}
+
+.organism-pet-form__avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  border: 2px dashed var(--color-outline-variant);
+  background-color: var(--color-surface-container-low);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.organism-pet-form__avatar-preview:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-container);
+}
+
+.organism-pet-form__preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.organism-pet-form__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.organism-pet-form__placeholder .material-symbols-outlined {
+  font-size: 32px;
+  color: var(--color-primary-container);
+}
+
+.organism-pet-form__error {
+  color: var(--color-error);
+  font-family: var(--font-body);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Grid Layout */
+.organism-pet-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+@media (max-width: 480px) {
+  .organism-pet-form__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.organism-pet-form__checkbox-field {
+  display: flex;
+  align-items: center;
+  margin-top: var(--spacing-xs);
+}
+
+.organism-pet-form__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface);
+  cursor: pointer;
+}
+
+.organism-pet-form__checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-default);
+  accent-color: var(--color-primary);
+}
+
+.organism-pet-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.organism-pet-form__actions button {
+  min-width: 120px;
+}
+
+.atom-input--textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

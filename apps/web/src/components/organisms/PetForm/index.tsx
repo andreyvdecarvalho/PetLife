@@ -1,0 +1,392 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useCreatePet } from '../../../application/pet/useCreatePet';
+import type { PetSex, PetSize, PetSpecies } from '../../../domain/pet/Pet';
+import { compressImage } from '../../../utils/imageCompressor';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
+import './styles.css';
+
+interface PetFormProps {
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+const BREED_SUGGESTIONS: Record<string, string[]> = {
+  DOG: [
+    'Sem raça definida (SRD)',
+    'Golden Retriever',
+    'Poodle',
+    'Buldogue Francês',
+    'Pastor Alemão',
+    'Yorkshire Terrier',
+    'Labrador Retriever',
+    'Beagle',
+    'Pinscher',
+    'Shih Tzu',
+    'Rottweiler',
+    'Pug',
+  ],
+  CAT: [
+    'Sem raça definida (SRD)',
+    'Persa',
+    'Siamês',
+    'Maine Coon',
+    'Angorá',
+    'Ragdoll',
+    'Sphynx',
+    'Bengal',
+  ],
+  BIRD: ['Calopsita', 'Canário', 'Papagaio', 'Periquito'],
+  FISH: ['Beta', 'Peixinho Dourado', 'Guppy', 'Neon'],
+};
+
+export const PetForm: React.FC<PetFormProps> = ({ onSuccess, onCancel }) => {
+  const { createPet, loading, error: apiError } = useCreatePet();
+
+  // Campos do formulário
+  const [name, setName] = useState('');
+  const [species, setSpecies] = useState<PetSpecies>('DOG');
+  const [breed, setBreed] = useState('');
+  const [sex, setSex] = useState<PetSex>('UNKNOWN');
+  const [birthDate, setBirthDate] = useState('');
+  const [weightKg, setWeightKg] = useState('');
+  const [size, setSize] = useState<PetSize>('MEDIUM');
+  const [neutered, setNeutered] = useState(false);
+  const [microchipId, setMicrochipId] = useState('');
+  const [allergies, setAllergies] = useState('');
+  const [notes, setNotes] = useState('');
+
+  // Foto e Compressão
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [compressing, setCompressing] = useState(false);
+  
+  // Validações
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Carrega raças sugeridas dinamicamente
+  const breedSuggestions = BREED_SUGGESTIONS[species] || [];
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setCompressing(true);
+    try {
+      // Comprime localmente antes de salvar no estado
+      const compressed = await compressImage(file, 500); // máx 500KB
+      setPhotoFile(compressed);
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(compressed);
+    } catch (err) {
+      console.error('Erro na compressão:', err);
+      setErrors(prev => ({ ...prev, photo: 'Falha ao processar imagem.' }));
+    } finally {
+      setCompressing(false);
+    }
+  };
+
+  const handleSelectPhotoClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const validate = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!name.trim()) {
+      newErrors.name = 'O nome é obrigatório.';
+    } else if (name.trim().length < 2) {
+      newErrors.name = 'O nome deve ter no mínimo 2 caracteres.';
+    }
+
+    if (!species) {
+      newErrors.species = 'A espécie é obrigatória.';
+    }
+
+    if (birthDate) {
+      const selectedDate = new Date(birthDate);
+      const today = new Date();
+      if (selectedDate > today) {
+        newErrors.birthDate = 'A data de nascimento não pode ser no futuro.';
+      }
+    }
+
+    if (weightKg && isNaN(Number(weightKg))) {
+      newErrors.weightKg = 'O peso deve ser um número válido.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    try {
+      await createPet({
+        name,
+        species,
+        breed: breed.trim() || undefined,
+        sex,
+        birthDate: birthDate || undefined,
+        weightKg: weightKg ? Number(weightKg) : undefined,
+        size,
+        neutered,
+        microchipId: microchipId.trim() || undefined,
+        allergies: allergies.trim() || undefined,
+        notes: notes.trim() || undefined,
+      }, photoFile || undefined);
+
+      onSuccess();
+    } catch (err) {
+      // Erro tratado pelo hook useCreatePet e exposto via apiError
+    }
+  };
+
+  return (
+    <form className="organism-pet-form" onSubmit={handleSubmit} data-testid="pet-form">
+      <h2 className="organism-pet-form__title">Cadastrar Novo Pet</h2>
+      
+      {apiError && (
+        <div className="organism-pet-form__alert-error" role="alert">
+          {apiError}
+        </div>
+      )}
+
+      {/* Foto do Pet */}
+      <div className="organism-pet-form__photo-section">
+        <div 
+          className="organism-pet-form__avatar-preview" 
+          onClick={handleSelectPhotoClick}
+          role="button"
+          tabIndex={0}
+          aria-label="Selecionar foto do pet"
+        >
+          {photoPreview ? (
+            <img src={photoPreview} alt="Preview do Pet" className="organism-pet-form__preview-img" />
+          ) : (
+            <div className="organism-pet-form__placeholder">
+              <span className="material-symbols-outlined">pets</span>
+              <span>{compressing ? 'Processando...' : 'Adicionar Foto'}</span>
+            </div>
+          )}
+        </div>
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          onChange={handlePhotoChange} 
+          accept="image/*"
+          style={{ display: 'none' }}
+          data-testid="input-foto-pet"
+        />
+        {errors.photo && <span className="organism-pet-form__error">{errors.photo}</span>}
+      </div>
+
+      <div className="organism-pet-form__grid">
+        {/* Nome */}
+        <FormField
+          label="Nome do Pet"
+          id="pet-name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          error={errors.name}
+          required
+          placeholder="Ex: Max, Luna"
+          data-testid="input-nome-pet"
+        />
+
+        {/* Espécie */}
+        <div className="molecule-form-field">
+          <label htmlFor="pet-species" className="atom-label atom-label--required">
+            Espécie
+          </label>
+          <select
+            id="pet-species"
+            value={species}
+            onChange={e => {
+              setSpecies(e.target.value as PetSpecies);
+              setBreed(''); // Reseta a raça ao mudar a espécie
+            }}
+            className={`atom-input ${errors.species ? 'atom-input--error' : ''}`}
+            data-testid="select-especie-pet"
+          >
+            <option value="DOG">Cachorro</option>
+            <option value="CAT">Gato</option>
+            <option value="BIRD">Ave</option>
+            <option value="FISH">Peixe</option>
+            <option value="RODENT">Roedor</option>
+            <option value="REPTILE">Réptil</option>
+            <option value="OTHER">Outro</option>
+          </select>
+          {errors.species && <span className="molecule-form-field__error">{errors.species}</span>}
+        </div>
+
+        {/* Raça */}
+        <div className="molecule-form-field">
+          <label htmlFor="pet-breed" className="atom-label">
+            Raça
+          </label>
+          <input
+            id="pet-breed"
+            type="text"
+            list="breeds-list"
+            value={breed}
+            onChange={e => setBreed(e.target.value)}
+            className="atom-input"
+            placeholder="Ex: Golden Retriever, Siamês"
+            data-testid="input-raca-pet"
+          />
+          <datalist id="breeds-list">
+            {breedSuggestions.map(suggestion => (
+              <option key={suggestion} value={suggestion} />
+            ))}
+          </datalist>
+        </div>
+
+        {/* Sexo */}
+        <div className="molecule-form-field">
+          <label htmlFor="pet-sex" className="atom-label">
+            Sexo
+          </label>
+          <select
+            id="pet-sex"
+            value={sex}
+            onChange={e => setSex(e.target.value as PetSex)}
+            className="atom-input"
+            data-testid="select-sexo-pet"
+          >
+            <option value="MALE">Macho</option>
+            <option value="FEMALE">Fêmea</option>
+            <option value="UNKNOWN">Não Sei</option>
+          </select>
+        </div>
+
+        {/* Data de Nascimento */}
+        <FormField
+          label="Data de Nascimento"
+          id="pet-birthdate"
+          type="date"
+          value={birthDate}
+          onChange={e => setBirthDate(e.target.value)}
+          error={errors.birthDate}
+          data-testid="input-nascimento-pet"
+        />
+
+        {/* Peso (kg) */}
+        <FormField
+          label="Peso (kg)"
+          id="pet-weight"
+          type="text"
+          value={weightKg}
+          onChange={e => setWeightKg(e.target.value)}
+          error={errors.weightKg}
+          placeholder="Ex: 12.5"
+          data-testid="input-peso-pet"
+        />
+
+        {/* Porte */}
+        <div className="molecule-form-field">
+          <label htmlFor="pet-size" className="atom-label">
+            Porte
+          </label>
+          <select
+            id="pet-size"
+            value={size}
+            onChange={e => setSize(e.target.value as PetSize)}
+            className="atom-input"
+            data-testid="select-porte-pet"
+          >
+            <option value="MINI">Mini</option>
+            <option value="SMALL">Pequeno</option>
+            <option value="MEDIUM">Médio</option>
+            <option value="LARGE">Grande</option>
+            <option value="GIANT">Gigante</option>
+          </select>
+        </div>
+
+        {/* ID do Microchip */}
+        <FormField
+          label="Nº do Microchip"
+          id="pet-microchip"
+          value={microchipId}
+          onChange={e => setMicrochipId(e.target.value)}
+          placeholder="Ex: 981020000..."
+          data-testid="input-microchip-pet"
+        />
+      </div>
+
+      {/* Castrado */}
+      <div className="organism-pet-form__checkbox-field">
+        <label className="organism-pet-form__checkbox-label">
+          <input
+            type="checkbox"
+            checked={neutered}
+            onChange={e => setNeutered(e.target.checked)}
+            className="organism-pet-form__checkbox"
+            data-testid="checkbox-castrado-pet"
+          />
+          <span>O pet é castrado</span>
+        </label>
+      </div>
+
+      {/* Alergias */}
+      <div className="molecule-form-field">
+        <label htmlFor="pet-allergies" className="atom-label">
+          Alergias
+        </label>
+        <textarea
+          id="pet-allergies"
+          value={allergies}
+          onChange={e => setAllergies(e.target.value)}
+          className="atom-input atom-input--textarea"
+          placeholder="Ex: Alergia a picada de pulga, ração de frango..."
+          rows={3}
+          data-testid="input-alergias-pet"
+        />
+      </div>
+
+      {/* Notas / Observações */}
+      <div className="molecule-form-field">
+        <label htmlFor="pet-notes" className="atom-label">
+          Observações / Notas de Cuidados
+        </label>
+        <textarea
+          id="pet-notes"
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          className="atom-input atom-input--textarea"
+          placeholder="Ex: Medo de fogos, rotina de passeios..."
+          rows={3}
+          data-testid="input-observacoes-pet"
+        />
+      </div>
+
+      {/* Ações */}
+      <div className="organism-pet-form__actions">
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={onCancel}
+          disabled={loading}
+          data-testid="btn-cancelar-pet"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          type="submit" 
+          disabled={loading || compressing}
+          data-testid="btn-salvar-pet"
+        >
+          {loading ? 'Cadastrando...' : 'Cadastrar Pet'}
+        </Button>
+      </div>
+    </form>
+  );
+};
