@@ -17,7 +17,7 @@ export function useGetPets() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await petApi.list(page, size, status);
+      const response = status !== undefined ? await petApi.list(page, size, status) : await petApi.list(page, size);
       setPets(response.data.data);
       if (response.data.meta) {
         setMeta(response.data.meta);
