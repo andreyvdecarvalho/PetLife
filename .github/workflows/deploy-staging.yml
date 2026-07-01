@@ -30,11 +30,12 @@ jobs:
       - name: "Deploy JAR (ex: AWS ECS / EC2 / Railway)"
         run: echo "Deploy step aqui..."
 
-      - name: Notify Slack
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "text": "✅ Deploy staging: ${{ github.ref_name }} (${{ github.sha }})"
-            }
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      - name: Notify Slack
+#        uses: slackapi/slack-github-action@v1.26.0
+#        with:
+#          payload: |
+#            {
+#              "text": "✅ Deploy staging: ${{ github.ref_name }} (${{ github.sha }})"
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
