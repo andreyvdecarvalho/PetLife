@@ -308,4 +308,103 @@ class PetControllerTest extends IntegrationTestBase {
                     .andExpect(jsonPath("$.error.code").value("FORBIDDEN_PET_ACCESS"));
         }
     }
+
+    @Nested
+    @DisplayName("PUT /api/v1/pets/{id}")
+    class UpdatePet {
+
+        @Test
+        @DisplayName("Deve atualizar dados do pet com sucesso")
+        void shouldUpdatePet() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet pet = PetFactory.make(p -> { p.setUser(user); p.setName("Rex"); });
+            petRepository.save(pet);
+
+            var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest(
+                    "Bob",
+                    com.petlife.modules.pet.entity.PetSpecies.DOG,
+                    "Labrador",
+                    com.petlife.modules.pet.entity.PetSex.MALE,
+                    java.time.LocalDate.now().minusYears(1),
+                    new java.math.BigDecimal("20.0"),
+                    com.petlife.modules.pet.entity.PetSize.LARGE,
+                    true,
+                    "981023",
+                    "Poeira",
+                    "Nenhuma"
+            );
+
+            mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/pets/{id}", pet.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data.name").value("Bob"))
+                    .andExpect(jsonPath("$.data.breed").value("Labrador"))
+                    .andExpect(jsonPath("$.data.weightKg").value(20.0));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 404 se o pet nao existir")
+        void shouldReturn404IfPetNotFound() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest(
+                    "Bob",
+                    com.petlife.modules.pet.entity.PetSpecies.DOG,
+                    "Labrador",
+                    com.petlife.modules.pet.entity.PetSex.MALE,
+                    java.time.LocalDate.now().minusYears(1),
+                    new java.math.BigDecimal("20.0"),
+                    com.petlife.modules.pet.entity.PetSize.LARGE,
+                    true,
+                    "981023",
+                    "Poeira",
+                    "Nenhuma"
+            );
+
+            mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/pets/{id}", UUID.randomUUID())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error.code").value("PET_NOT_FOUND"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 403 se o pet pertencer a outro tutor")
+        void shouldReturn403IfPetBelongsToOtherUser() throws Exception {
+            User user = UserFactory.make();
+            User otherUser = UserFactory.make();
+            userRepository.save(user);
+            userRepository.save(otherUser);
+
+            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            petRepository.save(otherPet);
+
+            var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest(
+                    "Bob",
+                    com.petlife.modules.pet.entity.PetSpecies.DOG,
+                    "Labrador",
+                    com.petlife.modules.pet.entity.PetSex.MALE,
+                    java.time.LocalDate.now().minusYears(1),
+                    new java.math.BigDecimal("20.0"),
+                    com.petlife.modules.pet.entity.PetSize.LARGE,
+                    true,
+                    "981023",
+                    "Poeira",
+                    "Nenhuma"
+            );
+
+            mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/pets/{id}", otherPet.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.error.code").value("FORBIDDEN_PET_ACCESS"));
+        }
+    }
 }

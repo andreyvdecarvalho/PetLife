@@ -41,4 +41,7 @@ export const petApi = {
 
   getById: (id: string) =>
     api.get<{ data: Pet }>(`/pets/${id}`),
+
+  update: (id: string, data: CreatePetData) =>
+    api.put<{ data: Pet }>(`/pets/${id}`, data),
 };

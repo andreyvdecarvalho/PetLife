@@ -3,9 +3,11 @@ package com.petlife.modules.pet.infrastructure.controller;
 import com.petlife.modules.pet.application.usecase.CreatePetUseCase;
 import com.petlife.modules.pet.application.usecase.GetPetByIdUseCase;
 import com.petlife.modules.pet.application.usecase.GetPetsUseCase;
+import com.petlife.modules.pet.application.usecase.UpdatePetUseCase;
 import com.petlife.modules.pet.application.usecase.UploadPetPhotoUseCase;
 import com.petlife.modules.pet.infrastructure.dto.CreatePetRequest;
 import com.petlife.modules.pet.infrastructure.dto.PetResponse;
+import com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest;
 import com.petlife.shared.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +21,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +41,7 @@ public class PetController {
     private final UploadPetPhotoUseCase uploadPetPhotoUseCase;
     private final GetPetsUseCase getPetsUseCase;
     private final GetPetByIdUseCase getPetByIdUseCase;
+    private final UpdatePetUseCase updatePetUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -75,5 +79,15 @@ public class PetController {
             @PathVariable UUID id) {
         UUID userId = UUID.fromString(jwt.getSubject());
         return ApiResponse.of(getPetByIdUseCase.execute(userId, id));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Editar dados do pet")
+    public ApiResponse<PetResponse> update(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePetRequest request) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        return ApiResponse.of(updatePetUseCase.execute(userId, id, request));
     }
 }
