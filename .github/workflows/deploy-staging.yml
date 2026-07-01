@@ -27,9 +27,9 @@ jobs:
         working-directory: apps/backend
         run: mvn flyway:migrate -B
         env:
-          SPRING_DATASOURCE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.STAGING_DB_USER }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.STAGING_DB_PASS }}
+          FLYWAY_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          FLYWAY_USER: ${{ secrets.STAGING_DB_USER }}
+          FLYWAY_PASSWORD: ${{ secrets.STAGING_DB_PASS }}
 
       - name: "Deploy JAR (ex: AWS ECS / EC2 / Railway)"
         run: echo "Deploy step aqui..."
