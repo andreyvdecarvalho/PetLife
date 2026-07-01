@@ -37,7 +37,8 @@ public class UploadPetPhotoUseCase {
         }
 
         // Simula upload gerando URL fictícia de S3
-        String fakePhotoUrl = "https://s3.amazonaws.com/petlife/pets/" + petId + "_" + System.currentTimeMillis() + ".jpg";
+        String fakePhotoUrl = "https://s3.amazonaws.com/petlife/pets/" 
+                + petId + "_" + System.currentTimeMillis() + ".jpg";
         pet.setPhotoUrl(fakePhotoUrl);
 
         Pet savedPet = petRepository.save(pet);

@@ -32,7 +32,11 @@ public class CreatePetUseCase {
         if (user.getPlan() == UserPlan.FREE) {
             long activePetsCount = petRepository.countByUserIdAndStatusNot(userId, PetStatus.ARCHIVED);
             if (activePetsCount >= 2) {
-                throw new BusinessException("PET_LIMIT_REACHED", "O limite de pets para o plano Free foi atingido (máx: 2).", org.springframework.http.HttpStatus.BAD_REQUEST);
+                throw new BusinessException(
+                        "PET_LIMIT_REACHED",
+                        "O limite de pets para o plano Free foi atingido (máx: 2).",
+                        org.springframework.http.HttpStatus.BAD_REQUEST
+                );
             }
         }
 
@@ -52,7 +56,8 @@ public class CreatePetUseCase {
         pet.setStatus(PetStatus.ACTIVE);
 
         Pet savedPet = petRepository.save(pet);
-        log.info("Pet cadastrado com sucesso: {} (ID: {}) para o usuário {}", savedPet.getName(), savedPet.getId(), userId);
+        log.info("Pet cadastrado com sucesso: {} (ID: {}) para o usuário {}",
+                savedPet.getName(), savedPet.getId(), userId);
 
         return PetResponse.fromEntity(savedPet);
     }
