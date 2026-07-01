@@ -23,8 +23,13 @@ public class GetPetsUseCase {
     private final PetRepositoryPort petRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponse<List<PetResponse>> execute(UUID userId, Pageable pageable) {
-        Page<Pet> page = petRepository.findByUserIdAndStatusNot(userId, PetStatus.ARCHIVED, pageable);
+    public ApiResponse<List<PetResponse>> execute(UUID userId, PetStatus status, Pageable pageable) {
+        Page<Pet> page;
+        if (status != null) {
+            page = petRepository.findByUserIdAndStatus(userId, status, pageable);
+        } else {
+            page = petRepository.findByUserIdAndStatusNot(userId, PetStatus.ARCHIVED, pageable);
+        }
 
         List<PetResponse> content = page.getContent().stream()
                 .map(PetResponse::fromEntity)

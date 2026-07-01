@@ -3,12 +3,16 @@ package com.petlife.modules.pet.infrastructure.controller;
 import com.petlife.modules.pet.application.usecase.CreatePetUseCase;
 import com.petlife.modules.pet.application.usecase.GetPetByIdUseCase;
 import com.petlife.modules.pet.application.usecase.GetPetsUseCase;
+import com.petlife.modules.pet.application.usecase.UpdatePetStatusUseCase;
 import com.petlife.modules.pet.application.usecase.UpdatePetUseCase;
 import com.petlife.modules.pet.application.usecase.UploadPetPhotoUseCase;
 import com.petlife.modules.pet.infrastructure.dto.CreatePetRequest;
 import com.petlife.modules.pet.infrastructure.dto.PetResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest;
+import com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest;
 import com.petlife.shared.response.ApiResponse;
+import com.petlife.modules.pet.infrastructure.dto.WeightRecordResponse;
+import com.petlife.modules.pet.application.usecase.GetPetWeightHistoryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +47,8 @@ public class PetController {
     private final GetPetsUseCase getPetsUseCase;
     private final GetPetByIdUseCase getPetByIdUseCase;
     private final UpdatePetUseCase updatePetUseCase;
+    private final UpdatePetStatusUseCase updatePetStatusUseCase;
+private final GetPetWeightHistoryUseCase getPetWeightHistoryUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -67,9 +74,10 @@ public class PetController {
     @Operation(summary = "Listar pets do tutor autenticado (paginado)")
     public ApiResponse<List<PetResponse>> list(
             @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(value = "status", required = false) com.petlife.modules.pet.entity.PetStatus status,
             @PageableDefault(size = 10) Pageable pageable) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return getPetsUseCase.execute(userId, pageable);
+        return getPetsUseCase.execute(userId, status, pageable);
     }
 
     @GetMapping("/{id}")
@@ -90,4 +98,23 @@ public class PetController {
         UUID userId = UUID.fromString(jwt.getSubject());
         return ApiResponse.of(updatePetUseCase.execute(userId, id, request));
     }
+
+    @PatchMapping("/{id}/status")
+    @Operation(summary = "Alterar status do pet (Arquivar/Desarquivar)")
+    public ApiResponse<PetResponse> updateStatus(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePetStatusRequest request) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        return ApiResponse.of(updatePetStatusUseCase.execute(userId, id, request.status()));
+    }
+    @GetMapping("/{id}/weight-history")
+    @Operation(summary = "Obter histórico de peso do pet")
+    public ApiResponse<List<WeightRecordResponse>> getWeightHistory(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        return getPetWeightHistoryUseCase.execute(userId, id);
+    }
 }
+

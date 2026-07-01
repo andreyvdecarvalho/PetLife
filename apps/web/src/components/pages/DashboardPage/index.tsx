@@ -3,8 +3,10 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
 import { PetForm } from '../../organisms/PetForm';
 import { useGetPets } from '../../../application/pet/useGetPets';
-import type { Pet } from '../../../domain/pet/Pet';
+import type { Pet, PetStatus } from '../../../domain/pet/Pet';
+import { useUpdatePetStatus } from '../../../application/pet/useUpdatePetStatus';
 import './styles.css';
+import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 
 interface Appointment {
   id: string;
@@ -22,6 +24,18 @@ export const DashboardPageContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
   const { pets, isLoading, fetchPets } = useGetPets();
+  const { updatePetStatus, loading: statusLoading, error: statusError } = useUpdatePetStatus();
+  const handleToggleStatus = async (pet: Pet) => {
+    const newStatus: PetStatus = pet.status === 'ACTIVE' ? 'ARCHIVED' : 'ACTIVE';
+    try {
+      await updatePetStatus(pet.id, newStatus);
+      // Refresh list after status change
+      fetchPets();
+    } catch (e) {
+      // error handling is already inside hook (sets error state)
+      console.error(e);
+    }
+  };
   const [activePetId, setActivePetId] = useState<string | null>(null);
 
   // Busca a lista de pets na montagem do componente
@@ -80,6 +94,7 @@ export const DashboardPageContent: React.FC = () => {
 
   const activePet = pets.find(p => p.id === activePetId) || pets[0];
   const activePetName = activePet?.name || '';
+  const { data: weightHistory, loading: weightLoading, error: weightError } = usePetWeightHistory(activePet?.id || '');
 
 
   return (
@@ -107,11 +122,35 @@ export const DashboardPageContent: React.FC = () => {
           )}
 
           {!isLoading && pets.map(pet => (
-            <div 
-              key={pet.id} 
+            <div
+              key={pet.id}
               className={`dashboard-page__pet-card ${activePetId === pet.id ? 'active' : ''}`}
               onClick={() => setActivePetId(pet.id)}
+              style={{ position: 'relative' }}
             >
+              {/* Archive / Unarchive button */}
+              <button
+                data-testid={pet.status === 'ACTIVE' ? 'btn-archive-pet' : 'btn-unarchive-pet'}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleToggleStatus(pet);
+                }}
+                className="dashboard-page__status-toggle"
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: pet.status === 'ACTIVE' ? 'var(--color-error)' : 'var(--color-primary)',
+                }}
+                aria-label={pet.status === 'ACTIVE' ? 'Arquivar pet' : 'Desarquivar pet'}
+              >
+                <span className="material-symbols-outlined">
+                  {pet.status === 'ACTIVE' ? 'archive' : 'unarchive'}
+                </span>
+              </button>
               <div className="dashboard-page__pet-avatar-wrapper">
                 <img 
                   src={pet.photoUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCnHN_9BTUOKpIb36hpFqE25LwIGylq8VtlrHjbSrAhgWcSBgVoSTXH_BMmBraiV93TqeZ2ZdWgYjVg7-fUZGPf16xvHpZ1gPOoaBajWM-dc79Xh3ETkTvT0uKw6_LbbTAI7P1n1FCrkGvgvYi-4WVKYEqmihw85_IDBmKe8RphLlmRkpBmiLcHOnESAVKHJYV78g1ZQNwdwNApTfakidYekZzgfDrEj-Pn9OiAs79HAY7c_WsQ9Eo8vsMeD9OmxSAc5nMX25sEWIw'} 

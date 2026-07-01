@@ -1,5 +1,5 @@
 import api from '../../services/api';
-import type { Pet, PetSex, PetSize, PetSpecies } from '../../domain/pet/Pet';
+import type { Pet, PetSex, PetSize, PetSpecies, PetStatus } from '../../domain/pet/Pet';
 
 export interface CreatePetData {
   name: string;
@@ -34,14 +34,20 @@ export const petApi = {
     });
   },
 
-  list: (page = 0, size = 10) =>
+  list: (page = 0, size = 10, status?: PetStatus) =>
     api.get<{ data: Pet[]; meta?: { page: number; perPage: number; total: number; totalPages: number } }>(
-      `/pets?page=${page}&size=${size}`
+      `/pets?page=${page}&size=${size}${status ? `&status=${status}` : ''}`
     ),
+
+  getWeightHistory: (id: string) =>
+    api.get<{ data: { weightKg: number; recordedAt: string }[] }>(`/pets/${id}/weight-history`),
 
   getById: (id: string) =>
     api.get<{ data: Pet }>(`/pets/${id}`),
 
   update: (id: string, data: CreatePetData) =>
     api.put<{ data: Pet }>(`/pets/${id}`, data),
+
+  updateStatus: (id: string, status: PetStatus) =>
+    api.patch<{ data: Pet }>(`/pets/${id}/status`, { status }),
 };

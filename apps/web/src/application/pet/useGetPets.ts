@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { petApi } from '../../infrastructure/http/pet.api';
-import type { Pet } from '../../domain/pet/Pet';
+import type { Pet, PetStatus } from '../../domain/pet/Pet';
 
 /**
  * Hook de aplicação para obter lista de pets do tutor logado.
@@ -13,11 +13,11 @@ export function useGetPets() {
   const [error, setError] = useState<string | null>(null);
   const [meta, setMeta] = useState<{ page: number; perPage: number; total: number; totalPages: number } | null>(null);
 
-  const fetchPets = useCallback(async (page = 0, size = 10) => {
+  const fetchPets = useCallback(async (page = 0, size = 10, status?: PetStatus) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await petApi.list(page, size);
+      const response = await petApi.list(page, size, status);
       setPets(response.data.data);
       if (response.data.meta) {
         setMeta(response.data.meta);
