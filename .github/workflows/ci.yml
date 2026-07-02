@@ -202,7 +202,7 @@ jobs:
           sleep 3
         env:
           SPRING_PROFILES_ACTIVE: test
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/petlife_test
+          SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/petlife_test
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
 
