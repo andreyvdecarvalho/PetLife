@@ -1,0 +1,29 @@
+.organism-consultation-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.organism-consultation-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .organism-consultation-form__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.organism-consultation-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.organism-consultation-form__actions button {
+  min-width: 120px;
+}

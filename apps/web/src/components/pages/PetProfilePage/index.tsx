@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { VaccinationsTab } from '../../organisms/VaccinationsTab';
+import { useConsultations } from '../../../application/consultation/useConsultations';
+import { Modal } from '../../molecules/Modal';
+import { ConsultationForm } from '../../organisms/ConsultationForm';
 import './styles.css';
 
 interface MedicalRecord {
@@ -16,15 +19,35 @@ interface MedicalRecord {
     name: string;
     icon: string;
   };
+  attachments?: string[];
 }
 
 export const PetProfilePageContent: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'history' | 'vaccines' | 'medications'>('history');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Mock records matching Stitch design
-  const records: MedicalRecord[] = [
+  const { consultations, fetchConsultations } = useConsultations(id || '');
+
+  useEffect(() => {
+    if (id) {
+      fetchConsultations();
+    }
+  }, [id, fetchConsultations]);
+
+  const realRecords: MedicalRecord[] = consultations.map(c => ({
+    id: c.id,
+    title: c.reason,
+    category: 'clinical',
+    subtitle: `${c.clinic || 'Sem clínica especificada'} - ${c.veterinarian || 'Sem veterinário especificado'}`,
+    date: new Date(c.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }),
+    description: c.diagnosis ? `Diagnóstico: ${c.diagnosis}${c.prescriptions ? ` | Prescrição: ${c.prescriptions}` : ''}` : c.notes,
+    value: c.weightAtVisit ? `${c.weightAtVisit} kg` : undefined,
+    attachments: c.attachments,
+  }));
+
+  const mockRecords: MedicalRecord[] = [
     {
       id: 'rec-1',
       title: 'Consulta de Rotina',
@@ -60,9 +83,10 @@ export const PetProfilePageContent: React.FC = () => {
     },
   ];
 
+  const allRecords = [...realRecords, ...mockRecords];
+
   return (
     <div className="pet-profile animate-fade-in">
-      {/* Back Navigation & Title */}
       <div className="pet-profile__header-row">
         <button 
           className="pet-profile__back-btn" 
@@ -75,11 +99,8 @@ export const PetProfilePageContent: React.FC = () => {
       </div>
 
       <div className="pet-profile__grid">
-        {/* Left Column: Profile Bento Box */}
         <aside className="pet-profile__aside">
-          {/* Profile Card */}
           <div className="pet-profile__card">
-            {/* Decorative background blob */}
             <div className="pet-profile__card-blob"></div>
             
             <div className="pet-profile__avatar-container">
@@ -112,7 +133,6 @@ export const PetProfilePageContent: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Status Card */}
           <div className="pet-profile__status-banner">
             <div className="pet-profile__status-icon-wrapper">
               <span className="material-symbols-outlined">check_circle</span>
@@ -124,9 +144,7 @@ export const PetProfilePageContent: React.FC = () => {
           </div>
         </aside>
 
-        {/* Right Column: Tabs & Content */}
         <section className="pet-profile__content">
-          {/* Tabs */}
           <div className="pet-profile__tabs no-scrollbar">
             <button 
               className={`pet-profile__tab ${activeTab === 'history' ? 'active' : ''}`}
@@ -148,27 +166,23 @@ export const PetProfilePageContent: React.FC = () => {
             </button>
           </div>
 
-          {/* Action Row */}
           <div className="pet-profile__actions-row">
             <h3 className="pet-profile__section-heading">Registros Recentes</h3>
-            <button className="pet-profile__new-record-btn">
+            <button className="pet-profile__new-record-btn" onClick={() => setIsModalOpen(true)}>
               <span className="material-symbols-outlined">add</span>
               Novo Registro Médico
             </button>
           </div>
 
-          {/* Timeline Content */}
           <div className="pet-profile__timeline">
-            {activeTab === 'history' && records.map(rec => (
+            {activeTab === 'history' && allRecords.map(rec => (
               <div key={rec.id} className="pet-profile__timeline-item">
-                {/* Node */}
                 <div className={`pet-profile__timeline-node pet-profile__timeline-node--${rec.category}`}>
                   <span className="material-symbols-outlined">
                     {rec.category === 'clinical' ? 'local_hospital' : rec.category === 'weight' ? 'scale' : 'science'}
                   </span>
                 </div>
                 
-                {/* Card */}
                 <div className="pet-profile__timeline-card">
                   <div className="pet-profile__card-header">
                     <div>
@@ -202,6 +216,21 @@ export const PetProfilePageContent: React.FC = () => {
                       </span>
                     </div>
                   )}
+
+                  {rec.attachments && rec.attachments.length > 0 && (
+                    <div className="pet-profile__card-attachments">
+                      {rec.attachments.map((url, idx) => {
+                        const name = url.substring(url.lastIndexOf('/') + 1).replace(/^[0-9a-f-]+_/, '');
+                        const isImg = url.toLowerCase().match(/\.(png|jpg|jpeg)$/);
+                        return (
+                          <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="pet-profile__attachment-link">
+                            <span className="material-symbols-outlined">{isImg ? 'image' : 'description'}</span>
+                            {name}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -219,6 +248,19 @@ export const PetProfilePageContent: React.FC = () => {
           </div>
         </section>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Registrar Consulta Médica">
+        {id && (
+          <ConsultationForm
+            petId={id}
+            onSuccess={() => {
+              setIsModalOpen(false);
+              fetchConsultations();
+            }}
+            onCancel={() => setIsModalOpen(false)}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

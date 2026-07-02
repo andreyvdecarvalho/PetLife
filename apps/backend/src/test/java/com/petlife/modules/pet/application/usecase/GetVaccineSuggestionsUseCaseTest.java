@@ -1,6 +1,5 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.pet.entity.PetSpecies;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,9 +34,9 @@ class GetVaccineSuggestionsUseCaseTest {
 
     @Test
     void shouldThrowExceptionForInvalidSpecies() {
-        BusinessException exception = assertThrows(BusinessException.class, 
-            () -> useCase.execute("INVALID"));
-            
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> useCase.execute("INVALID"));
+
         assertEquals("INVALID_SPECIES", exception.getCode());
     }
 }
