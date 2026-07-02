@@ -1,0 +1,148 @@
+.molecule-attachment-manager {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.molecule-attachment-manager__label {
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-on-surface);
+}
+
+.molecule-attachment-manager__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  border: 2px dashed var(--color-outline-variant);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-container-lowest);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.molecule-attachment-manager__dropzone:hover,
+.molecule-attachment-manager__dropzone.active {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-container-low);
+}
+
+.molecule-attachment-manager__input {
+  display: none;
+}
+
+.molecule-attachment-manager__upload-icon {
+  font-size: 32px;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.molecule-attachment-manager__dropzone-text {
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-on-surface-variant);
+}
+
+.molecule-attachment-manager__dropzone-text span {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.molecule-attachment-manager__error {
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  margin-top: -4px;
+}
+
+.molecule-attachment-manager__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.molecule-attachment-manager__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-container-lowest);
+  overflow: hidden;
+  height: 120px;
+  justify-content: space-between;
+}
+
+.molecule-attachment-manager__item.new {
+  border-color: var(--color-primary-container);
+  background-color: var(--color-surface-container-low);
+}
+
+.molecule-attachment-manager__thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.molecule-attachment-manager__pdf-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-error-container);
+  color: var(--color-error);
+  border-radius: var(--radius-sm);
+}
+
+.molecule-attachment-manager__pdf-icon .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.molecule-attachment-manager__filename {
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-xs);
+  color: var(--color-on-surface);
+  text-align: center;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: var(--spacing-xs);
+}
+
+.molecule-attachment-manager__remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: var(--color-surface-container-highest);
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-on-surface);
+  padding: 0;
+  transition: background-color var(--transition-normal);
+}
+
+.molecule-attachment-manager__remove-btn:hover {
+  background-color: var(--color-error);
+  color: var(--color-on-error);
+}
+
+.molecule-attachment-manager__remove-btn .material-symbols-outlined {
+  font-size: 14px;
+}

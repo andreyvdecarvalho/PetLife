@@ -1,4 +1,4 @@
-import api from '../../services/api';
+import api from './api';
 import type { Pet, PetSex, PetSize, PetSpecies, PetStatus } from '../../domain/pet/Pet';
 
 export interface CreatePetData {

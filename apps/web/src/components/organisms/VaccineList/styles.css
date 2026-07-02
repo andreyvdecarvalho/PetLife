@@ -1,0 +1,103 @@
+.organism-vaccine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.organism-vaccine-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  gap: 16px;
+  text-align: center;
+  color: var(--color-on-surface);
+  background-color: var(--color-surface-container-lowest, #F1F5F9);
+  border-radius: var(--radius-xl, 12px);
+  opacity: 0.8;
+}
+
+.organism-vaccine-list__empty .material-symbols-outlined {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.organism-vaccine-list__card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: var(--color-surface-container-lowest, #F1F5F9);
+  border-radius: var(--radius-xl, 12px);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.organism-vaccine-list__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.organism-vaccine-list__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.organism-vaccine-list__icon .material-symbols-outlined {
+  color: white;
+}
+
+.organism-vaccine-list__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.organism-vaccine-list__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.organism-vaccine-list__details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-on-surface);
+  opacity: 0.8;
+}
+
+.organism-vaccine-list__dot {
+  font-size: 10px;
+}
+
+.organism-vaccine-list__next {
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.organism-vaccine-list__arrow {
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.organism-vaccine-list__attachment {
+  color: var(--color-on-surface);
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

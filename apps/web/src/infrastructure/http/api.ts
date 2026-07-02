@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { tokenStorage } from '../infrastructure/storage/tokenStorage';
+import { tokenStorage } from '../storage/tokenStorage';
 
 /**
  * Instância base do cliente HTTP Axios.

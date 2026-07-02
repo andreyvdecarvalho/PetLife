@@ -7,7 +7,7 @@ import { useLogout } from '../application/auth/useLogout';
 import { useSession } from '../application/auth/useSession';
 import { useUpdateProfile } from '../application/user/useUpdateProfile';
 import { useDeleteAccount } from '../application/user/useDeleteAccount';
-import { setUnauthorizedCallback } from '../services/api';
+import { setUnauthorizedCallback } from '../infrastructure/http/api';
 
 // Re-exporta o tipo User para compatibilidade com componentes existentes
 export type User = UserResponse;

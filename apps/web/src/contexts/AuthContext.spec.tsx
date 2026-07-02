@@ -1,10 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
 import { AuthProvider, useAuth } from './AuthContext';
-import api from '../services/api';
+import api from '../infrastructure/http/api';
 import React from 'react';
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 
-vi.mock('../services/api');
+vi.mock('../infrastructure/http/api');
 
 describe('AuthContext', () => {
   beforeEach(() => {
