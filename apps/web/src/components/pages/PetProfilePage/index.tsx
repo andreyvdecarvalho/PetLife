@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { VaccinationsTab } from '../../organisms/VaccinationsTab';
 import './styles.css';
 
 interface MedicalRecord {
@@ -205,11 +206,8 @@ export const PetProfilePageContent: React.FC = () => {
               </div>
             ))}
 
-            {activeTab === 'vaccines' && (
-              <div className="pet-profile__empty-tab">
-                <span className="material-symbols-outlined">vaccines</span>
-                <p>Nenhuma vacina registrada recentemente.</p>
-              </div>
+            {activeTab === 'vaccines' && id && (
+              <VaccinationsTab petId={id} species="DOG" />
             )}
 
             {activeTab === 'medications' && (
