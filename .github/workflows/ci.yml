@@ -197,7 +197,7 @@ jobs:
 
       - name: Start backend
         working-directory: apps/backend
-        run: java -jar target/petlife-backend-*.jar &
+        run: java -jar target/petlife-backend-*.jar > backend.log 2>&1 &
         env:
           SPRING_PROFILES_ACTIVE: test
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/petlife_test
@@ -206,10 +206,18 @@ jobs:
 
       - name: Start web dev server
         working-directory: apps/web
-        run: pnpm run dev &
+        run: pnpm run dev > frontend.log 2>&1 &
 
       - name: Wait for servers
-        run: pnpm dlx wait-on http://localhost:8080/actuator/health http://localhost:5173
+        run: pnpm dlx wait-on http://127.0.0.1:8080/actuator/health http://127.0.0.1:5173
+
+      - name: Dump logs on failure
+        if: failure()
+        run: |
+          echo "=== BACKEND LOGS ==="
+          cat apps/backend/backend.log || true
+          echo "=== FRONTEND LOGS ==="
+          cat apps/web/frontend.log || true
 
       - name: Run Playwright E2E tests
         working-directory: apps/web
