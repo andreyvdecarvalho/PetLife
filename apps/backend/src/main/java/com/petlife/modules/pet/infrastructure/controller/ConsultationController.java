@@ -14,7 +14,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -32,26 +39,49 @@ public class ConsultationController {
 
     @PostMapping("/pets/{petId}/consultations")
     public ResponseEntity<ApiResponse<ConsultationResponse>> createConsultation(
-            @PathVariable UUID petId, @Valid @RequestBody CreateConsultationRequest request, @AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.of(createConsultationUseCase.execute(petId, UUID.fromString(jwt.getSubject()), request)));
+            @PathVariable UUID petId,
+            @Valid @RequestBody CreateConsultationRequest request,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        ConsultationResponse response = createConsultationUseCase.execute(petId, userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.of(response));
     }
 
     @GetMapping("/pets/{petId}/consultations")
     public ResponseEntity<ApiResponse<List<ConsultationResponse>>> listConsultations(
-            @PathVariable UUID petId, @AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.ok(ApiResponse.of(listConsultationsByPetUseCase.execute(petId, UUID.fromString(jwt.getSubject()))));
+            @PathVariable UUID petId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        List<ConsultationResponse> response = listConsultationsByPetUseCase.execute(petId, userId);
+        return ResponseEntity.ok(ApiResponse.of(response));
     }
 
-    @PostMapping(value = "/pets/{petId}/consultations/{id}/attachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            value = "/pets/{petId}/consultations/{id}/attachments",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<ApiResponse<ConsultationResponse>> uploadAttachments(
-            @PathVariable UUID petId, @PathVariable UUID id, @RequestPart("files") List<MultipartFile> files, @AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.ok(ApiResponse.of(uploadConsultationAttachmentUseCase.execute(petId, id, UUID.fromString(jwt.getSubject()), files)));
+            @PathVariable UUID petId,
+            @PathVariable UUID id,
+            @RequestPart("files") List<MultipartFile> files,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        ConsultationResponse response = uploadConsultationAttachmentUseCase.execute(petId, id, userId, files);
+        return ResponseEntity.ok(ApiResponse.of(response));
     }
 
     @DeleteMapping("/pets/{petId}/consultations/{id}/attachments/{index}")
     public ResponseEntity<ApiResponse<ConsultationResponse>> deleteAttachment(
-            @PathVariable UUID petId, @PathVariable UUID id, @PathVariable int index, @AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.ok(ApiResponse.of(deleteConsultationAttachmentUseCase.execute(petId, id, UUID.fromString(jwt.getSubject()), index)));
+            @PathVariable UUID petId,
+            @PathVariable UUID id,
+            @PathVariable int index,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        ConsultationResponse response = deleteConsultationAttachmentUseCase.execute(petId, id, userId, index);
+        return ResponseEntity.ok(ApiResponse.of(response));
     }
 }

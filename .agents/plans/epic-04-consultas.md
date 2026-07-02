@@ -40,9 +40,9 @@ Entidade `Consultation`:
 - **Timeline Integration**: Exibição simplificada desta consulta na linha do tempo principal.
 
 ## 7. Critérios de Aceite
-- [ ] Salvamento da consulta informando ao menos data e motivo.
-- [ ] Suporte até 5 arquivos/documentos (PDF/Imagens).
-- [ ] Atualização automática do peso do pet.
-- [ ] Criação de alerta agendado de retorno se data informada.
+- [x] Salvamento da consulta informando ao menos data e motivo.
+- [x] Suporte até 5 arquivos/documentos (PDF/Imagens).
+- [x] Atualização automática do peso do pet.
+- [x] Criação de alerta agendado de retorno se data informada.
 
 > **NOTA DE ARQUITETURA FRONTEND:** Para as telas desta Epic, siga rigorosamente o Atomic Design (Atoms, Molecules, Organisms, Templates, Pages). Cada componente em pasta própria com index.tsx e styles.css. Use Vanilla CSS (BEM / namespace semântico) consumindo variáveis do 	heme.css. Atoms não devem possuir margens e devem ocupar 100% (width: 100%), delegando posicionamento aos Organisms/Templates.

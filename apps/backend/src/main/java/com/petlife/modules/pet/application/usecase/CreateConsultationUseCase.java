@@ -34,8 +34,12 @@ public class CreateConsultationUseCase {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
-        if (request.getFollowUpDate() != null && request.getFollowUpDate().isBefore(request.getDate().toLocalDate())) {
-            throw BusinessException.badRequest("INVALID_DATE", "A data de retorno não pode ser anterior à data da consulta.");
+        if (request.getFollowUpDate() != null
+                && request.getFollowUpDate().isBefore(request.getDate().toLocalDate())) {
+            throw BusinessException.badRequest(
+                    "INVALID_DATE",
+                    "A data de retorno não pode ser anterior à data da consulta."
+            );
         }
 
         Consultation consultation = new Consultation();

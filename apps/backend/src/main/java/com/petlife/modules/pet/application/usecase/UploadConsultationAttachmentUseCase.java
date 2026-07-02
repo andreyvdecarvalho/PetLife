@@ -38,7 +38,10 @@ public class UploadConsultationAttachmentUseCase {
         }
 
         if (consultation.getAttachments().size() + files.size() > 5) {
-            throw BusinessException.badRequest("ATTACHMENT_LIMIT_EXCEEDED", "Limite de 5 anexos por consulta excedido.");
+            throw BusinessException.badRequest(
+                    "ATTACHMENT_LIMIT_EXCEEDED",
+                    "Limite de 5 anexos por consulta excedido."
+            );
         }
 
         for (MultipartFile file : files) {
@@ -57,12 +60,20 @@ public class UploadConsultationAttachmentUseCase {
                 throw BusinessException.badRequest("INVALID_FILE_TYPE", "Nome de arquivo inválido.");
             }
             String lowerName = originalFilename.toLowerCase();
-            if (!lowerName.endsWith(".jpg") && !lowerName.endsWith(".jpeg") && !lowerName.endsWith(".png") && !lowerName.endsWith(".pdf")) {
-                throw BusinessException.badRequest("INVALID_FILE_TYPE", "Tipo de arquivo não permitido. Apenas JPEG, PNG e PDF são aceitos.");
+            boolean isValidType = lowerName.endsWith(".jpg")
+                    || lowerName.endsWith(".jpeg")
+                    || lowerName.endsWith(".png")
+                    || lowerName.endsWith(".pdf");
+            if (!isValidType) {
+                throw BusinessException.badRequest(
+                        "INVALID_FILE_TYPE",
+                        "Tipo de arquivo não permitido. Apenas JPEG, PNG e PDF são aceitos."
+                );
             }
 
             // Simular upload
-            String fakeUrl = "https://s3.amazonaws.com/petlife/consultations/" + consultationId + "_" + originalFilename;
+            String fakeUrl = "https://s3.amazonaws.com/petlife/consultations/"
+                    + consultationId + "_" + originalFilename;
             consultation.getAttachments().add(fakeUrl);
         }
 
