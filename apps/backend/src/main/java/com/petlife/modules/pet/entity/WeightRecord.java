@@ -1,6 +1,14 @@
 package com.petlife.modules.pet.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -24,15 +32,35 @@ public class WeightRecord {
     private OffsetDateTime recordedAt;
 
     // Getters and Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public UUID getId() {
+        return id;
+    }
 
-    public Pet getPet() { return pet; }
-    public void setPet(Pet pet) { this.pet = pet; }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-    public BigDecimal getWeightKg() { return weightKg; }
-    public void setWeightKg(BigDecimal weightKg) { this.weightKg = weightKg; }
+    public Pet getPet() {
+        return pet;
+    }
 
-    public OffsetDateTime getRecordedAt() { return recordedAt; }
-    public void setRecordedAt(OffsetDateTime recordedAt) { this.recordedAt = recordedAt; }
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    public BigDecimal getWeightKg() {
+        return weightKg;
+    }
+
+    public void setWeightKg(BigDecimal weightKg) {
+        this.weightKg = weightKg;
+    }
+
+    public OffsetDateTime getRecordedAt() {
+        return recordedAt;
+    }
+
+    public void setRecordedAt(OffsetDateTime recordedAt) {
+        this.recordedAt = recordedAt;
+    }
 }
