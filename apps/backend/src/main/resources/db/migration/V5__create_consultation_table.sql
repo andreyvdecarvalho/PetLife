@@ -14,5 +14,5 @@ CREATE TABLE consultation (
     attachments JSONB NOT NULL DEFAULT '[]'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE,
-    CONSTRAINT fk_consultation_pet FOREIGN KEY (pet_id) REFERENCES pet(id) ON DELETE CASCADE
+    CONSTRAINT fk_consultation_pet FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE
 );

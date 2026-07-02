@@ -13,5 +13,5 @@ CREATE TABLE vaccination (
     reminder_active BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
-    CONSTRAINT fk_vaccination_pet FOREIGN KEY (pet_id) REFERENCES pet(id) ON DELETE CASCADE
+    CONSTRAINT fk_vaccination_pet FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE
 );
