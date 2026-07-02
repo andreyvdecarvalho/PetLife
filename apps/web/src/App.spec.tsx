@@ -3,7 +3,7 @@ import App from './App';
 import { vi, describe, it, expect } from 'vitest';
 import React from 'react';
 
-vi.mock('./services/api', () => ({
+vi.mock('./infrastructure/http/api', () => ({
   default: {
     post: vi.fn(),
     get: vi.fn(),

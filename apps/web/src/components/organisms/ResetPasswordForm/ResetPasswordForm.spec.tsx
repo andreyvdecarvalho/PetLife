@@ -3,14 +3,14 @@ import { ResetPasswordForm } from '.';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { useToast } from '../../molecules/Toast';
-import api from '../../../services/api';
+import api from '../../../infrastructure/http/api';
 import React from 'react';
 
 vi.mock('../../molecules/Toast', () => ({
   useToast: vi.fn(),
 }));
 
-vi.mock('../../../services/api', () => ({
+vi.mock('../../../infrastructure/http/api', () => ({
   default: {
     post: vi.fn(),
   },
