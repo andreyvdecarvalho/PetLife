@@ -1,5 +1,5 @@
 import React from 'react';
-import { Vaccination } from '../../../domain/pet/Vaccination';
+import type { Vaccination } from '../../../domain/pet/Vaccination';
 import './styles.css';
 
 interface VaccineListProps {

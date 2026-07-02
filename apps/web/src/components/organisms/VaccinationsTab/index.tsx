@@ -3,7 +3,7 @@ import { useVaccinations } from '../../../application/vaccination/useVaccination
 import { useVaccineSuggestions } from '../../../application/vaccination/useVaccineSuggestions';
 import { VaccineList } from '../VaccineList';
 import { VaccineForm } from '../VaccineForm';
-import { CreateVaccinationData, Vaccination } from '../../../domain/pet/Vaccination';
+import type { CreateVaccinationData, Vaccination } from '../../../domain/pet/Vaccination';
 import { Modal } from '../../molecules/Modal';
 import { Button } from '../../atoms/Button';
 import { ProofUploader } from '../../molecules/ProofUploader';

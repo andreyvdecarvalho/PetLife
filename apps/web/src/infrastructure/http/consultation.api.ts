@@ -1,5 +1,5 @@
 import api from './api';
-import { Consultation, CreateConsultationData } from '../../domain/pet/Consultation';
+import type { Consultation, CreateConsultationData } from '../../domain/pet/Consultation';
 
 export const consultationApi = {
   create: async (petId: string, data: CreateConsultationData): Promise<Consultation> => {

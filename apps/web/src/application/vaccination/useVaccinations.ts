@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Vaccination, CreateVaccinationData } from '../../domain/pet/Vaccination';
+import type { Vaccination, CreateVaccinationData } from '../../domain/pet/Vaccination';
 import { vaccinationApi } from '../../infrastructure/http/vaccination.api';
 
 export function useVaccinations(petId: string) {

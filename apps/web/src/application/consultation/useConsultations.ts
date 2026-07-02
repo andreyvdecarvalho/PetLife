@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Consultation, CreateConsultationData } from '../../domain/pet/Consultation';
+import type { Consultation, CreateConsultationData } from '../../domain/pet/Consultation';
 import { consultationApi } from '../../infrastructure/http/consultation.api';
 
 export function useConsultations(petId: string) {

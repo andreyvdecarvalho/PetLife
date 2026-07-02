@@ -1,5 +1,5 @@
 import api from './api';
-import { Vaccination, CreateVaccinationData } from '../../domain/pet/Vaccination';
+import type { Vaccination, CreateVaccinationData } from '../../domain/pet/Vaccination';
 
 export const vaccinationApi = {
   addVaccination: async (petId: string, data: CreateVaccinationData): Promise<Vaccination> => {
