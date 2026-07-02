@@ -1,18 +1,19 @@
 package com.petlife.modules.pet.application.usecase;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.entity.Consultation;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.shared.exception.BusinessException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

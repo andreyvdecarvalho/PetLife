@@ -1,12 +1,8 @@
 package com.petlife.modules.pet.infrastructure.controller;
 
-import com.petlife.modules.pet.application.usecase.CreateConsultationUseCase;
-import com.petlife.modules.pet.application.usecase.DeleteConsultationAttachmentUseCase;
-import com.petlife.modules.pet.application.usecase.ListConsultationsByPetUseCase;
-import com.petlife.modules.pet.application.usecase.UploadConsultationAttachmentUseCase;
-import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
-import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
-import com.petlife.shared.response.ApiResponse;
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import com.petlife.modules.pet.application.usecase.CreateConsultationUseCase;
+import com.petlife.modules.pet.application.usecase.DeleteConsultationAttachmentUseCase;
+import com.petlife.modules.pet.application.usecase.ListConsultationsByPetUseCase;
+import com.petlife.modules.pet.application.usecase.UploadConsultationAttachmentUseCase;
+import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
+import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
+import com.petlife.shared.response.ApiResponse;
 
 @RestController
 @RequestMapping("/api/v1")

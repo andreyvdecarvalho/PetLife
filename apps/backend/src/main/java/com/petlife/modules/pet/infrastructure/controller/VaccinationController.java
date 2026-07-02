@@ -1,17 +1,9 @@
 package com.petlife.modules.pet.infrastructure.controller;
 
-import com.petlife.modules.pet.application.usecase.AddVaccinationUseCase;
-import com.petlife.modules.pet.application.usecase.GetVaccineSuggestionsUseCase;
-import com.petlife.modules.pet.application.usecase.ListVaccinationsByPetUseCase;
-import com.petlife.modules.pet.application.usecase.UpdateVaccinationUseCase;
-import com.petlife.modules.pet.application.usecase.UploadVaccinationProofUseCase;
-import com.petlife.modules.pet.infrastructure.dto.CreateVaccinationRequest;
-import com.petlife.modules.pet.infrastructure.dto.UpdateVaccinationRequest;
-import com.petlife.modules.pet.infrastructure.dto.VaccinationResponse;
-import com.petlife.shared.response.ApiResponse;
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.petlife.modules.pet.application.usecase.AddVaccinationUseCase;
+import com.petlife.modules.pet.application.usecase.GetVaccineSuggestionsUseCase;
+import com.petlife.modules.pet.application.usecase.ListVaccinationsByPetUseCase;
+import com.petlife.modules.pet.application.usecase.UpdateVaccinationUseCase;
+import com.petlife.modules.pet.application.usecase.UploadVaccinationProofUseCase;
+import com.petlife.modules.pet.infrastructure.dto.CreateVaccinationRequest;
+import com.petlife.modules.pet.infrastructure.dto.UpdateVaccinationRequest;
+import com.petlife.modules.pet.infrastructure.dto.VaccinationResponse;
+import com.petlife.shared.response.ApiResponse;
 
 @RestController
 @RequestMapping("/api/v1")

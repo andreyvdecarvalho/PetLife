@@ -1,21 +1,22 @@
 package com.petlife.modules.pet.application.usecase;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
 import com.petlife.modules.pet.entity.Consultation;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.entity.WeightRecord;
-import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
+import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
 import com.petlife.shared.exception.BusinessException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
