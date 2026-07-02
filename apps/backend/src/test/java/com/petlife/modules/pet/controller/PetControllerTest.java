@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -100,7 +100,7 @@ class PetControllerTest extends IntegrationTestBase {
                             .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail())))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(status().is(422))
                     .andExpect(jsonPath("$.error.code").value("VALIDATION_ERROR"))
                     .andExpect(jsonPath("$.error.details[0].field").value("name"));
         }
@@ -258,6 +258,33 @@ class PetControllerTest extends IntegrationTestBase {
                     .andExpect(jsonPath("$.data.length()").value(1))
                     .andExpect(jsonPath("$.data[0].name").value("Ativo"));
         }
+
+        @Test
+        @DisplayName("Deve retornar apenas pets arquivados quando filtrado por status ARCHIVED")
+        void shouldListOnlyArchivedPets() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet petActive = PetFactory.make(p -> { 
+                p.setUser(user); 
+                p.setName("Ativo"); 
+                p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); 
+            });
+            Pet petArchived = PetFactory.make(p -> { 
+                p.setUser(user); 
+                p.setName("Arquivado"); 
+                p.setStatus(com.petlife.modules.pet.entity.PetStatus.ARCHIVED); 
+            });
+            petRepository.save(petActive);
+            petRepository.save(petArchived);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets")
+                            .param("status", "ARCHIVED")
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data.length()").value(1))
+                    .andExpect(jsonPath("$.data[0].name").value("Arquivado"));
+        }
     }
 
     @Nested
@@ -400,6 +427,76 @@ class PetControllerTest extends IntegrationTestBase {
             );
 
             mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/pets/{id}", otherPet.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.error.code").value("FORBIDDEN_PET_ACCESS"));
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /api/v1/pets/{id}/status")
+    class UpdatePetStatus {
+
+        @Test
+        @DisplayName("Deve alterar status do pet com sucesso")
+        void shouldUpdatePetStatus() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet pet = PetFactory.make(p -> { 
+                p.setUser(user); 
+                p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); 
+            });
+            petRepository.save(pet);
+
+            var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest(
+                    com.petlife.modules.pet.entity.PetStatus.ARCHIVED
+            );
+
+            mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/pets/{id}/status", pet.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data.status").value("ARCHIVED"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 404 se o pet nao existir")
+        void shouldReturn404IfPetNotFound() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest(
+                    com.petlife.modules.pet.entity.PetStatus.ARCHIVED
+            );
+
+            mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/pets/{id}/status", UUID.randomUUID())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error.code").value("PET_NOT_FOUND"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 403 se o pet pertencer a outro tutor")
+        void shouldReturn403IfPetBelongsToOtherUser() throws Exception {
+            User user = UserFactory.make();
+            User otherUser = UserFactory.make();
+            userRepository.save(user);
+            userRepository.save(otherUser);
+
+            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            petRepository.save(otherPet);
+
+            var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest(
+                    com.petlife.modules.pet.entity.PetStatus.ARCHIVED
+            );
+
+            mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/pets/{id}/status", otherPet.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request))
                             .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))

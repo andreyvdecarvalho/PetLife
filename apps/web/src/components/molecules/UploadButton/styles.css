@@ -1,0 +1,57 @@
+.molecule-upload-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+  gap: var(--space-xs);
+}
+
+.molecule-upload-button__preview {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  border: 2px dashed var(--color-outline-variant);
+  background-color: var(--color-surface-container-low);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.molecule-upload-button__preview:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-container);
+}
+
+.molecule-upload-button__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.molecule-upload-button__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.molecule-upload-button__placeholder .material-symbols-outlined {
+  font-size: 32px;
+  color: var(--color-primary-container);
+}
+
+.molecule-upload-button__error {
+  color: var(--color-error);
+  font-size: var(--text-label-sm-size, 12px);
+  font-family: var(--font-label);
+}

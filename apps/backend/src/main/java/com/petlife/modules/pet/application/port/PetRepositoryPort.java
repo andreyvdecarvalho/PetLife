@@ -14,4 +14,5 @@ public interface PetRepositoryPort {
     long countByUserIdAndStatusNot(UUID userId, PetStatus status);
     List<Pet> findByUserIdAndStatusNot(UUID userId, PetStatus status);
     Page<Pet> findByUserIdAndStatusNot(UUID userId, PetStatus status, Pageable pageable);
+    Page<Pet> findByUserIdAndStatus(UUID userId, PetStatus status, Pageable pageable);
 }

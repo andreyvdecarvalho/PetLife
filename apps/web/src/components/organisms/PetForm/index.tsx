@@ -4,6 +4,7 @@ import { useUpdatePet } from '../../../application/pet/useUpdatePet';
 import type { Pet, PetSex, PetSize, PetSpecies } from '../../../domain/pet/Pet';
 import { compressImage } from '../../../utils/imageCompressor';
 import { FormField } from '../../molecules/FormField';
+import { UploadButton } from '../../molecules/UploadButton';
 import { Button } from '../../atoms/Button';
 import './styles.css';
 
@@ -70,8 +71,6 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
   // Validações
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     if (pet) {
       setName(pet.name);
@@ -115,10 +114,6 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
     } finally {
       setCompressing(false);
     }
-  };
-
-  const handleSelectPhotoClick = () => {
-    fileInputRef.current?.click();
   };
 
   const validate = (): boolean => {
@@ -196,33 +191,12 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
       )}
 
       {/* Foto do Pet */}
-      <div className="organism-pet-form__photo-section">
-        <div 
-          className="organism-pet-form__avatar-preview" 
-          onClick={handleSelectPhotoClick}
-          role="button"
-          tabIndex={0}
-          aria-label="Selecionar foto do pet"
-        >
-          {photoPreview ? (
-            <img src={photoPreview} alt="Preview do Pet" className="organism-pet-form__preview-img" />
-          ) : (
-            <div className="organism-pet-form__placeholder">
-              <span className="material-symbols-outlined">pets</span>
-              <span>{compressing ? 'Processando...' : 'Adicionar Foto'}</span>
-            </div>
-          )}
-        </div>
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          onChange={handlePhotoChange} 
-          accept="image/*"
-          style={{ display: 'none' }}
-          data-testid="input-foto-pet"
-        />
-        {errors.photo && <span className="organism-pet-form__error">{errors.photo}</span>}
-      </div>
+      <UploadButton
+        photoPreview={photoPreview}
+        compressing={compressing}
+        error={errors.photo}
+        onPhotoChange={handlePhotoChange}
+      />
 
       <div className="organism-pet-form__grid">
         {/* Nome */}
