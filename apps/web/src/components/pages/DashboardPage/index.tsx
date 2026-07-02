@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
+import { PetCard } from '../../molecules/PetCard';
 import { PetForm } from '../../organisms/PetForm';
+import { WeightChart } from '../../organisms/WeightChart';
 import { useGetPets } from '../../../application/pet/useGetPets';
 import type { Pet, PetStatus } from '../../../domain/pet/Pet';
 import { useUpdatePetStatus } from '../../../application/pet/useUpdatePetStatus';
@@ -122,45 +124,13 @@ export const DashboardPageContent: React.FC = () => {
           )}
 
           {!isLoading && pets.map(pet => (
-            <div
+            <PetCard
               key={pet.id}
-              className={`dashboard-page__pet-card ${activePetId === pet.id ? 'active' : ''}`}
-              onClick={() => setActivePetId(pet.id)}
-              style={{ position: 'relative' }}
-            >
-              {/* Archive / Unarchive button */}
-              <button
-                data-testid={pet.status === 'ACTIVE' ? 'btn-archive-pet' : 'btn-unarchive-pet'}
-                onClick={e => {
-                  e.stopPropagation();
-                  handleToggleStatus(pet);
-                }}
-                className="dashboard-page__status-toggle"
-                style={{
-                  position: 'absolute',
-                  top: '8px',
-                  right: '8px',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: pet.status === 'ACTIVE' ? 'var(--color-error)' : 'var(--color-primary)',
-                }}
-                aria-label={pet.status === 'ACTIVE' ? 'Arquivar pet' : 'Desarquivar pet'}
-              >
-                <span className="material-symbols-outlined">
-                  {pet.status === 'ACTIVE' ? 'archive' : 'unarchive'}
-                </span>
-              </button>
-              <div className="dashboard-page__pet-avatar-wrapper">
-                <img 
-                  src={pet.photoUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCnHN_9BTUOKpIb36hpFqE25LwIGylq8VtlrHjbSrAhgWcSBgVoSTXH_BMmBraiV93TqeZ2ZdWgYjVg7-fUZGPf16xvHpZ1gPOoaBajWM-dc79Xh3ETkTvT0uKw6_LbbTAI7P1n1FCrkGvgvYi-4WVKYEqmihw85_IDBmKe8RphLlmRkpBmiLcHOnESAVKHJYV78g1ZQNwdwNApTfakidYekZzgfDrEj-Pn9OiAs79HAY7c_WsQ9Eo8vsMeD9OmxSAc5nMX25sEWIw'} 
-                  alt={pet.name} 
-                  className="dashboard-page__pet-img" 
-                />
-                {activePetId === pet.id && <div className="dashboard-page__pet-status-dot"></div>}
-              </div>
-              <span className="dashboard-page__pet-name">{pet.name}</span>
-            </div>
+              pet={pet}
+              isActive={activePetId === pet.id}
+              onClick={(p) => setActivePetId(p.id)}
+              onToggleStatus={handleToggleStatus}
+            />
           ))}
           
           {/* Add Pet Button */}
@@ -262,31 +232,17 @@ export const DashboardPageContent: React.FC = () => {
 
             {/* Chart */}
             <div className="dashboard-page__chart-container">
-              <div className="dashboard-page__chart-grid-lines">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-              <div className="dashboard-page__chart-bars">
-                {[
-                  { label: 'Jan', val: '23.0', height: '60%' },
-                  { label: 'Fev', val: '23.5', height: '65%' },
-                  { label: 'Mar', val: '23.2', height: '62%' },
-                  { label: 'Abr', val: '24.0', height: '70%' },
-                  { label: 'Mai', val: `${activePet?.weightKg || 24.5}`, height: '75%', highlight: true }
-                ].map((bar, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`dashboard-page__chart-bar-wrapper ${bar.highlight ? 'highlight' : ''}`}
-                    style={{ height: bar.height }}
-                  >
-                    <div className="dashboard-page__chart-tooltip">{bar.val}</div>
-                    <div className="dashboard-page__chart-bar"></div>
-                    <span className="dashboard-page__chart-label">{bar.label}</span>
-                  </div>
-                ))}
-              </div>
+              {weightLoading ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '160px', color: 'var(--color-on-surface-variant)' }}>
+                  Carregando histórico...
+                </div>
+              ) : weightError ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '160px', color: 'var(--color-error)' }}>
+                  Erro ao carregar histórico
+                </div>
+              ) : (
+                <WeightChart data={weightHistory || []} />
+              )}
             </div>
 
             <div className="dashboard-page__stats-footer">
