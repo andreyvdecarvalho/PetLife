@@ -43,10 +43,10 @@ Entidade `Vaccination`:
 - **ProofUploader**: Upload do adesivo/carimbo da vacina.
 
 ## 7. Critérios de Aceite
-- [ ] Cadastro com data e nome da vacina.
-- [ ] Autocomplete inteligente exibindo catálogo de vacinas baseado na espécie.
-- [ ] Sistema projeta a próxima data automaticamente para vacinas padrão.
-- [ ] Exibe comprovante expandido ao clicar.
-- [ ] Exibição mais recente primeiro.
+- [x] Cadastro com data e nome da vacina.
+- [x] Autocomplete inteligente exibindo catálogo de vacinas baseado na espécie.
+- [x] Sistema projeta a próxima data automaticamente para vacinas padrão.
+- [x] Exibe comprovante expandido ao clicar.
+- [x] Exibição mais recente primeiro.
 
 > **NOTA DE ARQUITETURA FRONTEND:** Para as telas desta Epic, siga rigorosamente o Atomic Design (Atoms, Molecules, Organisms, Templates, Pages). Cada componente em pasta própria com index.tsx e styles.css. Use Vanilla CSS (BEM / namespace semântico) consumindo variáveis do 	heme.css. Atoms não devem possuir margens e devem ocupar 100% (width: 100%), delegando posicionamento aos Organisms/Templates.

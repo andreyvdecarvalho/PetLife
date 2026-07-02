@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CreateVaccinationData } from '../../../../domain/pet/Vaccination';
+import { CreateVaccinationData } from '../../../domain/pet/Vaccination';
 import { Input } from '../../atoms/Input';
 import { Button } from '../../atoms/Button';
 import './styles.css';

@@ -9,7 +9,7 @@ import com.petlife.modules.pet.infrastructure.dto.CreateVaccinationRequest;
 import com.petlife.modules.pet.infrastructure.dto.UpdateVaccinationRequest;
 import com.petlife.modules.pet.infrastructure.dto.VaccinationResponse;
 import com.petlife.shared.response.ApiResponse;
-import com.petlife.shared.security.UserPrincipal;
+import com.petlife.shared.response.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,9 +56,9 @@ public class VaccinationController {
     public ResponseEntity<ApiResponse<VaccinationResponse>> addVaccination(
             @PathVariable UUID petId,
             @Valid @RequestBody CreateVaccinationRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal Jwt jwt) {
 
-        VaccinationResponse response = addVaccinationUseCase.execute(petId, userPrincipal.getUserId(), request);
+        VaccinationResponse response = addVaccinationUseCase.execute(petId, UUID.fromString(jwt.getSubject()), request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.of(response));
     }
@@ -65,9 +66,9 @@ public class VaccinationController {
     @GetMapping("/pets/{petId}/vaccines")
     public ResponseEntity<ApiResponse<List<VaccinationResponse>>> listVaccinations(
             @PathVariable UUID petId,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal Jwt jwt) {
 
-        List<VaccinationResponse> response = listVaccinationsByPetUseCase.execute(petId, userPrincipal.getUserId());
+        List<VaccinationResponse> response = listVaccinationsByPetUseCase.execute(petId, UUID.fromString(jwt.getSubject()));
         return ResponseEntity.ok(ApiResponse.of(response));
     }
 
@@ -76,10 +77,10 @@ public class VaccinationController {
             @PathVariable UUID petId,
             @PathVariable UUID vaccineId,
             @Valid @RequestBody UpdateVaccinationRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal Jwt jwt) {
 
         VaccinationResponse response = updateVaccinationUseCase.execute(
-                petId, vaccineId, userPrincipal.getUserId(), request);
+                petId, vaccineId, UUID.fromString(jwt.getSubject()), request);
         return ResponseEntity.ok(ApiResponse.of(response));
     }
 
@@ -88,10 +89,10 @@ public class VaccinationController {
             @PathVariable UUID petId,
             @PathVariable UUID vaccineId,
             @RequestPart("file") MultipartFile file,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal Jwt jwt) {
 
         VaccinationResponse response = uploadVaccinationProofUseCase.execute(
-                petId, vaccineId, userPrincipal.getUserId(), file);
+                petId, vaccineId, UUID.fromString(jwt.getSubject()), file);
         return ResponseEntity.ok(ApiResponse.of(response));
     }
 
