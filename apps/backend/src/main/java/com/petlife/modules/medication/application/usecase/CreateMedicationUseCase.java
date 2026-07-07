@@ -48,7 +48,8 @@ public class CreateMedicationUseCase {
         }
 
         if (request.frequency() == MedicationFrequency.CUSTOM && request.customFrequencyHours() == null) {
-            throw BusinessException.badRequest("INVALID_FREQUENCY", "Frequência personalizada requer definição de horas.");
+            throw BusinessException.badRequest("INVALID_FREQUENCY",
+                    "Frequência personalizada requer definição de horas.");
         }
 
         Medication medication = new Medication();

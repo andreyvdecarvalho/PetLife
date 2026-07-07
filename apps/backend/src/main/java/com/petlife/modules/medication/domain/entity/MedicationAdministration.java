@@ -22,7 +22,8 @@ import java.time.OffsetDateTime;
 public class MedicationAdministration extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medication_id", nullable = false, foreignKey = @ForeignKey(name = "fk_medication_administration_medication"))
+    @JoinColumn(name = "medication_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_medication_administration_medication"))
     private Medication medication;
 
     @Column(name = "scheduled_time", nullable = false)

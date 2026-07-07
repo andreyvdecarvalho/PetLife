@@ -30,7 +30,8 @@ public class UpdateMedicationAdministrationUseCase {
         }
 
         administration.setStatus(request.status());
-        if (request.status() == MedicationAdministrationStatus.TAKEN || request.status() == MedicationAdministrationStatus.LATE) {
+        if (request.status() == MedicationAdministrationStatus.TAKEN
+                || request.status() == MedicationAdministrationStatus.LATE) {
             administration.setAdministeredAt(OffsetDateTime.now(ZoneOffset.UTC));
             administration.setSkippedReason(null);
         } else if (request.status() == MedicationAdministrationStatus.SKIPPED) {

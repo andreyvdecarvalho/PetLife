@@ -67,7 +67,8 @@ public class MedicationController {
             @AuthenticationPrincipal Jwt jwt
     ) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        MedicationAdministrationResponse response = updateMedicationAdministrationUseCase.execute(doseId, userId, request);
+        MedicationAdministrationResponse response = updateMedicationAdministrationUseCase
+                .execute(doseId, userId, request);
         return ResponseEntity.ok(ApiResponse.of(response));
     }
 

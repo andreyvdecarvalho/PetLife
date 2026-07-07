@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface MedicationAdministrationJpaRepository extends JpaRepository<MedicationAdministration, UUID>, MedicationAdministrationRepositoryPort {
+public interface MedicationAdministrationJpaRepository
+        extends JpaRepository<MedicationAdministration, UUID>, MedicationAdministrationRepositoryPort {
 }
