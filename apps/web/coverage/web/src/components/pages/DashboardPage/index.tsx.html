@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.55% </span>
+                <span class="strong">86.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>190/217</span>
+                <span class='fraction'>195/226</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.63% </span>
+                <span class="strong">65.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>21/33</span>
+                <span class='fraction'>23/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">22.22% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/8</span>
+                <span class='fraction'>2/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.55% </span>
+                <span class="strong">86.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>190/217</span>
+                <span class='fraction'>195/226</span>
             </div>
         
             
@@ -339,13 +339,23 @@
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
 <a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -362,6 +372,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
@@ -504,6 +515,13 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -616,6 +634,7 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
 import { PetCard } from '../../molecules/PetCard';
@@ -638,6 +657,7 @@ interface Appointment {
 }
 &nbsp;
 export const DashboardPageContent: React.FC = () =&gt; {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -782,6 +802,13 @@ export const DashboardPageContent: React.FC = () =&gt; {
               &lt;div 
                 key={app.id} 
                 className={`dashboard-page__app-card dashboard-page__app-card--${app.type}`}
+                onClick={<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                  if (app.type === 'grooming' &amp;&amp; activePetId) {</span>
+<span class="cstat-no" title="statement not covered" >                    navigate(`/pets/${activePetId}/grooming`);</span>
+<span class="cstat-no" title="statement not covered" >                  }</span>
+<span class="cstat-no" title="statement not covered" >                }}</span>
+                style={{ cursor: app.type === 'grooming' ? 'pointer' : 'default' }}
+                data-testid={`appointment-${app.id}`}
               &gt;
                 &lt;div className="dashboard-page__app-badge"&gt;{app.badge}&lt;/div&gt;
                 &lt;div className="dashboard-page__app-icon-container"&gt;
@@ -898,7 +925,7 @@ export { DashboardPageContent as DashboardPage };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-08T22:45:52.031Z
+                at 2026-07-08T23:24:04.206Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

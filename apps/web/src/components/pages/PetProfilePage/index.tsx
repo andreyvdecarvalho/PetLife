@@ -142,6 +142,32 @@ export const PetProfilePageContent: React.FC = () => {
               <p className="pet-profile__status-desc">Próxima vacina em 4 meses</p>
             </div>
           </div>
+
+          <button
+            className="pet-profile__quick-action-btn"
+            onClick={() => navigate(`/pets/${id}/grooming`)}
+            style={{
+              marginTop: '16px',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '12px',
+              backgroundColor: 'var(--color-primary-fixed, #ffdbcb)',
+              color: 'var(--color-on-primary-fixed, #351000)',
+              border: 'none',
+              borderRadius: 'var(--radius-full, 100px)',
+              fontFamily: 'var(--font-label, sans-serif)',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
+            }}
+            data-testid="btn-to-grooming"
+          >
+            <span className="material-symbols-outlined">shower</span>
+            Banho & Tosa
+          </button>
         </aside>
 
         <section className="pet-profile__content">

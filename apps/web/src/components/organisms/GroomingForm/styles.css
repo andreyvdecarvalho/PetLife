@@ -1,0 +1,221 @@
+.organism-grooming-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.organism-grooming-form__title {
+  margin: 0 0 8px 0;
+  font-family: var(--font-title, sans-serif);
+  font-size: var(--text-title-md-size, 22px);
+  font-weight: var(--text-title-md-weight, 700);
+  color: var(--color-on-surface, #1d1b20);
+}
+
+.organism-grooming-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.organism-grooming-form__label {
+  font-family: var(--font-label, sans-serif);
+  font-size: var(--text-label-md-size, 14px);
+  font-weight: var(--text-label-md-weight, 500);
+  color: var(--color-on-surface-variant, #49454f);
+}
+
+.organism-grooming-form__input,
+.organism-grooming-form__textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-outline, #79747e);
+  border-radius: var(--radius-md, 8px);
+  background-color: var(--color-surface-container-lowest, #ffffff);
+  font-family: var(--font-body, sans-serif);
+  font-size: 16px;
+  color: var(--color-on-surface, #1d1b20);
+  box-sizing: border-box;
+}
+
+.organism-grooming-form__input:focus,
+.organism-grooming-form__textarea:focus {
+  border-color: var(--color-primary, #6750a4);
+  outline: none;
+}
+
+.organism-grooming-form__textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.organism-grooming-form__radio-group {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.organism-grooming-form__radio-label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid var(--color-outline-variant, #c4c7c5);
+  border-radius: var(--radius-lg, 12px);
+  cursor: pointer;
+  font-family: var(--font-label, sans-serif);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--color-on-surface-variant, #49454f);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.organism-grooming-form__radio-label.active {
+  border-color: var(--color-primary, #6750a4);
+  background-color: var(--color-primary-container, #eaddff);
+  color: var(--color-on-primary-container, #21005d);
+}
+
+.organism-grooming-form__radio-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.organism-grooming-form__error {
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--text-label-sm-size, 12px);
+  font-weight: var(--text-label-sm-weight, 500);
+  color: var(--color-error, #ba1a1a);
+}
+
+.organism-grooming-form__photos-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  border-top: 1px solid var(--color-outline-variant, #c4c7c5);
+  padding-top: 16px;
+}
+
+.organism-grooming-form__subtitle {
+  margin: 0;
+  font-family: var(--font-title, sans-serif);
+  font-size: var(--text-title-sm-size, 16px);
+  font-weight: var(--text-title-sm-weight, 600);
+  color: var(--color-on-surface, #1d1b20);
+}
+
+.organism-grooming-form__uploads-grid {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.organism-grooming-form__upload-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.organism-grooming-form__upload-title {
+  font-family: var(--font-label, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-on-surface-variant, #49454f);
+}
+
+.organism-grooming-form__upload-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px dashed var(--color-outline-variant, #c4c7c5);
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  background-color: var(--color-surface-container-low, #f7f2fa);
+}
+
+.organism-grooming-form__upload-area:hover {
+  border-color: var(--color-primary, #6750a4);
+}
+
+.organism-grooming-form__upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-on-surface-variant, #49454f);
+  font-family: var(--font-label, sans-serif);
+  font-size: 12px;
+}
+
+.organism-grooming-form__upload-placeholder span.material-symbols-outlined {
+  font-size: 28px;
+}
+
+.organism-grooming-form__preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.organism-grooming-form__file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.organism-grooming-form__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.organism-grooming-form__btn {
+  padding: 10px 24px;
+  border-radius: var(--radius-full, 100px);
+  font-family: var(--font-label, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.organism-grooming-form__btn--primary {
+  background-color: var(--color-primary, #6750a4);
+  color: var(--color-on-primary, #ffffff);
+  border: none;
+}
+
+.organism-grooming-form__btn--primary:hover:not(:disabled) {
+  box-shadow: var(--shadow-elevation-low, 0 1px 3px rgba(0, 0, 0, 0.12));
+}
+
+.organism-grooming-form__btn--secondary {
+  background-color: transparent;
+  color: var(--color-primary, #6750a4);
+  border: 1px solid var(--color-outline, #79747e);
+}
+
+.organism-grooming-form__btn--secondary:hover:not(:disabled) {
+  background-color: var(--color-surface-container-low, #f7f2fa);
+}
+
+.organism-grooming-form__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
