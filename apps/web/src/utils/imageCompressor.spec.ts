@@ -21,13 +21,13 @@ describe('imageCompressor utility', () => {
       }, 0);
     });
 
-    const originalFileReader = global.FileReader;
-    global.FileReader = class {
+    const originalFileReader = globalThis.FileReader;
+    globalThis.FileReader = class {
       readAsDataURL = readAsDataURLMock;
     } as any;
 
     await expect(compressImage(file, 1)).rejects.toThrow('FileReader error');
 
-    global.FileReader = originalFileReader;
+    globalThis.FileReader = originalFileReader;
   });
 });
