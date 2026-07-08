@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import type { GroomingType } from '../../domain/pet/Grooming';
 import type { CreateGroomingData } from '../../infrastructure/http/grooming.api';
 
@@ -54,7 +54,7 @@ export function useGroomingForm({ initialValues, onSubmit }: UseGroomingFormProp
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
