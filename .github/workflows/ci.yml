@@ -200,8 +200,13 @@ jobs:
         working-directory: apps/backend
         run: mvn package -DskipTests -B
 
+      - name: Wait for Postgres
+        run: pnpm dlx wait-on --timeout 120000 tcp:127.0.0.1:5432
+
+      - name: Wait for RabbitMQ
+        run: pnpm dlx wait-on --timeout 120000 tcp:127.0.0.1:5672
+
       - name: Start backend
-        working-directory: apps/backend
         run: |
           nohup java -jar target/petlife-backend-*.jar > backend.log 2>&1 &
           sleep 3
@@ -211,7 +216,12 @@ jobs:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
           SPRING_JPA_HIBERNATE_DDL_AUTO: update
-          SPRING_RABBITMQ_HOST: 127.0.0.1
+          SPRING_RABBITMQ_HOST: rabbitmq
+          SPRING_RABBITMQ_PORT: 5672
+          SPRING_RABBITMQ_USERNAME: guest
+          SPRING_RABBITMQ_PASSWORD: guest
+          SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP: false
+          SPRING_RABBITMQ_LISTENER_DIRECT_AUTO_STARTUP: false
 
       - name: Start web dev server
         working-directory: apps/web
@@ -220,7 +230,7 @@ jobs:
           sleep 3
 
       - name: Wait for servers
-        run: pnpm dlx wait-on --timeout 120000 http://127.0.0.1:8080/actuator/health http://127.0.0.1:5173
+        run: pnpm dlx wait-on --timeout 120000 tcp:127.0.0.1:8080 http://127.0.0.1:8080/actuator/health http://127.0.0.1:5173
 
       - name: Dump logs on failure
         if: failure()
