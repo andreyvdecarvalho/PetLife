@@ -55,4 +55,7 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Pet> pets = new ArrayList<>();
+
+    @Column(name = "fcm_token")
+    private String fcmToken;
 }

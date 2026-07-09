@@ -1,0 +1,106 @@
+.preferences-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.preferences-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-top: 24px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: 8px;
+}
+
+.preferences-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--color-outline-variant);
+}
+
+.preferences-toggle__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-on-surface);
+}
+
+.preferences-toggle__checkbox {
+  width: 44px;
+  height: 22px;
+  appearance: none;
+  background-color: var(--color-outline-variant);
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s;
+}
+
+.preferences-toggle__checkbox:checked {
+  background-color: var(--color-primary);
+}
+
+.preferences-toggle__checkbox::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background-color: var(--color-surface-container-lowest);
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.preferences-toggle__checkbox:checked::before {
+  transform: translateX(22px);
+}
+
+.preferences-time-inputs {
+  display: flex;
+  gap: 24px;
+}
+
+.preferences-time-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.preferences-time-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+
+.preferences-time-field input[type="time"] {
+  padding: 10px 14px;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-container-lowest);
+  color: var(--color-on-surface);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.preferences-time-field input[type="time"]:focus {
+  border-color: var(--color-primary);
+}
+
+.preferences-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-on-surface-variant);
+}

@@ -3,6 +3,7 @@ import { ProfilePage } from './ProfilePage';
 import { RegisterPage } from './RegisterPage';
 import { ForgotPasswordPage } from './ForgotPasswordPage';
 import { ResetPasswordPage } from './ResetPasswordPage';
+import { NotificationsPage } from './NotificationsPage';
 import { useAuth } from '../contexts/AuthContext';
 import { MemoryRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
@@ -37,7 +38,16 @@ describe('Wrapper Pages', () => {
         <ProfilePage />
       </MemoryRouter>
     );
-    expect(screen.getByText('Meu Perfil')).toBeDefined();
+    expect(screen.getAllByText('Meu Perfil').length).toBeGreaterThan(0);
+  });
+
+  it('should render NotificationsPage correctly', () => {
+    render(
+      <MemoryRouter>
+        <NotificationsPage />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Central de Notificações')).toBeInTheDocument();
   });
 
   it('should render RegisterPage correctly', () => {
