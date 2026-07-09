@@ -26,14 +26,17 @@ public class UpdateGroomingUseCase {
                 .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND", "Pet não encontrado."));
 
         if (!pet.getUser().getId().equals(userId)) {
-            throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
+            throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS",
+                    "Este pet não pertence ao usuário autenticado.");
         }
 
         Grooming grooming = groomingRepositoryPort.findById(groomingId)
-                .orElseThrow(() -> BusinessException.notFound("GROOMING_NOT_FOUND", "Registro de banho e tosa não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound("GROOMING_NOT_FOUND",
+                        "Registro de banho e tosa não encontrado."));
 
         if (!grooming.getPet().getId().equals(petId)) {
-            throw BusinessException.badRequest("GROOMING_PET_MISMATCH", "Este registro de banho e tosa não pertence a este pet.");
+            throw BusinessException.badRequest("GROOMING_PET_MISMATCH",
+                    "Este registro de banho e tosa não pertence a este pet.");
         }
 
         grooming.setType(request.getType());
