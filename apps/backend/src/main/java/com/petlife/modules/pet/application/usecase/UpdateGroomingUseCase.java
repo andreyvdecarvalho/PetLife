@@ -21,9 +21,11 @@ public class UpdateGroomingUseCase {
     private final PetRepositoryPort petRepositoryPort;
 
     @Transactional
-    public GroomingResponse execute(UUID petId, UUID groomingId, UUID userId, UpdateGroomingRequest request) {
+    public GroomingResponse execute(UUID petId, UUID groomingId, UUID userId,
+            UpdateGroomingRequest request) {
         Pet pet = petRepositoryPort.findById(petId)
-                .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND", "Pet não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND",
+                        "Pet não encontrado."));
 
         if (!pet.getUser().getId().equals(userId)) {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS",

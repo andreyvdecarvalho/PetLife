@@ -23,13 +23,16 @@ public class UploadGroomingPhotoUseCase {
     private final PetRepositoryPort petRepositoryPort;
 
     @Transactional
-    public GroomingResponse execute(UUID petId, UUID groomingId, UUID userId, MultipartFile file, String type) {
+    public GroomingResponse execute(UUID petId, UUID groomingId, UUID userId,
+            MultipartFile file, String type) {
         if (file == null || file.isEmpty()) {
-            throw BusinessException.badRequest("FILE_EMPTY", "File is empty or not provided");
+            throw BusinessException.badRequest("FILE_EMPTY",
+                    "File is empty or not provided");
         }
 
         Pet pet = petRepositoryPort.findById(petId)
-                .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND", "Pet não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND",
+                        "Pet não encontrado."));
 
         if (!pet.getUser().getId().equals(userId)) {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS",
@@ -46,23 +49,29 @@ public class UploadGroomingPhotoUseCase {
         }
 
         if (type == null) {
-            throw BusinessException.badRequest("INVALID_PHOTO_TYPE", "Photo type is required");
+            throw BusinessException.badRequest("INVALID_PHOTO_TYPE",
+                    "Photo type is required");
         }
 
         String typeStr = type.toLowerCase();
         if (!typeStr.equals("before") && !typeStr.equals("after")) {
-            throw BusinessException.badRequest("INVALID_PHOTO_TYPE", "Photo type must be 'before' or 'after'");
+            throw BusinessException.badRequest("INVALID_PHOTO_TYPE",
+                    "Photo type must be 'before' or 'after'");
         }
 
-        List<String> photos = new ArrayList<>(grooming.getPhotos() != null ? grooming.getPhotos() : new ArrayList<>());
+        List<String> photos = new ArrayList<>(
+                grooming.getPhotos() != null ? grooming.getPhotos()
+                        : new ArrayList<>());
 
-        String targetUrl = "/uploads/grooming-" + groomingId + "-" + typeStr + ".jpg";
+        String targetUrl = "/uploads/grooming-" + groomingId + "-" + typeStr
+                + ".jpg";
 
         // Remove existing photo of the same type if present to avoid duplicates
         photos.removeIf(url -> url.contains("-" + typeStr + ".jpg"));
 
         if (photos.size() >= 2) {
-            throw BusinessException.badRequest("PHOTO_LIMIT_EXCEEDED", "Grooming can have at most 2 photos");
+            throw BusinessException.badRequest("PHOTO_LIMIT_EXCEEDED",
+                    "Grooming can have at most 2 photos");
         }
 
         photos.add(targetUrl);
