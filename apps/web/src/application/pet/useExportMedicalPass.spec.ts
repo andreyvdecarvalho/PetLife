@@ -14,8 +14,8 @@ describe('useExportMedicalPass Hook', () => {
     vi.clearAllMocks();
 
     // Safe mock for URL operations
-    global.URL.createObjectURL = vi.fn().mockReturnValue('mock-url');
-    global.URL.revokeObjectURL = vi.fn();
+    window.URL.createObjectURL = vi.fn().mockReturnValue('mock-url');
+    window.URL.revokeObjectURL = vi.fn();
   });
 
   afterEach(() => {

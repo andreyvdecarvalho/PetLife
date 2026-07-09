@@ -7,7 +7,7 @@ import { useTimeline } from '../../../application/pet/useTimeline';
 import { useExportMedicalPass } from '../../../application/pet/useExportMedicalPass';
 import { useToast } from '../../molecules/Toast';
 import { useAuth } from '../../../contexts/AuthContext';
-import { TimelineEventType } from '../../../domain/pet/Timeline';
+import type { TimelineEventType } from '../../../domain/pet/Timeline';
 import './styles.css';
 
 const FILTER_OPTIONS = [
