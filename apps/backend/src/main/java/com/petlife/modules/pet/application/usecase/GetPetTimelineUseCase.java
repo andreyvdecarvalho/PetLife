@@ -64,7 +64,7 @@ public class GetPetTimelineUseCase {
                             + (v.getVeterinarian() != null ? v.getVeterinarian() : "Não informado") + 
                                  (v.getClinic() != null ? " (Clínica: " + v.getClinic() + ")" : ""))
                     .icon("vaccines")
-                    .color("#4F46E5")
+                    .color("#006b55")
                     .photoUrl(v.getProofUrl())
                     .build());
         }
@@ -79,7 +79,7 @@ public class GetPetTimelineUseCase {
                     .title("Consulta: " + c.getReason())
                     .description("Diagnóstico: " + (c.getDiagnosis() != null ? c.getDiagnosis() : "Não informado"))
                     .icon("medical_services")
-                    .color("#10B981")
+                    .color("#005fac")
                     .photoUrl(c.getAttachments() != null && !c.getAttachments().isEmpty()
                             ? c.getAttachments().get(0) : null)
                     .build());
@@ -119,8 +119,8 @@ public class GetPetTimelineUseCase {
                     .date(w.getRecordedAt())
                     .title("Registro de Peso: " + w.getWeightKg() + " kg")
                     .description("Acompanhamento de peso.")
-                    .icon("monitoring")
-                    .color("#3B82F6")
+                    .icon("scale")
+                    .color("#14B8A6")
                     .build());
         }
 
@@ -135,7 +135,7 @@ public class GetPetTimelineUseCase {
                     .title("Início de Medicamento: " + m.getName())
                     .description("Dosagem: " + m.getDosage() + " | Frequência: " + m.getFrequency())
                     .icon("medication")
-                    .color("#F59E0B")
+                    .color("#8B5CF6")
                     .build());
 
             // End Event (if exists)
@@ -147,7 +147,7 @@ public class GetPetTimelineUseCase {
                         .title("Fim de Medicamento: " + m.getName())
                         .description("Tratamento concluído.")
                         .icon("check_circle")
-                        .color("#10B981")
+                        .color("#6B7280")
                         .build());
             }
         }
@@ -170,7 +170,7 @@ public class GetPetTimelineUseCase {
                             .description("Parabéns, " + pet.getName() + "! Hoje completa "
                                     + age + " " + (age == 1 ? "ano" : "anos") + " de vida.")
                             .icon("cake")
-                            .color("#F43F5E")
+                            .color("#EAB308")
                             .build());
                 }
             }
