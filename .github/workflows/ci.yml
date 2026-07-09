@@ -230,7 +230,7 @@ jobs:
           sleep 3
 
       - name: Wait for servers
-        run: pnpm dlx wait-on --timeout 120000 tcp:127.0.0.1:8080 http://127.0.0.1:8080/actuator/health http://127.0.0.1:5173
+        run: pnpm dlx wait-on --timeout 120000 http://127.0.0.1:8080/actuator/health http://127.0.0.1:5173
 
       - name: Dump logs on failure
         if: failure()
