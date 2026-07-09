@@ -1,6 +1,5 @@
 package com.petlife.modules.pet.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petlife.modules.auth.entity.User;
 import com.petlife.modules.auth.repository.UserRepository;
 import com.petlife.modules.pet.entity.Grooming;
