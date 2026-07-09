@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
 import { PetCard } from '../../molecules/PetCard';
@@ -21,6 +22,7 @@ interface Appointment {
 }
 
 export const DashboardPageContent: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -165,6 +167,13 @@ export const DashboardPageContent: React.FC = () => {
               <div 
                 key={app.id} 
                 className={`dashboard-page__app-card dashboard-page__app-card--${app.type}`}
+                onClick={() => {
+                  if (app.type === 'grooming' && activePetId) {
+                    navigate(`/pets/${activePetId}/grooming`);
+                  }
+                }}
+                style={{ cursor: app.type === 'grooming' ? 'pointer' : 'default' }}
+                data-testid={`appointment-${app.id}`}
               >
                 <div className="dashboard-page__app-badge">{app.badge}</div>
                 <div className="dashboard-page__app-icon-container">

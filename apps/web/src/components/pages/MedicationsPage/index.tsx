@@ -643,8 +643,9 @@ export const MedicationsPageContent: React.FC = () => {
             <h2 className="medications-page__modal-title">Cadastrar Tratamento</h2>
             <form onSubmit={handleCreateTreatment} className="medications-page__form">
               <div className="medications-page__form-field">
-                <label className="medications-page__form-label">Nome do Medicamento *</label>
+                <label htmlFor="med-name" className="medications-page__form-label">Nome do Medicamento *</label>
                 <input
+                  id="med-name"
                   type="text"
                   className="medications-page__form-input"
                   placeholder="Ex: Amoxicilina, Colírio"
@@ -655,8 +656,9 @@ export const MedicationsPageContent: React.FC = () => {
               </div>
 
               <div className="medications-page__form-field">
-                <label className="medications-page__form-label">Dosagem *</label>
+                <label htmlFor="med-dosage" className="medications-page__form-label">Dosagem *</label>
                 <input
+                  id="med-dosage"
                   type="text"
                   className="medications-page__form-input"
                   placeholder="Ex: 1 comprimido, 5 gotas, 2ml"
@@ -668,8 +670,9 @@ export const MedicationsPageContent: React.FC = () => {
 
               <div className="medications-page__form-row">
                 <div className="medications-page__form-field">
-                  <label className="medications-page__form-label">Frequência *</label>
+                  <label htmlFor="med-frequency" className="medications-page__form-label">Frequência *</label>
                   <select
+                    id="med-frequency"
                     className="medications-page__form-input"
                     value={newFrequency}
                     onChange={(e) => setNewFrequency(e.target.value as MedicationFrequency)}

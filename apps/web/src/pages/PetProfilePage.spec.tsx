@@ -7,6 +7,19 @@ import React from 'react';
 
 vi.mock('../contexts/AuthContext');
 
+vi.mock('../application/consultation/useConsultations', () => ({
+  useConsultations: () => ({
+    consultations: [],
+    loading: false,
+    error: null,
+    fetchConsultations: vi.fn(),
+  }),
+}));
+
+vi.mock('../components/organisms/VaccinationsTab', () => ({
+  VaccinationsTab: () => null,
+}));
+
 describe('PetProfilePage', () => {
   it('should render correctly with pet profile details', () => {
     (useAuth as any).mockReturnValue({

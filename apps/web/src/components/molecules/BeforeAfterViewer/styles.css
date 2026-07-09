@@ -1,0 +1,111 @@
+.molecule-before-after-viewer {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: var(--radius-xl, 12px);
+  overflow: hidden;
+  box-shadow: var(--shadow-card, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+.molecule-before-after-viewer__container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  user-select: none;
+  background-color: var(--color-surface-container-highest, #e0e3e5);
+}
+
+.molecule-before-after-viewer__image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.molecule-before-after-viewer__image-wrapper.before {
+  z-index: 10;
+}
+
+.molecule-before-after-viewer__image-wrapper.after {
+  z-index: 5;
+}
+
+.molecule-before-after-viewer__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.molecule-before-after-viewer__slider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-on-primary, #ffffff);
+  z-index: 15;
+  pointer-events: none;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.molecule-before-after-viewer__slider-button {
+  position: absolute;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-primary, #9b4500);
+  color: var(--color-on-primary, #ffffff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--shadow-elevation-medium, 0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+.molecule-before-after-viewer__slider-button span {
+  font-size: 20px;
+  transform: rotate(90deg);
+}
+
+.molecule-before-after-viewer__slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 25;
+  margin: 0;
+}
+
+.molecule-before-after-viewer__label {
+  position: absolute;
+  bottom: 10px;
+  padding: 4px 8px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-family: var(--font-label, sans-serif);
+  font-size: var(--text-label-sm-size, 12px);
+  font-weight: var(--text-label-sm-weight, 500);
+  border-radius: var(--radius-sm, 4px);
+  z-index: 30;
+  pointer-events: none;
+}
+
+.molecule-before-after-viewer__label.before-label {
+  left: 10px;
+}
+
+.molecule-before-after-viewer__label.after-label {
+  right: 10px;
+}

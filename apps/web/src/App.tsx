@@ -14,6 +14,7 @@ import { RoutinePage } from './pages/RoutinePage';
 import { MemoriesPage } from './pages/MemoriesPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
 import { OnboardingPage } from './pages/OnboardingPage';
+import { GroomingPage } from './pages/GroomingPage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -44,6 +45,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <PetProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pets/:petId/grooming"
+              element={
+                <PrivateRoute>
+                  <GroomingPage />
                 </PrivateRoute>
               }
             />

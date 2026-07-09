@@ -25,6 +25,22 @@ vi.mock('../application/pet/useGetPets', () => ({
   })
 }));
 
+vi.mock('../application/pet/useUpdatePetStatus', () => ({
+  useUpdatePetStatus: () => ({
+    updatePetStatus: vi.fn(),
+    loading: false,
+    error: null
+  })
+}));
+
+vi.mock('../application/pet/usePetWeightHistory', () => ({
+  usePetWeightHistory: () => ({
+    data: [],
+    loading: false,
+    error: null
+  })
+}));
+
 describe('DashboardPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
