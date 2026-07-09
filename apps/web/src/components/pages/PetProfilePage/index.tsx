@@ -1,89 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { VaccinationsTab } from '../../organisms/VaccinationsTab';
-import { useConsultations } from '../../../application/consultation/useConsultations';
 import { Modal } from '../../molecules/Modal';
 import { ConsultationForm } from '../../organisms/ConsultationForm';
+import { useTimeline } from '../../../application/pet/useTimeline';
+import { useExportMedicalPass } from '../../../application/pet/useExportMedicalPass';
+import { useToast } from '../../molecules/Toast';
+import { useAuth } from '../../../contexts/AuthContext';
+import { TimelineEventType } from '../../../domain/pet/Timeline';
 import './styles.css';
 
-interface MedicalRecord {
-  id: string;
-  title: string;
-  category: 'clinical' | 'weight' | 'exam';
-  subtitle: string;
-  date: string;
-  description?: string;
-  value?: string;
-  trend?: string;
-  attachment?: {
-    name: string;
-    icon: string;
-  };
-  attachments?: string[];
-}
+const FILTER_OPTIONS = [
+  { label: 'Todos', value: null },
+  { label: 'Vacinas', value: ['VACCINE'] as TimelineEventType[] },
+  { label: 'Consultas', value: ['CONSULTATION'] as TimelineEventType[] },
+  { label: 'Medicamentos', value: ['MEDICATION_START', 'MEDICATION_END'] as TimelineEventType[] },
+  { label: 'Estética', value: ['GROOMING'] as TimelineEventType[] },
+  { label: 'Peso', value: ['WEIGHT'] as TimelineEventType[] },
+];
 
 export const PetProfilePageContent: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'history' | 'vaccines' | 'medications'>('history');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<TimelineEventType[] | null>(null);
+  const [page, setPage] = useState(0);
 
-  const { consultations, fetchConsultations } = useConsultations(id || '');
+  const { user } = useAuth();
+  const { showToast } = useToast();
+  const { events, isLoading, error: timelineError, hasMore, fetchTimeline } = useTimeline();
+  const { isExporting, exportError, exportMedicalPass } = useExportMedicalPass();
+
+  const handleRefresh = React.useCallback(() => {
+    if (id) {
+      fetchTimeline(id, selectedFilter || undefined, 0, 20, false);
+      setPage(0);
+    }
+  }, [id, selectedFilter, fetchTimeline]);
 
   useEffect(() => {
-    if (id) {
-      fetchConsultations();
+    if (activeTab === 'history') {
+      handleRefresh();
     }
-  }, [id, fetchConsultations]);
+  }, [activeTab, handleRefresh]);
 
-  const realRecords: MedicalRecord[] = consultations.map(c => ({
-    id: c.id,
-    title: c.reason,
-    category: 'clinical',
-    subtitle: `${c.clinic || 'Sem clínica especificada'} - ${c.veterinarian || 'Sem veterinário especificado'}`,
-    date: new Date(c.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }),
-    description: c.diagnosis ? `Diagnóstico: ${c.diagnosis}${c.prescriptions ? ` | Prescrição: ${c.prescriptions}` : ''}` : c.notes,
-    value: c.weightAtVisit ? `${c.weightAtVisit} kg` : undefined,
-    attachments: c.attachments,
-  }));
+  useEffect(() => {
+    if (timelineError) {
+      showToast(timelineError, 'error');
+    }
+  }, [timelineError, showToast]);
 
-  const mockRecords: MedicalRecord[] = [
-    {
-      id: 'rec-1',
-      title: 'Consulta de Rotina',
-      category: 'clinical',
-      subtitle: 'Clínica Vet Care - Dr. Silva',
-      date: '12 Out 2023',
-      description: 'Exame geral realizado. Max apresenta ótima saúde cardiovascular e pelagem brilhante. Recomendada continuação da dieta atual.',
-      attachment: {
-        name: 'Receita.pdf',
-        icon: 'description',
-      },
-    },
-    {
-      id: 'rec-2',
-      title: 'Registro de Peso',
-      category: 'weight',
-      subtitle: 'Aferição em casa',
-      date: '10 Out 2023',
-      value: '32.0 kg',
-      trend: '- 0.5 kg',
-    },
-    {
-      id: 'rec-3',
-      title: 'Exame de Sangue',
-      category: 'exam',
-      subtitle: 'Laboratório PetLab',
-      date: '05 Set 2023',
-      description: 'Hemograma completo anual. Todos os índices dentro da normalidade para a raça e idade.',
-      attachment: {
-        name: 'Resultados.pdf',
-        icon: 'lab_profile',
-      },
-    },
-  ];
+  useEffect(() => {
+    if (exportError) {
+      showToast(exportError, 'error');
+    }
+  }, [exportError, showToast]);
 
-  const allRecords = [...realRecords, ...mockRecords];
+  const handleLoadMore = () => {
+    if (id) {
+      const nextPage = page + 1;
+      fetchTimeline(id, selectedFilter || undefined, nextPage, 20, true);
+      setPage(nextPage);
+    }
+  };
+
+  const handleExport = async () => {
+    if (!id) return;
+    const success = await exportMedicalPass(id);
+    if (success) {
+      showToast('Prontuário exportado com sucesso!', 'success');
+    }
+  };
 
   return (
     <div className="pet-profile animate-fade-in">
@@ -105,7 +93,7 @@ export const PetProfilePageContent: React.FC = () => {
             
             <div className="pet-profile__avatar-container">
               <img 
-                alt="Max the Golden Retriever" 
+                alt="Max" 
                 className="pet-profile__avatar" 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuB84xkd7Mi62jZm1xSkIdQ7bSTD9bf2WPHQaNnroEICjqKLPzaBUtaj61a0fWiA_LTm64QiOiCyrQyvZWs7g5819q2etrJfYfmndaJOtCyMXAZZa2G04m3q-laOEp6PGum3rozS-zQmKYFA_U-W7vRzehxWJhfqQj4lFemuWXMULK2fMiVlBNdOBUC8sJflJK2LalIbDXjO7LsLhj2oQL_p-8I97iS5LuRrbOHkFsL_dU07YCUTKprrurY0QOW8aBnRDtP9lBs98as" 
               />
@@ -194,72 +182,117 @@ export const PetProfilePageContent: React.FC = () => {
 
           <div className="pet-profile__actions-row">
             <h3 className="pet-profile__section-heading">Registros Recentes</h3>
-            <button className="pet-profile__new-record-btn" onClick={() => setIsModalOpen(true)}>
-              <span className="material-symbols-outlined">add</span>
-              Novo Registro Médico
-            </button>
+            <div className="pet-profile__buttons-group">
+              <button 
+                className="pet-profile__export-btn" 
+                onClick={handleExport}
+                disabled={isExporting}
+                data-testid="export-pdf-button"
+              >
+                <span className="material-symbols-outlined">{isExporting ? 'sync' : 'download'}</span>
+                {isExporting ? 'Exportando...' : 'Exportar Prontuário'}
+              </button>
+              <button className="pet-profile__new-record-btn" onClick={() => setIsModalOpen(true)}>
+                <span className="material-symbols-outlined">add</span>
+                Novo Registro Médico
+              </button>
+            </div>
           </div>
 
+          {activeTab === 'history' && (
+            <div className="pet-profile__filter-chips no-scrollbar">
+              {FILTER_OPTIONS.map(opt => (
+                <button
+                  key={opt.label}
+                  className={`pet-profile__filter-chip ${selectedFilter === opt.value ? 'active' : ''}`}
+                  onClick={() => setSelectedFilter(opt.value)}
+                  data-testid={`filter-chip-${opt.label}`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="pet-profile__timeline">
-            {activeTab === 'history' && allRecords.map(rec => (
-              <div key={rec.id} className="pet-profile__timeline-item">
-                <div className={`pet-profile__timeline-node pet-profile__timeline-node--${rec.category}`}>
-                  <span className="material-symbols-outlined">
-                    {rec.category === 'clinical' ? 'local_hospital' : rec.category === 'weight' ? 'scale' : 'science'}
-                  </span>
-                </div>
-                
-                <div className="pet-profile__timeline-card">
-                  <div className="pet-profile__card-header">
-                    <div>
-                      <h4 className="pet-profile__card-title">{rec.title}</h4>
-                      <p className="pet-profile__card-subtitle">{rec.subtitle}</p>
-                    </div>
-                    {rec.value ? (
-                      <div className="pet-profile__card-value-group">
-                        <span className="pet-profile__card-value">{rec.value}</span>
-                        {rec.trend && (
-                          <span className="pet-profile__card-trend text-tertiary">
-                            <span className="material-symbols-outlined">arrow_downward</span>
-                            {rec.trend.replace('- ', '')}
-                          </span>
-                        )}
-                      </div>
-                    ) : (
-                      <span className="pet-profile__card-date">{rec.date}</span>
-                    )}
+            {activeTab === 'history' && isLoading && page === 0 && (
+              <div className="pet-profile__empty-tab">
+                <span className="material-symbols-outlined className='animate-spin'">sync</span>
+                <p>Carregando registros...</p>
+              </div>
+            )}
+
+            {activeTab === 'history' && !isLoading && events.length === 0 && (
+              <div className="pet-profile__empty-tab">
+                <span className="material-symbols-outlined">history</span>
+                <p>Nenhum registro encontrado.</p>
+              </div>
+            )}
+
+            {activeTab === 'history' && events.map((event, idx) => {
+              const dateStr = event.date 
+                ? new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+                : 'N/A';
+              return (
+                <div key={event.id || `${event.type}-${idx}`} className="pet-profile__timeline-item">
+                  <div 
+                    className="pet-profile__timeline-node" 
+                    style={{ 
+                      backgroundColor: event.color, 
+                      color: '#ffffff', 
+                      borderColor: 'var(--color-surface)' 
+                    }}
+                    data-testid={`timeline-node-${event.type}`}
+                  >
+                    <span className="material-symbols-outlined">{event.icon}</span>
                   </div>
                   
-                  {rec.description && (
-                    <p className="pet-profile__card-description">{rec.description}</p>
-                  )}
-
-                  {rec.attachment && (
-                    <div className="pet-profile__card-attachments">
-                      <span className="pet-profile__attachment-link">
-                        <span className="material-symbols-outlined">{rec.attachment.icon}</span>
-                        {rec.attachment.name}
-                      </span>
+                  <div className="pet-profile__timeline-card">
+                    <div className="pet-profile__card-header">
+                      <div>
+                        <h4 className="pet-profile__card-title">{event.title}</h4>
+                        <p className="pet-profile__card-subtitle">
+                          {event.type === 'BIRTHDAY' ? 'Aniversário' : 
+                           event.type === 'VACCINE' ? 'Vacina' :
+                           event.type === 'CONSULTATION' ? 'Consulta' :
+                           event.type === 'GROOMING' ? 'Estética' :
+                           event.type === 'WEIGHT' ? 'Peso' :
+                           event.type === 'MEDICATION_START' ? 'Início de Medicamento' :
+                           event.type === 'MEDICATION_END' ? 'Fim de Medicamento' : event.type}
+                        </p>
+                      </div>
+                      <span className="pet-profile__card-date">{dateStr}</span>
                     </div>
-                  )}
+                    
+                    {event.description && (
+                      <p className="pet-profile__card-description">{event.description}</p>
+                    )}
 
-                  {rec.attachments && rec.attachments.length > 0 && (
-                    <div className="pet-profile__card-attachments">
-                      {rec.attachments.map((url, idx) => {
-                        const name = url.substring(url.lastIndexOf('/') + 1).replace(/^[0-9a-f-]+_/, '');
-                        const isImg = url.toLowerCase().match(/\.(png|jpg|jpeg)$/);
-                        return (
-                          <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="pet-profile__attachment-link">
-                            <span className="material-symbols-outlined">{isImg ? 'image' : 'description'}</span>
-                            {name}
-                          </a>
-                        );
-                      })}
-                    </div>
-                  )}
+                    {event.photoUrl && (
+                      <div className="pet-profile__card-attachments">
+                        <a href={event.photoUrl} target="_blank" rel="noopener noreferrer" className="pet-profile__attachment-link">
+                          <span className="material-symbols-outlined">image</span>
+                          Visualizar Comprovante
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
+              );
+            })}
+
+            {activeTab === 'history' && hasMore && events.length > 0 && (
+              <div className="pet-profile__load-more-container">
+                <button 
+                  className="pet-profile__load-more-btn"
+                  onClick={handleLoadMore}
+                  disabled={isLoading}
+                  data-testid="load-more-button"
+                >
+                  {isLoading ? 'Carregando...' : 'Carregar mais'}
+                </button>
               </div>
-            ))}
+            )}
 
             {activeTab === 'vaccines' && id && (
               <VaccinationsTab petId={id} species="DOG" />
@@ -281,7 +314,7 @@ export const PetProfilePageContent: React.FC = () => {
             petId={id}
             onSuccess={() => {
               setIsModalOpen(false);
-              fetchConsultations();
+              handleRefresh();
             }}
             onCancel={() => setIsModalOpen(false)}
           />

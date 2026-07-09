@@ -7,12 +7,31 @@ import React from 'react';
 
 vi.mock('../contexts/AuthContext');
 
-vi.mock('../application/consultation/useConsultations', () => ({
-  useConsultations: () => ({
-    consultations: [],
-    loading: false,
+vi.mock('../components/molecules/Toast', () => ({
+  useToast: () => ({
+    showToast: vi.fn(),
+  }),
+}));
+
+vi.mock('../application/pet/useTimeline', () => ({
+  useTimeline: () => ({
+    events: [
+      { id: 'rec-1', type: 'CONSULTATION', date: '2026-07-08T00:00:00Z', title: 'Consulta de Rotina', description: 'Exame geral', icon: 'local_hospital', color: '#10B981' },
+      { id: 'rec-2', type: 'WEIGHT', date: '2026-07-08T00:00:00Z', title: 'Registro de Peso', description: 'Acompanhamento do peso corporal', icon: 'monitoring', color: '#3B82F6' },
+      { id: 'rec-3', type: 'CONSULTATION', date: '2026-07-08T00:00:00Z', title: 'Exame de Sangue', description: 'Hemograma', icon: 'science', color: '#006b55' },
+    ],
+    isLoading: false,
     error: null,
-    fetchConsultations: vi.fn(),
+    hasMore: false,
+    fetchTimeline: vi.fn(),
+  }),
+}));
+
+vi.mock('../application/pet/useExportMedicalPass', () => ({
+  useExportMedicalPass: () => ({
+    isExporting: false,
+    exportError: null,
+    exportMedicalPass: vi.fn(),
   }),
 }));
 
