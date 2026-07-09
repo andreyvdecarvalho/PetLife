@@ -37,7 +37,7 @@ describe('Wrapper Pages', () => {
         <ProfilePage />
       </MemoryRouter>
     );
-    expect(screen.getByText('Meu Perfil')).toBeDefined();
+    expect(screen.getAllByText('Meu Perfil').length).toBeGreaterThan(0);
   });
 
   it('should render RegisterPage correctly', () => {

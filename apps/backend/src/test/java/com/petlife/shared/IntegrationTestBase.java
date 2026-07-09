@@ -15,7 +15,13 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "spring.rabbitmq.listener.simple.auto-startup=false",
+                "spring.rabbitmq.listener.direct.auto-startup=false"
+        }
+)
 @ActiveProfiles("test")
 @Transactional
 public abstract class IntegrationTestBase {
