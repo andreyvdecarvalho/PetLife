@@ -211,6 +211,7 @@ jobs:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
           SPRING_JPA_HIBERNATE_DDL_AUTO: update
+          SPRING_RABBITMQ_HOST: 127.0.0.1
 
       - name: Start web dev server
         working-directory: apps/web
