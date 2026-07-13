@@ -1,0 +1,22 @@
+CREATE TABLE veterinarians (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    crmv_number VARCHAR(20) NOT NULL UNIQUE,
+    crmv_state VARCHAR(2) NOT NULL,
+    crmv_status VARCHAR(20) NOT NULL,
+    full_name VARCHAR(200) NOT NULL,
+    bio TEXT,
+    specialties JSONB,
+    species_served JSONB,
+    modalities JSONB,
+    payment_types JSONB,
+    insurance_plans JSONB,
+    emergency_on_duty BOOLEAN NOT NULL DEFAULT false,
+    availability_status VARCHAR(20) NOT NULL,
+    profile_photo_url VARCHAR(500),
+    phone VARCHAR(20),
+    website_url VARCHAR(500),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_veterinarian_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);

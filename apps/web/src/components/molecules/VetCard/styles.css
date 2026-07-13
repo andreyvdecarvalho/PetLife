@@ -1,0 +1,97 @@
+.vet-card {
+  background-color: var(--color-surface-container-lowest);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.vet-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vet-card__photo, .vet-card__photo-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #F1F5F9;
+}
+
+.vet-card__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.vet-card__name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-on-surface);
+  margin: 0;
+}
+
+.vet-card__crmv {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  color: #64748B;
+  margin: 0;
+}
+
+.vet-card__specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vet-card__specialty-chip {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: #F1F5F9;
+  color: #475569;
+  border-radius: 12px;
+}
+
+.vet-card__status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 12px;
+}
+
+.vet-card__availability {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.vet-card__availability--available {
+  color: #10B981;
+}
+
+.vet-card__availability--unavailable {
+  color: #EF4444;
+}
+
+.vet-card__emergency-badge {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: var(--color-error-container);
+  color: #DC2626;
+  border-radius: 4px;
+}
