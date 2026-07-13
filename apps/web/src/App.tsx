@@ -18,6 +18,8 @@ import { GroomingPage } from './pages/GroomingPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { VetSearchPage } from './pages/VetSearchPage';
 import { VetDetailPage } from './pages/VetDetailPage';
+import { VetFavoritesPage } from './pages/VetFavoritesPage';
+import { VetProfilePage } from './pages/VetProfilePage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -27,7 +29,7 @@ export const App: React.FC = () => {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Rotas Públicas */}
+            {/* Rotas Pǧblicas */}
             <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -104,6 +106,22 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <VetDetailPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarians/favorites"
+              element={
+                <PrivateRoute>
+                  <VetFavoritesPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarian/dashboard"
+              element={
+                <PrivateRoute>
+                  <VetProfilePage />
                 </PrivateRoute>
               }
             />
