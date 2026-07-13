@@ -34,4 +34,18 @@ public class VeterinarianPersistenceAdapter implements VeterinarianRepositoryPor
     public boolean existsByCrmvNumber(String crmvNumber) {
         return repository.existsByCrmvNumber(crmvNumber);
     }
+
+    @Override
+    public org.springframework.data.domain.Page<Veterinarian> search(
+            com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest request) {
+        return repository.searchVeterinarians(
+                request.latitude(),
+                request.longitude(),
+                request.radiusKm(),
+                request.modality() != null ? request.modality().name() : null,
+                request.specialty(),
+                request.emergencyOnDuty(),
+                org.springframework.data.domain.PageRequest.of(request.page(), request.size())
+        );
+    }
 }

@@ -1,4 +1,5 @@
-import React, from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Veterinarian } from '../../../domain/models/Veterinarian';
 import './styles.css';
 
@@ -8,7 +9,7 @@ interface Props {
 
 export function VetCard({ veterinarian }: Props) {
   return (
-    <div className="vet-card">
+    <Link to={`/veterinarians/${veterinarian.id}`} className="vet-card" style={{ textDecoration: 'none' }}>
       <div className="vet-card__header">
         {veterinarian.profilePhotoUrl ? (
           <img src={veterinarian.profilePhotoUrl} alt={veterinarian.fullName} className="vet-card__photo" />
@@ -36,6 +37,6 @@ export function VetCard({ veterinarian }: Props) {
           <span className="vet-card__emergency-badge">Plantão Emergência</span>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

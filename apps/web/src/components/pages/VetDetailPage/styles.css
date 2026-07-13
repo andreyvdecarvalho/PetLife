@@ -1,0 +1,131 @@
+.vet-detail-page {
+  padding: var(--spacing-4);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.vet-detail-page__header {
+  margin-bottom: var(--spacing-4);
+}
+
+.vet-detail-page__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.vet-detail-page__profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-surface);
+  padding: var(--spacing-6);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.vet-detail-page__photo, .vet-detail-page__photo-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: var(--spacing-4);
+  object-fit: cover;
+}
+
+.vet-detail-page__photo-placeholder {
+  background-color: var(--color-surface-container-highest);
+}
+
+.vet-detail-page__name {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-on-surface);
+  margin-bottom: var(--spacing-1);
+}
+
+.vet-detail-page__crmv {
+  color: var(--color-outline);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-3);
+}
+
+.vet-detail-page__status {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: center;
+}
+
+.vet-detail-page__availability {
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.vet-detail-page__availability--available {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.vet-detail-page__availability--unavailable {
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+}
+
+.vet-detail-page__emergency {
+  background-color: var(--color-error);
+  color: var(--color-on-error);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.vet-detail-page__info {
+  background: var(--color-surface);
+  padding: var(--spacing-6);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+}
+
+.vet-detail-page__section {
+  margin-bottom: var(--spacing-6);
+}
+
+.vet-detail-page__section h3 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-on-surface);
+  margin-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--spacing-1);
+}
+
+.vet-detail-page__section p {
+  color: var(--color-on-surface-variant);
+  line-height: 1.5;
+}
+
+.vet-detail-page__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.vet-detail-page__chip {
+  background-color: var(--color-surface-container-highest);
+  color: var(--color-on-surface);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.vet-detail-page__loading, .vet-detail-page__error {
+  text-align: center;
+  padding: var(--spacing-8);
+  color: var(--color-on-surface);
+}

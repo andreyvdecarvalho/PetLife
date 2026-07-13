@@ -16,6 +16,8 @@ import { AppointmentsPage } from './pages/AppointmentsPage';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { GroomingPage } from './pages/GroomingPage';
 import { NotificationsPage } from './pages/NotificationsPage';
+import { VetSearchPage } from './pages/VetSearchPage';
+import { VetDetailPage } from './pages/VetDetailPage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -86,6 +88,22 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <AppointmentsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarians"
+              element={
+                <PrivateRoute>
+                  <VetSearchPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarians/:id"
+              element={
+                <PrivateRoute>
+                  <VetDetailPage />
                 </PrivateRoute>
               }
             />

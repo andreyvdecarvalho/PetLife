@@ -10,4 +10,7 @@ public interface VeterinarianRepositoryPort {
     Optional<Veterinarian> findById(UUID id);
     Optional<Veterinarian> findByUserId(UUID userId);
     boolean existsByCrmvNumber(String crmvNumber);
+    org.springframework.data.domain.Page<Veterinarian> search(
+        com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest request
+    );
 }
