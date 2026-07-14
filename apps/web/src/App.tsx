@@ -18,8 +18,8 @@ import { GroomingPage } from './pages/GroomingPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { VetSearchPage } from './pages/VetSearchPage';
 import { VetDetailPage } from './pages/VetDetailPage';
-import { VetFavoritesPage } from './pages/VetFavoritesPage';
-import { VetProfilePage } from './pages/VetProfilePage';
+import { VetFavoritesPage } from './pages/vet-favorites/VetFavoritesPage';
+import { VetProfilePage } from './pages/vet-profile/VetProfilePage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
