@@ -53,6 +53,8 @@ class ProcessNotificationConsumerTest {
         });
         prefs = new NotificationPreferences();
         prefs.setUserId(user.getId());
+        prefs.setDoNotDisturbStart(null);
+        prefs.setDoNotDisturbEnd(null);
     }
 
     @Test

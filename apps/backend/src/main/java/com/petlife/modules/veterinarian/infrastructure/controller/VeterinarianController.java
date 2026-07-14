@@ -24,6 +24,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,43 +57,43 @@ public class VeterinarianController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Cria o perfil de um veterinário (requer CRMV)")
     public ApiResponse<VeterinarianResponse> createProfile(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody @Valid CreateVeterinarianRequest request) {
-        return ApiResponse.of(createVeterinarianProfileUseCase.execute(userPrincipal.getUserId(), request));
+        return ApiResponse.of(createVeterinarianProfileUseCase.execute(UUID.fromString(jwt.getSubject()), request));
     }
 
     @PostMapping("/address")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Adiciona endereço ao veterinário logado")
     public ApiResponse<VetAddressResponse> addAddress(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody @Valid AddVetAddressRequest request) {
-        return ApiResponse.of(addVetAddressUseCase.execute(userPrincipal.getUserId(), request));
+        return ApiResponse.of(addVetAddressUseCase.execute(UUID.fromString(jwt.getSubject()), request));
     }
 
     @PostMapping("/schedule")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Define horário de funcionamento do veterinário logado")
     public ApiResponse<VetScheduleResponse> setSchedule(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody @Valid SetVetScheduleRequest request) {
-        return ApiResponse.of(setVetScheduleUseCase.execute(userPrincipal.getUserId(), request));
+        return ApiResponse.of(setVetScheduleUseCase.execute(UUID.fromString(jwt.getSubject()), request));
     }
 
     @PatchMapping("/availability")
     @Operation(summary = "Atualiza o status de disponibilidade do veterinário logado")
     public ApiResponse<VeterinarianResponse> updateAvailability(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody @Valid UpdateAvailabilityRequest request) {
-        return ApiResponse.of(updateAvailabilityUseCase.execute(userPrincipal.getUserId(), request));
+        return ApiResponse.of(updateAvailabilityUseCase.execute(UUID.fromString(jwt.getSubject()), request));
     }
 
     @PostMapping("/{veterinarianId}/favorite")
     @Operation(summary = "Tutor favorita ou desfavorita um veterinário")
     public ApiResponse<Void> toggleFavorite(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID veterinarianId) {
-        toggleFavoriteVetUseCase.execute(userPrincipal.getUserId(), veterinarianId);
+        toggleFavoriteVetUseCase.execute(UUID.fromString(jwt.getSubject()), veterinarianId);
         return ApiResponse.of(null);
     }
 
