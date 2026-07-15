@@ -6,15 +6,21 @@ import './styles.css';
 
 const sanitizeUrl = (url: string | null): string | undefined => {
   if (!url) return undefined;
-  const sanitized = url.trim().toLowerCase();
-  if (
-    sanitized.startsWith('javascript:') ||
-    sanitized.startsWith('data:') ||
-    sanitized.startsWith('vbscript:')
-  ) {
+  const trimmedUrl = url.trim();
+  if (!trimmedUrl) return undefined;
+
+  try {
+    const parsedUrl = new URL(trimmedUrl, window.location.origin);
+    const allowedProtocols = new Set(['http:', 'https:', 'blob:']);
+
+    if (!allowedProtocols.has(parsedUrl.protocol)) {
+      return undefined;
+    }
+
+    return parsedUrl.toString();
+  } catch {
     return undefined;
   }
-  return url;
 };
 
 interface GroomingFormProps {
