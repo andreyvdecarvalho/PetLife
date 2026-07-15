@@ -4,6 +4,25 @@ import type { Grooming, GroomingType } from '../../../domain/pet/Grooming';
 import type { CreateGroomingData } from '../../../infrastructure/http/grooming.api';
 import './styles.css';
 
+const sanitizeUrl = (url: string | null): string | undefined => {
+  if (!url) return undefined;
+  const trimmedUrl = url.trim();
+  if (!trimmedUrl) return undefined;
+
+  try {
+    const parsedUrl = new URL(trimmedUrl, window.location.origin);
+    const allowedProtocols = new Set(['http:', 'https:', 'blob:']);
+
+    if (!allowedProtocols.has(parsedUrl.protocol)) {
+      return undefined;
+    }
+
+    return parsedUrl.toString();
+  } catch {
+    return undefined;
+  }
+};
+
 interface GroomingFormProps {
   grooming?: Grooming;
   onSuccess: (data: CreateGroomingData, beforeFile: File | null, afterFile: File | null) => Promise<void>;
@@ -218,7 +237,7 @@ export const GroomingForm: React.FC<GroomingFormProps> = ({ grooming, onSuccess,
             <span className="organism-grooming-form__upload-title">Antes</span>
             <label className="organism-grooming-form__upload-area" data-testid="upload-area-before">
               {beforePreview ? (
-                <img src={beforePreview} alt="Preview Antes" className="organism-grooming-form__preview-img" />
+                <img src={sanitizeUrl(beforePreview)} alt="Preview Antes" className="organism-grooming-form__preview-img" />
               ) : (
                 <div className="organism-grooming-form__upload-placeholder">
                   <span className="material-symbols-outlined">add_a_photo</span>
@@ -241,7 +260,7 @@ export const GroomingForm: React.FC<GroomingFormProps> = ({ grooming, onSuccess,
             <span className="organism-grooming-form__upload-title">Depois</span>
             <label className="organism-grooming-form__upload-area" data-testid="upload-area-after">
               {afterPreview ? (
-                <img src={afterPreview} alt="Preview Depois" className="organism-grooming-form__preview-img" />
+                <img src={sanitizeUrl(afterPreview)} alt="Preview Depois" className="organism-grooming-form__preview-img" />
               ) : (
                 <div className="organism-grooming-form__upload-placeholder">
                   <span className="material-symbols-outlined">add_a_photo</span>
