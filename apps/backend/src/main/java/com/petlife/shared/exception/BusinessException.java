@@ -2,13 +2,14 @@ package com.petlife.shared.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 @Getter
 public class BusinessException extends RuntimeException {
     private final String code;
-    private final HttpStatus status;
+    private final HttpStatusCode status;
 
-    public BusinessException(String code, String message, HttpStatus status) {
+    public BusinessException(String code, String message, HttpStatusCode status) {
         super(message);
         this.code = code;
         this.status = status;

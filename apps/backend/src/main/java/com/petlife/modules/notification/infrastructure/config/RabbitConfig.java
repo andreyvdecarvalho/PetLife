@@ -33,7 +33,7 @@ public class RabbitConfig {
 
     @Bean
     @SuppressWarnings("removal")
-    public org.springframework.amqp.support.converter.Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+    public org.springframework.amqp.support.converter.MessageConverter jackson2JsonMessageConverter() {
         return new org.springframework.amqp.support.converter.Jackson2JsonMessageConverter();
     }
 }
