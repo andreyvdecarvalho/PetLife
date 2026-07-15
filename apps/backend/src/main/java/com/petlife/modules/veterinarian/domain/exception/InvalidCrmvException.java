@@ -5,6 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public class InvalidCrmvException extends BusinessException {
     public InvalidCrmvException(String message) {
-        super("INVALID_CRMV", message, HttpStatus.UNPROCESSABLE_ENTITY);
+        super("INVALID_CRMV", message, HttpStatus.valueOf(422));
     }
 }

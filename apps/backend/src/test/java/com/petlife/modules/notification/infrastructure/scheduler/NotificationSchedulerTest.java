@@ -103,7 +103,7 @@ class NotificationSchedulerTest {
 
         List<NotificationPayload> payloads = captor.getAllValues();
         assertThat(payloads).hasSize(4);
-        assertThat(payloads.stream().map(NotificationPayload::type))
+        assertThat(payloads.stream().map(payload -> payload.type()))
                 .containsExactlyInAnyOrder(
                         NotificationType.VACCINATION_DUE,
                         NotificationType.CONSULTATION_REMINDER,
