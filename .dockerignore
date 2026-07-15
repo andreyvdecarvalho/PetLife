@@ -1,0 +1,43 @@
+# ==============================================================================
+# .dockerignore — Raiz do Monorepo PetLife
+# ==============================================================================
+# Usado pelo build do Web (context: .) para minimizar o contexto de build.
+# ==============================================================================
+
+# Git
+.git/
+.github/
+.gitignore
+
+# Agents / IDE
+.agents/
+.idea/
+.vscode/
+
+# Backend (não necessário para o build do web)
+apps/backend/target/
+apps/backend/*.log
+apps/backend/.idea/
+
+# Mobile (não necessário para o build do web)
+apps/mobile/
+
+# Node build artifacts
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/playwright-report/
+
+# Env / Secrets
+**/.env
+**/.env.local
+**/.env.*.local
+**/*.pem
+**/*.key
+
+# Misc
+**/*.log
+docs/
+*.md
+!apps/web/package.json
