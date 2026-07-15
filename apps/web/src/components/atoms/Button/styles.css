@@ -2,24 +2,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 16px;
+  padding: calc(var(--space-xs) * 1.5) var(--space-sm);
   font-family: var(--font-label-md);
   font-size: var(--text-label-md-size, 14px);
   font-weight: var(--text-label-md-weight, 600);
   line-height: var(--text-label-md-line-height, 20px);
   letter-spacing: var(--text-label-md-letter-spacing, 0.01em);
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   color: var(--color-on-primary);
   border: 1px solid transparent;
   background: var(--color-primary);
-  box-shadow: 0 4px 12px 0 rgba(155, 69, 0, 0.2);
+  box-shadow: var(--shadow-button);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%; /* Rule: Herdar tamanho ou ocupar 100%, sem margins */
 }
 
 .atom-button:hover:not(:disabled) {
   opacity: 0.9;
-  box-shadow: 0 6px 15px 0 rgba(155, 69, 0, 0.3);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .atom-button:active:not(:disabled) {
