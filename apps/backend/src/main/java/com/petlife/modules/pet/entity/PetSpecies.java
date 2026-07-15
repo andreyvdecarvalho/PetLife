@@ -7,5 +7,7 @@ public enum PetSpecies {
     FISH,
     RODENT,
     REPTILE,
+    EXOTIC,
+    WILDLIFE,
     OTHER
 }

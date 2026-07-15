@@ -16,6 +16,10 @@ import { AppointmentsPage } from './pages/AppointmentsPage';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { GroomingPage } from './pages/GroomingPage';
 import { NotificationsPage } from './pages/NotificationsPage';
+import { VetSearchPage } from './pages/VetSearchPage';
+import { VetDetailPage } from './pages/VetDetailPage';
+import { VetFavoritesPage } from './pages/vet-favorites/VetFavoritesPage';
+import { VetProfilePage } from './pages/vet-profile/VetProfilePage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
 import './index.css';
 
@@ -25,7 +29,7 @@ export const App: React.FC = () => {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Rotas Públicas */}
+            {/* Rotas Pǧblicas */}
             <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -86,6 +90,38 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <AppointmentsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarians"
+              element={
+                <PrivateRoute>
+                  <VetSearchPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarians/:id"
+              element={
+                <PrivateRoute>
+                  <VetDetailPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarians/favorites"
+              element={
+                <PrivateRoute>
+                  <VetFavoritesPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/veterinarian/dashboard"
+              element={
+                <PrivateRoute>
+                  <VetProfilePage />
                 </PrivateRoute>
               }
             />
