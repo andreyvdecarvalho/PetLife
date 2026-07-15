@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Veterinarian } from '../../../domain/models/Veterinarian';
+import type { Veterinarian } from '../../../domain/models/Veterinarian';
 import './styles.css';
 
 interface Props {

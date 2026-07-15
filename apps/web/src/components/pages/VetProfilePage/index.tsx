@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useVeterinarianProfile } from '../../../application/veterinarian/useVeterinarianProfile';
-import { Veterinarian } from '../../../domain/models/Veterinarian';
+import type { Veterinarian } from '../../../domain/models/Veterinarian';
 import './styles.css';
 
 export function VetProfilePage() {

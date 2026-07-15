@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import api from '../../infrastructure/http/api';
-import { Veterinarian } from '../../domain/models/Veterinarian';
+import type { Veterinarian } from '../../domain/models/Veterinarian';
 
 export function useVetFavorites() {
   const [loading, setLoading] = useState(false);
