@@ -1,0 +1,34 @@
+# Dependencies (instaladas dentro do container)
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+playwright-report/
+
+# Tests
+e2e/
+**/*.test.*
+**/*.spec.*
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*.yml
+
+# Env / Secrets
+.env
+.env.local
+.env.*.local
+
+# Misc
+*.log
+*.md
