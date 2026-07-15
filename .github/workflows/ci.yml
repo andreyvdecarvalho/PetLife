@@ -212,7 +212,7 @@ jobs:
       - name: Start backend
         working-directory: apps/backend
         run: |
-          nohup java -jar target/petlife-backend-*.jar --server.port=8080 > backend.log 2>&1 &
+          nohup java -jar target/petlife-backend-1.0.0.jar --server.port=8080 > backend.log 2>&1 &
           sleep 5
         env:
           SPRING_PROFILES_ACTIVE: test
@@ -234,7 +234,7 @@ jobs:
           sleep 3
 
       - name: Wait for servers
-        run: pnpm dlx wait-on --timeout 120000 http://127.0.0.1:8080/actuator/health http://127.0.0.1:5173
+        run: pnpm dlx wait-on --timeout 120000 http-get://127.0.0.1:8080/actuator/health http-get://127.0.0.1:5173
 
       - name: Dump logs on failure
         if: failure()
