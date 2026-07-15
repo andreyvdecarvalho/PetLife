@@ -1,0 +1,31 @@
+# Build artifacts
+target/
+*.jar
+*.war
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Docker (evita loop de contexto)
+Dockerfile
+docker-compose*.yml
+
+# Env / Secrets
+.env
+*.pem
+*.key
+jwt_keys/
