@@ -7,7 +7,11 @@ import './styles.css';
 const sanitizeUrl = (url: string | null): string | undefined => {
   if (!url) return undefined;
   const sanitized = url.trim().toLowerCase();
-  if (sanitized.startsWith('javascript:') || sanitized.startsWith('vbscript:')) {
+  if (
+    sanitized.startsWith('javascript:') ||
+    sanitized.startsWith('data:') ||
+    sanitized.startsWith('vbscript:')
+  ) {
     return undefined;
   }
   return url;
