@@ -17,7 +17,7 @@ import com.petlife.modules.veterinarian.infrastructure.dto.response.VetAddressRe
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VetScheduleResponse;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
 import com.petlife.shared.response.ApiResponse;
-import com.petlife.shared.security.UserPrincipal;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
