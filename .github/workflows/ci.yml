@@ -130,11 +130,11 @@ jobs:
       - name: Run component tests with coverage
         run: pnpm vitest run --coverage
 
-      - name: Coverage Gate Frontend (≥ 80%)
+      - name: Coverage Gate Frontend (≥ 85%)
         run: |
           COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "❌ Coverage $COVERAGE% below 80%"
+          if (( $(echo "$COVERAGE < 85" | bc -l) )); then
+            echo "❌ Coverage $COVERAGE% below 85%"
             exit 1
           fi
           echo "✅ Coverage $COVERAGE%"
