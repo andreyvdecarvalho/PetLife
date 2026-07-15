@@ -7,14 +7,14 @@ describe('imageCompressor utility', () => {
   let originalCreateElement: any;
 
   beforeEach(() => {
-    originalFileReader = global.FileReader;
-    originalImage = global.Image;
+    originalFileReader = globalThis.FileReader;
+    originalImage = globalThis.Image;
     originalCreateElement = document.createElement;
   });
 
   afterEach(() => {
-    global.FileReader = originalFileReader;
-    global.Image = originalImage;
+    globalThis.FileReader = originalFileReader;
+    globalThis.Image = originalImage;
     document.createElement = originalCreateElement;
     vi.restoreAllMocks();
   });
@@ -32,7 +32,7 @@ describe('imageCompressor utility', () => {
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
     const mockFileReader = { readAsDataURL: vi.fn(), onload: null as any, onerror: null as any };
-    global.FileReader = vi.fn(() => mockFileReader) as any;
+    globalThis.FileReader = vi.fn(() => mockFileReader) as any;
 
     const compressPromise = compressImage(file, 500);
     mockFileReader.onerror(new Error('FileReader error'));
@@ -45,10 +45,10 @@ describe('imageCompressor utility', () => {
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
     const mockFileReader = { readAsDataURL: vi.fn(), onload: null as any, onerror: null as any };
-    global.FileReader = vi.fn(() => mockFileReader) as any;
+    globalThis.FileReader = vi.fn(() => mockFileReader) as any;
 
     const mockImage = { src: '', onload: null as any, onerror: null as any };
-    global.Image = vi.fn(() => mockImage) as any;
+    globalThis.Image = vi.fn(() => mockImage) as any;
 
     const compressPromise = compressImage(file, 500);
     mockFileReader.onload({ target: { result: 'data:image/jpeg;base64,abc' } } as any);
@@ -62,10 +62,10 @@ describe('imageCompressor utility', () => {
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
     const mockFileReader = { readAsDataURL: vi.fn(), onload: null as any, onerror: null as any };
-    global.FileReader = vi.fn(() => mockFileReader) as any;
+    globalThis.FileReader = vi.fn(() => mockFileReader) as any;
 
     const mockImage = { src: '', width: 800, height: 600, onload: null as any, onerror: null as any };
-    global.Image = vi.fn(() => mockImage) as any;
+    globalThis.Image = vi.fn(() => mockImage) as any;
 
     const mockCanvas = { width: 0, height: 0, getContext: vi.fn(() => null) };
     document.createElement = vi.fn((tag) => tag === 'canvas' ? mockCanvas : originalCreateElement.call(document, tag)) as any;
@@ -82,10 +82,10 @@ describe('imageCompressor utility', () => {
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
     const mockFileReader = { readAsDataURL: vi.fn(), onload: null as any, onerror: null as any };
-    global.FileReader = vi.fn(() => mockFileReader) as any;
+    globalThis.FileReader = vi.fn(() => mockFileReader) as any;
 
     const mockImage = { src: '', width: 2000, height: 1000, onload: null as any, onerror: null as any };
-    global.Image = vi.fn(() => mockImage) as any;
+    globalThis.Image = vi.fn(() => mockImage) as any;
 
     const mockContext = { drawImage: vi.fn() };
     const mockToBlob = vi.fn((callback, type, quality) => {
@@ -133,10 +133,10 @@ describe('imageCompressor utility', () => {
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
     const mockFileReader = { readAsDataURL: vi.fn(), onload: null as any, onerror: null as any };
-    global.FileReader = vi.fn(() => mockFileReader) as any;
+    globalThis.FileReader = vi.fn(() => mockFileReader) as any;
 
     const mockImage = { src: '', width: 500, height: 500, onload: null as any, onerror: null as any };
-    global.Image = vi.fn(() => mockImage) as any;
+    globalThis.Image = vi.fn(() => mockImage) as any;
 
     const mockContext = { drawImage: vi.fn() };
     const mockCanvas = {
