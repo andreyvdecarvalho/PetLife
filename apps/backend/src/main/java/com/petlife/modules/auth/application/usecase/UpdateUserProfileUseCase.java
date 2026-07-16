@@ -33,7 +33,9 @@ public class UpdateUserProfileUseCase {
         }
 
         user.setName(request.name());
+        user.setNickname(request.nickname());
         user.setEmail(request.email());
+        user.setPhone(request.phone());
         user.setAvatarUrl(request.avatarUrl());
         user.setTimezone(request.timezone());
 

@@ -268,7 +268,7 @@ class AuthControllerTest extends IntegrationTestBase {
             var user = UserFactory.make();
             userRepository.save(user);
 
-            var request = new UpdateProfileRequest("Novo Nome", user.getEmail(), "http://avatar.url", "America/Sao_Paulo");
+            var request = new UpdateProfileRequest("Novo Nome", user.getEmail(), "http://avatar.url", "Apelido", "11999999999", com.petlife.modules.auth.entity.Timezone.AMERICA_SAO_PAULO);
 
             mockMvc.perform(put("/api/v1/auth/me")
                             .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail())))

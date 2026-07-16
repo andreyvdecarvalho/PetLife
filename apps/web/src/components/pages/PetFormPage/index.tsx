@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PetForm } from '../../organisms/PetForm';
 import { useToast } from '../../molecules/Toast';
-import { Pet } from '../../../domain/pet/Pet';
+import type { Pet } from '../../../domain/pet/Pet';
 import './styles.css';
 
 export const PetFormPage: React.FC = () => {

@@ -25,7 +25,7 @@ public class UserFactory {
         user.setPlan(UserPlan.FREE);
         user.setEmailVerified(true);
         user.setAvatarUrl(faker.internet().image());
-        user.setTimezone("America/Sao_Paulo");
+        user.setTimezone(com.petlife.modules.auth.entity.Timezone.AMERICA_SAO_PAULO);
         user.setLgpdAcceptedAt(LocalDateTime.now());
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());

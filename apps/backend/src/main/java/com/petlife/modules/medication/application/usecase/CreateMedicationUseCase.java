@@ -66,8 +66,8 @@ public class CreateMedicationUseCase {
         Medication savedMedication = medicationRepository.save(medication);
 
         // Generate doses
-        String tz = pet.getUser().getTimezone();
-        ZoneId zoneId = ZoneId.of(tz != null ? tz : "America/Sao_Paulo");
+        String tz = pet.getUser().getTimezone() != null ? pet.getUser().getTimezone().getZoneId() : "America/Sao_Paulo";
+        ZoneId zoneId = ZoneId.of(tz);
         List<MedicationAdministration> administrations = generateDoses(savedMedication, zoneId);
         
         if (!administrations.isEmpty()) {

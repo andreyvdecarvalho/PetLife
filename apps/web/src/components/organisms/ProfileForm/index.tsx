@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
 import { FormField } from '../../molecules/FormField';
+import { UploadButton } from '../../molecules/UploadButton';
 import { Button } from '../../atoms/Button';
+import { compressImage } from '../../../utils/imageCompressor';
 import './styles.css';
 
 export const ProfileForm: React.FC = () => {
@@ -10,11 +12,17 @@ export const ProfileForm: React.FC = () => {
   const { showToast } = useToast();
 
   const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
-  const [timezone, setTimezone] = useState('America/Sao_Paulo');
+  const [timezone, setTimezone] = useState('AMERICA_SAO_PAULO');
 
-  const [errors, setErrors] = useState<{ name?: string; email?: string; timezone?: string }>({});
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [compressing, setCompressing] = useState(false);
+
+  const [errors, setErrors] = useState<{ name?: string; email?: string; timezone?: string; photo?: string }>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -23,14 +31,19 @@ export const ProfileForm: React.FC = () => {
   useEffect(() => {
     if (user) {
       setName(user.name);
+      setNickname(user.nickname || '');
       setEmail(user.email);
+      setPhone(user.phone || '');
       setAvatarUrl(user.avatarUrl || '');
-      setTimezone(user.timezone || 'America/Sao_Paulo');
+      if (user.avatarUrl) {
+        setPhotoPreview(user.avatarUrl);
+      }
+      setTimezone(user.timezone || 'AMERICA_SAO_PAULO');
     }
   }, [user]);
 
   const validate = () => {
-    const newErrors: { name?: string; email?: string; timezone?: string } = {};
+    const newErrors: { name?: string; email?: string; timezone?: string; photo?: string } = {};
 
     if (!name) {
       newErrors.name = 'O nome é obrigatório.';
@@ -52,6 +65,28 @@ export const ProfileForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setCompressing(true);
+    try {
+      const compressed = await compressImage(file, 500); // máx 500KB
+      setPhotoFile(compressed);
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(compressed);
+    } catch (err) {
+      console.error('Erro na compressão:', err);
+      setErrors(prev => ({ ...prev, photo: 'Falha ao processar imagem.' }));
+    } finally {
+      setCompressing(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -59,7 +94,14 @@ export const ProfileForm: React.FC = () => {
 
     setIsSaving(true);
     try {
-      await updateProfile(name, email, avatarUrl, timezone);
+      await updateProfile({
+        name,
+        nickname: nickname.trim() || undefined,
+        email,
+        phone: phone.trim() || undefined,
+        avatarUrl,
+        timezone,
+      }, photoFile || undefined);
       showToast('Perfil atualizado com sucesso! ✨', 'success');
     } catch (error: any) {
       console.error(error);
@@ -89,56 +131,81 @@ export const ProfileForm: React.FC = () => {
       <h2 className="profile-title">Configurações do Perfil</h2>
 
       <form onSubmit={handleSubmit}>
-        <div className="profile-avatar-preview">
-          {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="profile-avatar-img" />
-          ) : (
-            <div className="profile-avatar-placeholder">👤</div>
-          )}
+        <UploadButton
+          photoPreview={photoPreview}
+          compressing={compressing}
+          error={errors.photo}
+          onPhotoChange={handlePhotoChange}
+        />
+
+        <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: '1fr 1fr' }}>
           <FormField
-            label="URL da Foto do Perfil"
+            label="Nome Completo de Cadastro"
             type="text"
-            id="avatarUrl"
-            placeholder="https://exemplo.com/sua-foto.jpg"
-            value={avatarUrl}
-            onChange={(e) => setAvatarUrl(e.target.value)}
+            id="name"
+            placeholder="Seu nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={errors.name}
+            required
+          />
+
+          <FormField
+            label="Apelido (como gostaria de ser chamado)"
+            type="text"
+            id="nickname"
+            placeholder="Seu apelido"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
           />
         </div>
 
-        <FormField
-          label="Nome"
-          type="text"
-          id="name"
-          placeholder="Seu nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          error={errors.name}
-          required
-        />
+        <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: '1fr 1fr' }}>
+          <FormField
+            label="E-mail"
+            type="email"
+            id="email"
+            placeholder="seu-email@petlife.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email}
+            required
+          />
 
-        <FormField
-          label="E-mail"
-          type="email"
-          id="email"
-          placeholder="seu-email@petlife.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email}
-          required
-        />
+          <FormField
+            label="Telefone (opcional)"
+            type="text"
+            id="phone"
+            placeholder="(11) 99999-9999"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
 
-        <FormField
-          label="Fuso Horário"
-          type="text"
-          id="timezone"
-          placeholder="America/Sao_Paulo"
-          value={timezone}
-          onChange={(e) => setTimezone(e.target.value)}
-          error={errors.timezone}
-          required
-        />
 
-        <Button type="submit" isLoading={isSaving} style={{ width: 'auto', minWidth: '150px' }}>
+        <div className="molecule-form-field">
+          <label htmlFor="timezone" className="atom-label atom-label--required">
+            Fuso Horário
+          </label>
+          <select
+            id="timezone"
+            value={timezone}
+            onChange={e => setTimezone(e.target.value)}
+            className={`atom-input ${errors.timezone ? 'atom-input--error' : ''}`}
+          >
+            <option value="AMERICA_SAO_PAULO">Brasília (BRT/BRST)</option>
+            <option value="AMERICA_MANAUS">Manaus (AMT)</option>
+            <option value="AMERICA_BELEM">Belém (BRT)</option>
+            <option value="AMERICA_FORTALEZA">Fortaleza (BRT)</option>
+            <option value="AMERICA_RECIFE">Recife (BRT)</option>
+            <option value="AMERICA_CUIABA">Cuiabá (AMT)</option>
+            <option value="AMERICA_CAMPO_GRANDE">Campo Grande (AMT)</option>
+            <option value="AMERICA_RIO_BRANCO">Rio Branco (ACT)</option>
+          </select>
+          {errors.timezone && <span className="molecule-form-field__error">{errors.timezone}</span>}
+        </div>
+
+        <Button type="submit" isLoading={isSaving} disabled={compressing} style={{ width: 'auto', minWidth: '150px' }}>
           Salvar Alterações
         </Button>
       </form>

@@ -36,8 +36,16 @@ public class User extends BaseEntity {
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
-    @Column(name = "timezone", nullable = false, length = 50)
-    private String timezone = "America/Sao_Paulo";
+    @Column(name = "nickname", length = 100)
+    private String nickname;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "timezone", nullable = false)
+    private Timezone timezone = Timezone.AMERICA_SAO_PAULO;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
