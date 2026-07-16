@@ -282,7 +282,7 @@ export const GroomingPageContent: React.FC = () => {
                         <span>{g.provider}</span>
                       </p>
                     )}
-                    {g.cost !== undefined && (
+                    {g.cost != null && (
                       <p className="page-grooming__card-meta">
                         <span className="material-symbols-outlined">payments</span>
                         <span>R$ {g.cost.toFixed(2)}</span>
