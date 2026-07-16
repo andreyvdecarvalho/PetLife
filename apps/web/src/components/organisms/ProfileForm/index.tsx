@@ -138,9 +138,9 @@ export const ProfileForm: React.FC = () => {
           onPhotoChange={handlePhotoChange}
         />
 
-        <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: '1fr 1fr' }}>
+        <div className="profile-form-row">
           <FormField
-            label="Nome Completo de Cadastro"
+            label="Nome Completo"
             type="text"
             id="name"
             placeholder="Seu nome"
@@ -151,16 +151,16 @@ export const ProfileForm: React.FC = () => {
           />
 
           <FormField
-            label="Apelido (como gostaria de ser chamado)"
+            label="Apelido"
             type="text"
             id="nickname"
-            placeholder="Seu apelido"
+            placeholder="Como gostaria de ser chamado"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
         </div>
 
-        <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: '1fr 1fr' }}>
+        <div className="profile-form-row">
           <FormField
             label="E-mail"
             type="email"
@@ -183,7 +183,7 @@ export const ProfileForm: React.FC = () => {
         </div>
 
 
-        <div className="molecule-form-field">
+        <div className="molecule-form-field" style={{ marginBottom: '24px' }}>
           <label htmlFor="timezone" className="atom-label atom-label--required">
             Fuso Horário
           </label>

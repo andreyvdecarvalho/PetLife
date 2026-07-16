@@ -75,3 +75,16 @@
   gap: 16px;
   margin-top: 24px;
 }
+
+.profile-form-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 480px) {
+  .profile-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
