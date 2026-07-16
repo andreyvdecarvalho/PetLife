@@ -105,14 +105,13 @@ describe('api client', () => {
       },
     };
 
-    // Mock the api instance call
-    vi.spyOn(api, 'request').mockResolvedValue('retried response' as any);
+    // Mock the adapter to prevent actual HTTP requests
+    api.defaults.adapter = vi.fn().mockResolvedValue({ data: 'retried response' });
     
     // The `api` is exported from the file, so it's a function we can't easily spy on without causing issues.
-    // However, calling `api(config)` delegates to `api.request(config)`.
+    // However, overriding the adapter prevents ECONNREFUSED.
     
     try {
-      // It will throw because `api(originalRequest)` is not mocked properly as a function
       await responseInterceptor.rejected(mockError);
     } catch (e) {
       // Ignore

@@ -98,4 +98,107 @@ class CreateMedicationUseCaseTest {
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("Este pet não pertence ao usuário autenticado.");
     }
+
+    @Test
+    @DisplayName("Deve lancar excecao se pet nao for encontrado")
+    void shouldThrowIfPetNotFound() {
+        UUID petId = UUID.randomUUID();
+        UUID userId = user.getId();
+        CreateMedicationRequest request = new CreateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.DAILY, null,
+                LocalDate.now(), null, List.of("08:00")
+        );
+
+        given(petRepository.findById(petId)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> createMedicationUseCase.execute(petId, userId, request))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("Pet não encontrado");
+    }
+
+    @Test
+    @DisplayName("Deve lancar excecao se frequencia customizada nao tiver horas")
+    void shouldThrowIfCustomFrequencyLacksHours() {
+        UUID petId = pet.getId();
+        UUID userId = user.getId();
+        CreateMedicationRequest request = new CreateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.CUSTOM, null,
+                LocalDate.now(), null, List.of("08:00")
+        );
+
+        given(petRepository.findById(petId)).willReturn(Optional.of(pet));
+
+        assertThatThrownBy(() -> createMedicationUseCase.execute(petId, userId, request))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("Frequência personalizada requer");
+    }
+
+    @Test
+    @DisplayName("Deve gerar doses corretamente para ONCE")
+    void shouldGenerateDosesForOnce() {
+        UUID petId = pet.getId();
+        UUID userId = user.getId();
+        CreateMedicationRequest request = new CreateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.ONCE, null,
+                LocalDate.now(), null, List.of("23:59")
+        );
+
+        given(petRepository.findById(petId)).willReturn(Optional.of(pet));
+        given(medicationRepository.save(any(Medication.class))).willAnswer(i -> {
+            Medication med = i.getArgument(0);
+            med.setId(UUID.randomUUID());
+            return med;
+        });
+
+        MedicationResponse response = createMedicationUseCase.execute(petId, userId, request);
+
+        assertThat(response.frequency()).isEqualTo(MedicationFrequency.ONCE);
+        verify(administrationRepository).saveAll(any());
+    }
+
+    @Test
+    @DisplayName("Deve gerar doses corretamente para CUSTOM")
+    void shouldGenerateDosesForCustom() {
+        UUID petId = pet.getId();
+        UUID userId = user.getId();
+        CreateMedicationRequest request = new CreateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.CUSTOM, 12,
+                LocalDate.now(), LocalDate.now().plusDays(1), List.of("08:00")
+        );
+
+        given(petRepository.findById(petId)).willReturn(Optional.of(pet));
+        given(medicationRepository.save(any(Medication.class))).willAnswer(i -> {
+            Medication med = i.getArgument(0);
+            med.setId(UUID.randomUUID());
+            return med;
+        });
+
+        MedicationResponse response = createMedicationUseCase.execute(petId, userId, request);
+
+        assertThat(response.frequency()).isEqualTo(MedicationFrequency.CUSTOM);
+        verify(administrationRepository).saveAll(any());
+    }
+
+    @Test
+    @DisplayName("Deve gerar doses corretamente para WEEKLY")
+    void shouldGenerateDosesForWeekly() {
+        UUID petId = pet.getId();
+        UUID userId = user.getId();
+        CreateMedicationRequest request = new CreateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.WEEKLY, null,
+                LocalDate.now(), LocalDate.now().plusDays(14), List.of("08:00")
+        );
+
+        given(petRepository.findById(petId)).willReturn(Optional.of(pet));
+        given(medicationRepository.save(any(Medication.class))).willAnswer(i -> {
+            Medication med = i.getArgument(0);
+            med.setId(UUID.randomUUID());
+            return med;
+        });
+
+        MedicationResponse response = createMedicationUseCase.execute(petId, userId, request);
+
+        assertThat(response.frequency()).isEqualTo(MedicationFrequency.WEEKLY);
+        verify(administrationRepository).saveAll(any());
+    }
 }

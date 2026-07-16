@@ -6,7 +6,12 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateMedicationRequest {
     private String name;
     private String dosage;

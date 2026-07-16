@@ -11,7 +11,10 @@ import com.petlife.modules.pet.entity.Consultation;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.entity.TimelineEventType;
 import com.petlife.modules.pet.entity.Vaccination;
+import com.petlife.modules.pet.entity.Grooming;
+import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;
+import java.math.BigDecimal;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -176,5 +179,71 @@ class GetPetTimelineUseCaseTest {
         assertThrows(BusinessException.class, () -> 
             getPetTimelineUseCase.execute(petId, otherUserId, null, 0, 20)
         );
+    }
+
+    @Test
+    void shouldMapGroomingAndWeightAndMedicationEvents() {
+        // Grooming
+        Grooming grooming = new Grooming();
+        grooming.setId(UUID.randomUUID());
+        grooming.setDate(LocalDate.now().minusDays(2));
+        grooming.setProvider("PetShop");
+        grooming.setNotes("Lindo");
+        grooming.setPhotos(List.of("photo.jpg"));
+
+        // Weight
+        com.petlife.modules.pet.entity.WeightRecord weight = new com.petlife.modules.pet.entity.WeightRecord();
+        weight.setId(UUID.randomUUID());
+        weight.setWeightKg(BigDecimal.valueOf(15.5));
+        weight.setRecordedAt(OffsetDateTime.now().minusDays(3));
+
+        // Medication
+        Medication med = new Medication();
+        med.setId(UUID.randomUUID());
+        med.setName("Bravecto");
+        med.setDosage("1 cp");
+        med.setFrequency(com.petlife.modules.medication.domain.entity.MedicationFrequency.DAILY);
+        med.setStartDate(LocalDate.now().minusDays(10));
+        med.setEndDate(LocalDate.now().plusDays(20));
+
+        when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
+        when(vaccinationPort.findByPetId(petId)).thenReturn(Collections.emptyList());
+        when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
+        when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(List.of(grooming));
+        when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(List.of(weight));
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(List.of(med));
+
+        List<TimelineEventResponse> response = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
+
+        assertNotNull(response);
+        assertEquals(4, response.size()); // Grooming, Weight, Medication Start, Medication End
+    }
+
+    @Test
+    void shouldPaginateCorrectly() {
+        // Create 25 consultation events
+        List<Consultation> consultations = new java.util.ArrayList<>();
+        for (int i = 0; i < 25; i++) {
+            Consultation c = new Consultation();
+            c.setId(UUID.randomUUID());
+            c.setReason("Test " + i);
+            c.setDate(OffsetDateTime.now().minusDays(i));
+            consultations.add(c);
+        }
+
+        when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
+        when(vaccinationPort.findByPetId(petId)).thenReturn(Collections.emptyList());
+        when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(consultations);
+        when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
+        when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(Collections.emptyList());
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(Collections.emptyList());
+
+        List<TimelineEventResponse> page0 = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
+        List<TimelineEventResponse> page1 = getPetTimelineUseCase.execute(petId, userId, null, 1, 20);
+        List<TimelineEventResponse> page2 = getPetTimelineUseCase.execute(petId, userId, null, 2, 20);
+
+        assertEquals(20, page0.size());
+        assertEquals(5, page1.size());
+        assertEquals(0, page2.size());
     }
 }
