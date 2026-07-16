@@ -6,6 +6,7 @@ import { useRoutineActivities } from '../../../application/routine/useRoutineAct
 import { useMedications } from '../../../application/medications/useMedications';
 import { useConsultations } from '../../../application/consultation/useConsultations';
 import { useGrooming } from '../../../application/grooming/useGrooming';
+import { useVaccinations } from '../../../application/vaccination/useVaccinations';
 import './styles.css';
 
 interface ConsolidatedActivity {
@@ -31,6 +32,7 @@ export const RoutinePage: React.FC = () => {
   const { medications, fetchMedications } = useMedications(selectedPetId || '');
   const { consultations, fetchConsultations, addConsultation } = useConsultations(selectedPetId || '');
   const { groomings, fetchGroomings, addGrooming } = useGrooming(selectedPetId || '');
+  const { vaccinations, fetchVaccinations } = useVaccinations(selectedPetId || '');
 
   const [activities, setActivities] = useState<ConsolidatedActivity[]>([]);
 
@@ -65,8 +67,9 @@ export const RoutinePage: React.FC = () => {
       fetchMedications();
       fetchConsultations();
       fetchGroomings();
+      fetchVaccinations();
     }
-  }, [selectedPetId, selectedDate, fetchActivities, fetchMedications, fetchConsultations, fetchGroomings]);
+  }, [selectedPetId, selectedDate, fetchActivities, fetchMedications, fetchConsultations, fetchGroomings, fetchVaccinations]);
 
   useEffect(() => {
     const cons: ConsolidatedActivity[] = [];
@@ -99,9 +102,16 @@ export const RoutinePage: React.FC = () => {
       }
     });
 
+    vaccinations.forEach(v => {
+      const vDateStr = new Date(v.date).toISOString().split('T')[0];
+      if (vDateStr === dateStr) {
+        cons.push({ id: `vac-${v.id}`, sourceId: v.id, title: `Vacina: ${v.name}`, time: '09:00', description: v.veterinarian || 'Clínica', status: v.status === 'ADMINISTERED' ? 'completed' : 'scheduled', type: 'generic', source: 'medication' });
+      }
+    });
+
     cons.sort((a, b) => a.time.localeCompare(b.time));
     setActivities(cons);
-  }, [rawActivities, medications, consultations, groomings, selectedDate]);
+  }, [rawActivities, medications, consultations, groomings, vaccinations, selectedDate]);
 
   const handleDaySelect = (day: number) => {
     const newDate = new Date(selectedDate);
