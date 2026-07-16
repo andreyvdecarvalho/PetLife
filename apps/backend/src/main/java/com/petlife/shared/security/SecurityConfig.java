@@ -12,7 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 /**
  * Configuração principal de Security — SRP: apenas SecurityFilterChain.
@@ -26,9 +25,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults());
-        
-        // codeql[java/spring-disabled-csrf-protection] JWT API without cookies doesn't need CSRF
-        http.csrf(AbstractHttpConfigurer::disable);
         
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
