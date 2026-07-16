@@ -23,7 +23,11 @@
   background: none;
   border: none;
   color: var(--color-primary);
-  padding: 0.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   border-radius: var(--radius-full);
 }
