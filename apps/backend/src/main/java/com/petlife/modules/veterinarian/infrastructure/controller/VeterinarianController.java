@@ -13,6 +13,7 @@ import com.petlife.modules.veterinarian.infrastructure.dto.request.CreateVeterin
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SetVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateAvailabilityRequest;
+import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetAddressRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VetAddressResponse;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VetScheduleResponse;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
@@ -29,11 +30,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.petlife.modules.veterinarian.application.usecase.GetMyVetProfileUseCase;
+import com.petlife.modules.veterinarian.application.usecase.ListFavoriteVetsUseCase;
+import com.petlife.modules.veterinarian.application.usecase.UpdateVetAddressUseCase;
+import com.petlife.modules.veterinarian.application.usecase.DeleteVetAddressUseCase;
 
 import java.util.List;
 import java.math.BigDecimal;
@@ -52,6 +60,10 @@ public class VeterinarianController {
     private final ToggleFavoriteVetUseCase toggleFavoriteVetUseCase;
     private final SearchVeterinariansUseCase searchVeterinariansUseCase;
     private final GetVetProfileUseCase getVetProfileUseCase;
+    private final GetMyVetProfileUseCase getMyVetProfileUseCase;
+    private final ListFavoriteVetsUseCase listFavoriteVetsUseCase;
+    private final UpdateVetAddressUseCase updateVetAddressUseCase;
+    private final DeleteVetAddressUseCase deleteVetAddressUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -127,5 +139,35 @@ public class VeterinarianController {
                 .build();
                 
         return searchVeterinariansUseCase.execute(request);
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Busca o perfil do veterinário logado")
+    public ApiResponse<VeterinarianResponse> getMyProfile(@AuthenticationPrincipal Jwt jwt) {
+        return ApiResponse.of(getMyVetProfileUseCase.execute(UUID.fromString(jwt.getSubject())));
+    }
+
+    @GetMapping("/favorites")
+    @Operation(summary = "Lista os veterinários favoritados pelo usuário logado")
+    public ApiResponse<List<VeterinarianResponse>> listFavorites(@AuthenticationPrincipal Jwt jwt) {
+        return ApiResponse.of(listFavoriteVetsUseCase.execute(UUID.fromString(jwt.getSubject())));
+    }
+
+    @PutMapping("/address/{id}")
+    @Operation(summary = "Atualiza um endereço do veterinário")
+    public ApiResponse<VetAddressResponse> updateAddress(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateVetAddressRequest request) {
+        return ApiResponse.of(updateVetAddressUseCase.execute(UUID.fromString(jwt.getSubject()), id, request));
+    }
+
+    @DeleteMapping("/address/{id}")
+    @Operation(summary = "Remove um endereço do veterinário")
+    public ApiResponse<Void> deleteAddress(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id) {
+        deleteVetAddressUseCase.execute(UUID.fromString(jwt.getSubject()), id);
+        return ApiResponse.of(null);
     }
 }

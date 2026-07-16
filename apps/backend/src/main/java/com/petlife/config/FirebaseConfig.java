@@ -23,13 +23,15 @@ public class FirebaseConfig {
     @PostConstruct
     public void initFirebase() {
         if (serviceAccountJson == null || serviceAccountJson.isBlank()) {
-            log.warn("firebase.service-account-json property is missing or blank. Firebase Admin SDK will NOT be initialized.");
+            log.warn("firebase.service-account-json property is missing or blank. "
+                    + "Firebase Admin SDK will NOT be initialized.");
             return;
         }
 
         try {
             if (FirebaseApp.getApps().isEmpty()) {
-                InputStream credentialsStream = new ByteArrayInputStream(serviceAccountJson.getBytes(StandardCharsets.UTF_8));
+                InputStream credentialsStream = new ByteArrayInputStream(
+                        serviceAccountJson.getBytes(StandardCharsets.UTF_8));
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(credentialsStream))
                         .build();

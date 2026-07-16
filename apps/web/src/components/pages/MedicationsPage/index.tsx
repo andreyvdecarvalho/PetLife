@@ -85,7 +85,7 @@ export const MedicationsPage: React.FC = () => {
     let computedEndDate = undefined;
     if (newDurationDays && Number(newDurationDays) > 0) {
       const sDate = new Date(newStartDate);
-      sDate.setDate(sDate.getDate() + Number(newDurationDays));
+      sDate.setUTCDate(sDate.getUTCDate() + Number(newDurationDays));
       computedEndDate = sDate.toISOString().split('T')[0];
     }
 
@@ -228,6 +228,16 @@ export const MedicationsPage: React.FC = () => {
               </div>
               <div className="medications-page__form-row">
                 <div className="medications-page__form-field">
+                  <label htmlFor="med-start-date">Data de início</label>
+                  <input id="med-start-date" type="date" value={newStartDate} onChange={e => setNewStartDate(e.target.value)} required data-testid="input-start-date" />
+                </div>
+                <div className="medications-page__form-field">
+                  <label htmlFor="med-duration">Duração do tratamento (dias)</label>
+                  <input id="med-duration" type="number" placeholder="Ex: 7" min="1" value={newDurationDays} onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')} data-testid="input-duration" />
+                </div>
+              </div>
+              <div className="medications-page__form-row">
+                <div className="medications-page__form-field">
                   <label htmlFor="med-frequency">Frequência</label>
                   <select id="med-frequency" value={newFrequency} onChange={e => setNewFrequency(e.target.value as any)} data-testid="input-frequency">
                     <option value="DAILY">Diário</option>
@@ -242,10 +252,6 @@ export const MedicationsPage: React.FC = () => {
                     <input type="number" value={newCustomHours} onChange={e => setNewCustomHours(Number(e.target.value))} required data-testid="input-custom-hours" />
                   </div>
                 )}
-                <div className="medications-page__form-field">
-                  <label htmlFor="med-duration">Duração (dias)</label>
-                  <input id="med-duration" type="number" placeholder="Ex: 7" min="1" value={newDurationDays} onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')} data-testid="input-duration" />
-                </div>
               </div>
               <div className="medications-page__form-actions">
                 <button type="button" className="medications-page__btn-secondary" onClick={() => setIsFormOpen(false)} data-testid="btn-cancel">Cancelar</button>
