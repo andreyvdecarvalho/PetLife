@@ -56,7 +56,13 @@ export const AppointmentsPageContent: React.FC = () => {
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
         <h1 className="appointments-page__title">Meus Agendamentos</h1>
-        <div className="appointments-page__spacer"></div>
+        <button 
+          className="appointments-page__add-btn"
+          aria-label="Adicionar agendamento"
+          onClick={() => navigate('/vet-search')}
+        >
+          <span className="material-symbols-outlined">add</span>
+        </button>
       </div>
 
       <div className="appointments-page__tabs shadow-sm">
