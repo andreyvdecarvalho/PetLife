@@ -49,7 +49,7 @@ export const RoutinePage: React.FC = () => {
   const [appTime, setAppTime] = useState('10:00');
 
   const [groomProvider, setGroomProvider] = useState('');
-  const [groomType, setGroomType] = useState<'BATH' | 'GROOMING' | 'BOTH'>('BATH');
+  const [groomType, setGroomType] = useState<'BATH' | 'GROOMING' | 'BATH_AND_GROOMING'>('BATH');
   const [groomTime, setGroomTime] = useState('09:00');
 
   useEffect(() => { fetchPets(); }, [fetchPets]);
@@ -93,8 +93,9 @@ export const RoutinePage: React.FC = () => {
       const gDateStr = gDate.toISOString().split('T')[0];
       if (gDateStr === dateStr) {
         const typeStr = g.type === 'BATH' ? 'Banho' : g.type === 'GROOMING' ? 'Tosa' : 'Banho & Tosa';
-        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: '09:00', description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
-        // NOTE: Grooming backend entity doesn't have a time field currently, so we use a default or just '00:00'.
+        const timeMatch = g.notes?.match(/Marcado para (\d{2}:\d{2})/);
+        const extractedTime = timeMatch ? timeMatch[1] : '09:00';
+        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: extractedTime, description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
       }
     });
 
@@ -143,9 +144,7 @@ export const RoutinePage: React.FC = () => {
   const submitGrooming = async (e: React.FormEvent) => {
     e.preventDefault();
     const dateStr = selectedDate.toISOString().split('T')[0];
-    // Create Date from dateStr + groomTime
-    const dt = new Date(`${dateStr}T${groomTime}:00Z`);
-    await addGrooming({ provider: groomProvider, type: groomType, date: dt.toISOString(), notes: `Marcado para ${groomTime}` });
+    await addGrooming({ provider: groomProvider, type: groomType, date: dateStr, notes: `Marcado para ${groomTime}` });
     setIsGroomingModalOpen(false);
     showToast('Banho/Tosa agendado!', 'success');
     fetchGroomings();
@@ -323,7 +322,7 @@ export const RoutinePage: React.FC = () => {
                   <select value={groomType} onChange={e => setGroomType(e.target.value as any)} data-testid="input-groom-type">
                     <option value="BATH">Banho</option>
                     <option value="GROOMING">Tosa</option>
-                    <option value="BOTH">Banho & Tosa</option>
+                    <option value="BATH_AND_GROOMING">Banho & Tosa</option>
                   </select>
                 </div>
                 <div className="routine-page__form-field">
