@@ -23,7 +23,8 @@ public class UpdateConsultationUseCase {
     private final PetRepositoryPort petRepositoryPort;
 
     @Transactional
-    public ConsultationResponse execute(UUID petId, UUID consultationId, UUID userId, UpdateConsultationRequest request) {
+    public ConsultationResponse execute(
+            UUID petId, UUID consultationId, UUID userId, UpdateConsultationRequest request) {
         Pet pet = petRepositoryPort.findById(petId)
                 .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND", "Pet não encontrado."));
 

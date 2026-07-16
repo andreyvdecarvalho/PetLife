@@ -5,6 +5,7 @@ import { tokenStorage } from '../storage/tokenStorage';
 vi.mock('../storage/tokenStorage', () => ({
   tokenStorage: {
     getAccessToken: vi.fn(),
+    getRefreshToken: vi.fn(),
     clearTokens: vi.fn(),
   },
 }));
@@ -47,6 +48,7 @@ describe('api client', () => {
       response: {
         status: 401,
       },
+      config: {},
     };
 
     await expect(responseInterceptor.rejected(mockError)).rejects.toEqual(mockError);
@@ -65,6 +67,7 @@ describe('api client', () => {
       response: {
         status: 500,
       },
+      config: {},
     };
 
     await expect(responseInterceptor.rejected(mockError)).rejects.toEqual(mockError);

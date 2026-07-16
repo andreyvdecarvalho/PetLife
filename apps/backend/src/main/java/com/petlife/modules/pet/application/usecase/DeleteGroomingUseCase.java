@@ -30,7 +30,8 @@ public class DeleteGroomingUseCase {
         }
 
         Grooming grooming = groomingRepositoryPort.findById(groomingId)
-                .orElseThrow(() -> BusinessException.notFound("GROOMING_NOT_FOUND", "Registro de banho e tosa não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound(
+                        "GROOMING_NOT_FOUND", "Registro de banho e tosa não encontrado."));
 
         if (!grooming.getPet().getId().equals(petId)) {
             throw BusinessException.badRequest("GROOMING_PET_MISMATCH", "Este registro não pertence a este pet.");

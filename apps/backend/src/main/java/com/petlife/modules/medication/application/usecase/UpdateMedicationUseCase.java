@@ -55,7 +55,9 @@ public class UpdateMedicationUseCase {
         }
 
         if (medication.getStatus() != MedicationStatus.ACTIVE) {
-            throw BusinessException.badRequest("MEDICATION_NOT_ACTIVE", "Apenas medicações ativas podem ser alteradas.");
+            throw BusinessException.badRequest(
+                    "MEDICATION_NOT_ACTIVE",
+                    "Apenas medicações ativas podem ser alteradas.");
         }
 
         boolean scheduleChanged = false;
@@ -72,7 +74,8 @@ public class UpdateMedicationUseCase {
             scheduleChanged = true;
         }
 
-        if (request.getCustomFrequencyHours() != null && !request.getCustomFrequencyHours().equals(medication.getCustomFrequencyHours())) {
+        if (request.getCustomFrequencyHours() != null 
+                && !request.getCustomFrequencyHours().equals(medication.getCustomFrequencyHours())) {
             medication.setCustomFrequencyHours(request.getCustomFrequencyHours());
             scheduleChanged = true;
         }
@@ -88,7 +91,9 @@ public class UpdateMedicationUseCase {
         }
 
         if (medication.getFrequency() == MedicationFrequency.CUSTOM && medication.getCustomFrequencyHours() == null) {
-            throw BusinessException.badRequest("INVALID_FREQUENCY", "Frequência personalizada requer definição de horas.");
+            throw BusinessException.badRequest(
+                    "INVALID_FREQUENCY", 
+                    "Frequência personalizada requer definição de horas.");
         }
 
         Medication savedMedication = medicationRepository.save(medication);
@@ -105,7 +110,9 @@ public class UpdateMedicationUseCase {
             }
 
             // Generate new ones from now onwards
-            String tz = pet.getUser().getTimezone() != null ? pet.getUser().getTimezone().getZoneId() : "America/Sao_Paulo";
+            String tz = pet.getUser().getTimezone() != null 
+                    ? pet.getUser().getTimezone().getZoneId() 
+                    : "America/Sao_Paulo";
             ZoneId zoneId = ZoneId.of(tz);
             List<MedicationAdministration> newAdmins = generateFutureDoses(savedMedication, zoneId);
             
