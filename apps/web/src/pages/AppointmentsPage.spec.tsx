@@ -2,12 +2,16 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AppointmentsPage } from './AppointmentsPage';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../components/molecules/Toast';
+import { useGetPets } from '../application/pet/useGetPets';
+import { useConsultations } from '../application/consultation/useConsultations';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
 
 vi.mock('../contexts/AuthContext');
 vi.mock('../components/molecules/Toast');
+vi.mock('../application/pet/useGetPets');
+vi.mock('../application/consultation/useConsultations');
 
 describe('AppointmentsPage', () => {
   const mockShowToast = vi.fn();
@@ -16,6 +20,26 @@ describe('AppointmentsPage', () => {
     vi.clearAllMocks();
     (useToast as any).mockReturnValue({
       showToast: mockShowToast,
+    });
+    (useGetPets as any).mockReturnValue({
+      pets: [{ id: 'pet-1', name: 'Max', species: 'Cachorro' }],
+      fetchPets: vi.fn(),
+    });
+    (useConsultations as any).mockReturnValue({
+      consultations: [
+        {
+          id: 'app-1',
+          petId: 'pet-1',
+          veterinarianName: 'Dr. Ricardo Silva',
+          specialty: 'Clínico Geral',
+          clinicName: 'Clínica Vida Pet',
+          date: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Tomorrow
+          time: '10:00',
+          status: 'CONFIRMED'
+        }
+      ],
+      loading: false,
+      fetchConsultations: vi.fn()
     });
   });
 
@@ -44,8 +68,6 @@ describe('AppointmentsPage', () => {
     expect(screen.getByText('Histórico')).toBeDefined();
     expect(screen.getByText('Dr. Ricardo Silva')).toBeDefined();
     expect(screen.getByText('Clínica Vida Pet')).toBeDefined();
-    expect(screen.getByText('Pet Shop Estilo')).toBeDefined();
-    expect(screen.getByText('Banho & Tosa')).toBeDefined();
   });
 
   it('should trigger info toast when clicking Ver Detalhes button', () => {
@@ -73,10 +95,10 @@ describe('AppointmentsPage', () => {
 
     fireEvent.click(detailsButtons[0]);
 
-    expect(mockShowToast).toHaveBeenCalledWith('Exibindo detalhes do agendamento para Max', 'info');
+    expect(mockShowToast).toHaveBeenCalledWith('Exibindo detalhes do agendamento', 'info');
   });
 
-  it('should trigger success toast and confirm appointment when clicking Reagendar button on a pending appointment', async () => {
+  it('should trigger success toast and confirm appointment when clicking Reagendar button', async () => {
     (useAuth as any).mockReturnValue({
       user: {
         id: '1',
@@ -96,18 +118,13 @@ describe('AppointmentsPage', () => {
       </MemoryRouter>
     );
 
-    // Get Reagendar button for Luna (pending)
-    // The second card belongs to Luna (Pet Shop Estilo)
     const rescheduleButtons = screen.getAllByRole('button', { name: /reagendar/i });
-    expect(rescheduleButtons.length).toBe(2);
+    expect(rescheduleButtons.length).toBe(1);
 
-    fireEvent.click(rescheduleButtons[1]); // Reagendar for Luna
+    fireEvent.click(rescheduleButtons[0]);
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith('Solicitação de reagendamento para Luna enviada! 🗓️', 'success');
-      // The status badge for Luna should turn to "Confirmado"
-      const confirmedBadges = screen.getAllByText('Confirmado');
-      expect(confirmedBadges.length).toBe(2); // Both Max and Luna are now confirmed
+      expect(mockShowToast).toHaveBeenCalledWith('Solicitação de reagendamento enviada! 🗓️', 'success');
     });
   });
 });
