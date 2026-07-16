@@ -59,7 +59,7 @@ export const AppointmentsPageContent: React.FC = () => {
         <button 
           className="appointments-page__add-btn"
           aria-label="Adicionar agendamento"
-          onClick={() => navigate('/vet-search')}
+          onClick={() => navigate('/routine')}
         >
           <span className="material-symbols-outlined">add</span>
         </button>

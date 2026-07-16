@@ -185,8 +185,16 @@ export const RoutinePage: React.FC = () => {
               <button className="routine-page__action-card" onClick={() => setIsAppointmentModalOpen(true)} data-testid="btn-add-appointment">
                 <div className="routine-page__action-icon routine-page__action-icon--primary"><span className="material-symbols-outlined">medical_services</span></div>
                 <div className="routine-page__action-text">
-                  <span className="routine-page__action-title">Agendar Retorno Veterinário</span>
+                  <span className="routine-page__action-title">Agendar Veterinário</span>
                   <span className="routine-page__action-desc">Marcar próxima consulta de rotina.</span>
+                </div>
+              </button>
+
+              <button className="routine-page__action-card" onClick={() => navigate('/grooming')} data-testid="btn-add-grooming">
+                <div className="routine-page__action-icon routine-page__action-icon--tertiary"><span className="material-symbols-outlined">content_cut</span></div>
+                <div className="routine-page__action-text">
+                  <span className="routine-page__action-title">Agendar Banho e Tosa</span>
+                  <span className="routine-page__action-desc">Marcar serviços de estética e higiene.</span>
                 </div>
               </button>
 

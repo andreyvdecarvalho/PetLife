@@ -274,6 +274,11 @@
   color: var(--color-on-secondary-container);
 }
 
+.routine-page__action-icon--tertiary {
+  background-color: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
 .routine-page__action-title {
   display: block;
   font-weight: 600;
