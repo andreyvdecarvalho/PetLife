@@ -93,9 +93,8 @@ export const RoutinePage: React.FC = () => {
       const gDateStr = gDate.toISOString().split('T')[0];
       if (gDateStr === dateStr) {
         const typeStr = g.type === 'BATH' ? 'Banho' : g.type === 'GROOMING' ? 'Tosa' : 'Banho & Tosa';
-        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: groomTime, description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
-        // NOTE: Grooming backend entity doesn't have a time field currently, so we use a default or just '00:00'. Wait, if we use a default it will sort badly. Let's extract the time if it's there or '09:00'.
-        // Let's just use '09:00' for now.
+        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: '09:00', description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
+        // NOTE: Grooming backend entity doesn't have a time field currently, so we use a default or just '00:00'.
       }
     });
 

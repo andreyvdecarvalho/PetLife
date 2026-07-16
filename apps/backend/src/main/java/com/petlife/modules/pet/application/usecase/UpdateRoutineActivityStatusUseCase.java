@@ -19,7 +19,8 @@ public class UpdateRoutineActivityStatusUseCase {
     @Transactional
     public RoutineActivity execute(UUID id, RoutineActivityStatus status) {
         RoutineActivity activity = routineActivityRepository.findById(id)
-                .orElseThrow(() -> BusinessException.notFound("ROUTINE_ACTIVITY_NOT_FOUND", "Routine activity not found"));
+                .orElseThrow(() -> BusinessException.notFound(
+                        "ROUTINE_ACTIVITY_NOT_FOUND", "Routine activity not found"));
 
         activity.setStatus(status);
         return routineActivityRepository.save(activity);

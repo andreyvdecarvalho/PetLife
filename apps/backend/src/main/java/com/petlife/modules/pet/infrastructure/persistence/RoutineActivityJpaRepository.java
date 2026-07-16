@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface RoutineActivityJpaRepository extends JpaRepository<RoutineActivity, UUID>, RoutineActivityRepositoryPort {
+public interface RoutineActivityJpaRepository 
+    extends JpaRepository<RoutineActivity, UUID>, RoutineActivityRepositoryPort {
 }
