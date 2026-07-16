@@ -117,7 +117,7 @@ describe('AuthContext', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await act(async () => {
-      await result.current.updateProfile('Updated', 't@t.com', 'url', 'UTC');
+      await result.current.updateProfile({ name: 'Updated', email: 't@t.com', avatarUrl: 'url', timezone: 'UTC' });
     });
 
     expect(result.current.user?.name).toBe('Updated');

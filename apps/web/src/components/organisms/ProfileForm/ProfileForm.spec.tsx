@@ -39,7 +39,7 @@ describe('ProfileForm Component', () => {
 
   it('should render form fields', () => {
     renderComponent();
-    expect(screen.getByLabelText(/^Nome$/i)).toBeDefined();
+    expect(screen.getByLabelText(/^Nome Completo$/i)).toBeDefined();
     expect(screen.getByRole('button', { name: /Salvar Alterações/i })).toBeDefined();
   });
 
@@ -47,11 +47,18 @@ describe('ProfileForm Component', () => {
     mockUpdateProfile.mockResolvedValueOnce({});
     renderComponent();
     
-    fireEvent.change(screen.getByLabelText(/^Nome$/i), { target: { value: 'New Name' } });
+    fireEvent.change(screen.getByLabelText(/^Nome Completo$/i), { target: { value: 'New Name' } });
     fireEvent.click(screen.getByRole('button', { name: /Salvar Alterações/i }));
     
     await waitFor(() => {
-      expect(mockUpdateProfile).toHaveBeenCalledWith('New Name', 'test@test.com', '', 'America/Sao_Paulo');
+      expect(mockUpdateProfile).toHaveBeenCalledWith({
+        name: 'New Name',
+        nickname: undefined,
+        email: 'test@test.com',
+        phone: undefined,
+        avatarUrl: '',
+        timezone: 'America/Sao_Paulo'
+      }, undefined);
       expect(mockShowToast).toHaveBeenCalledWith('Perfil atualizado com sucesso! ✨', 'success');
     });
   });
