@@ -13,6 +13,7 @@ import com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest;
 import com.petlife.shared.response.ApiResponse;
 import com.petlife.modules.pet.infrastructure.dto.WeightRecordResponse;
 import com.petlife.modules.pet.application.usecase.GetPetWeightHistoryUseCase;
+import com.petlife.modules.pet.application.usecase.DeletePetUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +50,8 @@ public class PetController {
     private final GetPetByIdUseCase getPetByIdUseCase;
     private final UpdatePetUseCase updatePetUseCase;
     private final UpdatePetStatusUseCase updatePetStatusUseCase;
-private final GetPetWeightHistoryUseCase getPetWeightHistoryUseCase;
+    private final GetPetWeightHistoryUseCase getPetWeightHistoryUseCase;
+    private final DeletePetUseCase deletePetUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -108,6 +111,7 @@ private final GetPetWeightHistoryUseCase getPetWeightHistoryUseCase;
         UUID userId = UUID.fromString(jwt.getSubject());
         return ApiResponse.of(updatePetStatusUseCase.execute(userId, id, request.status()));
     }
+
     @GetMapping("/{id}/weight-history")
     @Operation(summary = "Obter histórico de peso do pet")
     public ApiResponse<List<WeightRecordResponse>> getWeightHistory(
@@ -116,5 +120,14 @@ private final GetPetWeightHistoryUseCase getPetWeightHistoryUseCase;
         UUID userId = UUID.fromString(jwt.getSubject());
         return getPetWeightHistoryUseCase.execute(userId, id);
     }
-}
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Excluir pet e todos os dados associados (LGPD)")
+    public void deletePet(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        deletePetUseCase.execute(id, userId);
+    }
+}

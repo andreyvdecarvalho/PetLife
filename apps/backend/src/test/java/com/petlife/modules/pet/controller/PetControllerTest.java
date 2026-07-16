@@ -164,7 +164,7 @@ class PetControllerTest extends IntegrationTestBase {
                             .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.data.photoUrl").exists())
-                    .andExpect(jsonPath("$.data.photoUrl").value(org.hamcrest.Matchers.containsString("pets")));
+                    .andExpect(jsonPath("$.data.photoUrl").value(org.hamcrest.Matchers.startsWith("data:image/jpeg;base64,")));
         }
 
         @Test
@@ -193,7 +193,7 @@ class PetControllerTest extends IntegrationTestBase {
         }
 
         @Test
-        @DisplayName("Deve retornar 400 se a foto exceder 500KB")
+        @DisplayName("Deve retornar 400 se a foto exceder 2MB")
         void shouldReturn400WhenPhotoIsTooLarge() throws Exception {
             User user = UserFactory.make();
             userRepository.save(user);
@@ -201,7 +201,7 @@ class PetControllerTest extends IntegrationTestBase {
             Pet pet = PetFactory.make(p -> p.setUser(user));
             petRepository.save(pet);
 
-            byte[] largeBytes = new byte[501 * 1024]; // 501KB
+            byte[] largeBytes = new byte[3 * 1024 * 1024]; // 3MB
             MockMultipartFile file = new MockMultipartFile(
                     "file",
                     "pet.jpg",

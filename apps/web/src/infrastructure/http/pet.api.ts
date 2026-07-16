@@ -46,4 +46,7 @@ export const petApi = {
 
   updateStatus: (id: string, status: PetStatus) =>
     api.patch<{ data: Pet }>(`/pets/${id}/status`, { status }),
+
+  delete: (id: string) =>
+    api.delete<void>(`/pets/${id}`),
 };

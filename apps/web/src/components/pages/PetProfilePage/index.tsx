@@ -5,6 +5,7 @@ import { Modal } from '../../molecules/Modal';
 import { ConsultationForm } from '../../organisms/ConsultationForm';
 import { useTimeline } from '../../../application/pet/useTimeline';
 import { useExportMedicalPass } from '../../../application/pet/useExportMedicalPass';
+import { useDeletePet } from '../../../application/pet/useDeletePet';
 import { useToast } from '../../molecules/Toast';
 import { useAuth } from '../../../contexts/AuthContext';
 import type { TimelineEventType } from '../../../domain/pet/Timeline';
@@ -31,6 +32,7 @@ export const PetProfilePageContent: React.FC = () => {
   const { showToast } = useToast();
   const { events, isLoading, error: timelineError, hasMore, fetchTimeline } = useTimeline();
   const { isExporting, exportError, exportMedicalPass } = useExportMedicalPass();
+  const { isDeleting, deletePet } = useDeletePet();
 
   const handleRefresh = React.useCallback(() => {
     if (id) {
@@ -70,6 +72,19 @@ export const PetProfilePageContent: React.FC = () => {
     const success = await exportMedicalPass(id);
     if (success) {
       showToast('Prontuário exportado com sucesso!', 'success');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!id) return;
+    if (window.confirm('Tem certeza que deseja excluir este pet e todos os seus dados? Esta ação é irreversível.')) {
+      try {
+        await deletePet(id);
+        showToast('Pet excluído com sucesso.', 'success');
+        navigate('/');
+      } catch (err) {
+        showToast('Falha ao excluir o pet.', 'error');
+      }
     }
   };
 
@@ -155,6 +170,33 @@ export const PetProfilePageContent: React.FC = () => {
           >
             <span className="material-symbols-outlined">shower</span>
             Banho & Tosa
+          </button>
+
+          <button
+            className="pet-profile__quick-action-btn"
+            onClick={handleDelete}
+            disabled={isDeleting}
+            style={{
+              marginTop: '16px',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '12px',
+              backgroundColor: 'var(--color-error-container, #ffdad6)',
+              color: 'var(--color-on-error-container, #410002)',
+              border: 'none',
+              borderRadius: 'var(--radius-full, 100px)',
+              fontFamily: 'var(--font-label, sans-serif)',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
+            }}
+            data-testid="btn-delete-pet"
+          >
+            <span className="material-symbols-outlined">delete</span>
+            {isDeleting ? 'Excluindo...' : 'Excluir Pet'}
           </button>
         </aside>
 

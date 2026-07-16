@@ -15,4 +15,5 @@ public interface PetRepositoryPort {
     List<Pet> findByUserIdAndStatusNot(UUID userId, PetStatus status);
     Page<Pet> findByUserIdAndStatusNot(UUID userId, PetStatus status, Pageable pageable);
     Page<Pet> findByUserIdAndStatus(UUID userId, PetStatus status, Pageable pageable);
+    void delete(Pet pet);
 }
