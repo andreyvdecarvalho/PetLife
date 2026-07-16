@@ -105,13 +105,11 @@ describe('api client', () => {
       },
     };
 
-    // Need to mock the returned `api(originalRequest)`
-    // Since `api` itself is the instance returned by `axios.create`
-    const mockApiCall = vi.fn().mockResolvedValue('retried response');
+    // Mock the api instance call
+    vi.spyOn(api, 'request').mockResolvedValue('retried response' as any);
     
-    // Replace the api instance with our mock just for this call, or we can just mock the post
     // The `api` is exported from the file, so it's a function we can't easily spy on without causing issues.
-    // Let's just catch the promise
+    // However, calling `api(config)` delegates to `api.request(config)`.
     
     try {
       // It will throw because `api(originalRequest)` is not mocked properly as a function
