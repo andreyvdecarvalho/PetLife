@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGrooming } from '../../../application/grooming/useGrooming';
 import { useGetPets } from '../../../application/pet/useGetPets';
-import type { Pet } from '../../../domain/pet/Pet';
 import type { Grooming } from '../../../domain/pet/Grooming';
 import { BeforeAfterViewer } from '../../molecules/BeforeAfterViewer';
 import { GroomingForm } from '../../organisms/GroomingForm';
@@ -15,7 +14,7 @@ export const GroomingPageContent: React.FC = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  const { pets, fetchPets } = useGetPets();
+  const { pets, isLoading: petsLoading, fetchPets } = useGetPets();
   const [selectedPetId, setSelectedPetId] = useState<string | null>(urlPetId || null);
   const [selectedGrooming, setSelectedGrooming] = useState<Grooming | undefined>(undefined);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -117,6 +116,24 @@ export const GroomingPageContent: React.FC = () => {
       showToast('Erro ao salvar serviço de banho e tosa.', 'error');
     }
   };
+
+  // Show loading skeleton while fetching pets to avoid blank screen
+  if (petsLoading) {
+    return (
+      <div className="page-grooming animate-fade-in">
+        <div className="page-grooming__header-row">
+          <button className="page-grooming__back-btn" onClick={() => navigate('/')} aria-label="Voltar">
+            <span className="material-symbols-outlined">arrow_back</span>
+          </button>
+          <h2 className="page-grooming__title">Banho &amp; Tosa</h2>
+        </div>
+        <div className="page-grooming__empty-state">
+          <span className="material-symbols-outlined">hourglass_empty</span>
+          <p>Carregando seus pets...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-grooming animate-fade-in">
