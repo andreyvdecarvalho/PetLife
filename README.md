@@ -1,52 +1,37 @@
 # PetLife
 
-**Toda a vida do seu pet em um só lugar**
+PetLife é uma plataforma completa e inteligente para o gerenciamento da vida, saúde e bem-estar do seu pet. Desenvolvida para tutores e profissionais, a aplicação centraliza rotinas, medicações e histórico clínico em um único lugar.
 
-Plataforma unificada para gestão da vida e saúde de animais de estimação, conectando tutores, veterinários e prestadores de serviços de forma simples e intuitiva.
+## Stack Tecnológica
+- **Backend:** Java 21, Spring Boot 3, Spring Data JPA, PostgreSQL, Flyway, Redis, RabbitMQ. (Clean Architecture + TDD).
+- **Frontend Web:** React 19, Vite, TypeScript, Vanilla CSS (Atomic Design, BEM).
+- **Mobile:** React Native 0.76.0.
 
-## 🛠️ Stack Tecnológica
+## Principais Funcionalidades
+- **Gestão de Perfil e Saúde:** Cadastro de pets, controle de peso e armazenamento de registros clínicos.
+- **Controle de Medicamentos:** Acompanhamento de tratamentos ativos, agendamento de horários e registro de aderência.
+- **Minha Rotina:** Planejamento diário e recorrente (passeios, banhos, etc.) e calendário integrado.
+- **Agendamentos:** Marcação de retorno veterinário e consultas.
+- **Diário de Memórias:** Registro de fotos e momentos especiais do pet.
 
-* **Backend**: Java 21 + Spring Boot (Maven), Clean Architecture e TDD.
-* **Frontend Web**: React 19 + Vite (PWA) e TypeScript, estruturado com Atomic Design e Vanilla CSS.
-* **Mobile**: React Native.
-* **Infraestrutura**: PostgreSQL (Flyway), Redis e RabbitMQ.
+## Execução Rápida
 
-## 📦 Principais Funcionalidades
+1. **Subir Banco de Dados e Serviços:**
+```bash
+docker-compose up -d
+```
 
-* **Perfil e Saúde**: Registro completo do pet com foto, espécie, histórico clínico e diário de vacinas.
-* **Rotina e Planejamento**: Calendário interativo para controle de alimentação, banhos, passeios e outras atividades.
-* **Controle de Medicamentos**: Gerenciamento de tratamentos, dosagens e lembretes de administração de remédios.
-* **Agendamento de Consultas**: Marcação de visitas veterinárias, controle de histórico e catálogo de profissionais (CRMV verificado).
-* **Diário de Memórias**: Armazenamento de momentos e fotos inesquecíveis do pet.
+2. **Iniciar Backend:**
+```bash
+cd apps/backend
+mvn spring-boot:run
+```
 
-## 🚀 Como Executar
+3. **Iniciar Frontend:**
+```bash
+cd apps/web
+pnpm install
+pnpm run dev
+```
 
-### Pré-requisitos
-* Java 21+ e Maven
-* Node.js 22+ e pnpm
-* Docker e Docker Compose (para banco de dados e mensageria)
-
-### Passos
-
-1. **Subir Infraestrutura**
-   Na raiz do projeto, inicie os contêineres:
-   ```bash
-   docker-compose up -d
-   ```
-
-2. **Rodar o Backend**
-   Em um terminal, acesse a pasta `apps/backend` e inicie a API:
-   ```bash
-   mvn clean install -DskipTests
-   mvn spring-boot:run
-   ```
-
-3. **Rodar o Frontend Web**
-   Em outro terminal, acesse a pasta `apps/web`, instale as dependências e inicie o dev server:
-   ```bash
-   pnpm install
-   pnpm run dev
-   ```
-
-4. **Acesso**
-   Abra o navegador em `http://localhost:5173`.
+Acesse a aplicação web via `http://localhost:5173`.
