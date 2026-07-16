@@ -5,6 +5,15 @@ import { MemoryRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
 
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router-dom')>();
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 vi.mock('../contexts/AuthContext');
 vi.mock('../components/molecules/Toast', () => ({
   useToast: () => ({
@@ -91,7 +100,7 @@ describe('DashboardPage', () => {
     expect(screen.getByText('⚠️ Por favor, confirme seu e-mail.')).toBeDefined();
   });
 
-  it('should open edit modal when clicking edit button', () => {
+  it('should navigate to edit page when clicking edit button', () => {
     (useAuth as any).mockReturnValue({
       user: {
         id: '1',
@@ -114,8 +123,11 @@ describe('DashboardPage', () => {
 
     fireEvent.click(editBtn);
 
-    // O modal deve ser aberto e exibir "Editar Pet" com o nome pré-preenchido
-    expect(screen.getByText('Editar Pet')).toBeDefined();
-    expect((screen.getByLabelText('Nome do Pet') as HTMLInputElement).value).toBe('Max');
+    // O navigate deve ser chamado com a rota /pets/new e o estado contendo o pet
+    expect(mockNavigate).toHaveBeenCalledWith('/pets/new', {
+      state: {
+        pet: expect.objectContaining({ id: '1', name: 'Max' })
+      }
+    });
   });
 });

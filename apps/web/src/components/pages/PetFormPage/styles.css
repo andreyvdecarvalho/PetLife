@@ -1,0 +1,58 @@
+.pet-form-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pet-form-page__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.pet-form-page__back-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-on-surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.pet-form-page__back-btn:hover {
+  background-color: var(--color-surface-container-highest);
+}
+
+.pet-form-page__title {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.pet-form-page__content {
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .pet-form-page {
+    padding: 16px;
+  }
+  
+  .pet-form-page__content {
+    padding: 16px;
+  }
+}

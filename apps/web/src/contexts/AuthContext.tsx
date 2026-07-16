@@ -20,7 +20,7 @@ interface AuthContextData {
   loginWithGoogle: (idToken: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  updateProfile: (data: UpdateProfileData) => Promise<void>;
+  updateProfile: (data: UpdateProfileData, photoFile?: File) => Promise<void>;
   deleteAccount: () => Promise<void>;
 }
 
@@ -66,8 +66,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userProfile);
   }, [googleLoginUseCase, setUser]);
 
-  const updateProfile = useCallback(async (data: UpdateProfileData) => {
-    const updatedUser = await updateProfileUseCase(data);
+  const updateProfile = useCallback(async (data: UpdateProfileData, photoFile?: File) => {
+    const updatedUser = await updateProfileUseCase(data, photoFile);
     setUser(updatedUser);
   }, [updateProfileUseCase, setUser]);
 

@@ -6,8 +6,11 @@ import { authApi, type UserResponse, type UpdateProfileData } from '../../infras
  */
 export function useUpdateProfile() {
   const updateProfile = useCallback(
-    async (data: UpdateProfileData): Promise<UserResponse> => {
-      const response = await authApi.updateProfile(data);
+    async (data: UpdateProfileData, photoFile?: File): Promise<UserResponse> => {
+      let response = await authApi.updateProfile(data);
+      if (photoFile) {
+        response = await authApi.uploadPhoto(photoFile);
+      }
       return response.data.data;
     },
     []

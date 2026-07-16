@@ -8,7 +8,9 @@ export interface TokenResponse {
 export interface UserResponse {
   id: string;
   name: string;
+  nickname?: string;
   email: string;
+  phone?: string;
   avatarUrl: string;
   timezone: string;
   plan: 'FREE' | 'PREMIUM' | 'FAMILY';
@@ -18,7 +20,9 @@ export interface UserResponse {
 
 export interface UpdateProfileData {
   name: string;
+  nickname?: string;
   email: string;
+  phone?: string;
   avatarUrl: string;
   timezone: string;
 }
@@ -43,6 +47,16 @@ export const authApi = {
 
   updateProfile: (data: UpdateProfileData) =>
     api.put<{ data: UserResponse }>('/auth/me', data),
+
+  uploadPhoto: (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post<{ data: UserResponse }>('/auth/me/photo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 
   forgotPassword: (email: string) =>
     api.post('/auth/forgot-password', { email }),

@@ -41,13 +41,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             {user && (
               <div className="template-dashboard__user-menu">
                 {user.avatarUrl ? (
-                  <img src={user.avatarUrl} alt={user.name} className="template-dashboard__user-avatar" />
+                  <img src={user.avatarUrl} alt={user.nickname || user.name} className="template-dashboard__user-avatar" />
                 ) : (
                   <div className="template-dashboard__user-avatar-placeholder">
                     <span className="material-symbols-outlined">person</span>
                   </div>
                 )}
-                <span className="template-dashboard__user-name">{user.name}</span>
+                <span className="template-dashboard__user-name">{user.nickname?.trim() || user.name?.split(' ')[0]}</span>
                 <button className="template-dashboard__logout-btn" onClick={handleLogout} title="Sair">
                   <span className="material-symbols-outlined">logout</span>
                 </button>

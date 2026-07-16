@@ -84,9 +84,12 @@ services:
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER:-petlife}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-petlife_dev}
       # Hibernate
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
       # Flyway
       SPRING_FLYWAY_ENABLED: "true"
+      SPRING_FLYWAY_URL: jdbc:postgresql://postgres:5432/petlife
+      SPRING_FLYWAY_USER: petlife
+      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-petlife_dev}
     ports:
       - "8081:8080"
     depends_on:
@@ -94,6 +97,12 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     deploy:
       resources:
         limits:

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useToast } from '../../molecules/Toast';
 import { PetCard } from '../../molecules/PetCard';
-import { PetForm } from '../../organisms/PetForm';
 import { WeightChart } from '../../organisms/WeightChart';
 import { useGetPets } from '../../../application/pet/useGetPets';
 import type { Pet, PetStatus } from '../../../domain/pet/Pet';
@@ -25,8 +24,6 @@ export const DashboardPageContent: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { showToast } = useToast();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingPet, setEditingPet] = useState<Pet | null>(null);
   const { pets, isLoading, fetchPets } = useGetPets();
   const { updatePetStatus, loading: statusLoading, error: statusError } = useUpdatePetStatus();
   const handleToggleStatus = async (pet: Pet) => {
@@ -53,18 +50,6 @@ export const DashboardPageContent: React.FC = () => {
       setActivePetId(pets[0].id);
     }
   }, [pets, activePetId]);
-
-  const handlePetFormSuccess = () => {
-    setIsModalOpen(false);
-    showToast(editingPet ? 'Pet atualizado com sucesso! ✨' : 'Pet cadastrado com sucesso! ✨', 'success');
-    setEditingPet(null);
-    fetchPets(); // Recarrega os pets da API
-  };
-
-  const handlePetFormCancel = () => {
-    setIsModalOpen(false);
-    setEditingPet(null);
-  };
 
   const appointments: Appointment[] = [
     {
@@ -101,11 +86,13 @@ export const DashboardPageContent: React.FC = () => {
   const { data: weightHistory, loading: weightLoading, error: weightError } = usePetWeightHistory(activePet?.id || '');
 
 
+  const displayName = user?.nickname?.trim() || user?.name?.split(' ')[0] || 'Ana';
+
   return (
     <div className="dashboard-page animate-fade-in">
       {/* Greeting Section */}
       <section className="dashboard-page__greeting">
-        <h1 className="dashboard-page__title">Olá, {user?.name || 'Ana'}! 👋</h1>
+        <h1 className="dashboard-page__title">Olá, {displayName}! 👋</h1>
         <p className="dashboard-page__subtitle">Aqui está o resumo do dia para seus pets.</p>
         
         {/* Hidden data container to satisfy existing test requirements without cluttering UI */}
@@ -138,7 +125,7 @@ export const DashboardPageContent: React.FC = () => {
           {/* Add Pet Button */}
           <div 
             className="dashboard-page__add-pet-btn group"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => navigate('/pets/new')}
             role="button"
             tabIndex={0}
             aria-label="Cadastrar novo pet"
@@ -203,10 +190,7 @@ export const DashboardPageContent: React.FC = () => {
           {activePet && (
             <button 
               className="dashboard-page__edit-btn"
-              onClick={() => {
-                setEditingPet(activePet);
-                setIsModalOpen(true);
-              }}
+              onClick={() => navigate('/pets/new', { state: { pet: activePet } })}
               title="Editar pet"
               style={{
                 background: 'transparent',
@@ -267,18 +251,6 @@ export const DashboardPageContent: React.FC = () => {
           )
         )}
       </section>
-
-      {isModalOpen && (
-        <div className="dashboard-page__modal-overlay" onClick={handlePetFormCancel}>
-          <div className="dashboard-page__modal-content" onClick={e => e.stopPropagation()}>
-            <PetForm 
-              pet={editingPet || undefined}
-              onSuccess={handlePetFormSuccess}
-              onCancel={handlePetFormCancel}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

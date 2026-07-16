@@ -12,6 +12,7 @@ import { PetProfilePage } from './pages/PetProfilePage';
 import { MedicationsPage } from './pages/MedicationsPage';
 import { RoutinePage } from './pages/RoutinePage';
 import { MemoriesPage } from './pages/MemoriesPage';
+import { PetFormPage } from './pages/PetFormPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { GroomingPage } from './pages/GroomingPage';
@@ -50,6 +51,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <PetProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pets/new"
+              element={
+                <PrivateRoute>
+                  <PetFormPage />
                 </PrivateRoute>
               }
             />

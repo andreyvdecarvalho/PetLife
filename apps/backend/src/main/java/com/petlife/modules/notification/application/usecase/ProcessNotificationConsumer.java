@@ -56,7 +56,7 @@ public class ProcessNotificationConsumer {
             return;
         }
 
-        ZoneId zoneId = ZoneId.of(user.getTimezone() != null ? user.getTimezone() : "America/Sao_Paulo");
+        ZoneId zoneId = ZoneId.of(user.getTimezone() != null ? user.getTimezone().getZoneId() : "America/Sao_Paulo");
         ZonedDateTime nowInUserTz = ZonedDateTime.now(zoneId);
         LocalTime nowTime = nowInUserTz.toLocalTime();
         if (isTimeInDnd(nowTime, preferences.getDoNotDisturbStart(), preferences.getDoNotDisturbEnd())) {

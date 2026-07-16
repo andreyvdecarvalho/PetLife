@@ -3,6 +3,8 @@ package com.petlife.modules.auth.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import com.petlife.modules.auth.entity.Timezone;
 
 public record UpdateProfileRequest(
     @NotBlank(message = "O nome é obrigatório.")
@@ -17,7 +19,12 @@ public record UpdateProfileRequest(
     @Size(max = 500, message = "O link do avatar deve ter no máximo 500 caracteres.")
     String avatarUrl,
 
-    @NotBlank(message = "O fuso horário é obrigatório.")
-    @Size(max = 50, message = "O fuso horário deve ter no máximo 50 caracteres.")
-    String timezone
+    @Size(max = 100, message = "O apelido deve ter no máximo 100 caracteres.")
+    String nickname,
+
+    @Size(max = 20, message = "O telefone deve ter no máximo 20 caracteres.")
+    String phone,
+
+    @NotNull(message = "O fuso horário é obrigatório.")
+    Timezone timezone
 ) {}

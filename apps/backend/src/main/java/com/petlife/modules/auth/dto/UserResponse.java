@@ -2,6 +2,7 @@ package com.petlife.modules.auth.dto;
 
 import com.petlife.modules.auth.entity.User;
 import com.petlife.modules.auth.entity.UserPlan;
+import com.petlife.modules.auth.entity.Timezone;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,9 +10,11 @@ import java.util.UUID;
 public record UserResponse(
     UUID id,
     String name,
+    String nickname,
     String email,
+    String phone,
     String avatarUrl,
-    String timezone,
+    Timezone timezone,
     UserPlan plan,
     boolean emailVerified,
     LocalDateTime createdAt
@@ -24,7 +27,9 @@ public record UserResponse(
         return new UserResponse(
                 user.getId(),
                 user.getName(),
+                user.getNickname(),
                 user.getEmail(),
+                user.getPhone(),
                 user.getAvatarUrl(),
                 user.getTimezone(),
                 user.getPlan(),
