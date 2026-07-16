@@ -17,6 +17,10 @@ export const vaccinationApi = {
     return response.data.data;
   },
 
+  deleteVaccination: async (petId: string, vaccineId: string): Promise<void> => {
+    await api.delete(`/pets/${petId}/vaccines/${vaccineId}`);
+  },
+
   uploadProof: async (petId: string, vaccineId: string, file: File): Promise<Vaccination> => {
     const formData = new FormData();
     formData.append('file', file);

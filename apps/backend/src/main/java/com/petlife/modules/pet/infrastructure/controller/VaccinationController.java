@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.petlife.modules.pet.application.usecase.AddVaccinationUseCase;
+import com.petlife.modules.pet.application.usecase.DeleteVaccinationUseCase;
 import com.petlife.modules.pet.application.usecase.GetVaccineSuggestionsUseCase;
 import com.petlife.modules.pet.application.usecase.ListVaccinationsByPetUseCase;
 import com.petlife.modules.pet.application.usecase.UpdateVaccinationUseCase;
@@ -39,6 +40,7 @@ public class VaccinationController {
     private final AddVaccinationUseCase addVaccinationUseCase;
     private final ListVaccinationsByPetUseCase listVaccinationsByPetUseCase;
     private final UpdateVaccinationUseCase updateVaccinationUseCase;
+    private final DeleteVaccinationUseCase deleteVaccinationUseCase;
     private final GetVaccineSuggestionsUseCase getVaccineSuggestionsUseCase;
     private final UploadVaccinationProofUseCase uploadVaccinationProofUseCase;
 
@@ -73,6 +75,17 @@ public class VaccinationController {
         UUID userId = UUID.fromString(jwt.getSubject());
         VaccinationResponse response = updateVaccinationUseCase.execute(petId, vaccineId, userId, request);
         return ResponseEntity.ok(ApiResponse.of(response));
+    }
+
+    @org.springframework.web.bind.annotation.DeleteMapping("/pets/{petId}/vaccines/{vaccineId}")
+    public ResponseEntity<ApiResponse<Void>> deleteVaccination(
+            @PathVariable UUID petId,
+            @PathVariable UUID vaccineId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        deleteVaccinationUseCase.execute(petId, vaccineId, userId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(

@@ -30,4 +30,9 @@ public class VaccinationAdapter implements VaccinationPort {
     public Optional<Vaccination> findById(UUID id) {
         return repository.findById(id);
     }
+
+    @Override
+    public void delete(Vaccination vaccination) {
+        repository.delete(vaccination);
+    }
 }

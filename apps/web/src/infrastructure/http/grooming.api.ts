@@ -26,6 +26,10 @@ export const groomingApi = {
     return response.data.data;
   },
 
+  deleteGrooming: async (petId: string, groomingId: string): Promise<void> => {
+    await api.delete(`/pets/${petId}/groomings/${groomingId}`);
+  },
+
   uploadPhoto: async (petId: string, groomingId: string, file: File, type: 'BEFORE' | 'AFTER'): Promise<Grooming> => {
     const formData = new FormData();
     formData.append('file', file);

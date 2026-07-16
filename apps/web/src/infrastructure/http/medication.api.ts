@@ -18,6 +18,11 @@ export const medicationApi = {
     return response.data.data;
   },
 
+  updateMedication: async (petId: string, medicationId: string, data: Partial<CreateMedicationData>): Promise<Medication> => {
+    const response = await api.put<{ data: Medication }>(`/pets/${petId}/medications/${medicationId}`, data);
+    return response.data.data;
+  },
+
   updateAdministration: async (doseId: string, data: UpdateAdministrationData): Promise<MedicationAdministration> => {
     const response = await api.patch<{ data: MedicationAdministration }>(`/medications/doses/${doseId}`, data);
     return response.data.data;
