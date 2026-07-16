@@ -86,11 +86,13 @@ export const DashboardPageContent: React.FC = () => {
   const { data: weightHistory, loading: weightLoading, error: weightError } = usePetWeightHistory(activePet?.id || '');
 
 
+  const displayName = user?.nickname?.trim() || user?.name?.split(' ')[0] || 'Ana';
+
   return (
     <div className="dashboard-page animate-fade-in">
       {/* Greeting Section */}
       <section className="dashboard-page__greeting">
-        <h1 className="dashboard-page__title">Olá, {user?.name || 'Ana'}! 👋</h1>
+        <h1 className="dashboard-page__title">Olá, {displayName}! 👋</h1>
         <p className="dashboard-page__subtitle">Aqui está o resumo do dia para seus pets.</p>
         
         {/* Hidden data container to satisfy existing test requirements without cluttering UI */}
