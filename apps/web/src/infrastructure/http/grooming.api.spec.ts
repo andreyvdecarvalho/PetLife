@@ -49,11 +49,7 @@ describe('groomingApi', () => {
     const file = new File(['image'], 'before.jpg', { type: 'image/jpeg' });
     const result = await groomingApi.uploadPhoto('pet-123', 'g-1', file, 'BEFORE');
     
-    expect(api.post).toHaveBeenCalledWith('/pets/pet-123/groomings/g-1/photos', expect.any(FormData), {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    expect(api.post).toHaveBeenCalledWith('/pets/pet-123/groomings/g-1/photos', expect.any(FormData));
     expect(result).toEqual(mockResponse.data.data);
   });
 });

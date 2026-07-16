@@ -30,11 +30,7 @@ export const groomingApi = {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', type);
-    const response = await api.post<{ data: Grooming }>(`/pets/${petId}/groomings/${groomingId}/photos`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await api.post<{ data: Grooming }>(`/pets/${petId}/groomings/${groomingId}/photos`, formData);
     return response.data.data;
   },
 };

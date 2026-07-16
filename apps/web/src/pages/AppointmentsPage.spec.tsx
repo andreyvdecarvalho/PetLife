@@ -34,12 +34,10 @@ describe('AppointmentsPage', () => {
       {
         id: 'app-1',
         petId: 'pet-1',
-        veterinarianName: 'Dr. Ricardo Silva',
-        specialty: 'Clínico Geral',
-        clinicName: 'Clínica Vida Pet',
-        date: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Tomorrow
-        time: '10:00',
-        status: 'CONFIRMED'
+        veterinarian: 'Dr. Ricardo Silva',
+        reason: 'Clínico Geral',
+        clinic: 'Clínica Vida Pet',
+        date: new Date(Date.now() + 86400000).toISOString().split('T')[0] + 'T10:00:00Z', // Tomorrow at 10:00
       }
     ]);
     (vaccinationApi.listVaccinations as any).mockResolvedValue([]);

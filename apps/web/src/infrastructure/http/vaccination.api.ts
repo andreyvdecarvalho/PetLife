@@ -20,11 +20,7 @@ export const vaccinationApi = {
   uploadProof: async (petId: string, vaccineId: string, file: File): Promise<Vaccination> => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await api.post<{ data: Vaccination }>(`/pets/${petId}/vaccines/${vaccineId}/proof`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await api.post<{ data: Vaccination }>(`/pets/${petId}/vaccines/${vaccineId}/proof`, formData);
     return response.data.data;
   },
 

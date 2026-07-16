@@ -98,6 +98,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               Agendamentos
             </Link>
             <Link
+              to="/grooming"
+              className={`template-dashboard__sidebar-link ${isActive('/grooming') ? 'active' : ''}`}
+            >
+              <span className="material-symbols-outlined">cut</span>
+              Banho & Tosa
+            </Link>
+            <Link
               to="/veterinarians"
               className={`template-dashboard__sidebar-link ${isActive('/veterinarians') ? 'active' : ''}`}
             >

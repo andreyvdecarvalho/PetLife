@@ -17,12 +17,7 @@ export const consultationApi = {
     files.forEach(file => formData.append('files', file));
     const response = await api.post<{ data: Consultation }>(
       `/pets/${petId}/consultations/${consultationId}/attachments`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      formData
     );
     return response.data.data;
   },

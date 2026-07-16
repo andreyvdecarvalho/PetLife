@@ -50,7 +50,10 @@ export const AppointmentsPageContent: React.FC = () => {
           ]);
 
           cons.forEach(c => {
-            all.push({ id: `cons-${c.id}`, sourceId: c.id, petId: pet.id, date: c.date, time: c.time || '00:00', title: `Consulta com ${c.veterinarianName}`, subtitle: c.specialty || 'Clínico Geral', location: c.clinicName || 'Não informado', icon: 'stethoscope', type: 'consultation' });
+            const cDate = new Date(c.date);
+            const dateStr = cDate.toISOString().split('T')[0];
+            const timeStr = cDate.toISOString().split('T')[1].substring(0, 5);
+            all.push({ id: `cons-${c.id}`, sourceId: c.id, petId: pet.id, date: dateStr, time: timeStr, title: `Consulta com ${c.veterinarian || 'Veterinário'}`, subtitle: c.reason || 'Clínico Geral', location: c.clinic || 'Não informado', icon: 'stethoscope', type: 'consultation' });
           });
 
           vacs.forEach(v => {

@@ -6,6 +6,8 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 
+import { useGetPets } from '../../../application/pet/useGetPets';
+
 // Mock dependencies
 vi.mock('../../../application/grooming/useGrooming', () => ({
   useGrooming: vi.fn(),
@@ -15,6 +17,10 @@ vi.mock('../../../infrastructure/http/pet.api', () => ({
   petApi: {
     getById: vi.fn(),
   },
+}));
+
+vi.mock('../../../application/pet/useGetPets', () => ({
+  useGetPets: vi.fn(),
 }));
 
 vi.mock('../../molecules/Toast', () => ({
@@ -54,6 +60,11 @@ describe('GroomingPageContent Component', () => {
     (petApi.getById as any).mockResolvedValue({
       data: { data: { id: 'pet-123', name: 'Bolinha' } },
     });
+
+    (useGetPets as any).mockReturnValue({
+      pets: [{ id: 'pet-123', name: 'Bolinha' }],
+      fetchPets: vi.fn(),
+    });
   });
 
   it('should render header and history list correctly', async () => {
@@ -65,7 +76,7 @@ describe('GroomingPageContent Component', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText('Banho & Tosa - Bolinha')).toBeDefined();
+    expect(await screen.findByText('Banho & Tosa')).toBeDefined();
     expect(screen.getByText('Pet Shop Spa')).toBeDefined();
     expect(screen.getByText('R$ 70.00')).toBeDefined();
     expect(screen.getByTestId('grooming-card')).toBeDefined();

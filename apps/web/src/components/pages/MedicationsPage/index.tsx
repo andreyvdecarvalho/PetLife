@@ -51,7 +51,7 @@ export const MedicationsPage: React.FC = () => {
   const [newFrequency, setNewFrequency] = useState<MedicationFrequency>('DAILY');
   const [newCustomHours, setNewCustomHours] = useState<number>(24);
   const [newStartDate, setNewStartDate] = useState(new Date().toISOString().substring(0, 10));
-  const [newEndDate, setNewEndDate] = useState('');
+  const [newDurationDays, setNewDurationDays] = useState<number | ''>('');
   const [newTimes, setNewTimes] = useState<string[]>(['08:00']);
 
   useEffect(() => { fetchPets(); }, [fetchPets]);
@@ -81,16 +81,24 @@ export const MedicationsPage: React.FC = () => {
       showToast('Por favor, preencha todos os campos obrigatórios.', 'error');
       return;
     }
+    
+    let computedEndDate = undefined;
+    if (newDurationDays && Number(newDurationDays) > 0) {
+      const sDate = new Date(newStartDate);
+      sDate.setDate(sDate.getDate() + Number(newDurationDays));
+      computedEndDate = sDate.toISOString().split('T')[0];
+    }
+
     const payload = {
       name: newName, dosage: newDosage, frequency: newFrequency,
       customFrequencyHours: newFrequency === 'CUSTOM' ? newCustomHours : undefined,
-      startDate: newStartDate, endDate: newEndDate || undefined, timesOfDay: newTimes,
+      startDate: newStartDate, endDate: computedEndDate, timesOfDay: newTimes,
     };
     const success = await createMedication(payload);
     if (success) {
       showToast('Tratamento cadastrado com sucesso! ✨', 'success');
       setIsFormOpen(false);
-      setNewName(''); setNewDosage(''); setNewFrequency('DAILY'); setNewTimes(['08:00']);
+      setNewName(''); setNewDosage(''); setNewFrequency('DAILY'); setNewTimes(['08:00']); setNewDurationDays('');
     }
   };
 
@@ -234,6 +242,10 @@ export const MedicationsPage: React.FC = () => {
                     <input type="number" value={newCustomHours} onChange={e => setNewCustomHours(Number(e.target.value))} required data-testid="input-custom-hours" />
                   </div>
                 )}
+                <div className="medications-page__form-field">
+                  <label htmlFor="med-duration">Duração (dias)</label>
+                  <input id="med-duration" type="number" placeholder="Ex: 7" min="1" value={newDurationDays} onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')} data-testid="input-duration" />
+                </div>
               </div>
               <div className="medications-page__form-actions">
                 <button type="button" className="medications-page__btn-secondary" onClick={() => setIsFormOpen(false)} data-testid="btn-cancel">Cancelar</button>

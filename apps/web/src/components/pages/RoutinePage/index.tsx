@@ -86,8 +86,11 @@ export const RoutinePage: React.FC = () => {
     });
 
     consultations.forEach(c => {
-      if (c.date === dateStr) {
-        cons.push({ id: `cons-${c.id}`, sourceId: c.id, title: `Consulta com ${c.veterinarianName}`, time: c.time || '00:00', description: c.specialty || 'Clínico Geral', status: c.status === 'COMPLETED' ? 'completed' : (c.status === 'CONFIRMED' ? 'scheduled' : 'pending'), type: 'consultation', source: 'consultation' });
+      const cDate = new Date(c.date);
+      const cDateStr = cDate.toISOString().split('T')[0];
+      if (cDateStr === dateStr) {
+        const timeStr = cDate.toISOString().split('T')[1].substring(0, 5);
+        cons.push({ id: `cons-${c.id}`, sourceId: c.id, title: `Consulta com ${c.veterinarian || 'Veterinário'}`, time: timeStr, description: c.reason || 'Clínico Geral', status: cDate >= new Date() ? 'scheduled' : 'completed', type: 'consultation', source: 'consultation' });
       }
     });
 
@@ -145,7 +148,8 @@ export const RoutinePage: React.FC = () => {
   const submitAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
     const dateStr = selectedDate.toISOString().split('T')[0];
-    await addConsultation({ veterinarianName: appVet, specialty: appSpec, clinicName: appClinic, date: dateStr, time: appTime, notes: '' });
+    const isoDate = new Date(`${dateStr}T${appTime}:00`).toISOString();
+    await addConsultation({ veterinarian: appVet, reason: appSpec || 'Consulta Geral', clinic: appClinic, date: isoDate, notes: '' });
     setIsAppointmentModalOpen(false);
     showToast('Agendamento criado!', 'success');
     fetchConsultations();
