@@ -21,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.petlife.modules.pet.application.usecase.CreateConsultationUseCase;
+import com.petlife.modules.pet.application.usecase.UpdateConsultationUseCase;
+import com.petlife.modules.pet.application.usecase.DeleteConsultationUseCase;
 import com.petlife.modules.pet.application.usecase.DeleteConsultationAttachmentUseCase;
 import com.petlife.modules.pet.application.usecase.ListConsultationsByPetUseCase;
 import com.petlife.modules.pet.application.usecase.UploadConsultationAttachmentUseCase;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
+import com.petlife.modules.pet.infrastructure.dto.UpdateConsultationRequest;
 import com.petlife.shared.response.ApiResponse;
 
 @RestController
@@ -34,6 +37,8 @@ import com.petlife.shared.response.ApiResponse;
 public class ConsultationController {
 
     private final CreateConsultationUseCase createConsultationUseCase;
+    private final UpdateConsultationUseCase updateConsultationUseCase;
+    private final DeleteConsultationUseCase deleteConsultationUseCase;
     private final ListConsultationsByPetUseCase listConsultationsByPetUseCase;
     private final UploadConsultationAttachmentUseCase uploadConsultationAttachmentUseCase;
     private final DeleteConsultationAttachmentUseCase deleteConsultationAttachmentUseCase;
@@ -57,6 +62,29 @@ public class ConsultationController {
         UUID userId = UUID.fromString(jwt.getSubject());
         List<ConsultationResponse> response = listConsultationsByPetUseCase.execute(petId, userId);
         return ResponseEntity.ok(ApiResponse.of(response));
+    }
+
+    @org.springframework.web.bind.annotation.PutMapping("/pets/{petId}/consultations/{id}")
+    public ResponseEntity<ApiResponse<ConsultationResponse>> updateConsultation(
+            @PathVariable UUID petId,
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateConsultationRequest request,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        ConsultationResponse response = updateConsultationUseCase.execute(petId, id, userId, request);
+        return ResponseEntity.ok(ApiResponse.of(response));
+    }
+
+    @org.springframework.web.bind.annotation.DeleteMapping("/pets/{petId}/consultations/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteConsultation(
+            @PathVariable UUID petId,
+            @PathVariable UUID id,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        deleteConsultationUseCase.execute(petId, id, userId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(

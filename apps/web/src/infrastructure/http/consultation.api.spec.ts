@@ -42,12 +42,7 @@ describe('consultationApi', () => {
     
     expect(api.post).toHaveBeenCalledWith(
       '/pets/pet-123/consultations/c-1/attachments',
-      expect.any(FormData),
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      expect.any(FormData)
     );
     expect(result).toEqual({ id: 'c-1', attachments: ['url'] });
   });

@@ -6,6 +6,7 @@ import { useRoutineActivities } from '../../../application/routine/useRoutineAct
 import { useMedications } from '../../../application/medications/useMedications';
 import { useConsultations } from '../../../application/consultation/useConsultations';
 import { useGrooming } from '../../../application/grooming/useGrooming';
+import { useVaccinations } from '../../../application/vaccination/useVaccinations';
 import './styles.css';
 
 interface ConsolidatedActivity {
@@ -31,6 +32,7 @@ export const RoutinePage: React.FC = () => {
   const { medications, fetchMedications } = useMedications(selectedPetId || '');
   const { consultations, fetchConsultations, addConsultation } = useConsultations(selectedPetId || '');
   const { groomings, fetchGroomings, addGrooming } = useGrooming(selectedPetId || '');
+  const { vaccinations, fetchVaccinations } = useVaccinations(selectedPetId || '');
 
   const [activities, setActivities] = useState<ConsolidatedActivity[]>([]);
 
@@ -49,7 +51,7 @@ export const RoutinePage: React.FC = () => {
   const [appTime, setAppTime] = useState('10:00');
 
   const [groomProvider, setGroomProvider] = useState('');
-  const [groomType, setGroomType] = useState<'BATH' | 'GROOMING' | 'BOTH'>('BATH');
+  const [groomType, setGroomType] = useState<'BATH' | 'GROOMING' | 'BATH_AND_GROOMING'>('BATH');
   const [groomTime, setGroomTime] = useState('09:00');
 
   useEffect(() => { fetchPets(); }, [fetchPets]);
@@ -65,8 +67,9 @@ export const RoutinePage: React.FC = () => {
       fetchMedications();
       fetchConsultations();
       fetchGroomings();
+      fetchVaccinations();
     }
-  }, [selectedPetId, selectedDate, fetchActivities, fetchMedications, fetchConsultations, fetchGroomings]);
+  }, [selectedPetId, selectedDate, fetchActivities, fetchMedications, fetchConsultations, fetchGroomings, fetchVaccinations]);
 
   useEffect(() => {
     const cons: ConsolidatedActivity[] = [];
@@ -83,8 +86,11 @@ export const RoutinePage: React.FC = () => {
     });
 
     consultations.forEach(c => {
-      if (c.date === dateStr) {
-        cons.push({ id: `cons-${c.id}`, sourceId: c.id, title: `Consulta com ${c.veterinarianName}`, time: c.time || '00:00', description: c.specialty || 'Clínico Geral', status: c.status === 'COMPLETED' ? 'completed' : (c.status === 'CONFIRMED' ? 'scheduled' : 'pending'), type: 'consultation', source: 'consultation' });
+      const cDate = new Date(c.date);
+      const cDateStr = cDate.toISOString().split('T')[0];
+      if (cDateStr === dateStr) {
+        const timeStr = cDate.toISOString().split('T')[1].substring(0, 5);
+        cons.push({ id: `cons-${c.id}`, sourceId: c.id, title: `Consulta com ${c.veterinarian || 'Veterinário'}`, time: timeStr, description: c.reason || 'Clínico Geral', status: cDate >= new Date() ? 'scheduled' : 'completed', type: 'consultation', source: 'consultation' });
       }
     });
 
@@ -93,14 +99,22 @@ export const RoutinePage: React.FC = () => {
       const gDateStr = gDate.toISOString().split('T')[0];
       if (gDateStr === dateStr) {
         const typeStr = g.type === 'BATH' ? 'Banho' : g.type === 'GROOMING' ? 'Tosa' : 'Banho & Tosa';
-        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: '09:00', description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
-        // NOTE: Grooming backend entity doesn't have a time field currently, so we use a default or just '00:00'.
+        const timeMatch = g.notes?.match(/Marcado para (\d{2}:\d{2})/);
+        const extractedTime = timeMatch ? timeMatch[1] : '09:00';
+        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: extractedTime, description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
+      }
+    });
+
+    vaccinations.forEach(v => {
+      const vDateStr = new Date(v.date).toISOString().split('T')[0];
+      if (vDateStr === dateStr) {
+        cons.push({ id: `vac-${v.id}`, sourceId: v.id, title: `Vacina: ${v.name}`, time: '09:00', description: v.veterinarian || 'Clínica', status: v.status === 'ADMINISTERED' ? 'completed' : 'scheduled', type: 'generic', source: 'medication' });
       }
     });
 
     cons.sort((a, b) => a.time.localeCompare(b.time));
     setActivities(cons);
-  }, [rawActivities, medications, consultations, groomings, selectedDate]);
+  }, [rawActivities, medications, consultations, groomings, vaccinations, selectedDate]);
 
   const handleDaySelect = (day: number) => {
     const newDate = new Date(selectedDate);
@@ -134,7 +148,8 @@ export const RoutinePage: React.FC = () => {
   const submitAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
     const dateStr = selectedDate.toISOString().split('T')[0];
-    await addConsultation({ veterinarianName: appVet, specialty: appSpec, clinicName: appClinic, date: dateStr, time: appTime, notes: '' });
+    const isoDate = new Date(`${dateStr}T${appTime}:00`).toISOString();
+    await addConsultation({ veterinarian: appVet, reason: appSpec || 'Consulta Geral', clinic: appClinic, date: isoDate, notes: '' });
     setIsAppointmentModalOpen(false);
     showToast('Agendamento criado!', 'success');
     fetchConsultations();
@@ -143,9 +158,7 @@ export const RoutinePage: React.FC = () => {
   const submitGrooming = async (e: React.FormEvent) => {
     e.preventDefault();
     const dateStr = selectedDate.toISOString().split('T')[0];
-    // Create Date from dateStr + groomTime
-    const dt = new Date(`${dateStr}T${groomTime}:00Z`);
-    await addGrooming({ provider: groomProvider, type: groomType, date: dt.toISOString(), notes: `Marcado para ${groomTime}` });
+    await addGrooming({ provider: groomProvider, type: groomType, date: dateStr, notes: `Marcado para ${groomTime}` });
     setIsGroomingModalOpen(false);
     showToast('Banho/Tosa agendado!', 'success');
     fetchGroomings();
@@ -323,7 +336,7 @@ export const RoutinePage: React.FC = () => {
                   <select value={groomType} onChange={e => setGroomType(e.target.value as any)} data-testid="input-groom-type">
                     <option value="BATH">Banho</option>
                     <option value="GROOMING">Tosa</option>
-                    <option value="BOTH">Banho & Tosa</option>
+                    <option value="BATH_AND_GROOMING">Banho & Tosa</option>
                   </select>
                 </div>
                 <div className="routine-page__form-field">

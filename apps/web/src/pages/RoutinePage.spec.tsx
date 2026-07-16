@@ -6,6 +6,8 @@ import { useGetPets } from '../application/pet/useGetPets';
 import { useRoutineActivities } from '../application/routine/useRoutineActivities';
 import { useMedications } from '../application/medications/useMedications';
 import { useConsultations } from '../application/consultation/useConsultations';
+import { useGrooming } from '../application/grooming/useGrooming';
+import { useVaccinations } from '../application/vaccination/useVaccinations';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
@@ -16,6 +18,8 @@ vi.mock('../application/pet/useGetPets');
 vi.mock('../application/routine/useRoutineActivities');
 vi.mock('../application/medications/useMedications');
 vi.mock('../application/consultation/useConsultations');
+vi.mock('../application/grooming/useGrooming');
+vi.mock('../application/vaccination/useVaccinations');
 
 describe('RoutinePage', () => {
   const mockShowToast = vi.fn();
@@ -57,6 +61,18 @@ describe('RoutinePage', () => {
       consultations: [],
       fetchConsultations: vi.fn(),
       addConsultation: vi.fn()
+    });
+
+    (useGrooming as any).mockReturnValue({
+      groomings: [],
+      fetchGroomings: vi.fn(),
+      addGrooming: vi.fn()
+    });
+
+    (useVaccinations as any).mockReturnValue({
+      vaccinations: [],
+      fetchVaccinations: vi.fn(),
+      addVaccination: vi.fn()
     });
   });
 

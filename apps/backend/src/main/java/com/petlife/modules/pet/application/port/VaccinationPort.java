@@ -9,4 +9,5 @@ public interface VaccinationPort {
     Vaccination save(Vaccination vaccination);
     List<Vaccination> findByPetId(UUID petId);
     Optional<Vaccination> findById(UUID id);
+    void delete(Vaccination vaccination);
 }

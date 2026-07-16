@@ -3,7 +3,9 @@ import { AppointmentsPage } from './AppointmentsPage';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../components/molecules/Toast';
 import { useGetPets } from '../application/pet/useGetPets';
-import { useConsultations } from '../application/consultation/useConsultations';
+import { consultationApi } from '../infrastructure/http/consultation.api';
+import { vaccinationApi } from '../infrastructure/http/vaccination.api';
+import { groomingApi } from '../infrastructure/http/grooming.api';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
@@ -11,7 +13,9 @@ import React from 'react';
 vi.mock('../contexts/AuthContext');
 vi.mock('../components/molecules/Toast');
 vi.mock('../application/pet/useGetPets');
-vi.mock('../application/consultation/useConsultations');
+vi.mock('../infrastructure/http/consultation.api');
+vi.mock('../infrastructure/http/vaccination.api');
+vi.mock('../infrastructure/http/grooming.api');
 
 describe('AppointmentsPage', () => {
   const mockShowToast = vi.fn();
@@ -25,25 +29,22 @@ describe('AppointmentsPage', () => {
       pets: [{ id: 'pet-1', name: 'Max', species: 'Cachorro' }],
       fetchPets: vi.fn(),
     });
-    (useConsultations as any).mockReturnValue({
-      consultations: [
-        {
-          id: 'app-1',
-          petId: 'pet-1',
-          veterinarianName: 'Dr. Ricardo Silva',
-          specialty: 'Clínico Geral',
-          clinicName: 'Clínica Vida Pet',
-          date: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Tomorrow
-          time: '10:00',
-          status: 'CONFIRMED'
-        }
-      ],
-      loading: false,
-      fetchConsultations: vi.fn()
-    });
+
+    (consultationApi.list as any).mockResolvedValue([
+      {
+        id: 'app-1',
+        petId: 'pet-1',
+        veterinarian: 'Dr. Ricardo Silva',
+        reason: 'Clínico Geral',
+        clinic: 'Clínica Vida Pet',
+        date: new Date(Date.now() + 86400000).toISOString().split('T')[0] + 'T10:00:00Z', // Tomorrow at 10:00
+      }
+    ]);
+    (vaccinationApi.listVaccinations as any).mockResolvedValue([]);
+    (groomingApi.listGroomings as any).mockResolvedValue([]);
   });
 
-  it('should render correctly with appointments list and professional details', () => {
+  it('should render correctly with appointments list and professional details', async () => {
     (useAuth as any).mockReturnValue({
       user: {
         id: '1',
@@ -63,14 +64,16 @@ describe('AppointmentsPage', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Meus Agendamentos')).toBeDefined();
-    expect(screen.getByText('Próximos')).toBeDefined();
-    expect(screen.getByText('Histórico')).toBeDefined();
-    expect(screen.getByText('Dr. Ricardo Silva')).toBeDefined();
-    expect(screen.getByText('Clínica Vida Pet')).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText('Meus Agendamentos')).toBeDefined();
+      expect(screen.getByText('Próximos')).toBeDefined();
+      expect(screen.getByText('Histórico')).toBeDefined();
+      expect(screen.getByText('Consulta com Dr. Ricardo Silva')).toBeDefined();
+      expect(screen.getByText('Clínica Vida Pet')).toBeDefined();
+    });
   });
 
-  it('should trigger info toast when clicking Ver Detalhes button', () => {
+  it('should trigger info toast when clicking Ver Detalhes button', async () => {
     (useAuth as any).mockReturnValue({
       user: {
         id: '1',
@@ -89,10 +92,12 @@ describe('AppointmentsPage', () => {
         </Routes>
       </MemoryRouter>
     );
+
+    await waitFor(() => {
+      expect(screen.queryAllByRole('button', { name: /ver detalhes/i }).length).toBeGreaterThan(0);
+    });
 
     const detailsButtons = screen.getAllByRole('button', { name: /ver detalhes/i });
-    expect(detailsButtons.length).toBeGreaterThan(0);
-
     fireEvent.click(detailsButtons[0]);
 
     expect(mockShowToast).toHaveBeenCalledWith('Exibindo detalhes do agendamento', 'info');
@@ -118,9 +123,11 @@ describe('AppointmentsPage', () => {
       </MemoryRouter>
     );
 
-    const rescheduleButtons = screen.getAllByRole('button', { name: /reagendar/i });
-    expect(rescheduleButtons.length).toBe(1);
+    await waitFor(() => {
+      expect(screen.queryAllByRole('button', { name: /reagendar/i }).length).toBe(1);
+    });
 
+    const rescheduleButtons = screen.getAllByRole('button', { name: /reagendar/i });
     fireEvent.click(rescheduleButtons[0]);
 
     await waitFor(() => {

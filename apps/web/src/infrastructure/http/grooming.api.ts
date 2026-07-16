@@ -26,15 +26,15 @@ export const groomingApi = {
     return response.data.data;
   },
 
+  deleteGrooming: async (petId: string, groomingId: string): Promise<void> => {
+    await api.delete(`/pets/${petId}/groomings/${groomingId}`);
+  },
+
   uploadPhoto: async (petId: string, groomingId: string, file: File, type: 'BEFORE' | 'AFTER'): Promise<Grooming> => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', type);
-    const response = await api.post<{ data: Grooming }>(`/pets/${petId}/groomings/${groomingId}/photos`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await api.post<{ data: Grooming }>(`/pets/${petId}/groomings/${groomingId}/photos`, formData);
     return response.data.data;
   },
 };

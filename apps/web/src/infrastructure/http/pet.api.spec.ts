@@ -32,11 +32,7 @@ describe('petApi', () => {
     const file = new File(['photo'], 'photo.jpg', { type: 'image/jpeg' });
     const result = await petApi.uploadPhoto('pet-1', file);
     
-    expect(api.post).toHaveBeenCalledWith('/pets/pet-1/photo', expect.any(FormData), {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    expect(api.post).toHaveBeenCalledWith('/pets/pet-1/photo', expect.any(FormData));
     expect(result).toEqual(mockResponse);
   });
 

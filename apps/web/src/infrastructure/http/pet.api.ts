@@ -27,11 +27,7 @@ export const petApi = {
   uploadPhoto: (id: string, file: File) => {
     const formData = new FormData();
     formData.append('file', file);
-    return api.post<{ data: Pet }>(`/pets/${id}/photo`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    return api.post<{ data: Pet }>(`/pets/${id}/photo`, formData);
   },
 
   list: (page = 0, size = 10, status?: PetStatus) =>
@@ -50,4 +46,7 @@ export const petApi = {
 
   updateStatus: (id: string, status: PetStatus) =>
     api.patch<{ data: Pet }>(`/pets/${id}/status`, { status }),
+
+  delete: (id: string) =>
+    api.delete<void>(`/pets/${id}`),
 };

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGrooming } from '../../../application/grooming/useGrooming';
-import { petApi } from '../../../infrastructure/http/pet.api';
-import type { Pet } from '../../../domain/pet/Pet';
+import { useGetPets } from '../../../application/pet/useGetPets';
 import type { Grooming } from '../../../domain/pet/Grooming';
 import { BeforeAfterViewer } from '../../molecules/BeforeAfterViewer';
 import { GroomingForm } from '../../organisms/GroomingForm';
@@ -11,13 +10,22 @@ import { useToast } from '../../molecules/Toast';
 import './styles.css';
 
 export const GroomingPageContent: React.FC = () => {
-  const { petId } = useParams<{ petId: string }>();
+  const { petId: urlPetId } = useParams<{ petId: string }>();
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  const [pet, setPet] = useState<Pet | null>(null);
+  const { pets, isLoading: petsLoading, fetchPets } = useGetPets();
+  const [selectedPetId, setSelectedPetId] = useState<string | null>(urlPetId || null);
   const [selectedGrooming, setSelectedGrooming] = useState<Grooming | undefined>(undefined);
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  useEffect(() => { fetchPets(); }, [fetchPets]);
+
+  useEffect(() => {
+    if (pets.length > 0 && !selectedPetId) {
+      setSelectedPetId(pets[0].id);
+    }
+  }, [pets, selectedPetId]);
 
   const {
     groomings,
@@ -27,14 +35,13 @@ export const GroomingPageContent: React.FC = () => {
     addGrooming,
     updateGrooming,
     uploadPhoto,
-  } = useGrooming(petId || '');
+  } = useGrooming(selectedPetId || '');
 
   useEffect(() => {
-    if (petId) {
-      petApi.getById(petId).then((res) => setPet(res.data.data)).catch(console.error);
+    if (selectedPetId) {
       fetchGroomings();
     }
-  }, [petId, fetchGroomings]);
+  }, [selectedPetId, fetchGroomings]);
 
   // Sort groomings from newest to oldest
   const sortedGroomings = [...groomings].sort(
@@ -110,19 +117,52 @@ export const GroomingPageContent: React.FC = () => {
     }
   };
 
+  // Show loading skeleton while fetching pets to avoid blank screen
+  if (petsLoading) {
+    return (
+      <div className="page-grooming animate-fade-in">
+        <div className="page-grooming__header-row">
+          <button className="page-grooming__back-btn" onClick={() => navigate('/')} aria-label="Voltar">
+            <span className="material-symbols-outlined">arrow_back</span>
+          </button>
+          <h2 className="page-grooming__title">Banho &amp; Tosa</h2>
+        </div>
+        <div className="page-grooming__empty-state">
+          <span className="material-symbols-outlined">hourglass_empty</span>
+          <p>Carregando seus pets...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="page-grooming animate-fade-in">
       {/* Header */}
       <div className="page-grooming__header-row">
         <button 
           className="page-grooming__back-btn" 
-          onClick={() => navigate(`/pets/${petId}`)}
-          aria-label="Voltar para o perfil do pet"
+          onClick={() => navigate('/')}
+          aria-label="Voltar para o painel"
           data-testid="btn-back-to-profile"
         >
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
-        <h2 className="page-grooming__title">Banho & Tosa - {pet?.name || 'Pet'}</h2>
+        <h2 className="page-grooming__title">Banho & Tosa</h2>
+      </div>
+      
+      <div className="page-grooming__pet-select-container" style={{ margin: '0 24px' }}>
+        <label htmlFor="pet-select" className="page-grooming__label">Selecione o Pet:</label>
+        <select
+          id="pet-select"
+          className="page-grooming__pet-select"
+          style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '1px solid var(--color-outline-variant)' }}
+          value={selectedPetId || ''}
+          onChange={(e) => setSelectedPetId(e.target.value)}
+          data-testid="input-pet-select"
+        >
+          <option value="" disabled>Selecione um Pet</option>
+          {pets.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
       </div>
 
       <div className="page-grooming__content-grid">

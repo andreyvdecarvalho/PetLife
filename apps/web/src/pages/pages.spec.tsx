@@ -9,12 +9,15 @@ import { MemoryRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
 
+import { useNotifications } from '../application/notification/useNotifications';
+
 vi.mock('../contexts/AuthContext');
 vi.mock('../components/molecules/Toast', () => ({
   useToast: () => ({
     showToast: vi.fn(),
   }),
 }));
+vi.mock('../application/notification/useNotifications');
 
 describe('Wrapper Pages', () => {
   beforeEach(() => {
@@ -29,6 +32,15 @@ describe('Wrapper Pages', () => {
       },
       logout: vi.fn(),
       loading: false,
+    });
+    (useNotifications as any).mockReturnValue({
+      notifications: [],
+      unreadCount: 0,
+      loading: false,
+      error: null,
+      fetchNotifications: vi.fn(),
+      markAsRead: vi.fn(),
+      markAllAsRead: vi.fn(),
     });
   });
 

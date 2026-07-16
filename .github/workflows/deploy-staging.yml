@@ -4,6 +4,9 @@ on:
   push:
     branches: [develop]
 
+permissions:
+  contents: read
+
 jobs:
   deploy-backend:
     name: Deploy Backend to Staging

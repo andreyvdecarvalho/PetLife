@@ -141,6 +141,6 @@ class GroomingControllerTest extends IntegrationTestBase {
                 .queryParam("type", "before")
                 .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.photos[0]").value("/uploads/grooming-" + grooming.getId() + "-before.jpg"));
+                .andExpect(jsonPath("$.data.photos[0]").value(org.hamcrest.Matchers.startsWith("data:image/jpeg;base64,")));
     }
 }

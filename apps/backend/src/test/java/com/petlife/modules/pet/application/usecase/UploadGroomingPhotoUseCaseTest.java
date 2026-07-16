@@ -77,7 +77,7 @@ class UploadGroomingPhotoUseCaseTest {
 
         assertNotNull(response);
         assertEquals(1, response.getPhotos().size());
-        assertTrue(response.getPhotos().get(0).contains("before"));
+        assertTrue(response.getPhotos().get(0).startsWith("data:image/jpeg;base64,"));
     }
 
     @Test
@@ -89,8 +89,8 @@ class UploadGroomingPhotoUseCaseTest {
         GroomingResponse response = useCase.execute(petId, groomingId, userId, file, "after");
 
         assertNotNull(response);
-        assertEquals(1, response.getPhotos().size());
-        assertTrue(response.getPhotos().get(0).contains("after"));
+        assertEquals(2, response.getPhotos().size());
+        assertTrue(response.getPhotos().get(1).startsWith("data:image/jpeg;base64,"));
     }
 
     @Test
@@ -105,7 +105,7 @@ class UploadGroomingPhotoUseCaseTest {
 
         assertNotNull(response);
         assertEquals(1, response.getPhotos().size());
-        assertTrue(response.getPhotos().get(0).contains("before"));
+        assertTrue(response.getPhotos().get(0).startsWith("data:image/jpeg;base64,"));
     }
 
     @Test
@@ -129,17 +129,4 @@ class UploadGroomingPhotoUseCaseTest {
         assertEquals("FILE_EMPTY", exception.getCode());
     }
 
-    @Test
-    void shouldThrowExceptionWhenPhotoLimitExceeded() {
-        grooming.getPhotos().add("other-photo-1.jpg");
-        grooming.getPhotos().add("other-photo-2.jpg");
-
-        when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
-        when(groomingRepositoryPort.findById(groomingId)).thenReturn(Optional.of(grooming));
-
-        BusinessException exception = assertThrows(BusinessException.class,
-                () -> useCase.execute(petId, groomingId, userId, file, "before"));
-
-        assertEquals("PHOTO_LIMIT_EXCEEDED", exception.getCode());
-    }
 }

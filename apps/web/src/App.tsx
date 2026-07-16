@@ -63,6 +63,14 @@ export const App: React.FC = () => {
               }
             />
             <Route
+              path="/grooming"
+              element={
+                <PrivateRoute>
+                  <GroomingPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="/pets/:petId/grooming"
               element={
                 <PrivateRoute>

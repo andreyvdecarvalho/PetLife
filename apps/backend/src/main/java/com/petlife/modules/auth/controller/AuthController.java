@@ -9,11 +9,13 @@ import com.petlife.modules.auth.application.usecase.RegisterUserUseCase;
 import com.petlife.modules.auth.application.usecase.ResetPasswordUseCase;
 import com.petlife.modules.auth.application.usecase.UpdateUserProfileUseCase;
 import com.petlife.modules.auth.application.usecase.UploadUserPhotoUseCase;
+import com.petlife.modules.auth.application.usecase.RefreshTokenUseCase;
 import com.petlife.modules.auth.dto.ForgotPasswordRequest;
 import com.petlife.modules.auth.dto.GoogleLoginRequest;
 import com.petlife.modules.auth.dto.LoginRequest;
 import com.petlife.modules.auth.dto.RegisterRequest;
 import com.petlife.modules.auth.dto.ResetPasswordRequest;
+import com.petlife.modules.auth.dto.RefreshTokenRequest;
 import com.petlife.modules.auth.dto.TokenResponse;
 import com.petlife.modules.auth.dto.UpdateProfileRequest;
 import com.petlife.modules.auth.dto.UserResponse;
@@ -57,6 +59,7 @@ public class AuthController {
     private final UpdateUserProfileUseCase updateUserProfileUseCase;
     private final UploadUserPhotoUseCase uploadUserPhotoUseCase;
     private final DeleteUserAccountUseCase deleteUserAccountUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -75,6 +78,12 @@ public class AuthController {
     @Operation(summary = "Autenticar ou cadastrar tutor via Google OAuth2")
     public ApiResponse<TokenResponse> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
         return ApiResponse.of(loginWithGoogleUseCase.execute(request));
+    }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "Renovar token de acesso usando refresh token")
+    public ApiResponse<TokenResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        return ApiResponse.of(refreshTokenUseCase.execute(request));
     }
 
     @PostMapping("/me/photo")

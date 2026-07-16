@@ -49,11 +49,7 @@ describe('vaccinationApi', () => {
     const file = new File(['proof'], 'proof.jpg', { type: 'image/jpeg' });
     const result = await vaccinationApi.uploadProof('pet-123', 'v-1', file);
     
-    expect(api.post).toHaveBeenCalledWith('/pets/pet-123/vaccines/v-1/proof', expect.any(FormData), {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    expect(api.post).toHaveBeenCalledWith('/pets/pet-123/vaccines/v-1/proof', expect.any(FormData));
     expect(result).toEqual({ id: 'v-1', proofUrl: 'http://proof' });
   });
 

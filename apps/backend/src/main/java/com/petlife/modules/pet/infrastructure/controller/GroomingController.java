@@ -3,6 +3,7 @@ package com.petlife.modules.pet.infrastructure.controller;
 import com.petlife.modules.pet.application.usecase.CreateGroomingUseCase;
 import com.petlife.modules.pet.application.usecase.ListGroomingsByPetUseCase;
 import com.petlife.modules.pet.application.usecase.UpdateGroomingUseCase;
+import com.petlife.modules.pet.application.usecase.DeleteGroomingUseCase;
 import com.petlife.modules.pet.application.usecase.UploadGroomingPhotoUseCase;
 import com.petlife.modules.pet.infrastructure.dto.CreateGroomingRequest;
 import com.petlife.modules.pet.infrastructure.dto.GroomingResponse;
@@ -37,6 +38,7 @@ public class GroomingController {
     private final CreateGroomingUseCase createGroomingUseCase;
     private final ListGroomingsByPetUseCase listGroomingsByPetUseCase;
     private final UpdateGroomingUseCase updateGroomingUseCase;
+    private final DeleteGroomingUseCase deleteGroomingUseCase;
     private final UploadGroomingPhotoUseCase uploadGroomingPhotoUseCase;
 
     @PostMapping("/pets/{petId}/groomings")
@@ -70,6 +72,17 @@ public class GroomingController {
         UUID userId = UUID.fromString(jwt.getSubject());
         GroomingResponse response = updateGroomingUseCase.execute(petId, id, userId, request);
         return ResponseEntity.ok(ApiResponse.of(response));
+    }
+
+    @org.springframework.web.bind.annotation.DeleteMapping("/pets/{petId}/groomings/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteGrooming(
+            @PathVariable UUID petId,
+            @PathVariable UUID id,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        deleteGroomingUseCase.execute(petId, id, userId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(

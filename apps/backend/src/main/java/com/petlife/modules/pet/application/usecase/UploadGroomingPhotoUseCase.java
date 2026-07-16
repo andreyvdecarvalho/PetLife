@@ -7,21 +7,29 @@ import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.GroomingResponse;
 import com.petlife.shared.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UploadGroomingPhotoUseCase {
 
     private final GroomingRepositoryPort groomingRepositoryPort;
     private final PetRepositoryPort petRepositoryPort;
 
+    /**
+     * Realiza o upload da foto antes/depois do banho e tosa.
+     * Em dev, armazena como Base64 Data URL. Em produção, usar AWS S3/MinIO.
+     */
     @Transactional
     public GroomingResponse execute(UUID petId, UUID groomingId, UUID userId,
             MultipartFile file, String type) {
@@ -63,22 +71,38 @@ public class UploadGroomingPhotoUseCase {
                 grooming.getPhotos() != null ? grooming.getPhotos()
                         : new ArrayList<>());
 
-        String targetUrl = "/uploads/grooming-" + groomingId + "-" + typeStr
-                + ".jpg";
+        try {
+            byte[] bytes = file.getBytes();
+            String mimeType = file.getContentType() != null ? file.getContentType() : "image/jpeg";
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            String dataUrl = "data:" + mimeType + ";base64," + base64;
 
-        // Remove existing photo of the same type if present to avoid duplicates
-        photos.removeIf(url -> url.contains("-" + typeStr + ".jpg"));
+            // Remove existing photo of the same type (identified by position: before=index 0, after=index 1)
+            if (typeStr.equals("before")) {
+                if (photos.isEmpty()) {
+                    photos.add(dataUrl);
+                } else {
+                    photos.set(0, dataUrl);
+                }
+            } else {
+                if (photos.size() < 1) {
+                    photos.add("");
+                }
+                if (photos.size() < 2) {
+                    photos.add(dataUrl);
+                } else {
+                    photos.set(1, dataUrl);
+                }
+            }
 
-        if (photos.size() >= 2) {
-            throw BusinessException.badRequest("PHOTO_LIMIT_EXCEEDED",
-                    "Grooming can have at most 2 photos");
+            grooming.setPhotos(photos);
+            Grooming saved = groomingRepositoryPort.save(grooming);
+            log.info("Foto {} do grooming {} atualizada ({} bytes)", typeStr, groomingId, bytes.length);
+            return mapToResponse(saved);
+        } catch (IOException e) {
+            log.error("Falha ao processar foto do grooming {}: {}", groomingId, e.getMessage());
+            throw BusinessException.badRequest("FILE_UPLOAD_FAILED", "Falha ao processar a foto.");
         }
-
-        photos.add(targetUrl);
-        grooming.setPhotos(photos);
-
-        Grooming saved = groomingRepositoryPort.save(grooming);
-        return mapToResponse(saved);
     }
 
     private GroomingResponse mapToResponse(Grooming grooming) {
