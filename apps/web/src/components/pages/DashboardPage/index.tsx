@@ -139,6 +139,37 @@ export const DashboardPageContent: React.FC = () => {
         </div>
       </section>
 
+      {/* Quick Actions */}
+      <section className="dashboard-page__quick-actions">
+        <h2 className="dashboard-page__section-title">Acesso Rápido</h2>
+        <div className="dashboard-page__actions-grid">
+          <button className="dashboard-page__action-card" onClick={() => navigate('/medications')} data-testid="btn-quick-medication">
+            <div className="dashboard-page__action-icon dashboard-page__action-icon--secondary"><span className="material-symbols-outlined">pill</span></div>
+            <div className="dashboard-page__action-text">
+              <span className="dashboard-page__action-title">Medicamentos</span>
+            </div>
+          </button>
+          <button className="dashboard-page__action-card" onClick={() => navigate('/grooming')} data-testid="btn-quick-grooming">
+            <div className="dashboard-page__action-icon dashboard-page__action-icon--tertiary"><span className="material-symbols-outlined">content_cut</span></div>
+            <div className="dashboard-page__action-text">
+              <span className="dashboard-page__action-title">Banho e Tosa</span>
+            </div>
+          </button>
+          <button className="dashboard-page__action-card" onClick={() => navigate('/veterinarians')} data-testid="btn-quick-vet">
+            <div className="dashboard-page__action-icon dashboard-page__action-icon--primary"><span className="material-symbols-outlined">medical_services</span></div>
+            <div className="dashboard-page__action-text">
+              <span className="dashboard-page__action-title">Veterinário</span>
+            </div>
+          </button>
+          <button className="dashboard-page__action-card" onClick={() => navigate('/appointments')} data-testid="btn-quick-appointments">
+            <div className="dashboard-page__action-icon dashboard-page__action-icon--surface"><span className="material-symbols-outlined">event</span></div>
+            <div className="dashboard-page__action-text">
+              <span className="dashboard-page__action-title">Agendamentos</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
       {/* Upcoming Appointments */}
       <section className="dashboard-page__appointments">
         <h2 className="dashboard-page__section-title">Próximos Compromissos</h2>

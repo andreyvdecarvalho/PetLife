@@ -19,22 +19,36 @@
   }
 }
 
-.appointments-page__back-btn {
+.appointments-page__back-btn, .appointments-page__add-btn {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full, 9999px);
-  color: var(--color-on-surface-variant);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s, color 0.2s;
 }
 
+.appointments-page__back-btn {
+  color: var(--color-on-surface-variant);
+}
+
+.appointments-page__add-btn {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
 .appointments-page__back-btn:hover {
   background-color: var(--color-surface-container-high);
   color: var(--color-on-surface);
+}
+
+.appointments-page__add-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .appointments-page__title {
@@ -43,10 +57,6 @@
   font-weight: 700;
   color: var(--color-primary);
   margin: 0;
-}
-
-.appointments-page__spacer {
-  width: 40px; /* balances the back button size for center alignment */
 }
 
 /* Segmented Control / Tabs */
