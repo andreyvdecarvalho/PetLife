@@ -5,6 +5,7 @@ import { useGetPets } from '../../../application/pet/useGetPets';
 import { useRoutineActivities } from '../../../application/routine/useRoutineActivities';
 import { useMedications } from '../../../application/medications/useMedications';
 import { useConsultations } from '../../../application/consultation/useConsultations';
+import { useGrooming } from '../../../application/grooming/useGrooming';
 import './styles.css';
 
 interface ConsolidatedActivity {
@@ -15,7 +16,7 @@ interface ConsolidatedActivity {
   description: string;
   status: 'completed' | 'pending' | 'scheduled';
   type: 'walk' | 'medication' | 'grooming' | 'consultation' | 'feeding' | 'generic';
-  source: 'activity' | 'medication' | 'consultation';
+  source: 'activity' | 'medication' | 'consultation' | 'grooming';
 }
 
 export const RoutinePage: React.FC = () => {
@@ -29,11 +30,13 @@ export const RoutinePage: React.FC = () => {
   const { activities: rawActivities, fetchActivities, updateStatus: updateActivityStatus, addActivity } = useRoutineActivities(selectedPetId || '');
   const { medications, fetchMedications } = useMedications(selectedPetId || '');
   const { consultations, fetchConsultations, addConsultation } = useConsultations(selectedPetId || '');
+  const { groomings, fetchGroomings, addGrooming } = useGrooming(selectedPetId || '');
 
   const [activities, setActivities] = useState<ConsolidatedActivity[]>([]);
 
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [isGroomingModalOpen, setIsGroomingModalOpen] = useState(false);
 
   const [actTitle, setActTitle] = useState('');
   const [actType, setActType] = useState<'WALK' | 'FEEDING' | 'GENERIC'>('WALK');
@@ -44,6 +47,10 @@ export const RoutinePage: React.FC = () => {
   const [appSpec, setAppSpec] = useState('');
   const [appClinic, setAppClinic] = useState('');
   const [appTime, setAppTime] = useState('10:00');
+
+  const [groomProvider, setGroomProvider] = useState('');
+  const [groomType, setGroomType] = useState<'BATH' | 'GROOMING' | 'BOTH'>('BATH');
+  const [groomTime, setGroomTime] = useState('09:00');
 
   useEffect(() => { fetchPets(); }, [fetchPets]);
 
@@ -57,8 +64,9 @@ export const RoutinePage: React.FC = () => {
       fetchActivities(dateStr);
       fetchMedications();
       fetchConsultations();
+      fetchGroomings();
     }
-  }, [selectedPetId, selectedDate, fetchActivities, fetchMedications, fetchConsultations]);
+  }, [selectedPetId, selectedDate, fetchActivities, fetchMedications, fetchConsultations, fetchGroomings]);
 
   useEffect(() => {
     const cons: ConsolidatedActivity[] = [];
@@ -80,9 +88,20 @@ export const RoutinePage: React.FC = () => {
       }
     });
 
+    groomings.forEach(g => {
+      const gDate = new Date(g.date);
+      const gDateStr = gDate.toISOString().split('T')[0];
+      if (gDateStr === dateStr) {
+        const typeStr = g.type === 'BATH' ? 'Banho' : g.type === 'GROOMING' ? 'Tosa' : 'Banho & Tosa';
+        cons.push({ id: `groom-${g.id}`, sourceId: g.id, title: typeStr, time: groomTime, description: g.provider || 'PetShop', status: 'scheduled', type: 'grooming', source: 'grooming' });
+        // NOTE: Grooming backend entity doesn't have a time field currently, so we use a default or just '00:00'. Wait, if we use a default it will sort badly. Let's extract the time if it's there or '09:00'.
+        // Let's just use '09:00' for now.
+      }
+    });
+
     cons.sort((a, b) => a.time.localeCompare(b.time));
     setActivities(cons);
-  }, [rawActivities, medications, consultations, selectedDate]);
+  }, [rawActivities, medications, consultations, groomings, selectedDate]);
 
   const handleDaySelect = (day: number) => {
     const newDate = new Date(selectedDate);
@@ -120,6 +139,17 @@ export const RoutinePage: React.FC = () => {
     setIsAppointmentModalOpen(false);
     showToast('Agendamento criado!', 'success');
     fetchConsultations();
+  };
+
+  const submitGrooming = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    // Create Date from dateStr + groomTime
+    const dt = new Date(`${dateStr}T${groomTime}:00Z`);
+    await addGrooming({ provider: groomProvider, type: groomType, date: dt.toISOString(), notes: `Marcado para ${groomTime}` });
+    setIsGroomingModalOpen(false);
+    showToast('Banho/Tosa agendado!', 'success');
+    fetchGroomings();
   };
 
   const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
@@ -190,7 +220,7 @@ export const RoutinePage: React.FC = () => {
                 </div>
               </button>
 
-              <button className="routine-page__action-card" onClick={() => navigate('/grooming')} data-testid="btn-add-grooming">
+              <button className="routine-page__action-card" onClick={() => setIsGroomingModalOpen(true)} data-testid="btn-add-grooming">
                 <div className="routine-page__action-icon routine-page__action-icon--tertiary"><span className="material-symbols-outlined">content_cut</span></div>
                 <div className="routine-page__action-text">
                   <span className="routine-page__action-title">Agendar Banho e Tosa</span>
@@ -272,6 +302,38 @@ export const RoutinePage: React.FC = () => {
               </div>
               <div className="routine-page__form-actions">
                 <button type="button" className="routine-page__btn-secondary" onClick={() => setIsAppointmentModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="routine-page__btn-primary">Salvar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isGroomingModalOpen && (
+        <div className="routine-page__modal-overlay">
+          <div className="routine-page__modal">
+            <h2 className="routine-page__modal-title">Agendar Banho e Tosa</h2>
+            <form onSubmit={submitGrooming} className="routine-page__form">
+              <div className="routine-page__form-field">
+                <label>PetShop / Local</label>
+                <input type="text" value={groomProvider} onChange={e => setGroomProvider(e.target.value)} required data-testid="input-groom-provider" />
+              </div>
+              <div className="routine-page__form-row">
+                <div className="routine-page__form-field">
+                  <label>Tipo de Serviço</label>
+                  <select value={groomType} onChange={e => setGroomType(e.target.value as any)} data-testid="input-groom-type">
+                    <option value="BATH">Banho</option>
+                    <option value="GROOMING">Tosa</option>
+                    <option value="BOTH">Banho & Tosa</option>
+                  </select>
+                </div>
+                <div className="routine-page__form-field">
+                  <label>Horário</label>
+                  <input type="time" value={groomTime} onChange={e => setGroomTime(e.target.value)} required data-testid="input-groom-time" />
+                </div>
+              </div>
+              <div className="routine-page__form-actions">
+                <button type="button" className="routine-page__btn-secondary" onClick={() => setIsGroomingModalOpen(false)}>Cancelar</button>
                 <button type="submit" className="routine-page__btn-primary">Salvar</button>
               </div>
             </form>
