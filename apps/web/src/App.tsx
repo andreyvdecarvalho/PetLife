@@ -22,12 +22,22 @@ import { VetDetailPage } from './pages/VetDetailPage';
 import { VetFavoritesPage } from './pages/vet-favorites/VetFavoritesPage';
 import { VetProfilePage } from './pages/vet-profile/VetProfilePage';
 import { PrivateRoute } from './components/atoms/PrivateRoute';
+import { useAuth } from './contexts/AuthContext';
+import { usePushNotifications } from './application/notification/usePushNotifications';
 import './index.css';
+
+const PushNotificationManager: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  usePushNotifications(isAuthenticated);
+  return null;
+};
+
 
 export const App: React.FC = () => {
   return (
     <ToastProvider>
       <AuthProvider>
+        <PushNotificationManager />
         <BrowserRouter>
           <Routes>
             {/* Rotas Pǧblicas */}
