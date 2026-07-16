@@ -16,6 +16,9 @@ describe('useExportMedicalPass Hook', () => {
     // Safe mock for URL operations
     window.URL.createObjectURL = vi.fn().mockReturnValue('mock-url');
     window.URL.revokeObjectURL = vi.fn();
+    
+    // Prevent JSDom from navigating when clicking the download link
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   });
 
   afterEach(() => {

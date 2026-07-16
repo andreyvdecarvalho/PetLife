@@ -11,6 +11,7 @@ Este diretório contém os registros de decisões arquiteturais do projeto **Pet
 | [ADR-003](ADR-003-spring-boot-architecture.md) | [Arquitetura do Backend com Spring Boot e Boas Práticas](ADR-003-spring-boot-architecture.md) | **Aprovado** | 30/06/2026 |
 | [ADR-004](ADR-004-jwt-rs256-security.md) | [Estrutura de Segurança de Autenticação com JWT RS256 e BCrypt](ADR-004-jwt-rs256-security.md) | **Aprovado** | 30/06/2026 |
 | [ADR-005](ADR-005-lgpd-data-compliance.md) | [Conformidade com LGPD — Estratégia de Cascade Delete vs Soft-Delete](ADR-005-lgpd-data-compliance.md) | **Aprovado** | 30/06/2026 |
+| [ADR-006](ADR-006-flyway-bean-post-processor.md) | [Abordagem de Inicialização do Flyway via BeanPostProcessor](ADR-006-flyway-bean-post-processor.md) | **Aceito** | 15/07/2026 |
 
 ---
 Para criar uma nova decisão arquitetural, copie o formato padrão de seções (Status, Data, Contexto, Decisão, Consequências) e incremente o ID correspondente.
