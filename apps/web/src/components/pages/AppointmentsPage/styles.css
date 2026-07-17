@@ -53,8 +53,8 @@
 
 .appointments-page__title {
   font-family: var(--font-headline);
-  font-size: var(--text-headline-md-size, 24px);
-  font-weight: 700;
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
   margin: 0;
 }

@@ -83,18 +83,20 @@
 
 .pet-profile__title {
   font-family: var(--font-headline);
-  font-size: var(--text-headline-lg-mobile-size, 28px);
-  font-weight: var(--text-headline-lg-mobile-weight, 700);
-  line-height: var(--text-headline-lg-mobile-line-height, 36px);
-  color: var(--color-on-surface);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  color: var(--color-primary);
   margin: 0;
 }
 
 @media (min-width: 768px) {
   .pet-profile__title {
-    font-size: var(--text-headline-lg-size, 32px);
-    line-height: var(--text-headline-lg-line-height, 40px);
-  }
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  color: var(--color-primary);
+  margin: 0;
+}
 }
 
 /* Grid Layout */

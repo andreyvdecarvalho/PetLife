@@ -28,11 +28,11 @@
 }
 
 .page-grooming__title {
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  color: var(--color-primary);
   margin: 0;
-  font-family: var(--font-title, sans-serif);
-  font-size: var(--text-title-lg-size, 24px);
-  font-weight: var(--text-title-lg-weight, 700);
-  color: var(--color-on-surface, #1d1b20);
 }
 
 .page-grooming__content-grid {

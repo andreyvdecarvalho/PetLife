@@ -32,9 +32,9 @@
 }
 
 .pet-form-page__title {
-  font-family: var(--font-primary);
-  font-size: 24px;
-  font-weight: 700;
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
   margin: 0;
 }

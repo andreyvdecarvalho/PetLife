@@ -33,9 +33,10 @@
 }
 
 .vaccines-page__title {
-  font-size: 24px;
-  font-family: var(--font-primary);
-  color: var(--color-on-surface);
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  color: var(--color-primary);
   margin: 0;
 }
 

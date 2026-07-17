@@ -12,13 +12,10 @@
 
 .memories-page__title {
   font-family: var(--font-headline);
-  font-size: var(--text-display-lg-size, 48px);
-  font-weight: var(--text-display-lg-weight, 700);
-  line-height: var(--text-display-lg-line-height, 56px);
-  letter-spacing: var(--text-display-lg-letter-spacing, -0.02em);
-  color: var(--color-on-surface);
-  margin-bottom: var(--space-xs, 8px);
-  margin-top: 0;
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  color: var(--color-primary);
+  margin: 0;
 }
 
 .memories-page__subtitle {
