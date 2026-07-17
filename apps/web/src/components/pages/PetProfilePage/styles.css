@@ -11,12 +11,22 @@
   gap: var(--space-sm, 16px);
   margin-bottom: var(--space-xs, 8px);
   text-align: left;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  gap: 16px;
 }
 
 @media (min-width: 768px) {
   .pet-profile__header-row {
     margin-bottom: var(--space-md, 24px);
-  }
+  
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  gap: 16px;
+}
 }
 
 .pet-profile__header-actions {
@@ -74,6 +84,11 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s, color 0.2s;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .pet-profile__back-btn:hover {
@@ -87,11 +102,12 @@
   font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
-  margin-bottom: var(--space-md);
+  flex: 1;
+  
   text-align: left;
-  border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: var(--space-xs);
-  width: 100%;
+  
+  
+  
 }
 
 @media (min-width: 768px) {
@@ -108,11 +124,12 @@
   font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
-  margin-bottom: var(--space-md);
+  flex: 1;
+  
   text-align: left;
-  border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: var(--space-xs);
-  width: 100%;
+  
+  
+  
 }
 
 @media (min-width: 768px) {

@@ -114,12 +114,22 @@
   box-shadow: var(--shadow-ambient-sm);
   transition: background-color 0.2s, color 0.2s, transform 0.15s;
   width: 100%;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 @media (min-width: 576px) {
   .memories-page__add-photo-btn {
     width: auto;
-  }
+  
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
+}
 }
 
 .memories-page__add-photo-btn:hover {

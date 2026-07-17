@@ -9,6 +9,11 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  gap: 16px;
 }
 
 .page-grooming__back-btn {
@@ -21,6 +26,11 @@
   justify-content: center;
   padding: 8px;
   border-radius: 50%;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .page-grooming__back-btn:hover {
@@ -33,11 +43,12 @@
   font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
-  margin-bottom: var(--space-md);
+  flex: 1;
+  
   text-align: left;
-  border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: var(--space-xs);
-  width: 100%;
+  
+  
+  
 }
 
 @media (min-width: 768px) {

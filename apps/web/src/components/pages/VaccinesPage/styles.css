@@ -14,6 +14,11 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  gap: 16px;
 }
 
 .vaccines-page__back-btn,
@@ -30,11 +35,21 @@
   box-shadow: var(--shadow-sm);
   color: var(--color-primary);
   transition: all 0.2s ease;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .vaccines-page__add-btn {
   background: var(--color-primary);
   color: var(--color-on-primary);
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .vaccines-page__title {
@@ -43,11 +58,12 @@
   font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
-  margin-bottom: var(--space-md);
+  flex: 1;
+  
   text-align: left;
-  border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: var(--space-xs);
-  width: 100%;
+  
+  
+  
 }
 
 @media (min-width: 768px) {
@@ -200,28 +216,10 @@
   color: var(--color-primary);
 }
 
-.vaccines-page__form-field {
+.vaccines-page__form {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--space-sm);
-}
-
-.vaccines-page__form-field label {
-  font-size: var(--text-label-sm-size);
-  color: var(--color-on-surface-variant);
-  margin-bottom: var(--space-base);
-  font-weight: 600;
-}
-
-.vaccines-page__form-field input,
-.vaccines-page__form-field select,
-.vaccines-page__form-field textarea {
-  padding: 0.75rem;
-  border-radius: var(--radius-default);
-  border: 1px solid var(--color-outline-variant);
-  background-color: var(--color-surface-container);
-  color: var(--color-on-surface);
-  font-family: var(--font-body);
+  gap: var(--space-md);
 }
 
 .vaccines-page__form-row {
