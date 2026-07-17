@@ -1,35 +1,58 @@
 .pets-page {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
 }
 
 .pets-page__header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 32px;
+  padding: 0 var(--space-margin-mobile);
+  height: 4rem;
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
-.pets-page__title {
-  font-family: var(--font-primary);
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--color-on-surface);
-  margin: 0 0 8px 0;
-}
-
-.pets-page__subtitle {
-  font-family: var(--font-secondary);
-  font-size: 16px;
-  color: var(--color-on-surface-variant);
-  margin: 0;
+.pets-page__back-btn, .pets-page__add-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius-full);
 }
 
 .pets-page__add-btn {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.pets-page__title {
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.pets-page__content {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 .pets-page__loading,

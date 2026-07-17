@@ -39,16 +39,15 @@ export const PetsPageContent: React.FC = () => {
 
   return (
     <div className="pets-page animate-fade-in">
-      <div className="pets-page__header">
-        <div>
-          <h1 className="pets-page__title">Meus Pets</h1>
-          <p className="pets-page__subtitle">Gerencie seus pets cadastrados.</p>
-        </div>
-        <Button onClick={() => navigate('/pets/new')} className="pets-page__add-btn">
-          <span className="material-symbols-outlined">add</span>
-          Novo Pet
-        </Button>
-      </div>
+      <header className="pets-page__header">
+        <button className="pets-page__back-btn" onClick={() => navigate('/')} data-testid="btn-back">
+          <span className="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 className="pets-page__title">Meus Pets</h1>
+        <button className="pets-page__add-btn" onClick={() => navigate('/pets/new')} aria-label="Adicionar pet">
+          <span className="material-symbols-outlined icon-fill">add</span>
+        </button>
+      </header>
 
       <div className="pets-page__content">
         {isLoading && <p className="pets-page__loading">Carregando pets...</p>}
