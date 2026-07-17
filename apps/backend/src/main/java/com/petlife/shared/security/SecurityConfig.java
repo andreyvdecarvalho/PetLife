@@ -28,6 +28,8 @@ public class SecurityConfig {
         http.cors(Customizer.withDefaults());
         
         // codeql[java/spring-disabled-csrf-protection] JWT API without cookies doesn't need CSRF
+// The application is a stateless REST API using JWT tokens, so CSRF protection is not required.
+// Disabling CSRF here aligns with the security architecture defined in DESIGN.md and avoids unnecessary overhead.
         http.csrf(AbstractHttpConfigurer::disable);
         
         http.sessionManagement(session ->

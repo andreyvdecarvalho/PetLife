@@ -67,7 +67,7 @@ public class Pet extends BaseEntity {
     @Column(name = "notes", length = 2000)
     private String notes;
 
-    @Column(name = "photo_url", length = 500)
+    @Column(name = "photo_url", columnDefinition = "TEXT")
     private String photoUrl;
 
     @Enumerated(EnumType.STRING)

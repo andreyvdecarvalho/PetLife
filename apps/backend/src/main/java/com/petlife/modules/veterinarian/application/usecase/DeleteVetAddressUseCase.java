@@ -20,10 +20,14 @@ public class DeleteVetAddressUseCase {
     @Transactional
     public void execute(UUID userId, UUID addressId) {
         Veterinarian vet = veterinarianRepository.findByUserId(userId)
-                .orElseThrow(() -> BusinessException.notFound("VET_NOT_FOUND", "Perfil de veterinário não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound(
+                        "VET_NOT_FOUND",
+                        "Perfil de veterinário não encontrado."));
 
         VetAddress address = vetAddressRepository.findByIdAndVeterinarianId(addressId, vet.getId())
-                .orElseThrow(() -> BusinessException.notFound("ADDRESS_NOT_FOUND", "Endereço não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound(
+                        "ADDRESS_NOT_FOUND",
+                        "Endereço não encontrado."));
 
         vetAddressRepository.delete(address);
     }

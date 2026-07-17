@@ -16,7 +16,9 @@ public class GetMyVetProfileUseCase {
 
     public VeterinarianResponse execute(UUID userId) {
         Veterinarian vet = veterinarianRepository.findByUserId(userId)
-                .orElseThrow(() -> BusinessException.notFound("VET_NOT_FOUND", "Perfil de veterinário não encontrado."));
+        .orElseThrow(() -> BusinessException.notFound(
+                "VET_NOT_FOUND",
+                "Perfil de veterinário não encontrado."));
         return VeterinarianResponse.fromEntity(vet);
     }
 }
