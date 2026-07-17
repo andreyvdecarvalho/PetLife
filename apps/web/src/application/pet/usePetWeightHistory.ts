@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { petApi } from '../../infrastructure/http/pet.api';
 import type { WeightRecordResponse } from '../../infrastructure/dto/WeightRecordResponse';
 
@@ -11,7 +11,7 @@ export function usePetWeightHistory(petId: string) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchHistory = () => {
+  const fetchHistory = useCallback(() => {
     setLoading(true);
     petApi
       .getWeightHistory(petId)
@@ -25,11 +25,11 @@ export function usePetWeightHistory(petId: string) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [petId]);
 
   useEffect(() => {
     fetchHistory();
-  }, [petId]);
+  }, [fetchHistory]);
 
   const deleteWeight = async (weightId: string) => {
     try {

@@ -11,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.List;
 
@@ -62,11 +63,12 @@ public class GlobalExceptionHandler {
                         "INTERNAL_SERVER_ERROR", "Ocorreu um erro interno no servidor", List.of())));
     }
 
-    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
-    public ResponseEntity<ErrorResponse> handleMaxSizeException(org.springframework.web.multipart.MaxUploadSizeExceededException exc) {
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxSizeException(MaxUploadSizeExceededException exc) {
         log.warn("Max upload size exceeded: {}", exc.getMessage());
         return ResponseEntity
                 .status(413)
-                .body(new ErrorResponse(new ErrorDetail("PAYLOAD_TOO_LARGE", "O arquivo enviado é muito grande", List.of())));
+                .body(new ErrorResponse(new ErrorDetail("PAYLOAD_TOO_LARGE",
+                        "O arquivo enviado é muito grande", List.of())));
     }
 }

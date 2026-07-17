@@ -34,10 +34,13 @@ public class UpdateWeightRecordUseCase {
         }
 
         WeightRecord weightRecord = findWeightRecordPort.findById(weightId)
-                .orElseThrow(() -> BusinessException.notFound("WEIGHT_RECORD_NOT_FOUND", "Registro de peso não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound(
+                        "WEIGHT_RECORD_NOT_FOUND", "Registro de peso não encontrado."));
 
         if (!weightRecord.getPet().getId().equals(petId)) {
-            throw new BusinessException("WEIGHT_RECORD_BELONGS_TO_ANOTHER_PET", "Este registro de peso não pertence ao pet informado.", org.springframework.http.HttpStatus.BAD_REQUEST);
+            throw new BusinessException("WEIGHT_RECORD_BELONGS_TO_ANOTHER_PET",
+                    "Este registro de peso não pertence ao pet informado.",
+                    org.springframework.http.HttpStatus.BAD_REQUEST);
         }
 
         weightRecord.setWeightKg(request.weightKg());
