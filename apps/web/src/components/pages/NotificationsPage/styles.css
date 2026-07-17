@@ -24,15 +24,22 @@
 
 .notifications-page__title {
   font-family: var(--font-headline);
-  font-size: var(--text-headline-md-size);
-  font-weight: var(--text-headline-md-weight);
+  font-size: var(--text-headline-lg-mobile-size);
+  font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-md);
   text-align: left;
   border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: 12px;
+  padding-bottom: var(--space-xs);
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .notifications-page__title {
+    font-size: var(--text-headline-lg-size);
+    font-weight: var(--text-headline-lg-weight);
+  }
 }
 
 .notifications-page__read-all-btn {
