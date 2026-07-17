@@ -91,3 +91,6 @@ jwt_keys/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Logs
+*.log
