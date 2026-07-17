@@ -1,0 +1,95 @@
+.pets-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pets-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.pets-page__title {
+  font-family: var(--font-primary);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  margin: 0 0 8px 0;
+}
+
+.pets-page__subtitle {
+  font-family: var(--font-secondary);
+  font-size: 16px;
+  color: var(--color-on-surface-variant);
+  margin: 0;
+}
+
+.pets-page__add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pets-page__loading,
+.pets-page__empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-secondary);
+}
+
+.pets-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.pets-page__card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--color-surface-container-lowest);
+  padding: 16px;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+}
+
+.pets-page__card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.pets-page__action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.pets-page__action-btn--delete {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.pets-page__action-btn--delete:hover {
+  background-color: var(--color-error-container);
+  color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+  .pets-page__header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .pets-page__add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

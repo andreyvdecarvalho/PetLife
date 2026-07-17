@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useCreatePet } from '../../../application/pet/useCreatePet';
 import { useUpdatePet } from '../../../application/pet/useUpdatePet';
+import { useDeletePet } from '../../../application/pet/useDeletePet';
 import type { Pet, PetSex, PetSize, PetSpecies } from '../../../domain/pet/Pet';
 import { compressImage } from '../../../utils/imageCompressor';
 import { FormField } from '../../molecules/FormField';
@@ -46,9 +47,12 @@ const BREED_SUGGESTIONS: Record<string, string[]> = {
 export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) => {
   const { createPet, loading: createLoading, error: createError } = useCreatePet();
   const { updatePet, loading: updateLoading, error: updateError } = useUpdatePet();
+  const { deletePet, loading: deleteLoading, error: deleteError } = useDeletePet();
 
-  const loading = createLoading || updateLoading;
-  const apiError = createError || updateError;
+  const loading = createLoading || updateLoading || deleteLoading;
+  const apiError = createError || updateError || deleteError;
+
+  const isSubmitting = useRef(false);
 
   // Campos do formulário
   const [name, setName] = useState('');
@@ -147,7 +151,10 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting.current) return;
     if (!validate()) return;
+    
+    isSubmitting.current = true;
 
     try {
       const data = {
@@ -165,11 +172,7 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
       };
 
       if (pet) {
-        await updatePet(pet.id, data);
-        if (photoFile) {
-          const { petApi } = await import('../../../infrastructure/http/pet.api');
-          await petApi.uploadPhoto(pet.id, photoFile);
-        }
+        await updatePet(pet.id, data, photoFile || undefined);
       } else {
         await createPet(data, photoFile || undefined);
       }
@@ -177,6 +180,23 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
       onSuccess();
     } catch (err) {
       // Erro tratado pelos hooks e exposto via apiError
+    } finally {
+      isSubmitting.current = false;
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!pet) return;
+    if (!window.confirm('Tem certeza que deseja excluir este pet? Esta ação não pode ser desfeita.')) return;
+    
+    isSubmitting.current = true;
+    try {
+      await deletePet(pet.id);
+      onSuccess(); // Triggers navigation back and success message
+    } catch (err) {
+      // Error handled by hook
+    } finally {
+      isSubmitting.current = false;
     }
   };
 
@@ -379,6 +399,16 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
 
       {/* Ações */}
       <div className="organism-pet-form__actions">
+        {pet && (
+          <Button 
+            type="button" 
+            variant="danger" 
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            Excluir Pet
+          </Button>
+        )}
         <Button 
           type="button" 
           variant="outline" 

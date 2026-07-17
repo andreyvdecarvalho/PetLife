@@ -61,4 +61,12 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(new ErrorDetail(
                         "INTERNAL_SERVER_ERROR", "Ocorreu um erro interno no servidor", List.of())));
     }
+
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxSizeException(org.springframework.web.multipart.MaxUploadSizeExceededException exc) {
+        log.warn("Max upload size exceeded: {}", exc.getMessage());
+        return ResponseEntity
+                .status(413)
+                .body(new ErrorResponse(new ErrorDetail("PAYLOAD_TOO_LARGE", "O arquivo enviado é muito grande", List.of())));
+    }
 }

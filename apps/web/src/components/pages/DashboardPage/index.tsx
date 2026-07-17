@@ -5,8 +5,7 @@ import { useToast } from '../../molecules/Toast';
 import { PetCard } from '../../molecules/PetCard';
 import { WeightChart } from '../../organisms/WeightChart';
 import { useGetPets } from '../../../application/pet/useGetPets';
-import type { Pet, PetStatus } from '../../../domain/pet/Pet';
-import { useUpdatePetStatus } from '../../../application/pet/useUpdatePetStatus';
+import type { Pet } from '../../../domain/pet/Pet';
 import './styles.css';
 import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 
@@ -25,18 +24,6 @@ export const DashboardPageContent: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const { pets, isLoading, fetchPets } = useGetPets();
-  const { updatePetStatus, loading: statusLoading, error: statusError } = useUpdatePetStatus();
-  const handleToggleStatus = async (pet: Pet) => {
-    const newStatus: PetStatus = pet.status === 'ACTIVE' ? 'ARCHIVED' : 'ACTIVE';
-    try {
-      await updatePetStatus(pet.id, newStatus);
-      // Refresh list after status change
-      fetchPets();
-    } catch (e) {
-      // error handling is already inside hook (sets error state)
-      console.error(e);
-    }
-  };
   const [activePetId, setActivePetId] = useState<string | null>(null);
 
   // Busca a lista de pets na montagem do componente
@@ -118,7 +105,6 @@ export const DashboardPageContent: React.FC = () => {
               pet={pet}
               isActive={activePetId === pet.id}
               onClick={(p) => setActivePetId(p.id)}
-              onToggleStatus={handleToggleStatus}
             />
           ))}
           
