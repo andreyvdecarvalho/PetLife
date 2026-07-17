@@ -57,6 +57,11 @@
   font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
   margin: 0;
+  margin-bottom: 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: 12px;
+  width: 100%;
 }
 
 /* Segmented Control / Tabs */

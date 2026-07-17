@@ -5,6 +5,11 @@
   font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
   margin: 0;
+  margin-bottom: 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: 12px;
+  width: 100%;
 }
 .vet-profile-page__error { color: var(--color-error); }
 .vet-profile-page__section { margin-bottom: 2rem; padding: 1.5rem; border: 1px solid var(--color-surface-variant, #ccc); border-radius: var(--radius-2xl); background-color: var(--color-surface, #fff); }

@@ -17,6 +17,11 @@
   position: sticky;
   top: 0;
   z-index: 50;
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .medications-page__back-btn, .medications-page__add-btn {
@@ -42,6 +47,12 @@
   font-size: var(--text-headline-md-size);
   font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
+  margin: 0;
+  margin-bottom: 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: 12px;
+  width: 100%;
 }
 
 .medications-page__main {

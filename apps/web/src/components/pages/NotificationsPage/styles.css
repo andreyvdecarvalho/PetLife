@@ -15,6 +15,11 @@
   margin-bottom: 24px;
   border-bottom: 1px solid var(--color-outline-variant, #dcc1b4);
   padding-bottom: 16px;
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .notifications-page__title {
@@ -23,6 +28,11 @@
   font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
   margin: 0;
+  margin-bottom: 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: 12px;
+  width: 100%;
 }
 
 .notifications-page__read-all-btn {

@@ -8,7 +8,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div style={{ maxWidth: '600px', margin: '0 auto', marginBottom: '24px' }}>
+      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', marginBottom: '24px' }}>
         <div
           style={{
             display: 'flex',

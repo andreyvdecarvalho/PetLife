@@ -9,6 +9,11 @@
 
 .vet-search-page__header {
   margin-bottom: var(--spacing-sm);
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .vet-search-page__header h2 {

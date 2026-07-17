@@ -74,7 +74,7 @@ export const MemoriesPageContent: React.FC = () => {
     <div className="memories-page animate-fade-in">
       {/* Header Section */}
       <section className="memories-page__header">
-        <h2 className="memories-page__title">Diary</h2>
+        <h2 className="memories-page__title">Diário</h2>
         <p className="memories-page__subtitle">Capture os momentos inesquecíveis da vida do seu pet.</p>
       </section>
 

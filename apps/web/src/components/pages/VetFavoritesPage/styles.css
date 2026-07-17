@@ -5,6 +5,11 @@
   font-weight: var(--text-headline-md-weight);
   color: var(--color-primary);
   margin: 0;
+  margin-bottom: 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: 12px;
+  width: 100%;
 }
 .vet-favorites-page__error { color: var(--color-error); margin-bottom: 1rem; }
 .vet-favorites-page__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
