@@ -7,6 +7,7 @@ import { compressImage } from '../../../utils/imageCompressor';
 import { FormField } from '../../molecules/FormField';
 import { UploadButton } from '../../molecules/UploadButton';
 import { Button } from '../../atoms/Button';
+import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 import './styles.css';
 
 interface PetFormProps {
@@ -72,6 +73,12 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);
   
+  // Histórico de peso
+  const { data: weightHistory, loading: weightLoading, deleteWeight, updateWeight } = usePetWeightHistory(pet?.id || '');
+  const [editingWeightId, setEditingWeightId] = useState<string | null>(null);
+  const [editWeightValue, setEditWeightValue] = useState<string>('');
+  const [editWeightDate, setEditWeightDate] = useState<string>('');
+
   // Validações
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -396,6 +403,120 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
           data-testid="input-observacoes-pet"
         />
       </div>
+
+      {/* Histórico de Peso */}
+      {pet && (
+        <div className="organism-pet-form__weight-history">
+          <h3 className="organism-pet-form__subtitle">Histórico de Peso</h3>
+          {weightLoading ? (
+            <p className="organism-pet-form__weight-loading">Carregando histórico...</p>
+          ) : weightHistory.length === 0 ? (
+            <p className="organism-pet-form__weight-empty">Nenhum registro de peso.</p>
+          ) : (
+            <div className="organism-pet-form__weight-list">
+              {weightHistory.map(record => (
+                <div key={record.id} className="organism-pet-form__weight-item">
+                  {editingWeightId === record.id ? (
+                    <div className="organism-pet-form__weight-edit-row">
+                      <input 
+                        type="date" 
+                        value={editWeightDate}
+                        onChange={e => setEditWeightDate(e.target.value)}
+                        className="atom-input"
+                      />
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <input 
+                          type="number" 
+                          step="0.01"
+                          value={editWeightValue}
+                          onChange={e => setEditWeightValue(e.target.value)}
+                          className="atom-input"
+                          style={{ width: '80px' }}
+                        />
+                        <span style={{ fontSize: '14px', color: 'var(--color-on-surface-variant)' }}>kg</span>
+                      </div>
+                      <div className="organism-pet-form__weight-actions">
+                        <button 
+                          type="button" 
+                          onClick={async () => {
+                            try {
+                              if (!editWeightValue || isNaN(Number(editWeightValue))) {
+                                alert('Peso inválido.');
+                                return;
+                              }
+                              if (!editWeightDate) {
+                                alert('Data inválida.');
+                                return;
+                              }
+                              await updateWeight(record.id, Number(editWeightValue), new Date(editWeightDate).toISOString());
+                              setEditingWeightId(null);
+                            } catch (err: any) {
+                              alert(err.message);
+                            }
+                          }}
+                          className="organism-pet-form__icon-btn success"
+                          title="Salvar"
+                        >
+                          <span className="material-symbols-outlined">check</span>
+                        </button>
+                        <button 
+                          type="button" 
+                          onClick={() => setEditingWeightId(null)}
+                          className="organism-pet-form__icon-btn cancel"
+                          title="Cancelar"
+                        >
+                          <span className="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="organism-pet-form__weight-info">
+                        <span className="organism-pet-form__weight-date">
+                          {new Date(record.recordedAt).toLocaleDateString('pt-BR')}
+                        </span>
+                        <span className="organism-pet-form__weight-value">
+                          {record.weightKg} kg
+                        </span>
+                      </div>
+                      <div className="organism-pet-form__weight-actions">
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            setEditingWeightId(record.id);
+                            setEditWeightValue(String(record.weightKg));
+                            setEditWeightDate(record.recordedAt.split('T')[0]);
+                          }}
+                          className="organism-pet-form__icon-btn edit"
+                          title="Editar"
+                        >
+                          <span className="material-symbols-outlined">edit</span>
+                        </button>
+                        <button 
+                          type="button" 
+                          onClick={async () => {
+                            if (window.confirm('Excluir este registro de peso?')) {
+                              try {
+                                await deleteWeight(record.id);
+                              } catch (err: any) {
+                                alert(err.message);
+                              }
+                            }
+                          }}
+                          className="organism-pet-form__icon-btn delete"
+                          title="Excluir"
+                        >
+                          <span className="material-symbols-outlined">delete</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Ações */}
       <div className="organism-pet-form__actions">

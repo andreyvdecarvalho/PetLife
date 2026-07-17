@@ -113,9 +113,10 @@ export const MedicationsPage: React.FC = () => {
     }
   };
 
-  const activeMedications = medications.filter(m => m.status === 'ACTIVE');
+  const targetMedications = medications.filter(m => m.medicationType === 'MEDICINE' || m.medicationType === 'VITAMIN' || !m.medicationType);
+  const activeMedications = targetMedications.filter(m => m.status === 'ACTIVE');
   const allDoses: MedicationAdministration[] = [];
-  medications.forEach(m => m.administrations?.forEach(a => allDoses.push(a)));
+  targetMedications.forEach(m => m.administrations?.forEach(a => allDoses.push(a)));
 
   const pendingOrRecentDoses = allDoses
     .sort((a, b) => new Date(a.scheduledTime).getTime() - new Date(b.scheduledTime).getTime())
@@ -182,9 +183,7 @@ export const MedicationsPage: React.FC = () => {
                       {m.name}
                       {m.medicationType && (
                         <span className={`medications-page__type-badge medications-page__type-badge--${m.medicationType.toLowerCase()}`}>
-                          {m.medicationType === 'VACCINE' ? '💉 Vacina' : 
-                           m.medicationType === 'VITAMIN' ? '💊 Vitamina' : 
-                           m.medicationType === 'DEWORMER' ? '🐛 Vermífugo' : '💊 Remédio'}
+                          {m.medicationType === 'VITAMIN' ? '💊 Vitamina' : '💊 Remédio'}
                         </span>
                       )}
                     </h3>
@@ -232,9 +231,7 @@ export const MedicationsPage: React.FC = () => {
               <div className="medications-page__form-field">
                 <label htmlFor="med-type">Tipo</label>
                 <select id="med-type" value={newMedicationType} onChange={e => setNewMedicationType(e.target.value)} data-testid="input-medication-type">
-                  <option value="VACCINE">Vacina</option>
                   <option value="VITAMIN">Vitamina</option>
-                  <option value="DEWORMER">Vermífugo</option>
                   <option value="MEDICINE">Remédio</option>
                 </select>
               </div>

@@ -90,6 +90,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               <span className="material-symbols-outlined">pill</span>
               Medicamentos
             </Link>
+            <Link
+              to="/vaccines"
+              className={`template-dashboard__sidebar-link ${isActive('/vaccines') ? 'active' : ''}`}
+            >
+              <span className="material-symbols-outlined">vaccines</span>
+              Vacinas
+            </Link>
 
             <Link
               to="/routine"
@@ -157,6 +164,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         >
           <span className="material-symbols-outlined">pill</span>
           <span className="template-dashboard__bottom-nav-label">Remédios</span>
+        </Link>
+        <Link
+          to="/vaccines"
+          className={`template-dashboard__bottom-nav-link ${location.pathname.startsWith('/vaccines') ? 'active' : ''}`}
+        >
+          <span className="material-symbols-outlined">vaccines</span>
+          <span className="template-dashboard__bottom-nav-label">Vacinas</span>
         </Link>
         <Link
           to="/routine"

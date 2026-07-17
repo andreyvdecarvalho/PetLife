@@ -248,8 +248,40 @@ export const DashboardPageContent: React.FC = () => {
                 <h3 className="dashboard-page__stats-title">Evolução de Peso</h3>
               </div>
               <span className="dashboard-page__stats-value">
-                {activePet?.weightKg || 24.5} <span className="dashboard-page__stats-unit">kg</span>
+                {activePet?.weightKg || '--'} <span className="dashboard-page__stats-unit">kg</span>
               </span>
+            </div>
+
+            <div className="dashboard-page__weight-input-group">
+              <input 
+                type="number" 
+                step="0.01"
+                placeholder="Ex: 12.5" 
+                id="quick-weight-input"
+                className="dashboard-page__weight-input"
+              />
+              <button 
+                className="dashboard-page__weight-btn"
+                onClick={async () => {
+                  const input = document.getElementById('quick-weight-input') as HTMLInputElement;
+                  const newWeight = Number(input.value);
+                  if (newWeight > 0 && activePet) {
+                    try {
+                      // Importar useUpdatePet hook no topo não é possível dentro do onClick.
+                      // Eu vou usar diretamente o petApi.
+                      const { petApi } = await import('../../../infrastructure/http/pet.api');
+                      await petApi.updatePet(activePet.id, { weightKg: newWeight });
+                      showToast('Peso registrado com sucesso! ✨', 'success');
+                      input.value = '';
+                      fetchPets(); // Atualiza a dashboard
+                    } catch (err) {
+                      showToast('Erro ao registrar peso.', 'error');
+                    }
+                  }
+                }}
+              >
+                Registrar
+              </button>
             </div>
 
             {/* Chart */}
