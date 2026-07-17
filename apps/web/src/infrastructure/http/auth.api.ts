@@ -51,9 +51,7 @@ export const authApi = {
   uploadPhoto: (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
-    return api.post<{ data: UserResponse }>('/auth/me/photo', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    return api.post<{ data: UserResponse }>('/auth/me/photo', formData);
   },
 
   forgotPassword: (email: string) =>

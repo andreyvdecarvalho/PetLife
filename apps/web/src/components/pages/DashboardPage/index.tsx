@@ -270,7 +270,19 @@ export const DashboardPageContent: React.FC = () => {
                       // Importar useUpdatePet hook no topo não é possível dentro do onClick.
                       // Eu vou usar diretamente o petApi.
                       const { petApi } = await import('../../../infrastructure/http/pet.api');
-                      await petApi.updatePet(activePet.id, { weightKg: newWeight });
+                      await petApi.update(activePet.id, { 
+                        name: activePet.name,
+                        species: activePet.species,
+                        sex: activePet.sex,
+                        breed: activePet.breed || undefined,
+                        birthDate: activePet.birthDate || undefined,
+                        size: activePet.size || undefined,
+                        neutered: activePet.neutered,
+                        microchipId: activePet.microchipId || undefined,
+                        allergies: activePet.allergies || undefined,
+                        notes: activePet.notes || undefined,
+                        weightKg: newWeight
+                      });
                       showToast('Peso registrado com sucesso! ✨', 'success');
                       input.value = '';
                       fetchPets(); // Atualiza a dashboard

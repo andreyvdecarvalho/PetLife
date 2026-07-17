@@ -4,6 +4,8 @@ import { useToast } from '../../molecules/Toast';
 import { useGetPets } from '../../../application/pet/useGetPets';
 import { useMedications } from '../../../application/medications/useMedications';
 import type { MedicationFrequency, MedicationAdministration } from '../../../domain/pet/Medication';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
 import './styles.css';
 
 const AdherenceCircle: React.FC<{ rate: number }> = ({ rate }) => {
@@ -228,35 +230,56 @@ export const MedicationsPage: React.FC = () => {
           <div className="medications-page__modal">
             <h2 className="medications-page__modal-title">Cadastrar Tratamento</h2>
             <form onSubmit={handleCreateTreatment} className="medications-page__form">
-              <div className="medications-page__form-field">
-                <label htmlFor="med-type">Tipo</label>
-                <select id="med-type" value={newMedicationType} onChange={e => setNewMedicationType(e.target.value)} data-testid="input-medication-type">
+              <div className="molecule-form-field">
+                <label htmlFor="med-type" className="atom-label">Tipo</label>
+                <select id="med-type" className="atom-input" value={newMedicationType} onChange={e => setNewMedicationType(e.target.value)} data-testid="input-medication-type">
                   <option value="VITAMIN">Vitamina</option>
                   <option value="MEDICINE">Remédio</option>
                 </select>
               </div>
-              <div className="medications-page__form-field">
-                <label htmlFor="med-name">Nome do Medicamento</label>
-                <input id="med-name" type="text" value={newName} onChange={e => setNewName(e.target.value)} required data-testid="input-name" />
-              </div>
-              <div className="medications-page__form-field">
-                <label htmlFor="med-dosage">Dosagem</label>
-                <input id="med-dosage" type="text" value={newDosage} onChange={e => setNewDosage(e.target.value)} required data-testid="input-dosage" />
+              <FormField
+                id="med-name"
+                label="Nome do Medicamento"
+                type="text"
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                required
+                data-testid="input-name"
+              />
+              <FormField
+                id="med-dosage"
+                label="Dosagem"
+                type="text"
+                value={newDosage}
+                onChange={e => setNewDosage(e.target.value)}
+                required
+                data-testid="input-dosage"
+              />
+              <div className="medications-page__form-row">
+                <FormField
+                  id="med-start-date"
+                  label="Data de início"
+                  type="date"
+                  value={newStartDate}
+                  onChange={e => setNewStartDate(e.target.value)}
+                  required
+                  data-testid="input-start-date"
+                />
+                <FormField
+                  id="med-duration"
+                  label="Duração do tratamento (dias)"
+                  type="number"
+                  placeholder="Ex: 7"
+                  min="1"
+                  value={newDurationDays}
+                  onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')}
+                  data-testid="input-duration"
+                />
               </div>
               <div className="medications-page__form-row">
-                <div className="medications-page__form-field">
-                  <label htmlFor="med-start-date">Data de início</label>
-                  <input id="med-start-date" type="date" value={newStartDate} onChange={e => setNewStartDate(e.target.value)} required data-testid="input-start-date" />
-                </div>
-                <div className="medications-page__form-field">
-                  <label htmlFor="med-duration">Duração do tratamento (dias)</label>
-                  <input id="med-duration" type="number" placeholder="Ex: 7" min="1" value={newDurationDays} onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')} data-testid="input-duration" />
-                </div>
-              </div>
-              <div className="medications-page__form-row">
-                <div className="medications-page__form-field">
-                  <label htmlFor="med-frequency">Frequência</label>
-                  <select id="med-frequency" value={newFrequency} onChange={e => setNewFrequency(e.target.value as any)} data-testid="input-frequency">
+                <div className="molecule-form-field">
+                  <label htmlFor="med-frequency" className="atom-label">Frequência</label>
+                  <select id="med-frequency" className="atom-input" value={newFrequency} onChange={e => setNewFrequency(e.target.value as any)} data-testid="input-frequency">
                     <option value="DAILY">Diário</option>
                     <option value="TWICE_DAILY">2x ao dia</option>
                     <option value="EVERY_8H">A cada 8 horas</option>
@@ -264,15 +287,20 @@ export const MedicationsPage: React.FC = () => {
                   </select>
                 </div>
                 {newFrequency === 'CUSTOM' && (
-                  <div className="medications-page__form-field">
-                    <label>Horas</label>
-                    <input type="number" value={newCustomHours} onChange={e => setNewCustomHours(Number(e.target.value))} required data-testid="input-custom-hours" />
-                  </div>
+                  <FormField
+                    id="med-custom-hours"
+                    label="Horas"
+                    type="number"
+                    value={newCustomHours}
+                    onChange={e => setNewCustomHours(Number(e.target.value))}
+                    required
+                    data-testid="input-custom-hours"
+                  />
                 )}
               </div>
               <div className="medications-page__form-actions">
-                <button type="button" className="medications-page__btn-secondary" onClick={() => setIsFormOpen(false)} data-testid="btn-cancel">Cancelar</button>
-                <button type="submit" className="medications-page__btn-primary" data-testid="btn-submit">Confirmar</button>
+                <Button type="button" variant="secondary" onClick={() => setIsFormOpen(false)} data-testid="btn-cancel">Cancelar</Button>
+                <Button type="submit" data-testid="btn-submit">Confirmar</Button>
               </div>
             </form>
           </div>
@@ -283,13 +311,13 @@ export const MedicationsPage: React.FC = () => {
         <div className="medications-page__modal-overlay">
           <div className="medications-page__modal">
             <h2 className="medications-page__modal-title">Justificar Dose Pulada</h2>
-            <div className="medications-page__form-field">
-              <label>Motivo</label>
-              <textarea placeholder="Ex: pet vomitou" value={skipReason} onChange={e => setSkipReason(e.target.value)} data-testid="input-reason" />
+            <div className="molecule-form-field">
+              <label htmlFor="skip-reason" className="atom-label">Motivo</label>
+              <textarea id="skip-reason" className="atom-input" placeholder="Ex: pet vomitou" value={skipReason} onChange={e => setSkipReason(e.target.value)} data-testid="input-reason" />
             </div>
             <div className="medications-page__form-actions">
-              <button type="button" className="medications-page__btn-secondary" onClick={() => setIsSkipModalOpen(false)}>Cancelar</button>
-              <button type="button" className="medications-page__btn-primary" onClick={handleSkipDoseSubmit} data-testid="btn-confirm-skip">Confirmar</button>
+              <Button type="button" variant="secondary" onClick={() => setIsSkipModalOpen(false)}>Cancelar</Button>
+              <Button type="button" onClick={handleSkipDoseSubmit} data-testid="btn-confirm-skip">Confirmar</Button>
             </div>
           </div>
         </div>

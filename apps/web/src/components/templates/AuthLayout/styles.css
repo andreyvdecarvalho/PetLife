@@ -7,7 +7,7 @@
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   padding: 3rem var(--space-margin-mobile) var(--space-xl) var(--space-margin-mobile);
-  font-family: var(--font-body-lg);
+  font-family: var(--font-body);
 }
 
 @media (min-width: 640px) {

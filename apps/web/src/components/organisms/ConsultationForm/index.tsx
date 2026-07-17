@@ -118,7 +118,7 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ petId, onSuc
       <AttachmentManager files={files} onFilesChange={setFiles} />
 
       <div className="organism-consultation-form__actions">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={loading} data-testid="btn-cancelar-consulta">Cancelar</Button>
+        <Button type="button" variant="secondary" onClick={onCancel} disabled={loading} data-testid="btn-cancelar-consulta">Cancelar</Button>
         <Button type="submit" disabled={loading} data-testid="btn-salvar-consulta">{loading ? 'Salvando...' : 'Registrar Consulta'}</Button>
       </div>
     </form>

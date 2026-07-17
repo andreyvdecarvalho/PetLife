@@ -1,8 +1,8 @@
 /**
  * Utilitário de compressão de imagens local usando Canvas do HTML5.
- * Garante que a foto do pet respeite o limite de 500KB antes de ser enviada à API.
+ * Garante que a foto do pet respeite o limite de 2MB antes de ser enviada à API.
  */
-export async function compressImage(file: File, maxSizeKB = 500): Promise<File> {
+export async function compressImage(file: File, maxSizeKB = 1800): Promise<File> {
   const maxSizeBytes = maxSizeKB * 1024;
   
   if (file.size <= maxSizeBytes) {
@@ -37,23 +37,27 @@ export async function compressImage(file: File, maxSizeKB = 500): Promise<File> 
 
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-          return reject(new Error('Não foi possível obter o contexto 2D do Canvas.'));
+          // Fallback if canvas is not supported
+          return resolve(file);
         }
 
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Comprime iterativamente reduzindo a qualidade do JPEG
-        let quality = 0.85;
+        // Preserve format if PNG or WEBP, otherwise use JPEG
+        const outputType = file.type === 'image/png' || file.type === 'image/webp' ? file.type : 'image/jpeg';
+
+        // Comprime iterativamente
+        let quality = 0.9;
         const checkAndResolve = (q: number) => {
           canvas.toBlob(
             (blob) => {
               if (!blob) {
-                return reject(new Error('Falha ao converter o Canvas em Blob.'));
+                return resolve(file); // Fallback to original file if blob creation fails
               }
               
               if (blob.size <= maxSizeBytes || q <= 0.1) {
                 const compressedFile = new File([blob], file.name, {
-                  type: 'image/jpeg',
+                  type: outputType,
                   lastModified: Date.now(),
                 });
                 resolve(compressedFile);
@@ -62,15 +66,19 @@ export async function compressImage(file: File, maxSizeKB = 500): Promise<File> 
                 checkAndResolve(q - 0.15);
               }
             },
-            'image/jpeg',
+            outputType,
             q
           );
         };
 
         checkAndResolve(quality);
       };
-      img.onerror = (err) => reject(err);
+      img.onerror = (err) => {
+        // Se a imagem não puder ser lida pelo canvas (ex: HEIC no Chrome), retorna o arquivo original
+        // O backend pode rejeitar se for maior que 2MB, mas pelo menos evitamos o erro silencioso.
+        resolve(file);
+      };
     };
-    reader.onerror = (err) => reject(err);
+    reader.onerror = (err) => resolve(file);
   });
 }

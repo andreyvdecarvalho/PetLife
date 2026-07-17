@@ -68,7 +68,7 @@ export const PetsPageContent: React.FC = () => {
                 />
                 <div className="pets-page__card-actions">
                   <Button 
-                    variant="outline" 
+                    variant="secondary" 
                     onClick={() => handleEdit(pet)}
                     className="pets-page__action-btn"
                   >

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../molecules/Toast';
 import { useGetPets } from '../../../application/pet/useGetPets';
 import { useMedications } from '../../../application/medications/useMedications';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
 import './styles.css';
 
 export const VaccinesPage: React.FC = () => {
@@ -148,35 +150,51 @@ export const VaccinesPage: React.FC = () => {
           <div className="vaccines-page__modal">
             <h2 className="vaccines-page__modal-title">Novo Registro</h2>
             <form onSubmit={handleCreateRecord} className="vaccines-page__form">
-              <div className="vaccines-page__form-field">
-                <label htmlFor="vac-type">Tipo</label>
-                <select id="vac-type" value={newMedicationType} onChange={e => setNewMedicationType(e.target.value)}>
+              <div className="molecule-form-field">
+                <label htmlFor="vac-type" className="atom-label">Tipo</label>
+                <select id="vac-type" className="atom-input" value={newMedicationType} onChange={e => setNewMedicationType(e.target.value)}>
                   <option value="VACCINE">Vacina</option>
                   <option value="DEWORMER">Vermífugo</option>
                 </select>
               </div>
-              <div className="vaccines-page__form-field">
-                <label htmlFor="vac-name">Nome (ex: V10, Antirrábica)</label>
-                <input id="vac-name" type="text" value={newName} onChange={e => setNewName(e.target.value)} required />
-              </div>
-              <div className="vaccines-page__form-field">
-                <label htmlFor="vac-dosage">Dosagem</label>
-                <input id="vac-dosage" type="text" value={newDosage} onChange={e => setNewDosage(e.target.value)} required placeholder="Ex: 1 dose, 1 comprimido" />
-              </div>
+              <FormField
+                id="vac-name"
+                label="Nome (ex: V10, Antirrábica)"
+                type="text"
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                required
+              />
+              <FormField
+                id="vac-dosage"
+                label="Dosagem"
+                type="text"
+                value={newDosage}
+                onChange={e => setNewDosage(e.target.value)}
+                required
+                placeholder="Ex: 1 dose, 1 comprimido"
+              />
               <div className="vaccines-page__form-row">
-                <div className="vaccines-page__form-field">
-                  <label htmlFor="vac-start-date">Data da Aplicação</label>
-                  <input id="vac-start-date" type="date" value={newStartDate} onChange={e => setNewStartDate(e.target.value)} required />
-                </div>
-                <div className="vaccines-page__form-field">
-                  <label htmlFor="vac-end-date">Próxima Dose (opcional)</label>
-                  <input id="vac-end-date" type="date" value={newEndDate} onChange={e => setNewEndDate(e.target.value)} />
-                </div>
+                <FormField
+                  id="vac-start-date"
+                  label="Data da Aplicação"
+                  type="date"
+                  value={newStartDate}
+                  onChange={e => setNewStartDate(e.target.value)}
+                  required
+                />
+                <FormField
+                  id="vac-end-date"
+                  label="Próxima Dose (opcional)"
+                  type="date"
+                  value={newEndDate}
+                  onChange={e => setNewEndDate(e.target.value)}
+                />
               </div>
               
               <div className="vaccines-page__form-actions">
-                <button type="button" className="vaccines-page__btn-secondary" onClick={() => setIsFormOpen(false)}>Cancelar</button>
-                <button type="submit" className="vaccines-page__btn-primary">Confirmar</button>
+                <Button type="button" variant="secondary" onClick={() => setIsFormOpen(false)}>Cancelar</Button>
+                <Button type="submit">Confirmar</Button>
               </div>
             </form>
           </div>

@@ -21,7 +21,7 @@
 
 .vet-search-page__header p {
   color: var(--color-on-surface-variant);
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
 }
 
 .vet-search-page__search-bar {
@@ -43,7 +43,7 @@
   border: none;
   background: transparent;
   flex: 1;
-  font-size: var(--font-size-md);
+  font-size: var(--text-body-md-size, 16px);
   color: var(--color-on-surface);
   outline: none;
 }
@@ -64,7 +64,7 @@
   background: var(--color-surface-container);
   color: var(--color-on-surface);
   font-weight: 600;
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
   cursor: pointer;
   border: none;
   transition: all 0.2s;

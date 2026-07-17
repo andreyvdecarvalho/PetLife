@@ -532,7 +532,7 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
         )}
         <Button 
           type="button" 
-          variant="outline" 
+          variant="secondary" 
           onClick={onCancel}
           disabled={loading}
           data-testid="btn-cancelar-pet"

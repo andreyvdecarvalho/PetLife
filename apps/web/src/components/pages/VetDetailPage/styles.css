@@ -47,7 +47,7 @@
 
 .vet-detail-page__crmv {
   color: var(--color-outline);
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
   margin-bottom: var(--spacing-3);
 }
 
@@ -96,7 +96,7 @@
 
 .vet-detail-page__section h3 {
   font-family: var(--font-family-heading);
-  font-size: var(--font-size-lg);
+  font-size: var(--text-body-lg-size, 18px);
   font-weight: 600;
   color: var(--color-on-surface);
   margin-bottom: var(--spacing-2);
@@ -120,7 +120,7 @@
   color: var(--color-on-surface);
   padding: 4px 12px;
   border-radius: 16px;
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
   font-weight: 500;
 }
 
