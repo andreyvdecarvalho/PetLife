@@ -39,6 +39,12 @@ export const RoutinePage: React.FC = () => {
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [isGroomingModalOpen, setIsGroomingModalOpen] = useState(false);
+  const [isMedicationModalOpen, setIsMedicationModalOpen] = useState(false);
+
+  const [schedMedId, setSchedMedId] = useState('');
+  const [schedMedDate, setSchedMedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [schedMedTime, setSchedMedTime] = useState('08:00');
+  const [schedMedNotes, setSchedMedNotes] = useState('');
 
   const [actTitle, setActTitle] = useState('');
   const [actType, setActType] = useState<'WALK' | 'FEEDING' | 'GENERIC'>('WALK');
@@ -164,6 +170,23 @@ export const RoutinePage: React.FC = () => {
     fetchGroomings();
   };
 
+  const submitMedicationSchedule = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const selectedMed = medications.find(m => m.id === schedMedId);
+    if (!selectedMed) return;
+    await addActivity({
+      title: `Medicamento: ${selectedMed.name}`,
+      type: 'GENERIC' as any, // tipo genérico para compatibilidade
+      activityDate: schedMedDate,
+      activityTime: schedMedTime + ':00',
+      description: `Dose: ${selectedMed.dosage}` + (schedMedNotes ? ` — ${schedMedNotes}` : ''),
+      status: 'PENDING'
+    });
+    setIsMedicationModalOpen(false);
+    showToast('Medicamento agendado na rotina! 💊', 'success');
+    fetchActivities(schedMedDate);
+  };
+
   const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
   const firstDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1).getDay();
   const spacers = Array.from({ length: firstDay }, (_, i) => i);
@@ -245,6 +268,16 @@ export const RoutinePage: React.FC = () => {
                 <div className="routine-page__action-text">
                   <span className="routine-page__action-title">Planejar Atividade</span>
                   <span className="routine-page__action-desc">Configurar passeios e rotinas.</span>
+                </div>
+              </button>
+
+              <button className="routine-page__action-card" onClick={() => setIsMedicationModalOpen(true)} data-testid="btn-add-medication-routine">
+                <div className="routine-page__action-icon routine-page__action-icon--secondary">
+                  <span className="material-symbols-outlined">medication</span>
+                </div>
+                <div className="routine-page__action-text">
+                  <span className="routine-page__action-title">Agendar Medicamento</span>
+                  <span className="routine-page__action-desc">Registrar dose ou lembrete de remédio.</span>
                 </div>
               </button>
             </div>
@@ -347,6 +380,43 @@ export const RoutinePage: React.FC = () => {
               <div className="routine-page__form-actions">
                 <button type="button" className="routine-page__btn-secondary" onClick={() => setIsGroomingModalOpen(false)}>Cancelar</button>
                 <button type="submit" className="routine-page__btn-primary">Salvar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isMedicationModalOpen && (
+        <div className="routine-page__modal-overlay">
+          <div className="routine-page__modal">
+            <h2 className="routine-page__modal-title">Agendar Medicamento</h2>
+            <form onSubmit={submitMedicationSchedule} className="routine-page__form">
+              <div className="routine-page__form-field">
+                <label>Medicamento</label>
+                <select value={schedMedId} onChange={e => setSchedMedId(e.target.value)} required data-testid="input-sched-med">
+                  <option value="">Selecione um medicamento ativo</option>
+                  {medications.filter(m => m.status === 'ACTIVE').map(m => (
+                    <option key={m.id} value={m.id}>{m.name} ({m.dosage})</option>
+                  ))}
+                </select>
+              </div>
+              <div className="routine-page__form-row">
+                <div className="routine-page__form-field">
+                  <label>Data</label>
+                  <input type="date" value={schedMedDate} onChange={e => setSchedMedDate(e.target.value)} required data-testid="input-sched-date" />
+                </div>
+                <div className="routine-page__form-field">
+                  <label>Horário</label>
+                  <input type="time" value={schedMedTime} onChange={e => setSchedMedTime(e.target.value)} required data-testid="input-sched-time" />
+                </div>
+              </div>
+              <div className="routine-page__form-field">
+                <label>Observações (opcional)</label>
+                <textarea value={schedMedNotes} onChange={e => setSchedMedNotes(e.target.value)} rows={2} data-testid="input-sched-notes" placeholder="Ex: administrar com alimento" />
+              </div>
+              <div className="routine-page__form-actions">
+                <button type="button" className="routine-page__btn-secondary" onClick={() => setIsMedicationModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="routine-page__btn-primary" data-testid="btn-confirm-sched-med">Agendar</button>
               </div>
             </form>
           </div>

@@ -230,6 +230,7 @@ describe('MedicationsPage', () => {
         name: 'Vitamina C',
         dosage: '5ml',
         frequency: 'DAILY',
+        medicationType: 'MEDICINE',
         customFrequencyHours: undefined,
         startDate: '2026-07-20',
         endDate: '2026-07-30',

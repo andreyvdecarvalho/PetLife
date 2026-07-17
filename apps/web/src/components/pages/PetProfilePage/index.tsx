@@ -99,6 +99,25 @@ export const PetProfilePageContent: React.FC = () => {
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
         <h2 className="pet-profile__title">Perfil do Pet</h2>
+        <div className="pet-profile__header-actions">
+          <button
+            className="pet-profile__edit-btn"
+            onClick={() => navigate('/pets/new', { state: { petId: id } })}
+            data-testid="btn-editar-pet-profile"
+          >
+            <span className="material-symbols-outlined">edit</span>
+            Editar
+          </button>
+          <button
+            className="pet-profile__delete-btn"
+            onClick={handleDelete}
+            disabled={isDeleting}
+            data-testid="btn-deletar-pet-profile"
+          >
+            <span className="material-symbols-outlined">delete</span>
+            Excluir
+          </button>
+        </div>
       </div>
 
       <div className="pet-profile__grid">

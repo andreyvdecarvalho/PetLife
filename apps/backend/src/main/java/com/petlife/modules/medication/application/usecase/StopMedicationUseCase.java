@@ -72,6 +72,7 @@ public class StopMedicationUseCase {
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),
+                med.getMedicationType(),
                 med.getCustomFrequencyHours(),
                 med.getStartDate(),
                 med.getEndDate(),

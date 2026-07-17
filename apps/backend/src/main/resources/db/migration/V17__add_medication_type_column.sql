@@ -1,0 +1,1 @@
+ALTER TABLE medication ADD COLUMN medication_type VARCHAR(50) NOT NULL DEFAULT 'MEDICINE';

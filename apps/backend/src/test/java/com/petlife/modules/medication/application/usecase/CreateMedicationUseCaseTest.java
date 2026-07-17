@@ -7,6 +7,7 @@ import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.medication.domain.entity.MedicationFrequency;
+import com.petlife.modules.medication.domain.entity.MedicationType;
 import com.petlife.modules.medication.infrastructure.dto.CreateMedicationRequest;
 import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
 import com.petlife.shared.exception.BusinessException;
@@ -62,7 +63,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = pet.getId();
         UUID userId = user.getId();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.DAILY, null,
+                "Dipirona", "5 gotas", MedicationFrequency.DAILY, MedicationType.MEDICINE, null,
                 LocalDate.now(), LocalDate.now().plusDays(2), List.of("08:00", "20:00")
         );
 
@@ -88,7 +89,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = pet.getId();
         UUID otherUserId = UUID.randomUUID();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.DAILY, null,
+                "Dipirona", "5 gotas", MedicationFrequency.DAILY, MedicationType.MEDICINE, null,
                 LocalDate.now(), LocalDate.now().plusDays(2), List.of("08:00")
         );
 
@@ -105,7 +106,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = UUID.randomUUID();
         UUID userId = user.getId();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.DAILY, null,
+                "Dipirona", "5 gotas", MedicationFrequency.DAILY, MedicationType.MEDICINE, null,
                 LocalDate.now(), null, List.of("08:00")
         );
 
@@ -122,7 +123,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = pet.getId();
         UUID userId = user.getId();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.CUSTOM, null,
+                "Dipirona", "5 gotas", MedicationFrequency.CUSTOM, MedicationType.MEDICINE, null,
                 LocalDate.now(), null, List.of("08:00")
         );
 
@@ -139,7 +140,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = pet.getId();
         UUID userId = user.getId();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.ONCE, null,
+                "Dipirona", "5 gotas", MedicationFrequency.ONCE, MedicationType.MEDICINE, null,
                 LocalDate.now(), null, List.of("23:59")
         );
 
@@ -162,7 +163,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = pet.getId();
         UUID userId = user.getId();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.CUSTOM, 12,
+                "Dipirona", "5 gotas", MedicationFrequency.CUSTOM, MedicationType.MEDICINE, 12,
                 LocalDate.now(), LocalDate.now().plusDays(1), List.of("08:00")
         );
 
@@ -185,7 +186,7 @@ class CreateMedicationUseCaseTest {
         UUID petId = pet.getId();
         UUID userId = user.getId();
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Dipirona", "5 gotas", MedicationFrequency.WEEKLY, null,
+                "Dipirona", "5 gotas", MedicationFrequency.WEEKLY, MedicationType.MEDICINE, null,
                 LocalDate.now(), LocalDate.now().plusDays(14), List.of("08:00")
         );
 

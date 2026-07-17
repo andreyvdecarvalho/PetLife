@@ -69,6 +69,10 @@ public class UpdateMedicationUseCase {
             medication.setDosage(request.getDosage());
         }
 
+        if (request.getMedicationType() != null && request.getMedicationType() != medication.getMedicationType()) {
+            medication.setMedicationType(request.getMedicationType());
+        }
+
         if (request.getFrequency() != null && request.getFrequency() != medication.getFrequency()) {
             medication.setFrequency(request.getFrequency());
             scheduleChanged = true;
@@ -247,6 +251,7 @@ public class UpdateMedicationUseCase {
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),
+                med.getMedicationType(),
                 med.getCustomFrequencyHours(),
                 med.getStartDate(),
                 med.getEndDate(),

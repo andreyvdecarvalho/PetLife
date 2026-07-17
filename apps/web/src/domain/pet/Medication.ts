@@ -10,6 +10,7 @@ export interface Medication {
   name: string;
   dosage: string;
   frequency: MedicationFrequency;
+  medicationType?: string;
   customFrequencyHours?: number;
   startDate: string; // ISO date string (YYYY-MM-DD)
   endDate?: string;  // ISO date string (YYYY-MM-DD)
@@ -35,6 +36,7 @@ export interface CreateMedicationData {
   name: string;
   dosage: string;
   frequency: MedicationFrequency;
+  medicationType?: string;
   customFrequencyHours?: number;
   startDate: string;
   endDate?: string;
