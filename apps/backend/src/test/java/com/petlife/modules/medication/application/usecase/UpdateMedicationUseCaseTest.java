@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -92,7 +92,7 @@ class UpdateMedicationUseCaseTest {
     @Test
     void shouldUpdateMedicationAndKeepScheduleIfNoScheduleFieldsChanged() {
         UpdateMedicationRequest req = new UpdateMedicationRequest(
-                "New Name", "New Dosage", null, null, null, null);
+                "New Name", "New Dosage", null, null, null, null, null);
 
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
@@ -110,7 +110,7 @@ class UpdateMedicationUseCaseTest {
     @Test
     void shouldUpdateScheduleAndRecreateAdministrations() {
         UpdateMedicationRequest req = new UpdateMedicationRequest(
-                null, null, MedicationFrequency.WEEKLY, null, LocalDate.now().plusDays(20), List.of("10:00"));
+                null, null, MedicationFrequency.WEEKLY, null, null, LocalDate.now().plusDays(20), List.of("10:00"));
 
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
@@ -129,7 +129,7 @@ class UpdateMedicationUseCaseTest {
 
     @Test
     void shouldThrowExceptionWhenPetNotFound() {
-        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null);
+        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class, () -> 
@@ -142,7 +142,7 @@ class UpdateMedicationUseCaseTest {
         anotherUser.setId(UUID.randomUUID());
         pet.setUser(anotherUser);
         
-        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null);
+        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
 
         assertThrows(BusinessException.class, () -> 
@@ -151,7 +151,7 @@ class UpdateMedicationUseCaseTest {
 
     @Test
     void shouldThrowExceptionWhenMedicationNotFound() {
-        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null);
+        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.empty());
 
@@ -165,7 +165,7 @@ class UpdateMedicationUseCaseTest {
         anotherPet.setId(UUID.randomUUID());
         medication.setPet(anotherPet);
 
-        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null);
+        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
 
@@ -177,7 +177,7 @@ class UpdateMedicationUseCaseTest {
     void shouldThrowExceptionWhenMedicationNotActive() {
         medication.setStatus(MedicationStatus.CANCELLED);
 
-        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null);
+        UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
 
@@ -188,7 +188,7 @@ class UpdateMedicationUseCaseTest {
     @Test
     void shouldThrowExceptionWhenCustomFrequencyLacksHours() {
         UpdateMedicationRequest req = new UpdateMedicationRequest(
-                null, null, MedicationFrequency.CUSTOM, null, null, null);
+                null, null, MedicationFrequency.CUSTOM, null, null, null, null);
 
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
@@ -200,7 +200,7 @@ class UpdateMedicationUseCaseTest {
     @Test
     void shouldGenerateCustomFrequency() {
         UpdateMedicationRequest req = new UpdateMedicationRequest(
-                null, null, MedicationFrequency.CUSTOM, 12, LocalDate.now().plusDays(2), List.of("10:00"));
+                null, null, MedicationFrequency.CUSTOM, null, 12, LocalDate.now().plusDays(2), List.of("10:00"));
 
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
@@ -214,7 +214,7 @@ class UpdateMedicationUseCaseTest {
     @Test
     void shouldGenerateOnceFrequency() {
         UpdateMedicationRequest req = new UpdateMedicationRequest(
-                null, null, MedicationFrequency.ONCE, null, null, List.of("23:59"));
+                null, null, MedicationFrequency.ONCE, null, null, null, List.of("23:59"));
 
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
         when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));

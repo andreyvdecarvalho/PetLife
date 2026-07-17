@@ -19,6 +19,50 @@
   }
 }
 
+.pet-profile__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.pet-profile__edit-btn {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pet-profile__edit-btn:hover { opacity: 0.85; }
+
+.pet-profile__delete-btn {
+  background: var(--color-error-container);
+  color: var(--color-on-error-container);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pet-profile__delete-btn:hover { opacity: 0.85; }
+.pet-profile__delete-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .pet-profile__back-btn {
   background-color: var(--color-surface-container-low);
   border: none;

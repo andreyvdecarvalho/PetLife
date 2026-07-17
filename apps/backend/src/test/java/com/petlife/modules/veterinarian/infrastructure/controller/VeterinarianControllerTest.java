@@ -10,7 +10,12 @@ import com.petlife.modules.veterinarian.infrastructure.dto.request.AddVetAddress
 import com.petlife.modules.veterinarian.infrastructure.dto.request.CreateVeterinarianRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SetVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateAvailabilityRequest;
+import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetAddressRequest;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VeterinarianJpaRepository;
+import com.petlife.modules.veterinarian.entity.VetAddress;
+import com.petlife.modules.veterinarian.entity.VetFavorite;
+import com.petlife.modules.veterinarian.infrastructure.persistence.VetAddressJpaRepository;
+import com.petlife.modules.veterinarian.infrastructure.persistence.VetFavoriteJpaRepository;
 import com.petlife.shared.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +35,12 @@ class VeterinarianControllerTest extends IntegrationTestBase {
 
     @Autowired
     private VeterinarianJpaRepository veterinarianRepository;
+
+    @Autowired
+    private VetAddressJpaRepository vetAddressRepository;
+
+    @Autowired
+    private VetFavoriteJpaRepository vetFavoriteRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -143,6 +154,78 @@ class VeterinarianControllerTest extends IntegrationTestBase {
                         .param("lat", "-23.5")
                         .param("lng", "-46.6")
                         .param("modality", "CLINIC")
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getMyProfile_ShouldReturnOk() throws Exception {
+        createVetProfile();
+
+        mockMvc.perform(get("/api/v1/veterinarians/me")
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(testVet.getId().toString()));
+    }
+
+    @Test
+    void listFavorites_ShouldReturnOk() throws Exception {
+        createVetProfile();
+        VetFavorite favorite = new VetFavorite();
+        favorite.setUser(testUser);
+        favorite.setVeterinarian(testVet);
+        vetFavoriteRepository.save(favorite);
+
+        mockMvc.perform(get("/api/v1/veterinarians/favorites")
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id").value(testVet.getId().toString()));
+    }
+
+    @Test
+    void updateAddress_ShouldReturnOk() throws Exception {
+        createVetProfile();
+        VetAddress address = new VetAddress();
+        address.setVeterinarian(testVet);
+        address.setLabel("Clinica Old");
+        address.setStreet("Rua Velha");
+        address.setCity("Old City");
+        address.setPostalCode("00000-000");
+        address.setPrimary(false);
+        address = vetAddressRepository.saveAndFlush(address);
+
+        UpdateVetAddressRequest request = UpdateVetAddressRequest.builder()
+                .label("Clinica Nova")
+                .street("Rua Nova")
+                .number("100")
+                .neighborhood("Centro")
+                .city("Nova")
+                .state("SP")
+                .postalCode("00000-000")
+                .isPrimary(true)
+                .build();
+
+        mockMvc.perform(put("/api/v1/veterinarians/address/{id}", address.getId())
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail())))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.street").value("Rua Nova"));
+    }
+
+    @Test
+    void deleteAddress_ShouldReturnNoContent() throws Exception {
+        createVetProfile();
+        VetAddress address = new VetAddress();
+        address.setVeterinarian(testVet);
+        address.setLabel("Deletar");
+        address.setStreet("Rua para deletar");
+        address.setCity("Delete City");
+        address.setPostalCode("11111-111");
+        address.setPrimary(false);
+        address = vetAddressRepository.saveAndFlush(address);
+
+        mockMvc.perform(delete("/api/v1/veterinarians/address/{id}", address.getId())
                         .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
                 .andExpect(status().isOk());
     }

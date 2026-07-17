@@ -2,6 +2,7 @@ package com.petlife.modules.medication.infrastructure.dto;
 
 import com.petlife.modules.medication.domain.entity.MedicationFrequency;
 import com.petlife.modules.medication.domain.entity.MedicationStatus;
+import com.petlife.modules.medication.domain.entity.MedicationType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public record MedicationResponse(
     String name,
     String dosage,
     MedicationFrequency frequency,
+    MedicationType medicationType,
     Integer customFrequencyHours,
     LocalDate startDate,
     LocalDate endDate,

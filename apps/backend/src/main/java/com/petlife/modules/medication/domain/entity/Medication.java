@@ -42,6 +42,10 @@ public class Medication extends BaseEntity {
     @Column(name = "frequency", nullable = false, length = 50)
     private MedicationFrequency frequency;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "medication_type", nullable = false, length = 50)
+    private MedicationType medicationType = MedicationType.MEDICINE;
+
     @Column(name = "custom_frequency_hours")
     private Integer customFrequencyHours;
 

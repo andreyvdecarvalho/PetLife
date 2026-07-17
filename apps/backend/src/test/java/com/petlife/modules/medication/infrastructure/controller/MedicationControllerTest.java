@@ -9,6 +9,7 @@ import com.petlife.modules.medication.application.port.MedicationAdministrationR
 import com.petlife.modules.medication.domain.entity.*;
 import com.petlife.modules.medication.infrastructure.dto.CreateMedicationRequest;
 import com.petlife.modules.medication.infrastructure.dto.UpdateAdministrationRequest;
+import com.petlife.modules.medication.domain.entity.MedicationType;
 import com.petlife.shared.IntegrationTestBase;
 import com.petlife.shared.factories.MedicationFactory;
 import com.petlife.shared.factories.PetFactory;
@@ -60,7 +61,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("POST /api/v1/pets/{petId}/medications - Deve cadastrar medicamento")
     void shouldCreateMedication() throws Exception {
         CreateMedicationRequest request = new CreateMedicationRequest(
-                "Ibuprofeno", "1 comprimido", MedicationFrequency.DAILY, null,
+                "Ibuprofeno", "1 comprimido", MedicationFrequency.DAILY, MedicationType.MEDICINE, null,
                 LocalDate.now(), LocalDate.now().plusDays(2), List.of("10:00")
         );
 

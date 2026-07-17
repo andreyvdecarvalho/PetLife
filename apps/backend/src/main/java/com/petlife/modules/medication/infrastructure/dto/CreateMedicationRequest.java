@@ -1,6 +1,7 @@
 package com.petlife.modules.medication.infrastructure.dto;
 
 import com.petlife.modules.medication.domain.entity.MedicationFrequency;
+import com.petlife.modules.medication.domain.entity.MedicationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,8 @@ public record CreateMedicationRequest(
 
     @NotNull
     MedicationFrequency frequency,
+
+    MedicationType medicationType,
 
     Integer customFrequencyHours,
 

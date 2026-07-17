@@ -43,10 +43,18 @@ export const GroomingPageContent: React.FC = () => {
     }
   }, [selectedPetId, fetchGroomings]);
 
+  const safeGetDate = (dateStr?: string | null): Date | null => {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? null : d;
+  };
+
   // Sort groomings from newest to oldest
-  const sortedGroomings = [...groomings].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const sortedGroomings = [...groomings].sort((a, b) => {
+    const timeA = safeGetDate(a.date)?.getTime() || 0;
+    const timeB = safeGetDate(b.date)?.getTime() || 0;
+    return timeB - timeA;
+  });
 
   const lastGrooming = sortedGroomings[0];
 
@@ -58,18 +66,24 @@ export const GroomingPageContent: React.FC = () => {
     if (lastGrooming.nextDate) {
       nextGroomingDate = lastGrooming.nextDate;
     } else if (lastGrooming.frequencyDays) {
-      const lastDateObj = new Date(lastGrooming.date);
-      const nextDateObj = new Date(lastDateObj.getTime() + lastGrooming.frequencyDays * 24 * 60 * 60 * 1000);
-      nextGroomingDate = nextDateObj.toISOString().split('T')[0];
+      const lastDateObj = safeGetDate(lastGrooming.date);
+      if (lastDateObj) {
+        const nextDateObj = new Date(lastDateObj.getTime() + lastGrooming.frequencyDays * 24 * 60 * 60 * 1000);
+        if (!isNaN(nextDateObj.getTime())) {
+          nextGroomingDate = nextDateObj.toISOString().split('T')[0];
+        }
+      }
     }
 
     if (nextGroomingDate) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      const targetDate = new Date(nextGroomingDate);
-      targetDate.setHours(0, 0, 0, 0);
-      const diffTime = targetDate.getTime() - today.getTime();
-      daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const targetDate = safeGetDate(nextGroomingDate);
+      if (targetDate) {
+        targetDate.setHours(0, 0, 0, 0);
+        const diffTime = targetDate.getTime() - today.getTime();
+        daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      }
     }
   }
 
@@ -174,7 +188,7 @@ export const GroomingPageContent: React.FC = () => {
               <h3 className="page-grooming__highlight-title">Próximo Banho & Tosa</h3>
               <p className="page-grooming__highlight-subtitle">
                 {nextGroomingDate
-                  ? `Agendado para: ${new Date(nextGroomingDate).toLocaleDateString('pt-BR')}`
+                  ? `Agendado para: ${safeGetDate(nextGroomingDate)?.toLocaleDateString('pt-BR', { timeZone: 'UTC' }) || nextGroomingDate}`
                   : 'Periodicidade não configurada'}
               </p>
             </div>
@@ -245,7 +259,7 @@ export const GroomingPageContent: React.FC = () => {
                         {g.type === 'BATH' ? 'Banho' : g.type === 'GROOMING' ? 'Tosa' : 'Banho & Tosa'}
                       </span>
                       <h4 className="page-grooming__card-date">
-                        {new Date(g.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
+                        {safeGetDate(g.date)?.toLocaleDateString('pt-BR', { timeZone: 'UTC' }) || 'Data não disponível'}
                       </h4>
                     </div>
 
@@ -268,7 +282,7 @@ export const GroomingPageContent: React.FC = () => {
                         <span>{g.provider}</span>
                       </p>
                     )}
-                    {g.cost !== undefined && (
+                    {g.cost != null && (
                       <p className="page-grooming__card-meta">
                         <span className="material-symbols-outlined">payments</span>
                         <span>R$ {g.cost.toFixed(2)}</span>

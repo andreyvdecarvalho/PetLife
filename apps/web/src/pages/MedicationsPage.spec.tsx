@@ -216,6 +216,12 @@ describe('MedicationsPage', () => {
     const frequencySelect = screen.getByLabelText(/frequência/i);
     fireEvent.change(frequencySelect, { target: { value: 'DAILY' } });
 
+    const startDateInput = screen.getByLabelText(/data de início/i);
+    fireEvent.change(startDateInput, { target: { value: '2026-07-20' } });
+
+    const durationInput = screen.getByLabelText(/duração do tratamento \(dias\)/i);
+    fireEvent.change(durationInput, { target: { value: '10' } });
+
     const submitButton = screen.getByRole('button', { name: /confirmar/i });
     fireEvent.click(submitButton);
 
@@ -224,9 +230,10 @@ describe('MedicationsPage', () => {
         name: 'Vitamina C',
         dosage: '5ml',
         frequency: 'DAILY',
+        medicationType: 'MEDICINE',
         customFrequencyHours: undefined,
-        startDate: expect.any(String),
-        endDate: undefined,
+        startDate: '2026-07-20',
+        endDate: '2026-07-30',
         timesOfDay: ['08:00']
       });
       expect(mockShowToast).toHaveBeenCalledWith('Tratamento cadastrado com sucesso! ✨', 'success');

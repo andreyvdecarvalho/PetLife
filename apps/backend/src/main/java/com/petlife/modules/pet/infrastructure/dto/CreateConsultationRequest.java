@@ -35,6 +35,7 @@ public class CreateConsultationRequest {
 
     private BigDecimal weightAtVisit;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate followUpDate;
 
     private BigDecimal cost;

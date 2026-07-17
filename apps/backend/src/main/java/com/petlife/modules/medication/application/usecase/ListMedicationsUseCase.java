@@ -58,6 +58,7 @@ public class ListMedicationsUseCase {
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),
+                med.getMedicationType(),
                 med.getCustomFrequencyHours(),
                 med.getStartDate(),
                 med.getEndDate(),

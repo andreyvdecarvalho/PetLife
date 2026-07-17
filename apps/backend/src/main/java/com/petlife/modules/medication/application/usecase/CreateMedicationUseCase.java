@@ -9,6 +9,7 @@ import com.petlife.modules.medication.domain.entity.MedicationAdministration;
 import com.petlife.modules.medication.domain.entity.MedicationAdministrationStatus;
 import com.petlife.modules.medication.domain.entity.MedicationFrequency;
 import com.petlife.modules.medication.domain.entity.MedicationStatus;
+import com.petlife.modules.medication.domain.entity.MedicationType;
 import com.petlife.modules.medication.infrastructure.dto.CreateMedicationRequest;
 import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
 import com.petlife.modules.medication.infrastructure.dto.MedicationAdministrationResponse;
@@ -57,6 +58,8 @@ public class CreateMedicationUseCase {
         medication.setName(request.name());
         medication.setDosage(request.dosage());
         medication.setFrequency(request.frequency());
+        medication.setMedicationType(
+                request.medicationType() != null ? request.medicationType() : MedicationType.MEDICINE);
         medication.setCustomFrequencyHours(request.customFrequencyHours());
         medication.setStartDate(request.startDate());
         medication.setEndDate(request.endDate());
@@ -184,6 +187,7 @@ public class CreateMedicationUseCase {
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),
+                med.getMedicationType(),
                 med.getCustomFrequencyHours(),
                 med.getStartDate(),
                 med.getEndDate(),

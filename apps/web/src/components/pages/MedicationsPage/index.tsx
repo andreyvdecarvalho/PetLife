@@ -47,6 +47,7 @@ export const MedicationsPage: React.FC = () => {
   const [isSkipModalOpen, setIsSkipModalOpen] = useState(false);
 
   const [newName, setNewName] = useState('');
+  const [newMedicationType, setNewMedicationType] = useState<string>('MEDICINE');
   const [newDosage, setNewDosage] = useState('');
   const [newFrequency, setNewFrequency] = useState<MedicationFrequency>('DAILY');
   const [newCustomHours, setNewCustomHours] = useState<number>(24);
@@ -85,12 +86,13 @@ export const MedicationsPage: React.FC = () => {
     let computedEndDate = undefined;
     if (newDurationDays && Number(newDurationDays) > 0) {
       const sDate = new Date(newStartDate);
-      sDate.setDate(sDate.getDate() + Number(newDurationDays));
+      sDate.setUTCDate(sDate.getUTCDate() + Number(newDurationDays));
       computedEndDate = sDate.toISOString().split('T')[0];
     }
 
     const payload = {
       name: newName, dosage: newDosage, frequency: newFrequency,
+      medicationType: newMedicationType,
       customFrequencyHours: newFrequency === 'CUSTOM' ? newCustomHours : undefined,
       startDate: newStartDate, endDate: computedEndDate, timesOfDay: newTimes,
     };
@@ -98,7 +100,7 @@ export const MedicationsPage: React.FC = () => {
     if (success) {
       showToast('Tratamento cadastrado com sucesso! ✨', 'success');
       setIsFormOpen(false);
-      setNewName(''); setNewDosage(''); setNewFrequency('DAILY'); setNewTimes(['08:00']); setNewDurationDays('');
+      setNewName(''); setNewDosage(''); setNewFrequency('DAILY'); setNewMedicationType('MEDICINE'); setNewTimes(['08:00']); setNewDurationDays('');
     }
   };
 
@@ -176,7 +178,16 @@ export const MedicationsPage: React.FC = () => {
                     <span className="material-symbols-outlined">pill</span>
                   </div>
                   <div className="medications-page__card-info">
-                    <h3>{m.name}</h3>
+                    <h3>
+                      {m.name}
+                      {m.medicationType && (
+                        <span className={`medications-page__type-badge medications-page__type-badge--${m.medicationType.toLowerCase()}`}>
+                          {m.medicationType === 'VACCINE' ? '💉 Vacina' : 
+                           m.medicationType === 'VITAMIN' ? '💊 Vitamina' : 
+                           m.medicationType === 'DEWORMER' ? '🐛 Vermífugo' : '💊 Remédio'}
+                        </span>
+                      )}
+                    </h3>
                     <p><span className="material-symbols-outlined">schedule</span> {m.frequency}</p>
                   </div>
                   <button className="medications-page__stop-btn" onClick={async () => { if(window.confirm('Tem certeza que deseja interromper este tratamento manualmente?')) { const ok = await stopMedication(m.id); if(ok) showToast('Tratamento interrompido.', 'info'); } }} data-testid={`btn-stop-${m.id}`}>Parar</button>
@@ -219,12 +230,31 @@ export const MedicationsPage: React.FC = () => {
             <h2 className="medications-page__modal-title">Cadastrar Tratamento</h2>
             <form onSubmit={handleCreateTreatment} className="medications-page__form">
               <div className="medications-page__form-field">
+                <label htmlFor="med-type">Tipo</label>
+                <select id="med-type" value={newMedicationType} onChange={e => setNewMedicationType(e.target.value)} data-testid="input-medication-type">
+                  <option value="VACCINE">Vacina</option>
+                  <option value="VITAMIN">Vitamina</option>
+                  <option value="DEWORMER">Vermífugo</option>
+                  <option value="MEDICINE">Remédio</option>
+                </select>
+              </div>
+              <div className="medications-page__form-field">
                 <label htmlFor="med-name">Nome do Medicamento</label>
                 <input id="med-name" type="text" value={newName} onChange={e => setNewName(e.target.value)} required data-testid="input-name" />
               </div>
               <div className="medications-page__form-field">
                 <label htmlFor="med-dosage">Dosagem</label>
                 <input id="med-dosage" type="text" value={newDosage} onChange={e => setNewDosage(e.target.value)} required data-testid="input-dosage" />
+              </div>
+              <div className="medications-page__form-row">
+                <div className="medications-page__form-field">
+                  <label htmlFor="med-start-date">Data de início</label>
+                  <input id="med-start-date" type="date" value={newStartDate} onChange={e => setNewStartDate(e.target.value)} required data-testid="input-start-date" />
+                </div>
+                <div className="medications-page__form-field">
+                  <label htmlFor="med-duration">Duração do tratamento (dias)</label>
+                  <input id="med-duration" type="number" placeholder="Ex: 7" min="1" value={newDurationDays} onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')} data-testid="input-duration" />
+                </div>
               </div>
               <div className="medications-page__form-row">
                 <div className="medications-page__form-field">
@@ -242,10 +272,6 @@ export const MedicationsPage: React.FC = () => {
                     <input type="number" value={newCustomHours} onChange={e => setNewCustomHours(Number(e.target.value))} required data-testid="input-custom-hours" />
                   </div>
                 )}
-                <div className="medications-page__form-field">
-                  <label htmlFor="med-duration">Duração (dias)</label>
-                  <input id="med-duration" type="number" placeholder="Ex: 7" min="1" value={newDurationDays} onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')} data-testid="input-duration" />
-                </div>
               </div>
               <div className="medications-page__form-actions">
                 <button type="button" className="medications-page__btn-secondary" onClick={() => setIsFormOpen(false)} data-testid="btn-cancel">Cancelar</button>
