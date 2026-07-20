@@ -71,7 +71,7 @@ describe('VaccinesPage', () => {
       createMedication: mockCreateMedication,
       stopMedication: mockStopMedication,
     });
-    global.confirm = vi.fn(() => true);
+    window.confirm = vi.fn(() => true);
   });
 
   it('should render page with pets and records', () => {
@@ -127,7 +127,7 @@ describe('VaccinesPage', () => {
     const deleteButtons = screen.getAllByText('delete'); // icon text
     fireEvent.click(deleteButtons[0]);
 
-    expect(global.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalled();
     await waitFor(() => {
       expect(mockStopMedication).toHaveBeenCalledWith('m2');
       expect(mockShowToast).toHaveBeenCalledWith('Registro excluído.', 'info');

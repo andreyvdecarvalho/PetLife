@@ -29,7 +29,7 @@ describe('OnboardingPage', () => {
       error: null,
     });
     
-    global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+    window.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
   });
 
   it('should complete the entire onboarding flow successfully', async () => {

@@ -41,7 +41,9 @@ describe('useVeterinarianProfile', () => {
     await act(async () => {
       try {
         await result.current.createProfile({});
-      } catch (e) {}
+      } catch (e) {
+        // expected error
+      }
     });
 
     expect(result.current.error).toBe('Erro na criação');
@@ -70,7 +72,9 @@ describe('useVeterinarianProfile', () => {
     await act(async () => {
       try {
         await result.current.getMyProfile();
-      } catch (e) {}
+      } catch (e) {
+        // expected error
+      }
     });
 
     expect(result.current.error).toBe('Not found');

@@ -61,7 +61,7 @@ describe('PetsPageContent', () => {
     });
 
     // Mock window.confirm
-    global.confirm = vi.fn(() => true);
+    window.confirm = vi.fn(() => true);
   });
 
   it('should render loading state', () => {
@@ -119,7 +119,7 @@ describe('PetsPageContent', () => {
     const deleteButtons = screen.getAllByText(/Excluir/i);
     fireEvent.click(deleteButtons[0]);
 
-    expect(global.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalled();
     expect(mockDeletePet).toHaveBeenCalledWith('1');
 
     await waitFor(() => {
@@ -134,7 +134,7 @@ describe('PetsPageContent', () => {
       isLoading: false,
       fetchPets: mockFetchPets,
     });
-    global.confirm = vi.fn(() => false);
+    window.confirm = vi.fn(() => false);
 
     render(<MemoryRouter><PetsPageContent /></MemoryRouter>);
 
