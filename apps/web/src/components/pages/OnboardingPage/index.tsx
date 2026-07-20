@@ -27,9 +27,11 @@ export const OnboardingPageContent: React.FC = () => {
       setPreviewUrl(null);
       return;
     }
-    const objectUrl = URL.createObjectURL(photo);
-    setPreviewUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewUrl(reader.result as string);
+    };
+    reader.readAsDataURL(photo);
   }, [photo]);
 
   const handleNext = () => setStep(s => s + 1);
