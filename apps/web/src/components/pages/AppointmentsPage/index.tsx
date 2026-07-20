@@ -108,14 +108,15 @@ export const AppointmentsPageContent: React.FC = () => {
         <h1 className="appointments-page__title">Meus Agendamentos</h1>
         <button 
           className="appointments-page__add-btn"
-          aria-label="Adicionar agendamento"
           onClick={() => navigate('/routine')}
+          aria-label="Adicionar agendamento"
         >
-          <span className="material-symbols-outlined">add</span>
+          <span className="material-symbols-outlined icon-fill">add</span>
         </button>
       </div>
 
-      <div className="appointments-page__tabs shadow-sm">
+      <main className="appointments-page__main">
+        <div className="appointments-page__tabs shadow-sm">
         <button 
           className={`appointments-page__tab ${activeTab === 'upcoming' ? 'active' : ''}`}
           onClick={() => setActiveTab('upcoming')}
@@ -211,6 +212,7 @@ export const AppointmentsPageContent: React.FC = () => {
           </div>
         )}
       </div>
+      </main>
     </div>
   );
 };

@@ -164,7 +164,9 @@ export const GroomingPageContent: React.FC = () => {
         <h2 className="page-grooming__title">Banho & Tosa</h2>
       </div>
       
-      <div className="page-grooming__pet-select-container" style={{ margin: '0 24px' }}>
+      <main className="page-grooming__main">
+      {/* Select Pet */}
+      <div className="page-grooming__pet-select-container">
         <label htmlFor="pet-select" className="page-grooming__label">Selecione o Pet:</label>
         <select
           id="pet-select"
@@ -316,7 +318,8 @@ export const GroomingPageContent: React.FC = () => {
           </div>
         </section>
       </div>
-
+      </main>
+      
       {/* Modal Form */}
       <Modal 
         isOpen={isFormOpen} 

@@ -1,18 +1,40 @@
 .vet-search-page {
-  padding: var(--spacing-md);
-  max-width: var(--max-width);
-  margin: 0 auto;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  font-family: var(--font-body);
 }
 
 .vet-search-page__header {
-  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-margin-mobile);
+  height: 4rem;
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: var(--space-md);
+  gap: 16px;
+}
+
+.vet-search-page__main {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
   width: 100%;
 }
 

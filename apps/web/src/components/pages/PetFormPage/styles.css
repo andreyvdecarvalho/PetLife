@@ -1,17 +1,22 @@
 .pet-form-page {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: var(--font-body);
 }
 
 .pet-form-page__header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  justify-content: space-between;
+  padding: 0 var(--space-margin-mobile);
+  height: 4rem;
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 
   max-width: var(--max-width);
   margin-left: auto;
@@ -19,9 +24,18 @@
   width: 100%;
 
   border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: var(--space-xs);
   margin-bottom: var(--space-md);
   gap: 16px;
+}
+
+.pet-form-page__main {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 .pet-form-page__back-btn {

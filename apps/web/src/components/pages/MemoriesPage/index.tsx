@@ -78,7 +78,8 @@ export const MemoriesPageContent: React.FC = () => {
         <p className="memories-page__subtitle">Capture os momentos inesquecíveis da vida do seu pet.</p>
       </section>
 
-      {/* Bento Grid: Growth Comparison (Hero Feature) */}
+      <main className="memories-page__main">
+      {/* Hero Section */}
       <section className="memories-page__hero">
         <div className="memories-page__hero-card glass-card">
           <div className="memories-page__hero-header">
@@ -170,6 +171,7 @@ export const MemoriesPageContent: React.FC = () => {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Floating Action Button (FAB) */}
       <button 

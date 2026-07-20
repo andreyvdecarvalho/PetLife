@@ -46,6 +46,7 @@ export function VetSearchPage() {
         <p>Busque profissionais qualificados próximos a você</p>
       </header>
 
+      <main className="vet-search-page__main">
       <div className="vet-search-page__search-bar">
         <span className="material-symbols-outlined vet-search-page__search-icon">search</span>
         <input 
@@ -114,6 +115,7 @@ export function VetSearchPage() {
           <p className="vet-search-page__empty">Nenhum veterinário encontrado com estes filtros.</p>
         )}
       </section>
+      </main>
     </div>
   );
 }
