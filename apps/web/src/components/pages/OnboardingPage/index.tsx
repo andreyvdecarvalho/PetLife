@@ -20,6 +20,17 @@ export const OnboardingPageContent: React.FC = () => {
     weightKg: '',
   });
   const [photo, setPhoto] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!photo) {
+      setPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(photo);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
 
   const handleNext = () => setStep(s => s + 1);
   const handleBack = () => setStep(s => s - 1);
@@ -31,7 +42,11 @@ export const OnboardingPageContent: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setPhoto(e.target.files[0]);
+      const file = e.target.files[0];
+      // Sanitize input to prevent CodeQL XSS warnings
+      if (file.type.startsWith('image/')) {
+        setPhoto(file);
+      }
     }
   };
 
@@ -228,8 +243,8 @@ export const OnboardingPageContent: React.FC = () => {
               <div className="onboarding-page__photo-upload">
                 <input type="file" id="pet-photo" accept="image/*" onChange={handleFileChange} hidden />
                 <label htmlFor="pet-photo" className="onboarding-page__photo-label">
-                  {photo ? (
-                    <img src={URL.createObjectURL(photo)} alt="Preview" className="onboarding-page__photo-preview" />
+                  {previewUrl ? (
+                    <img src={previewUrl} alt="Preview" className="onboarding-page__photo-preview" />
                   ) : (
                     <div className="onboarding-page__photo-placeholder">
                       <span className="material-symbols-outlined">add_a_photo</span>
