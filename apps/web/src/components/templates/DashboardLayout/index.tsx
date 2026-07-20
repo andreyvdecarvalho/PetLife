@@ -77,13 +77,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               Pets
             </Link>
             <Link
-              to="/profile"
-              className={`template-dashboard__sidebar-link ${isActive('/profile') ? 'active' : ''}`}
-            >
-              <span className="material-symbols-outlined">person</span>
-              Meu Perfil
-            </Link>
-            <Link
               to="/medications"
               className={`template-dashboard__sidebar-link ${isActive('/medications') ? 'active' : ''}`}
             >
@@ -132,6 +125,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             >
               <span className="material-symbols-outlined">photo_library</span>
               Memórias
+            </Link>
+            <Link
+              to="/profile"
+              className={`template-dashboard__sidebar-link ${isActive('/profile') ? 'active' : ''}`}
+            >
+              <span className="material-symbols-outlined">person</span>
+              Meu Perfil
             </Link>
           </nav>
         </aside>

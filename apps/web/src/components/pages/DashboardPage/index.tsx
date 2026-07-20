@@ -153,18 +153,6 @@ export const DashboardPageContent: React.FC = () => {
               <span className="dashboard-page__action-title">Agendamentos</span>
             </div>
           </button>
-          <button className="dashboard-page__action-card" 
-            onClick={() => activePet && navigate('/pets/new', { state: { pet: activePet } })} 
-            data-testid="btn-quick-edit-pet"
-            disabled={!activePet}
-          >
-            <div className="dashboard-page__action-icon dashboard-page__action-icon--primary">
-              <span className="material-symbols-outlined">edit</span>
-            </div>
-            <div className="dashboard-page__action-text">
-              <span className="dashboard-page__action-title">Editar Pet</span>
-            </div>
-          </button>
         </div>
       </section>
 
