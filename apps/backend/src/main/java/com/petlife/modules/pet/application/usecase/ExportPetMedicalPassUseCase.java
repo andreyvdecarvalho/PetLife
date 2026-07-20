@@ -9,7 +9,7 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.petlife.modules.auth.entity.UserPlan;
+import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;

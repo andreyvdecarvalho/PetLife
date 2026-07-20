@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
 import com.petlife.modules.veterinarian.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
@@ -39,7 +39,7 @@ class GetMyVetProfileUseCaseTest {
         user.setId(userId);
         veterinarian = new Veterinarian();
         veterinarian.setId(UUID.randomUUID());
-        veterinarian.setUser(user);
+        veterinarian.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         veterinarian.setCrmvNumber("12345");
         veterinarian.setFullName("Dr. Teste");
     }

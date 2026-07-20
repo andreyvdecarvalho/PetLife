@@ -1,7 +1,9 @@
-package com.petlife.modules.auth.entity;
+package com.petlife.modules.auth.infrastructure.persistence.entity;
 
-import com.petlife.shared.entity.BaseEntity;
+import com.petlife.modules.auth.domain.entity.Timezone;
+import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.pet.entity.Pet;
+import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +24,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-public class User extends BaseEntity {
+public class UserJpaEntity extends BaseEntity {
 
     @Column(name = "name", nullable = false, length = 200)
     private String name;

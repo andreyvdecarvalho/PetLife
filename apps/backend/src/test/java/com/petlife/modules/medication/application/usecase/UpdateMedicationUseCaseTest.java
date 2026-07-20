@@ -11,7 +11,7 @@ import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
 import com.petlife.modules.medication.infrastructure.dto.UpdateMedicationRequest;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class UpdateMedicationUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(user);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
 
         medication = new Medication();
         medication.setId(medId);
@@ -140,7 +140,7 @@ class UpdateMedicationUseCaseTest {
     void shouldThrowExceptionWhenPetBelongsToAnotherUser() {
         User anotherUser = new User();
         anotherUser.setId(UUID.randomUUID());
-        pet.setUser(anotherUser);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(anotherUser));
         
         UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));

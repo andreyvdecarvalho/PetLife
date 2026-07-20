@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VetFavoriteRepositoryPort;
 import com.petlife.modules.veterinarian.entity.VetFavorite;
 import com.petlife.modules.veterinarian.entity.Veterinarian;
@@ -44,7 +44,7 @@ class ListFavoriteVetsUseCaseTest {
 
         favorite = new VetFavorite();
         favorite.setId(UUID.randomUUID());
-        favorite.setUser(user);
+        favorite.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         favorite.setVeterinarian(vet);
     }
 

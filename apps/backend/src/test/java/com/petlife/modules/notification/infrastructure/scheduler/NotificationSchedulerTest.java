@@ -15,7 +15,7 @@ import com.petlife.modules.pet.infrastructure.persistence.ConsultationJpaReposit
 import com.petlife.modules.pet.infrastructure.persistence.JpaGroomingRepository;
 import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
 import com.petlife.modules.pet.infrastructure.persistence.VaccinationRepository;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,7 @@ class NotificationSchedulerTest {
         pet = new Pet();
         pet.setId(UUID.randomUUID());
         pet.setName("Rex");
-        pet.setUser(user);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
     }
 
     @Test

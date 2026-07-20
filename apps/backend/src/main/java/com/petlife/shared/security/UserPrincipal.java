@@ -1,6 +1,6 @@
 package com.petlife.shared.security;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

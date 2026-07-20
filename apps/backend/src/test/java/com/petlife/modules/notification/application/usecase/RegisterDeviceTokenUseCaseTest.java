@@ -1,7 +1,7 @@
 package com.petlife.modules.notification.application.usecase;
 
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.exception.BusinessException;
 import com.petlife.shared.factories.UserFactory;
 import org.junit.jupiter.api.DisplayName;

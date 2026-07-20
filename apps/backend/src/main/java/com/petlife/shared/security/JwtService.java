@@ -47,4 +47,16 @@ public class JwtService {
 
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+    public String generatePasswordResetToken(String email) {
+        Instant now = Instant.now();
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("petlife")
+                .issuedAt(now)
+                .expiresAt(now.plus(15, ChronoUnit.MINUTES))
+                .subject(email)
+                .claim("action", "reset-password")
+                .build();
+        return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
 }

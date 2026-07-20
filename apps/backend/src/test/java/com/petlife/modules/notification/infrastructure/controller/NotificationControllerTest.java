@@ -1,7 +1,7 @@
 package com.petlife.modules.notification.infrastructure.controller;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.notification.domain.entity.NotificationMessage;
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import com.petlife.modules.notification.infrastructure.persistence.NotificationMessageJpaRepository;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NotificationControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private NotificationMessageJpaRepository messageJpaRepository;

@@ -1,7 +1,7 @@
 package com.petlife.modules.medication.infrastructure.controller;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MedicationControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private PetRepositoryPort petRepository;
@@ -53,7 +53,7 @@ class MedicationControllerTest extends IntegrationTestBase {
         objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
         user = UserFactory.make();
         userRepository.save(user);
-        pet = PetFactory.make(p -> p.setUser(user));
+        pet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)));
         petRepository.save(pet);
     }
 

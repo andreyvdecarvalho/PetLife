@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.VaccinationPort;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.entity.Vaccination;
@@ -49,7 +49,7 @@ class UpdateVaccinationUseCaseTest {
         
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(user);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         
         vaccination = new Vaccination();
         vaccination.setId(vaccineId);

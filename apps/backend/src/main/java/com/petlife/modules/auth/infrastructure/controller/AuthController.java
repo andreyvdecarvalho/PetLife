@@ -1,4 +1,4 @@
-package com.petlife.modules.auth.controller;
+package com.petlife.modules.auth.infrastructure.controller;
 
 import com.petlife.modules.auth.application.usecase.DeleteUserAccountUseCase;
 import com.petlife.modules.auth.application.usecase.ForgotPasswordUseCase;
@@ -10,15 +10,15 @@ import com.petlife.modules.auth.application.usecase.ResetPasswordUseCase;
 import com.petlife.modules.auth.application.usecase.UpdateUserProfileUseCase;
 import com.petlife.modules.auth.application.usecase.UploadUserPhotoUseCase;
 import com.petlife.modules.auth.application.usecase.RefreshTokenUseCase;
-import com.petlife.modules.auth.dto.ForgotPasswordRequest;
-import com.petlife.modules.auth.dto.GoogleLoginRequest;
-import com.petlife.modules.auth.dto.LoginRequest;
-import com.petlife.modules.auth.dto.RegisterRequest;
-import com.petlife.modules.auth.dto.ResetPasswordRequest;
-import com.petlife.modules.auth.dto.RefreshTokenRequest;
-import com.petlife.modules.auth.dto.TokenResponse;
-import com.petlife.modules.auth.dto.UpdateProfileRequest;
-import com.petlife.modules.auth.dto.UserResponse;
+import com.petlife.modules.auth.application.dto.ForgotPasswordRequest;
+import com.petlife.modules.auth.application.dto.GoogleLoginRequest;
+import com.petlife.modules.auth.application.dto.LoginRequest;
+import com.petlife.modules.auth.application.dto.RegisterRequest;
+import com.petlife.modules.auth.application.dto.ResetPasswordRequest;
+import com.petlife.modules.auth.application.dto.RefreshTokenRequest;
+import com.petlife.modules.auth.application.dto.TokenResponse;
+import com.petlife.modules.auth.application.dto.UpdateProfileRequest;
+import com.petlife.modules.auth.application.dto.UserResponse;
 import com.petlife.shared.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -92,7 +92,11 @@ public class AuthController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return ApiResponse.of(uploadUserPhotoUseCase.execute(userId, file));
+        try {
+            return ApiResponse.of(uploadUserPhotoUseCase.execute(userId, file.getBytes(), file.getSize()));
+        } catch (java.io.IOException e) {
+            throw com.petlife.shared.exception.BusinessException.badRequest("FILE_READ_ERROR", "Falha ao ler o arquivo.");
+        }
     }
 
     @PostMapping("/forgot-password")

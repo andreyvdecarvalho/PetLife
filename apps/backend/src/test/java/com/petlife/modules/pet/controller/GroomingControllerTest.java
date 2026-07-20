@@ -1,7 +1,7 @@
 package com.petlife.modules.pet.controller;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.pet.entity.Grooming;
 import com.petlife.modules.pet.entity.GroomingType;
 import com.petlife.modules.pet.entity.Pet;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GroomingControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private PetJpaRepository petRepository;
@@ -54,7 +54,7 @@ class GroomingControllerTest extends IntegrationTestBase {
         });
 
         testPet = new Pet();
-        testPet.setUser(testUser);
+        testPet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
         testPet.setName("Max");
         testPet.setSpecies(PetSpecies.DOG);
         testPet.setSex(PetSex.MALE);

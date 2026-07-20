@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.entity;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,7 @@ public class Pet extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity user;
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;

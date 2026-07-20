@@ -1,4 +1,4 @@
-package com.petlife.modules.auth.dto;
+package com.petlife.modules.auth.application.dto;
 
 public record TokenResponse(
     String accessToken,

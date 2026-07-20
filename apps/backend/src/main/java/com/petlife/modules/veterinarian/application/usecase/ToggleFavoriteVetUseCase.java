@@ -1,7 +1,7 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VetFavoriteRepositoryPort;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
 import com.petlife.modules.veterinarian.entity.VetFavorite;
@@ -34,7 +34,7 @@ public class ToggleFavoriteVetUseCase {
                     favorite -> vetFavoriteRepository.delete(favorite),
                     () -> {
                         VetFavorite favorite = new VetFavorite();
-                        favorite.setUser(user);
+                        favorite.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
                         favorite.setVeterinarian(vet);
                         vetFavoriteRepository.save(favorite);
                     }

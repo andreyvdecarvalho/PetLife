@@ -1,7 +1,7 @@
 package com.petlife.modules.notification.application.usecase;
 
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.notification.application.port.FcmServicePort;
 import com.petlife.modules.notification.application.port.NotificationMessageRepositoryPort;
 import com.petlife.modules.notification.application.port.NotificationPreferencesRepositoryPort;

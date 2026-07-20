@@ -1,6 +1,6 @@
 package com.petlife.modules.auth.application.port;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -1,10 +1,10 @@
-package com.petlife.modules.auth.dto;
+package com.petlife.modules.auth.application.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
-import com.petlife.modules.auth.entity.Timezone;
+import com.petlife.modules.auth.domain.entity.Timezone;
 
 public record UpdateProfileRequest(
     @NotBlank(message = "O nome é obrigatório.")

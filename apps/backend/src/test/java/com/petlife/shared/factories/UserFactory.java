@@ -1,7 +1,7 @@
 package com.petlife.shared.factories;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.entity.UserPlan;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.domain.entity.UserPlan;
 import net.datafaker.Faker;
 
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ public class UserFactory {
         user.setPlan(UserPlan.FREE);
         user.setEmailVerified(true);
         user.setAvatarUrl(faker.internet().image());
-        user.setTimezone(com.petlife.modules.auth.entity.Timezone.AMERICA_SAO_PAULO);
+        user.setTimezone(com.petlife.modules.auth.domain.entity.Timezone.AMERICA_SAO_PAULO);
         user.setLgpdAcceptedAt(LocalDateTime.now());
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());

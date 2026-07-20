@@ -1,8 +1,8 @@
-package com.petlife.modules.auth.dto;
+package com.petlife.modules.auth.application.dto;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.entity.UserPlan;
-import com.petlife.modules.auth.entity.Timezone;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.domain.entity.UserPlan;
+import com.petlife.modules.auth.domain.entity.Timezone;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

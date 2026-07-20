@@ -1,7 +1,7 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
 import com.petlife.modules.veterinarian.domain.exception.CrmvAlreadyExistsException;
 import com.petlife.modules.veterinarian.entity.Veterinarian;
@@ -31,7 +31,7 @@ public class CreateVeterinarianProfileUseCase {
         }
 
         Veterinarian vet = new Veterinarian();
-        vet.setUser(user);
+        vet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         vet.setCrmvNumber(request.getCrmvNumber());
         vet.setCrmvState(request.getCrmvState());
         vet.setFullName(request.getFullName());

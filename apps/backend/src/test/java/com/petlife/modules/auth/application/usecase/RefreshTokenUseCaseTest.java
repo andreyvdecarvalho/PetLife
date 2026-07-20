@@ -1,20 +1,17 @@
 package com.petlife.modules.auth.application.usecase;
 
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.auth.dto.RefreshTokenRequest;
-import com.petlife.modules.auth.dto.TokenResponse;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.application.dto.RefreshTokenRequest;
+import com.petlife.modules.auth.application.dto.TokenResponse;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.exception.BusinessException;
-import com.petlife.shared.security.JwtService;
+import com.petlife.modules.auth.application.port.TokenGeneratorPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-
 
 import java.util.Optional;
 import java.util.UUID;
@@ -30,10 +27,7 @@ class RefreshTokenUseCaseTest {
     private UserRepositoryPort userRepository;
 
     @Mock
-    private JwtService jwtService;
-
-    @Mock
-    private JwtDecoder jwtDecoder;
+    private TokenGeneratorPort tokenService;
 
     @InjectMocks
     private RefreshTokenUseCase refreshTokenUseCase;
@@ -53,16 +47,10 @@ class RefreshTokenUseCaseTest {
     void shouldRefreshTokenSuccessfully() {
         RefreshTokenRequest request = new RefreshTokenRequest("valid_refresh_token");
 
-        Jwt jwt = Jwt.withTokenValue("valid_refresh_token")
-                .header("alg", "none")
-                .claim("refresh", true)
-                .subject(userId.toString())
-                .build();
-
-        when(jwtDecoder.decode("valid_refresh_token")).thenReturn(jwt);
+        when(tokenService.extractUserIdFromRefreshToken("valid_refresh_token")).thenReturn(userId.toString());
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(jwtService.generateAccessToken(any())).thenReturn("new_access_token");
-        when(jwtService.generateRefreshToken(any())).thenReturn("new_refresh_token");
+        when(tokenService.generateAccessToken(any())).thenReturn("new_access_token");
+        when(tokenService.generateRefreshToken(any())).thenReturn("new_refresh_token");
 
         TokenResponse response = refreshTokenUseCase.execute(request);
 
@@ -74,7 +62,7 @@ class RefreshTokenUseCaseTest {
     @Test
     void shouldThrowExceptionWhenTokenIsInvalid() {
         RefreshTokenRequest request = new RefreshTokenRequest("invalid_token");
-        when(jwtDecoder.decode("invalid_token")).thenThrow(new RuntimeException("Invalid token"));
+        when(tokenService.extractUserIdFromRefreshToken("invalid_token")).thenReturn(null);
 
         assertThrows(BusinessException.class, () -> refreshTokenUseCase.execute(request));
     }
@@ -82,14 +70,7 @@ class RefreshTokenUseCaseTest {
     @Test
     void shouldThrowExceptionWhenTokenIsNotARefreshToken() {
         RefreshTokenRequest request = new RefreshTokenRequest("access_token");
-
-        Jwt jwt = Jwt.withTokenValue("access_token")
-                .header("alg", "none")
-                .claim("refresh", false)
-                .subject(userId.toString())
-                .build();
-
-        when(jwtDecoder.decode("access_token")).thenReturn(jwt);
+        when(tokenService.extractUserIdFromRefreshToken("access_token")).thenReturn(null);
 
         assertThrows(BusinessException.class, () -> refreshTokenUseCase.execute(request));
     }
@@ -98,28 +79,16 @@ class RefreshTokenUseCaseTest {
     void shouldThrowExceptionWhenSubjectIsInvalid() {
         RefreshTokenRequest request = new RefreshTokenRequest("token_invalid_sub");
 
-        Jwt jwt = Jwt.withTokenValue("token_invalid_sub")
-                .header("alg", "none")
-                .claim("refresh", true)
-                .subject("not-a-uuid")
-                .build();
+        when(tokenService.extractUserIdFromRefreshToken("token_invalid_sub")).thenThrow(new IllegalArgumentException("Invalid UUID"));
 
-        when(jwtDecoder.decode("token_invalid_sub")).thenReturn(jwt);
-
-        assertThrows(BusinessException.class, () -> refreshTokenUseCase.execute(request));
+        assertThrows(IllegalArgumentException.class, () -> refreshTokenUseCase.execute(request));
     }
 
     @Test
     void shouldThrowExceptionWhenUserNotFound() {
         RefreshTokenRequest request = new RefreshTokenRequest("valid_token_missing_user");
 
-        Jwt jwt = Jwt.withTokenValue("valid_token_missing_user")
-                .header("alg", "none")
-                .claim("refresh", true)
-                .subject(userId.toString())
-                .build();
-
-        when(jwtDecoder.decode("valid_token_missing_user")).thenReturn(jwt);
+        when(tokenService.extractUserIdFromRefreshToken("valid_token_missing_user")).thenReturn(userId.toString());
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class, () -> refreshTokenUseCase.execute(request));
@@ -131,13 +100,7 @@ class RefreshTokenUseCaseTest {
 
         RefreshTokenRequest request = new RefreshTokenRequest("valid_token_deleted_user");
 
-        Jwt jwt = Jwt.withTokenValue("valid_token_deleted_user")
-                .header("alg", "none")
-                .claim("refresh", true)
-                .subject(userId.toString())
-                .build();
-
-        when(jwtDecoder.decode("valid_token_deleted_user")).thenReturn(jwt);
+        when(tokenService.extractUserIdFromRefreshToken("valid_token_deleted_user")).thenReturn(userId.toString());
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         assertThrows(BusinessException.class, () -> refreshTokenUseCase.execute(request));

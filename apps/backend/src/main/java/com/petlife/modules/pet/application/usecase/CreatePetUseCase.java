@@ -1,8 +1,8 @@
 package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.entity.UserPlan;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
 import com.petlife.modules.pet.entity.Pet;
@@ -46,7 +46,7 @@ public class CreatePetUseCase {
         }
 
         Pet pet = new Pet();
-        pet.setUser(user);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         pet.setName(request.name());
         pet.setSpecies(request.species());
         pet.setBreed(request.breed());

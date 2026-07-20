@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.entity;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.entity.PetSpecies;
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
@@ -29,7 +29,7 @@ public class Veterinarian extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
+    private com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity user;
 
     @Column(name = "crmv_number", nullable = false, unique = true, length = 20)
     private String crmvNumber;

@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VetAddressRepositoryPort;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
 import com.petlife.modules.veterinarian.entity.VetAddress;
@@ -46,7 +46,7 @@ class DeleteVetAddressUseCaseTest {
         
         veterinarian = new Veterinarian();
         veterinarian.setId(UUID.randomUUID());
-        veterinarian.setUser(user);
+        veterinarian.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         
         address = new VetAddress();
         address.setId(addressId);

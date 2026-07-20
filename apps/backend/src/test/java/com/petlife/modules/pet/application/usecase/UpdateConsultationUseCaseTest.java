@@ -6,7 +6,7 @@ import com.petlife.modules.pet.entity.Consultation;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdateConsultationRequest;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class UpdateConsultationUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(user);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
 
         consultation = new Consultation();
         consultation.setId(consultationId);
@@ -117,7 +117,7 @@ class UpdateConsultationUseCaseTest {
     void shouldThrowExceptionWhenUserNotOwner() {
         User otherUser = new User();
         otherUser.setId(UUID.randomUUID());
-        pet.setUser(otherUser);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(otherUser));
 
         UpdateConsultationRequest req = new UpdateConsultationRequest();
         when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));

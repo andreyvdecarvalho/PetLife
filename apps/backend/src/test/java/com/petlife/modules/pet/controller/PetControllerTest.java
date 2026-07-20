@@ -1,8 +1,8 @@
 package com.petlife.modules.pet.controller;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.entity.UserPlan;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.domain.entity.UserPlan;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.entity.PetSex;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PetControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private PetRepositoryPort petRepository;
@@ -111,8 +111,8 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make(u -> u.setPlan(UserPlan.FREE));
             userRepository.save(user);
 
-            Pet pet1 = PetFactory.make(p -> p.setUser(user));
-            Pet pet2 = PetFactory.make(p -> p.setUser(user));
+            Pet pet1 = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)));
+            Pet pet2 = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)));
             petRepository.save(pet1);
             petRepository.save(pet2);
 
@@ -149,7 +149,7 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make();
             userRepository.save(user);
 
-            Pet pet = PetFactory.make(p -> p.setUser(user));
+            Pet pet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)));
             petRepository.save(pet);
 
             MockMultipartFile file = new MockMultipartFile(
@@ -175,7 +175,7 @@ class PetControllerTest extends IntegrationTestBase {
             userRepository.save(user);
             userRepository.save(otherUser);
 
-            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            Pet otherPet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(otherUser)));
             petRepository.save(otherPet);
 
             MockMultipartFile file = new MockMultipartFile(
@@ -198,7 +198,7 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make();
             userRepository.save(user);
 
-            Pet pet = PetFactory.make(p -> p.setUser(user));
+            Pet pet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)));
             petRepository.save(pet);
 
             byte[] largeBytes = new byte[3 * 1024 * 1024]; // 3MB
@@ -227,8 +227,8 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make();
             userRepository.save(user);
 
-            Pet pet1 = PetFactory.make(p -> { p.setUser(user); p.setName("Pluto"); });
-            Pet pet2 = PetFactory.make(p -> { p.setUser(user); p.setName("Mimi"); });
+            Pet pet1 = PetFactory.make(p -> { p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); p.setName("Pluto"); });
+            Pet pet2 = PetFactory.make(p -> { p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); p.setName("Mimi"); });
             petRepository.save(pet1);
             petRepository.save(pet2);
 
@@ -247,8 +247,8 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make();
             userRepository.save(user);
 
-            Pet petActive = PetFactory.make(p -> { p.setUser(user); p.setName("Ativo"); p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); });
-            Pet petArchived = PetFactory.make(p -> { p.setUser(user); p.setName("Arquivado"); p.setStatus(com.petlife.modules.pet.entity.PetStatus.ARCHIVED); });
+            Pet petActive = PetFactory.make(p -> { p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); p.setName("Ativo"); p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); });
+            Pet petArchived = PetFactory.make(p -> { p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); p.setName("Arquivado"); p.setStatus(com.petlife.modules.pet.entity.PetStatus.ARCHIVED); });
             petRepository.save(petActive);
             petRepository.save(petArchived);
 
@@ -266,12 +266,12 @@ class PetControllerTest extends IntegrationTestBase {
             userRepository.save(user);
 
             Pet petActive = PetFactory.make(p -> { 
-                p.setUser(user); 
+                p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); 
                 p.setName("Ativo"); 
                 p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); 
             });
             Pet petArchived = PetFactory.make(p -> { 
-                p.setUser(user); 
+                p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); 
                 p.setName("Arquivado"); 
                 p.setStatus(com.petlife.modules.pet.entity.PetStatus.ARCHIVED); 
             });
@@ -297,7 +297,7 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make();
             userRepository.save(user);
 
-            Pet pet = PetFactory.make(p -> { p.setUser(user); p.setName("Bidu"); });
+            Pet pet = PetFactory.make(p -> { p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); p.setName("Bidu"); });
             petRepository.save(pet);
 
             mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets/{id}", pet.getId())
@@ -326,7 +326,7 @@ class PetControllerTest extends IntegrationTestBase {
             userRepository.save(user);
             userRepository.save(otherUser);
 
-            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            Pet otherPet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(otherUser)));
             petRepository.save(otherPet);
 
             mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pets/{id}", otherPet.getId())
@@ -346,7 +346,7 @@ class PetControllerTest extends IntegrationTestBase {
             User user = UserFactory.make();
             userRepository.save(user);
 
-            Pet pet = PetFactory.make(p -> { p.setUser(user); p.setName("Rex"); });
+            Pet pet = PetFactory.make(p -> { p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); p.setName("Rex"); });
             petRepository.save(pet);
 
             var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest(
@@ -409,7 +409,7 @@ class PetControllerTest extends IntegrationTestBase {
             userRepository.save(user);
             userRepository.save(otherUser);
 
-            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            Pet otherPet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(otherUser)));
             petRepository.save(otherPet);
 
             var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest(
@@ -446,7 +446,7 @@ class PetControllerTest extends IntegrationTestBase {
             userRepository.save(user);
 
             Pet pet = PetFactory.make(p -> { 
-                p.setUser(user); 
+                p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user)); 
                 p.setStatus(com.petlife.modules.pet.entity.PetStatus.ACTIVE); 
             });
             petRepository.save(pet);
@@ -489,7 +489,7 @@ class PetControllerTest extends IntegrationTestBase {
             userRepository.save(user);
             userRepository.save(otherUser);
 
-            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            Pet otherPet = PetFactory.make(p -> p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(otherUser)));
             petRepository.save(otherPet);
 
             var request = new com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest(

@@ -1,8 +1,8 @@
 package com.petlife.modules.pet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.pet.entity.Consultation;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.entity.PetSex;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ConsultationControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private PetJpaRepository petRepository;
@@ -61,7 +61,7 @@ class ConsultationControllerTest extends IntegrationTestBase {
         });
 
         testPet = new Pet();
-        testPet.setUser(testUser);
+        testPet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
         testPet.setName("Max");
         testPet.setSpecies(PetSpecies.DOG);
         testPet.setSex(PetSex.MALE);

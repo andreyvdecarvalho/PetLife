@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
@@ -61,7 +61,7 @@ class CreateConsultationUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(user);
+        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         pet.setName("Rex");
         pet.setWeightKg(BigDecimal.valueOf(10.0));
     }

@@ -1,6 +1,6 @@
 package com.petlife.modules.medication.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
@@ -53,7 +53,7 @@ class CreateMedicationUseCaseTest {
         user = UserFactory.make(u -> u.setId(UUID.randomUUID()));
         pet = PetFactory.make(p -> {
             p.setId(UUID.randomUUID());
-            p.setUser(user);
+            p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
         });
     }
 

@@ -1,8 +1,8 @@
 package com.petlife.modules.veterinarian.infrastructure.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.veterinarian.entity.AvailabilityStatus;
 import com.petlife.modules.veterinarian.entity.Modality;
 import com.petlife.modules.veterinarian.entity.Veterinarian;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VeterinarianControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private VeterinarianJpaRepository veterinarianRepository;
@@ -63,7 +63,7 @@ class VeterinarianControllerTest extends IntegrationTestBase {
 
     private void createVetProfile() {
         testVet = new Veterinarian();
-        testVet.setUser(testUser);
+        testVet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
         testVet.setFullName("Test Vet");
         testVet.setCrmvState("SP");
         testVet.setCrmvNumber("12345");
@@ -172,7 +172,7 @@ class VeterinarianControllerTest extends IntegrationTestBase {
     void listFavorites_ShouldReturnOk() throws Exception {
         createVetProfile();
         VetFavorite favorite = new VetFavorite();
-        favorite.setUser(testUser);
+        favorite.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
         favorite.setVeterinarian(testVet);
         vetFavoriteRepository.save(favorite);
 

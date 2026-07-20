@@ -1,4 +1,4 @@
-package com.petlife.modules.auth.dto;
+package com.petlife.modules.auth.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

@@ -1,4 +1,4 @@
-package com.petlife.modules.auth.entity;
+package com.petlife.modules.auth.domain.entity;
 
 public enum Timezone {
     AMERICA_SAO_PAULO("America/Sao_Paulo"),
