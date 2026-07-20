@@ -39,7 +39,7 @@ describe('MemoriesPage', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Diary')).toBeDefined();
+    expect(screen.getByText('Diário')).toBeDefined();
     expect(screen.getByText('Capture os momentos inesquecíveis da vida do seu pet.')).toBeDefined();
     expect(screen.getByText('Veja o quanto Bella cresceu!')).toBeDefined();
     expect(screen.getByText('Aniversário de 1 ano')).toBeDefined();

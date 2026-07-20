@@ -14,20 +14,16 @@ describe('OnboardingPage', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('PetLife')).toBeDefined();
     expect(screen.getByText('Vamos conhecer o seu melhor amigo?')).toBeDefined();
     expect(screen.getByText('Adicione os detalhes do seu pet para começarmos a acompanhar a saúde dele de perto.')).toBeDefined();
     expect(screen.getByRole('button', { name: /começar/i })).toBeDefined();
   });
 
-  it('should redirect to /register when clicking the Começar button', async () => {
-    let testLocation: any;
-
+  it('should transition to the first step when clicking the Começar button', async () => {
     render(
       <MemoryRouter initialEntries={['/onboarding']}>
         <Routes>
           <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/register" element={<div data-testid="register-screen">Register Page</div>} />
         </Routes>
       </MemoryRouter>
     );
@@ -36,7 +32,7 @@ describe('OnboardingPage', () => {
     fireEvent.click(startBtn);
 
     await waitFor(() => {
-      expect(screen.getByTestId('register-screen')).toBeDefined();
+      expect(screen.getByText('Dados Básicos')).toBeDefined();
     });
   });
 });

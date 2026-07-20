@@ -70,7 +70,7 @@ describe('RegisterForm Component', () => {
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith('Test User', 'test@test.com', 'Senha@123');
       expect(mockShowToast).toHaveBeenCalledWith('Conta criada com sucesso! Seja bem-vindo(a) ✨', 'success');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockNavigate).toHaveBeenCalledWith('/onboarding');
     });
   });
 });
