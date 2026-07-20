@@ -58,7 +58,7 @@ export const RegisterForm: React.FC = () => {
     try {
       await register(name, email, password);
       showToast('Conta criada com sucesso! Seja bem-vindo(a) ✨', 'success');
-      navigate('/');
+      navigate('/onboarding');
     } catch (error: any) {
       console.error(error);
       const message = error.response?.data?.error?.message || 'Erro ao criar conta. Tente novamente.';

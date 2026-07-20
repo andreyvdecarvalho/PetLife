@@ -34,22 +34,7 @@ RUN mvn package -B -q \
     && mv target/*.jar target/app.jar
 
 # ==============================================================================
-# Stage 3 — EXTRACT: Extração com jarmode=tools (Spring Boot 4.x)
-# ==============================================================================
-# Separa o fat JAR em app.jar (classes) + lib/ (dependências).
-# Isso cria 2 camadas Docker:
-#   1. lib/     → Muda raramente (dependências)
-#   2. app.jar  → Muda a cada commit (código da aplicação)
-# ==============================================================================
-FROM eclipse-temurin:21-jre-alpine AS extract
-
-WORKDIR /build
-COPY --from=build /build/target/app.jar ./app.jar
-
-RUN java -Djarmode=tools -jar app.jar extract --destination extracted
-
-# ==============================================================================
-# Stage 4 — RUNTIME: Imagem final mínima
+# Stage 3 — RUNTIME: Imagem final mínima
 # ==============================================================================
 # Usa eclipse-temurin JRE Alpine (~80MB vs ~400MB do JDK).
 # Roda como usuário não-root por segurança.
@@ -66,9 +51,8 @@ RUN addgroup -S petlife && adduser -S petlife -G petlife
 
 WORKDIR /app
 
-# Copia libs (mudam raramente) antes do app.jar (muda a cada commit)
-COPY --from=extract /build/extracted/lib ./lib
-COPY --from=extract /build/extracted/app.jar ./app.jar
+# Copia o fat JAR do stage de build
+COPY --from=build /build/target/app.jar ./app.jar
 
 # Healthcheck nativo via Spring Actuator
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \

@@ -30,7 +30,7 @@ describe('ProfilePage', () => {
     
     // Tab text should be visible
     expect(screen.getByText('Meu Perfil')).toBeInTheDocument();
-    expect(screen.getByText('Configurações de Notificação')).toBeInTheDocument();
+    expect(screen.getByText('Notificações')).toBeInTheDocument();
   });
 
   it('should switch to Notifications tab on click', () => {
@@ -40,11 +40,11 @@ describe('ProfilePage', () => {
       </MemoryRouter>
     );
 
-    const notificationsTab = screen.getByText('Configurações de Notificação');
+    const notificationsTab = screen.getByText('Notificações');
     fireEvent.click(notificationsTab);
 
     expect(screen.getByTestId('notification-preferences-form')).toBeInTheDocument();
-    expect(screen.getByText('Preferências de Notificação')).toBeInTheDocument();
+    expect(screen.getByText('Notification Preferences Content')).toBeInTheDocument();
     
     // Profile form should not be present
     expect(screen.queryByTestId('profile-form')).not.toBeInTheDocument();

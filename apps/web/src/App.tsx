@@ -13,6 +13,8 @@ import { MedicationsPage } from './pages/MedicationsPage';
 import { RoutinePage } from './pages/RoutinePage';
 import { MemoriesPage } from './pages/MemoriesPage';
 import { PetFormPage } from './pages/PetFormPage';
+import { PetsPage } from './pages/PetsPage';
+import { VaccinesPage } from './pages/VaccinesPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { GroomingPage } from './pages/GroomingPage';
@@ -57,6 +59,14 @@ export const App: React.FC = () => {
               }
             />
             <Route
+              path="/pets"
+              element={
+                <PrivateRoute>
+                  <PetsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="/pets/:id"
               element={
                 <PrivateRoute>
@@ -93,6 +103,14 @@ export const App: React.FC = () => {
               element={
                 <PrivateRoute>
                   <MedicationsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/vaccines"
+              element={
+                <PrivateRoute>
+                  <VaccinesPage />
                 </PrivateRoute>
               }
             />

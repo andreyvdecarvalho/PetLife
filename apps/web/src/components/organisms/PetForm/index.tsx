@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useCreatePet } from '../../../application/pet/useCreatePet';
 import { useUpdatePet } from '../../../application/pet/useUpdatePet';
+import { useDeletePet } from '../../../application/pet/useDeletePet';
 import type { Pet, PetSex, PetSize, PetSpecies } from '../../../domain/pet/Pet';
 import { compressImage } from '../../../utils/imageCompressor';
 import { FormField } from '../../molecules/FormField';
 import { UploadButton } from '../../molecules/UploadButton';
 import { Button } from '../../atoms/Button';
+import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 import './styles.css';
 
 interface PetFormProps {
@@ -46,9 +48,12 @@ const BREED_SUGGESTIONS: Record<string, string[]> = {
 export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) => {
   const { createPet, loading: createLoading, error: createError } = useCreatePet();
   const { updatePet, loading: updateLoading, error: updateError } = useUpdatePet();
+  const { deletePet, loading: deleteLoading, error: deleteError } = useDeletePet();
 
-  const loading = createLoading || updateLoading;
-  const apiError = createError || updateError;
+  const loading = createLoading || updateLoading || deleteLoading;
+  const apiError = createError || updateError || deleteError;
+
+  const isSubmitting = useRef(false);
 
   // Campos do formulário
   const [name, setName] = useState('');
@@ -68,6 +73,12 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);
   
+  // Histórico de peso
+  const { data: weightHistory, loading: weightLoading, deleteWeight, updateWeight } = usePetWeightHistory(pet?.id || '');
+  const [editingWeightId, setEditingWeightId] = useState<string | null>(null);
+  const [editWeightValue, setEditWeightValue] = useState<string>('');
+  const [editWeightDate, setEditWeightDate] = useState<string>('');
+
   // Validações
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -147,7 +158,10 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting.current) return;
     if (!validate()) return;
+    
+    isSubmitting.current = true;
 
     try {
       const data = {
@@ -165,11 +179,7 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
       };
 
       if (pet) {
-        await updatePet(pet.id, data);
-        if (photoFile) {
-          const { petApi } = await import('../../../infrastructure/http/pet.api');
-          await petApi.uploadPhoto(pet.id, photoFile);
-        }
+        await updatePet(pet.id, data, photoFile || undefined);
       } else {
         await createPet(data, photoFile || undefined);
       }
@@ -177,6 +187,23 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
       onSuccess();
     } catch (err) {
       // Erro tratado pelos hooks e exposto via apiError
+    } finally {
+      isSubmitting.current = false;
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!pet) return;
+    if (!window.confirm('Tem certeza que deseja excluir este pet? Esta ação não pode ser desfeita.')) return;
+    
+    isSubmitting.current = true;
+    try {
+      await deletePet(pet.id);
+      onSuccess(); // Triggers navigation back and success message
+    } catch (err) {
+      // Error handled by hook
+    } finally {
+      isSubmitting.current = false;
     }
   };
 
@@ -377,11 +404,135 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
         />
       </div>
 
+      {/* Histórico de Peso */}
+      {pet && (
+        <div className="organism-pet-form__weight-history">
+          <h3 className="organism-pet-form__subtitle">Histórico de Peso</h3>
+          {weightLoading ? (
+            <p className="organism-pet-form__weight-loading">Carregando histórico...</p>
+          ) : weightHistory.length === 0 ? (
+            <p className="organism-pet-form__weight-empty">Nenhum registro de peso.</p>
+          ) : (
+            <div className="organism-pet-form__weight-list">
+              {weightHistory.map(record => (
+                <div key={record.id} className="organism-pet-form__weight-item">
+                  {editingWeightId === record.id ? (
+                    <div className="organism-pet-form__weight-edit-row">
+                      <input 
+                        type="date" 
+                        value={editWeightDate}
+                        onChange={e => setEditWeightDate(e.target.value)}
+                        className="atom-input"
+                      />
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <input 
+                          type="number" 
+                          step="0.01"
+                          value={editWeightValue}
+                          onChange={e => setEditWeightValue(e.target.value)}
+                          className="atom-input"
+                          style={{ width: '80px' }}
+                        />
+                        <span style={{ fontSize: '14px', color: 'var(--color-on-surface-variant)' }}>kg</span>
+                      </div>
+                      <div className="organism-pet-form__weight-actions">
+                        <button 
+                          type="button" 
+                          onClick={async () => {
+                            try {
+                              if (!editWeightValue || isNaN(Number(editWeightValue))) {
+                                alert('Peso inválido.');
+                                return;
+                              }
+                              if (!editWeightDate) {
+                                alert('Data inválida.');
+                                return;
+                              }
+                              await updateWeight(record.id, Number(editWeightValue), new Date(editWeightDate).toISOString());
+                              setEditingWeightId(null);
+                            } catch (err: any) {
+                              alert(err.message);
+                            }
+                          }}
+                          className="organism-pet-form__icon-btn success"
+                          title="Salvar"
+                        >
+                          <span className="material-symbols-outlined">check</span>
+                        </button>
+                        <button 
+                          type="button" 
+                          onClick={() => setEditingWeightId(null)}
+                          className="organism-pet-form__icon-btn cancel"
+                          title="Cancelar"
+                        >
+                          <span className="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="organism-pet-form__weight-info">
+                        <span className="organism-pet-form__weight-date">
+                          {new Date(record.recordedAt).toLocaleDateString('pt-BR')}
+                        </span>
+                        <span className="organism-pet-form__weight-value">
+                          {record.weightKg} kg
+                        </span>
+                      </div>
+                      <div className="organism-pet-form__weight-actions">
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            setEditingWeightId(record.id);
+                            setEditWeightValue(String(record.weightKg));
+                            setEditWeightDate(record.recordedAt.split('T')[0]);
+                          }}
+                          className="organism-pet-form__icon-btn edit"
+                          title="Editar"
+                        >
+                          <span className="material-symbols-outlined">edit</span>
+                        </button>
+                        <button 
+                          type="button" 
+                          onClick={async () => {
+                            if (window.confirm('Excluir este registro de peso?')) {
+                              try {
+                                await deleteWeight(record.id);
+                              } catch (err: any) {
+                                alert(err.message);
+                              }
+                            }
+                          }}
+                          className="organism-pet-form__icon-btn delete"
+                          title="Excluir"
+                        >
+                          <span className="material-symbols-outlined">delete</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Ações */}
       <div className="organism-pet-form__actions">
+        {pet && (
+          <Button 
+            type="button" 
+            variant="danger" 
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            Excluir Pet
+          </Button>
+        )}
         <Button 
           type="button" 
-          variant="outline" 
+          variant="secondary" 
           onClick={onCancel}
           disabled={loading}
           data-testid="btn-cancelar-pet"

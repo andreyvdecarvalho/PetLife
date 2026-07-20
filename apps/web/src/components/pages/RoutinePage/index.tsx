@@ -7,6 +7,8 @@ import { useMedications } from '../../../application/medications/useMedications'
 import { useConsultations } from '../../../application/consultation/useConsultations';
 import { useGrooming } from '../../../application/grooming/useGrooming';
 import { useVaccinations } from '../../../application/vaccination/useVaccinations';
+import { FormField } from '../../molecules/FormField';
+import { Button } from '../../atoms/Button';
 import './styles.css';
 
 interface ConsolidatedActivity {
@@ -291,31 +293,41 @@ export const RoutinePage: React.FC = () => {
           <div className="routine-page__modal">
             <h2 className="routine-page__modal-title">Planejar Atividade</h2>
             <form onSubmit={submitActivity} className="routine-page__form">
-              <div className="routine-page__form-field">
-                <label>Título</label>
-                <input type="text" value={actTitle} onChange={e => setActTitle(e.target.value)} required data-testid="input-act-title" />
-              </div>
+              <FormField
+                id="act-title"
+                label="Título"
+                type="text"
+                value={actTitle}
+                onChange={e => setActTitle(e.target.value)}
+                required
+                data-testid="input-act-title"
+              />
               <div className="routine-page__form-row">
-                <div className="routine-page__form-field">
-                  <label>Tipo</label>
-                  <select value={actType} onChange={e => setActType(e.target.value as any)} data-testid="input-act-type">
+                <div className="molecule-form-field">
+                  <label htmlFor="act-type" className="atom-label">Tipo</label>
+                  <select id="act-type" className="atom-input" value={actType} onChange={e => setActType(e.target.value as any)} data-testid="input-act-type">
                     <option value="WALK">Passeio</option>
                     <option value="FEEDING">Alimentação</option>
                     <option value="GENERIC">Geral</option>
                   </select>
                 </div>
-                <div className="routine-page__form-field">
-                  <label>Horário</label>
-                  <input type="time" value={actTime} onChange={e => setActTime(e.target.value)} required data-testid="input-act-time" />
-                </div>
+                <FormField
+                  id="act-time"
+                  label="Horário"
+                  type="time"
+                  value={actTime}
+                  onChange={e => setActTime(e.target.value)}
+                  required
+                  data-testid="input-act-time"
+                />
               </div>
-              <div className="routine-page__form-field">
-                <label>Descrição</label>
-                <textarea value={actDesc} onChange={e => setActDesc(e.target.value)} rows={3} data-testid="input-act-desc"></textarea>
+              <div className="molecule-form-field">
+                <label htmlFor="act-desc" className="atom-label">Descrição</label>
+                <textarea id="act-desc" className="atom-input" value={actDesc} onChange={e => setActDesc(e.target.value)} rows={3} data-testid="input-act-desc" />
               </div>
               <div className="routine-page__form-actions">
-                <button type="button" className="routine-page__btn-secondary" onClick={() => setIsActivityModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="routine-page__btn-primary">Salvar</button>
+                <Button type="button" variant="secondary" onClick={() => setIsActivityModalOpen(false)}>Cancelar</Button>
+                <Button type="submit">Salvar</Button>
               </div>
             </form>
           </div>
@@ -327,27 +339,45 @@ export const RoutinePage: React.FC = () => {
           <div className="routine-page__modal">
             <h2 className="routine-page__modal-title">Agendar Retorno</h2>
             <form onSubmit={submitAppointment} className="routine-page__form">
-              <div className="routine-page__form-field">
-                <label>Veterinário</label>
-                <input type="text" value={appVet} onChange={e => setAppVet(e.target.value)} required data-testid="input-app-vet" />
-              </div>
-              <div className="routine-page__form-field">
-                <label>Especialidade</label>
-                <input type="text" value={appSpec} onChange={e => setAppSpec(e.target.value)} data-testid="input-app-spec" />
-              </div>
+              <FormField
+                id="app-vet"
+                label="Veterinário"
+                type="text"
+                value={appVet}
+                onChange={e => setAppVet(e.target.value)}
+                required
+                data-testid="input-app-vet"
+              />
+              <FormField
+                id="app-spec"
+                label="Especialidade"
+                type="text"
+                value={appSpec}
+                onChange={e => setAppSpec(e.target.value)}
+                data-testid="input-app-spec"
+              />
               <div className="routine-page__form-row">
-                <div className="routine-page__form-field">
-                  <label>Clínica</label>
-                  <input type="text" value={appClinic} onChange={e => setAppClinic(e.target.value)} data-testid="input-app-clinic" />
-                </div>
-                <div className="routine-page__form-field">
-                  <label>Horário</label>
-                  <input type="time" value={appTime} onChange={e => setAppTime(e.target.value)} required data-testid="input-app-time" />
-                </div>
+                <FormField
+                  id="app-clinic"
+                  label="Clínica"
+                  type="text"
+                  value={appClinic}
+                  onChange={e => setAppClinic(e.target.value)}
+                  data-testid="input-app-clinic"
+                />
+                <FormField
+                  id="app-time"
+                  label="Horário"
+                  type="time"
+                  value={appTime}
+                  onChange={e => setAppTime(e.target.value)}
+                  required
+                  data-testid="input-app-time"
+                />
               </div>
               <div className="routine-page__form-actions">
-                <button type="button" className="routine-page__btn-secondary" onClick={() => setIsAppointmentModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="routine-page__btn-primary">Salvar</button>
+                <Button type="button" variant="secondary" onClick={() => setIsAppointmentModalOpen(false)}>Cancelar</Button>
+                <Button type="submit">Salvar</Button>
               </div>
             </form>
           </div>
@@ -359,27 +389,37 @@ export const RoutinePage: React.FC = () => {
           <div className="routine-page__modal">
             <h2 className="routine-page__modal-title">Agendar Banho e Tosa</h2>
             <form onSubmit={submitGrooming} className="routine-page__form">
-              <div className="routine-page__form-field">
-                <label>PetShop / Local</label>
-                <input type="text" value={groomProvider} onChange={e => setGroomProvider(e.target.value)} required data-testid="input-groom-provider" />
-              </div>
+              <FormField
+                id="groom-provider"
+                label="PetShop / Local"
+                type="text"
+                value={groomProvider}
+                onChange={e => setGroomProvider(e.target.value)}
+                required
+                data-testid="input-groom-provider"
+              />
               <div className="routine-page__form-row">
-                <div className="routine-page__form-field">
-                  <label>Tipo de Serviço</label>
-                  <select value={groomType} onChange={e => setGroomType(e.target.value as any)} data-testid="input-groom-type">
+                <div className="molecule-form-field">
+                  <label htmlFor="groom-type" className="atom-label">Tipo de Serviço</label>
+                  <select id="groom-type" className="atom-input" value={groomType} onChange={e => setGroomType(e.target.value as any)} data-testid="input-groom-type">
                     <option value="BATH">Banho</option>
                     <option value="GROOMING">Tosa</option>
                     <option value="BATH_AND_GROOMING">Banho & Tosa</option>
                   </select>
                 </div>
-                <div className="routine-page__form-field">
-                  <label>Horário</label>
-                  <input type="time" value={groomTime} onChange={e => setGroomTime(e.target.value)} required data-testid="input-groom-time" />
-                </div>
+                <FormField
+                  id="groom-time"
+                  label="Horário"
+                  type="time"
+                  value={groomTime}
+                  onChange={e => setGroomTime(e.target.value)}
+                  required
+                  data-testid="input-groom-time"
+                />
               </div>
               <div className="routine-page__form-actions">
-                <button type="button" className="routine-page__btn-secondary" onClick={() => setIsGroomingModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="routine-page__btn-primary">Salvar</button>
+                <Button type="button" variant="secondary" onClick={() => setIsGroomingModalOpen(false)}>Cancelar</Button>
+                <Button type="submit">Salvar</Button>
               </div>
             </form>
           </div>
@@ -391,9 +431,9 @@ export const RoutinePage: React.FC = () => {
           <div className="routine-page__modal">
             <h2 className="routine-page__modal-title">Agendar Medicamento</h2>
             <form onSubmit={submitMedicationSchedule} className="routine-page__form">
-              <div className="routine-page__form-field">
-                <label>Medicamento</label>
-                <select value={schedMedId} onChange={e => setSchedMedId(e.target.value)} required data-testid="input-sched-med">
+              <div className="molecule-form-field">
+                <label htmlFor="sched-med" className="atom-label">Medicamento</label>
+                <select id="sched-med" className="atom-input" value={schedMedId} onChange={e => setSchedMedId(e.target.value)} required data-testid="input-sched-med">
                   <option value="">Selecione um medicamento ativo</option>
                   {medications.filter(m => m.status === 'ACTIVE').map(m => (
                     <option key={m.id} value={m.id}>{m.name} ({m.dosage})</option>
@@ -401,22 +441,32 @@ export const RoutinePage: React.FC = () => {
                 </select>
               </div>
               <div className="routine-page__form-row">
-                <div className="routine-page__form-field">
-                  <label>Data</label>
-                  <input type="date" value={schedMedDate} onChange={e => setSchedMedDate(e.target.value)} required data-testid="input-sched-date" />
-                </div>
-                <div className="routine-page__form-field">
-                  <label>Horário</label>
-                  <input type="time" value={schedMedTime} onChange={e => setSchedMedTime(e.target.value)} required data-testid="input-sched-time" />
-                </div>
+                <FormField
+                  id="sched-date"
+                  label="Data"
+                  type="date"
+                  value={schedMedDate}
+                  onChange={e => setSchedMedDate(e.target.value)}
+                  required
+                  data-testid="input-sched-date"
+                />
+                <FormField
+                  id="sched-time"
+                  label="Horário"
+                  type="time"
+                  value={schedMedTime}
+                  onChange={e => setSchedMedTime(e.target.value)}
+                  required
+                  data-testid="input-sched-time"
+                />
               </div>
-              <div className="routine-page__form-field">
-                <label>Observações (opcional)</label>
-                <textarea value={schedMedNotes} onChange={e => setSchedMedNotes(e.target.value)} rows={2} data-testid="input-sched-notes" placeholder="Ex: administrar com alimento" />
+              <div className="molecule-form-field">
+                <label htmlFor="sched-notes" className="atom-label">Observações (opcional)</label>
+                <textarea id="sched-notes" className="atom-input" value={schedMedNotes} onChange={e => setSchedMedNotes(e.target.value)} rows={2} data-testid="input-sched-notes" placeholder="Ex: administrar com alimento" />
               </div>
               <div className="routine-page__form-actions">
-                <button type="button" className="routine-page__btn-secondary" onClick={() => setIsMedicationModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="routine-page__btn-primary" data-testid="btn-confirm-sched-med">Agendar</button>
+                <Button type="button" variant="secondary" onClick={() => setIsMedicationModalOpen(false)}>Cancelar</Button>
+                <Button type="submit" data-testid="btn-confirm-sched-med">Agendar</Button>
               </div>
             </form>
           </div>

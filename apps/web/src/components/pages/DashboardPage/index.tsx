@@ -5,8 +5,7 @@ import { useToast } from '../../molecules/Toast';
 import { PetCard } from '../../molecules/PetCard';
 import { WeightChart } from '../../organisms/WeightChart';
 import { useGetPets } from '../../../application/pet/useGetPets';
-import type { Pet, PetStatus } from '../../../domain/pet/Pet';
-import { useUpdatePetStatus } from '../../../application/pet/useUpdatePetStatus';
+import type { Pet } from '../../../domain/pet/Pet';
 import './styles.css';
 import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 
@@ -25,18 +24,6 @@ export const DashboardPageContent: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const { pets, isLoading, fetchPets } = useGetPets();
-  const { updatePetStatus, loading: statusLoading, error: statusError } = useUpdatePetStatus();
-  const handleToggleStatus = async (pet: Pet) => {
-    const newStatus: PetStatus = pet.status === 'ACTIVE' ? 'ARCHIVED' : 'ACTIVE';
-    try {
-      await updatePetStatus(pet.id, newStatus);
-      // Refresh list after status change
-      fetchPets();
-    } catch (e) {
-      // error handling is already inside hook (sets error state)
-      console.error(e);
-    }
-  };
   const [activePetId, setActivePetId] = useState<string | null>(null);
 
   // Busca a lista de pets na montagem do componente
@@ -118,7 +105,6 @@ export const DashboardPageContent: React.FC = () => {
               pet={pet}
               isActive={activePetId === pet.id}
               onClick={(p) => setActivePetId(p.id)}
-              onToggleStatus={handleToggleStatus}
             />
           ))}
           
@@ -165,18 +151,6 @@ export const DashboardPageContent: React.FC = () => {
             <div className="dashboard-page__action-icon dashboard-page__action-icon--surface"><span className="material-symbols-outlined">event</span></div>
             <div className="dashboard-page__action-text">
               <span className="dashboard-page__action-title">Agendamentos</span>
-            </div>
-          </button>
-          <button className="dashboard-page__action-card" 
-            onClick={() => activePet && navigate('/pets/new', { state: { pet: activePet } })} 
-            data-testid="btn-quick-edit-pet"
-            disabled={!activePet}
-          >
-            <div className="dashboard-page__action-icon dashboard-page__action-icon--primary">
-              <span className="material-symbols-outlined">edit</span>
-            </div>
-            <div className="dashboard-page__action-text">
-              <span className="dashboard-page__action-title">Editar Pet</span>
             </div>
           </button>
         </div>
@@ -262,8 +236,52 @@ export const DashboardPageContent: React.FC = () => {
                 <h3 className="dashboard-page__stats-title">Evolução de Peso</h3>
               </div>
               <span className="dashboard-page__stats-value">
-                {activePet?.weightKg || 24.5} <span className="dashboard-page__stats-unit">kg</span>
+                {activePet?.weightKg || '--'} <span className="dashboard-page__stats-unit">kg</span>
               </span>
+            </div>
+
+            <div className="dashboard-page__weight-input-group">
+              <input 
+                type="number" 
+                step="0.01"
+                placeholder="Ex: 12.5" 
+                id="quick-weight-input"
+                className="dashboard-page__weight-input"
+              />
+              <button 
+                className="dashboard-page__weight-btn"
+                onClick={async () => {
+                  const input = document.getElementById('quick-weight-input') as HTMLInputElement;
+                  const newWeight = Number(input.value);
+                  if (newWeight > 0 && activePet) {
+                    try {
+                      // Importar useUpdatePet hook no topo não é possível dentro do onClick.
+                      // Eu vou usar diretamente o petApi.
+                      const { petApi } = await import('../../../infrastructure/http/pet.api');
+                      await petApi.update(activePet.id, { 
+                        name: activePet.name,
+                        species: activePet.species,
+                        sex: activePet.sex,
+                        breed: activePet.breed || undefined,
+                        birthDate: activePet.birthDate || undefined,
+                        size: activePet.size || undefined,
+                        neutered: activePet.neutered,
+                        microchipId: activePet.microchipId || undefined,
+                        allergies: activePet.allergies || undefined,
+                        notes: activePet.notes || undefined,
+                        weightKg: newWeight
+                      });
+                      showToast('Peso registrado com sucesso! ✨', 'success');
+                      input.value = '';
+                      fetchPets(); // Atualiza a dashboard
+                    } catch (err) {
+                      showToast('Erro ao registrar peso.', 'error');
+                    }
+                  }
+                }}
+              >
+                Registrar
+              </button>
             </div>
 
             {/* Chart */}

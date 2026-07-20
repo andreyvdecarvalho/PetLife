@@ -24,6 +24,7 @@
         <flyway.url></flyway.url>
         <flyway.user></flyway.user>
         <flyway.password></flyway.password>
+        <flyway.version>10.20.0</flyway.version>
     </properties>
 
     <dependencies>
@@ -63,6 +64,10 @@
         </dependency>
 
         <!-- Database & Migrations -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

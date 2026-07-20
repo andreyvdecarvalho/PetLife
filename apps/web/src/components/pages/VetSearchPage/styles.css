@@ -1,27 +1,66 @@
 .vet-search-page {
-  padding: var(--spacing-md);
-  max-width: var(--max-width);
-  margin: 0 auto;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  font-family: var(--font-body);
 }
 
 .vet-search-page__header {
-  margin-bottom: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-md) var(--space-margin-mobile);
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: var(--space-md);
+  gap: 4px;
+}
+
+.vet-search-page__main {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 .vet-search-page__header h2 {
-  font-family: var(--font-family-heading);
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-lg-mobile-size);
+  font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  margin-bottom: var(--spacing-xs);
+  margin: 0;
+  margin-bottom: var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .vet-search-page__header h2 {
+    font-size: var(--text-headline-lg-size);
+    font-weight: var(--text-headline-lg-weight);
+  }
 }
 
 .vet-search-page__header p {
   color: var(--color-on-surface-variant);
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
 }
 
 .vet-search-page__search-bar {
@@ -43,7 +82,7 @@
   border: none;
   background: transparent;
   flex: 1;
-  font-size: var(--font-size-md);
+  font-size: var(--text-body-md-size, 16px);
   color: var(--color-on-surface);
   outline: none;
 }
@@ -64,7 +103,7 @@
   background: var(--color-surface-container);
   color: var(--color-on-surface);
   font-weight: 600;
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
   cursor: pointer;
   border: none;
   transition: all 0.2s;

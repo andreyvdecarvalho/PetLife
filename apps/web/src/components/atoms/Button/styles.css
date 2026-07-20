@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   padding: calc(var(--space-xs) * 1.5) var(--space-sm);
-  font-family: var(--font-label-md);
+  font-family: var(--font-label);
   font-size: var(--text-label-md-size, 14px);
   font-weight: var(--text-label-md-weight, 600);
   line-height: var(--text-label-md-line-height, 20px);

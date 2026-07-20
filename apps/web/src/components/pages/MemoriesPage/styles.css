@@ -1,24 +1,62 @@
 .memories-page {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg, 40px);
-  width: 100%;
+  font-family: var(--font-body);
 }
 
 /* Header */
 .memories-page__header {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-md) var(--space-margin-mobile);
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: var(--space-md);
+  gap: 4px;
+}
+
+.memories-page__main {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 .memories-page__title {
   font-family: var(--font-headline);
-  font-size: var(--text-display-lg-size, 48px);
-  font-weight: var(--text-display-lg-weight, 700);
-  line-height: var(--text-display-lg-line-height, 56px);
-  letter-spacing: var(--text-display-lg-letter-spacing, -0.02em);
-  color: var(--color-on-surface);
-  margin-bottom: var(--space-xs, 8px);
-  margin-top: 0;
+  font-size: var(--text-headline-lg-mobile-size);
+  font-weight: var(--text-headline-lg-mobile-weight);
+  color: var(--color-primary);
+  margin: 0;
+  margin-bottom: var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .memories-page__title {
+    font-size: var(--text-headline-lg-size);
+    font-weight: var(--text-headline-lg-weight);
+  }
 }
 
 .memories-page__subtitle {
@@ -100,12 +138,22 @@
   box-shadow: var(--shadow-ambient-sm);
   transition: background-color 0.2s, color 0.2s, transform 0.15s;
   width: 100%;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 @media (min-width: 576px) {
   .memories-page__add-photo-btn {
     width: auto;
-  }
+  
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
+}
 }
 
 .memories-page__add-photo-btn:hover {

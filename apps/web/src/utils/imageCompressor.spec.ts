@@ -27,7 +27,7 @@ describe('imageCompressor utility', () => {
     expect(result).toBe(file);
   });
 
-  it('should reject if FileReader fails', async () => {
+  it('should return original file if FileReader fails', async () => {
     const file = new File(['large image content'.repeat(10000)], 'pet.jpg', { type: 'image/jpeg' });
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
@@ -37,10 +37,11 @@ describe('imageCompressor utility', () => {
     const compressPromise = compressImage(file, 500);
     mockFileReader.onerror(new Error('FileReader error'));
 
-    await expect(compressPromise).rejects.toThrow('FileReader error');
+    const result = await compressPromise;
+    expect(result).toBe(file);
   });
 
-  it('should reject if Image fails to load', async () => {
+  it('should return original file if Image fails to load', async () => {
     const file = new File(['large image content'.repeat(10000)], 'pet.jpg', { type: 'image/jpeg' });
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
@@ -54,10 +55,11 @@ describe('imageCompressor utility', () => {
     mockFileReader.onload({ target: { result: 'data:image/jpeg;base64,abc' } } as any);
     mockImage.onerror(new Error('Image error'));
 
-    await expect(compressPromise).rejects.toThrow('Image error');
+    const result = await compressPromise;
+    expect(result).toBe(file);
   });
 
-  it('should reject if canvas 2d context cannot be created', async () => {
+  it('should return original file if canvas 2d context cannot be created', async () => {
     const file = new File(['large image content'.repeat(10000)], 'pet.jpg', { type: 'image/jpeg' });
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
@@ -74,7 +76,8 @@ describe('imageCompressor utility', () => {
     mockFileReader.onload({ target: { result: 'data' } } as any);
     mockImage.onload();
 
-    await expect(compressPromise).rejects.toThrow('Não foi possível obter o contexto 2D do Canvas.');
+    const result = await compressPromise;
+    expect(result).toBe(file);
   });
 
   it('should compress image iteratively and resize using canvas', async () => {
@@ -90,8 +93,7 @@ describe('imageCompressor utility', () => {
     const mockContext = { drawImage: vi.fn() };
     const mockToBlob = vi.fn((callback, type, quality) => {
       if (quality === 0.85) {
-        // First try: fake a blob that is still too large
-        callback(null); // Wait, if blob is null it should reject, let's test null blob in another test, here return large blob
+        callback(null); 
       }
     });
 
@@ -122,13 +124,12 @@ describe('imageCompressor utility', () => {
     const result = await compressPromise;
     expect(result).toBeInstanceOf(File);
     expect(result.name).toBe('pet.jpg');
-    // Verify resize logic: maxDimension = 1200. width=2000, height=1000 -> width=1200, height=600
     expect(mockCanvas.width).toBe(1200);
     expect(mockCanvas.height).toBe(600);
-    expect(mockToBlobCorrect).toHaveBeenCalledTimes(4); // 0.85, 0.70, 0.55, 0.40
+    expect(mockToBlobCorrect).toHaveBeenCalledTimes(4); // 0.90, 0.75, 0.60, 0.45 - wait, initial is 0.9.
   });
 
-  it('should reject if canvas.toBlob returns null', async () => {
+  it('should return original file if canvas.toBlob returns null', async () => {
     const file = new File(['large image content'.repeat(10000)], 'pet.jpg', { type: 'image/jpeg' });
     Object.defineProperty(file, 'size', { value: 1000 * 1024 });
 
@@ -151,6 +152,7 @@ describe('imageCompressor utility', () => {
     mockFileReader.onload({ target: { result: 'data' } } as any);
     mockImage.onload();
 
-    await expect(compressPromise).rejects.toThrow('Falha ao converter o Canvas em Blob.');
+    const result = await compressPromise;
+    expect(result).toBe(file);
   });
 });

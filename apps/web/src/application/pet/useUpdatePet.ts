@@ -12,14 +12,20 @@ export function useUpdatePet() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const updatePet = async (id: string, data: CreatePetData) => {
+  const updatePet = async (id: string, data: CreatePetData, photo?: File) => {
     setLoading(true);
     setError(null);
     try {
       const response = await petApi.update(id, data);
-      return response.data.data;
+      let pet = response.data.data;
+
+      if (photo) {
+        const photoResponse = await petApi.uploadPhoto(pet.id, photo);
+        pet = photoResponse.data.data;
+      }
+      return pet;
     } catch (err: any) {
-      const errMsg = err.response?.data?.error?.message || 'Falha ao atualizar pet.';
+      const errMsg = err.response?.data?.error?.message || 'Falha ao atualizar pet e/ou enviar foto.';
       setError(errMsg);
       throw new Error(errMsg);
     } finally {

@@ -35,13 +35,14 @@ export const PetFormPage: React.FC = () => {
           {editingPet ? 'Editar Pet' : 'Cadastrar Novo Pet'}
         </h1>
       </div>
-      <div className="pet-form-page__content">
+
+      <main className="pet-form-page__main">
         <PetForm 
           pet={editingPet}
           onSuccess={handleSuccess}
           onCancel={handleCancel}
         />
-      </div>
+      </main>
     </div>
   );
 };

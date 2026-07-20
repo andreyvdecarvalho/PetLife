@@ -4,8 +4,10 @@ import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.auth.entity.User;
 import com.petlife.modules.auth.entity.UserPlan;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
 import com.petlife.modules.pet.entity.Pet;
 import com.petlife.modules.pet.entity.PetStatus;
+import com.petlife.modules.pet.entity.WeightRecord;
 import com.petlife.modules.pet.infrastructure.dto.CreatePetRequest;
 import com.petlife.modules.pet.infrastructure.dto.PetResponse;
 import com.petlife.shared.exception.BusinessException;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
@@ -22,6 +26,7 @@ public class CreatePetUseCase {
 
     private final PetRepositoryPort petRepository;
     private final UserRepositoryPort userRepository;
+    private final SaveWeightRecordPort saveWeightRecordPort;
 
     @Transactional
     public PetResponse execute(UUID userId, CreatePetRequest request) {
@@ -58,6 +63,14 @@ public class CreatePetUseCase {
         Pet savedPet = petRepository.save(pet);
         log.info("Pet cadastrado com sucesso: {} (ID: {}) para o usuário {}",
                 savedPet.getName(), savedPet.getId(), userId);
+
+        if (request.weightKg() != null) {
+            WeightRecord weightRecord = new WeightRecord();
+            weightRecord.setPet(savedPet);
+            weightRecord.setWeightKg(request.weightKg());
+            weightRecord.setRecordedAt(OffsetDateTime.now());
+            saveWeightRecordPort.save(weightRecord);
+        }
 
         return PetResponse.fromEntity(savedPet);
     }

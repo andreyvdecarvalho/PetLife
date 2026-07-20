@@ -17,7 +17,7 @@
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-body);
   background-color: var(--color-background);
   color: var(--color-on-background);
   min-height: 100vh;
@@ -32,6 +32,18 @@ body {
   flex-direction: column;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline);
+  color: var(--color-on-surface);
+}
+
+h1 { font-size: var(--text-headline-lg-size); font-weight: var(--text-headline-lg-weight); line-height: var(--text-headline-lg-line-height); }
+h2 { font-size: var(--text-headline-md-size); font-weight: var(--text-headline-md-weight); line-height: var(--text-headline-md-line-height); }
+
+@media (max-width: 768px) {
+  h1 { font-size: var(--text-headline-lg-mobile-size); line-height: var(--text-headline-lg-mobile-line-height); }
+}
+
 /* Micro-interações e Efeitos de Hover */
 a, button {
   transition: var(--transition-smooth);
@@ -41,11 +53,11 @@ button {
   cursor: pointer;
   border: none;
   background: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-label);
 }
 
 input, select, textarea {
-  font-family: var(--font-primary);
+  font-family: var(--font-body);
   outline: none;
   transition: var(--transition-smooth);
 }
@@ -56,16 +68,16 @@ input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: var(--color-surface-container-low);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--color-outline-variant);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: var(--color-outline);
 }
 
 /* Animações Globais */

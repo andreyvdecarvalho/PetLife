@@ -12,7 +12,10 @@ import com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest;
 import com.petlife.modules.pet.infrastructure.dto.UpdatePetStatusRequest;
 import com.petlife.shared.response.ApiResponse;
 import com.petlife.modules.pet.infrastructure.dto.WeightRecordResponse;
+import com.petlife.modules.pet.infrastructure.dto.UpdateWeightRecordRequest;
 import com.petlife.modules.pet.application.usecase.GetPetWeightHistoryUseCase;
+import com.petlife.modules.pet.application.usecase.UpdateWeightRecordUseCase;
+import com.petlife.modules.pet.application.usecase.DeleteWeightRecordUseCase;
 import com.petlife.modules.pet.application.usecase.DeletePetUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,6 +54,8 @@ public class PetController {
     private final UpdatePetUseCase updatePetUseCase;
     private final UpdatePetStatusUseCase updatePetStatusUseCase;
     private final GetPetWeightHistoryUseCase getPetWeightHistoryUseCase;
+    private final UpdateWeightRecordUseCase updateWeightRecordUseCase;
+    private final DeleteWeightRecordUseCase deleteWeightRecordUseCase;
     private final DeletePetUseCase deletePetUseCase;
 
     @PostMapping
@@ -119,6 +124,28 @@ public class PetController {
             @PathVariable UUID id) {
         UUID userId = UUID.fromString(jwt.getSubject());
         return getPetWeightHistoryUseCase.execute(userId, id);
+    }
+
+    @PutMapping("/{id}/weight-history/{weightId}")
+    @Operation(summary = "Editar registro de peso do pet")
+    public ApiResponse<WeightRecordResponse> updateWeightRecord(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @PathVariable UUID weightId,
+            @Valid @RequestBody UpdateWeightRecordRequest request) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        return ApiResponse.of(updateWeightRecordUseCase.execute(userId, id, weightId, request));
+    }
+
+    @DeleteMapping("/{id}/weight-history/{weightId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Deletar registro de peso do pet")
+    public void deleteWeightRecord(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @PathVariable UUID weightId) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        deleteWeightRecordUseCase.execute(userId, id, weightId);
     }
 
     @DeleteMapping("/{id}")

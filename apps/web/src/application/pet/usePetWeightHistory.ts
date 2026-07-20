@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { petApi } from '../../infrastructure/http/pet.api';
 import type { WeightRecordResponse } from '../../infrastructure/dto/WeightRecordResponse';
 
@@ -11,31 +11,43 @@ export function usePetWeightHistory(petId: string) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let isMounted = true;
+  const fetchHistory = useCallback(() => {
     setLoading(true);
     petApi
       .getWeightHistory(petId)
       .then((response) => {
-        if (isMounted) {
-          setData(response.data.data);
-          setError(null);
-        }
+        setData(response.data.data);
+        setError(null);
       })
       .catch((err) => {
-        if (isMounted) {
-          setError(err.response?.data?.error?.message || 'Failed to fetch weight history.');
-        }
+        setError(err.response?.data?.error?.message || 'Failed to fetch weight history.');
       })
       .finally(() => {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       });
-    return () => {
-      isMounted = false;
-    };
   }, [petId]);
 
-  return { data, loading, error };
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
+
+  const deleteWeight = async (weightId: string) => {
+    try {
+      await petApi.deleteWeightHistory(petId, weightId);
+      setData(prev => prev.filter(w => w.id !== weightId));
+    } catch (err: any) {
+      throw new Error(err.response?.data?.error?.message || 'Failed to delete weight record.');
+    }
+  };
+
+  const updateWeight = async (weightId: string, weightKg: number, recordedAt: string) => {
+    try {
+      await petApi.updateWeightHistory(petId, weightId, { weightKg, recordedAt });
+      fetchHistory(); // Refresh to get sorted data
+    } catch (err: any) {
+      throw new Error(err.response?.data?.error?.message || 'Failed to update weight record.');
+    }
+  };
+
+  return { data, loading, error, refresh: fetchHistory, deleteWeight, updateWeight };
 }

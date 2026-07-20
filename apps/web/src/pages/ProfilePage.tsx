@@ -8,7 +8,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div style={{ maxWidth: '600px', margin: '0 auto', marginBottom: '24px' }}>
+      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', marginBottom: '24px' }}>
         <div
           style={{
             display: 'flex',
@@ -28,7 +28,8 @@ export const ProfilePage: React.FC = () => {
                   : 'var(--color-on-surface-variant)',
               fontWeight: activeTab === 'profile' ? 600 : 500,
               cursor: 'pointer',
-              fontSize: '16px',
+              fontSize: 'var(--text-headline-md-size)',
+              fontFamily: 'var(--font-headline)',
               padding: '8px 16px',
               borderBottom: activeTab === 'profile' ? '2px solid var(--color-primary)' : 'none',
             }}
@@ -46,13 +47,14 @@ export const ProfilePage: React.FC = () => {
                   : 'var(--color-on-surface-variant)',
               fontWeight: activeTab === 'notifications' ? 600 : 500,
               cursor: 'pointer',
-              fontSize: '16px',
+              fontSize: 'var(--text-headline-md-size)',
+              fontFamily: 'var(--font-headline)',
               padding: '8px 16px',
               borderBottom:
                 activeTab === 'notifications' ? '2px solid var(--color-primary)' : 'none',
             }}
           >
-            Configurações de Notificação
+            Notificações
           </button>
         </div>
       </div>

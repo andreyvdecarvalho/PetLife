@@ -1,22 +1,52 @@
 .appointments-page {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md, 24px);
-  width: 100%;
+  font-family: var(--font-body);
 }
 
 .appointments-page__header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-xs, 8px);
-  text-align: left;
+  padding: 0 var(--space-margin-mobile);
+  height: 4rem;
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: var(--space-md);
+  gap: 16px;
+}
+
+.appointments-page__main {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
   .appointments-page__header-row {
     margin-bottom: var(--space-md, 24px);
-  }
+  
+  border-bottom: 1px solid var(--color-outline-variant);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  gap: 16px;
+}
 }
 
 .appointments-page__back-btn, .appointments-page__add-btn {
@@ -30,15 +60,30 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s, color 0.2s;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .appointments-page__back-btn {
   color: var(--color-on-surface-variant);
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .appointments-page__add-btn {
   background-color: var(--color-primary-container);
   color: var(--color-on-primary-container);
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .appointments-page__back-btn:hover {
@@ -53,10 +98,23 @@
 
 .appointments-page__title {
   font-family: var(--font-headline);
-  font-size: var(--text-headline-md-size, 24px);
-  font-weight: 700;
+  font-size: var(--text-headline-lg-mobile-size);
+  font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
+  flex: 1;
+  
+  text-align: left;
+  
+  
+  
+}
+
+@media (min-width: 768px) {
+  .appointments-page__title {
+    font-size: var(--text-headline-lg-size);
+    font-weight: var(--text-headline-lg-weight);
+  }
 }
 
 /* Segmented Control / Tabs */

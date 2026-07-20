@@ -165,7 +165,7 @@ export const VaccineForm: React.FC<VaccineFormProps> = ({
 
       <div className="organism-vaccine-form__actions">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="secondary" onClick={onCancel}>
             Cancelar
           </Button>
         )}

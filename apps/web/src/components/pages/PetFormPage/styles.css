@@ -1,17 +1,41 @@
 .pet-form-page {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: var(--font-body);
 }
 
 .pet-form-page__header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-margin-mobile);
+  height: 4rem;
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: var(--space-md);
   gap: 16px;
-  margin-bottom: 24px;
+}
+
+.pet-form-page__main {
+  padding: var(--space-sm) var(--space-margin-mobile) 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
 }
 
 .pet-form-page__back-btn {
@@ -25,6 +49,11 @@
   padding: 8px;
   border-radius: 50%;
   transition: background-color 0.2s ease;
+
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
 }
 
 .pet-form-page__back-btn:hover {
@@ -32,11 +61,24 @@
 }
 
 .pet-form-page__title {
-  font-family: var(--font-primary);
-  font-size: 24px;
-  font-weight: 700;
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-lg-mobile-size);
+  font-weight: var(--text-headline-lg-mobile-weight);
   color: var(--color-primary);
   margin: 0;
+  flex: 1;
+  
+  text-align: left;
+  
+  
+  
+}
+
+@media (min-width: 768px) {
+  .pet-form-page__title {
+    font-size: var(--text-headline-lg-size);
+    font-weight: var(--text-headline-lg-weight);
+  }
 }
 
 .pet-form-page__content {

@@ -8,7 +8,7 @@
   background-color: #F1F5F9;
   border: 1px solid transparent;
   border-radius: var(--radius-lg, 0.5rem);
-  font-family: var(--font-body-md);
+  font-family: var(--font-body);
   font-size: var(--text-body-md-size, 16px);
   color: var(--color-on-surface);
   padding: var(--space-sm, 12px) var(--space-sm, 16px);

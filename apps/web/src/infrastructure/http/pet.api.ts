@@ -49,4 +49,10 @@ export const petApi = {
 
   delete: (id: string) =>
     api.delete<void>(`/pets/${id}`),
+
+  updateWeightHistory: (id: string, weightId: string, data: { weightKg: number; recordedAt: string }) =>
+    api.put(`/pets/${id}/weight-history/${weightId}`, data),
+
+  deleteWeightHistory: (id: string, weightId: string) =>
+    api.delete(`/pets/${id}/weight-history/${weightId}`),
 };

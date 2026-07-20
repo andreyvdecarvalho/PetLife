@@ -7,7 +7,7 @@
 
 .molecule-attachment-manager__label {
   font-family: var(--font-family-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
   font-weight: var(--font-weight-semibold);
   color: var(--color-on-surface);
 }
@@ -44,7 +44,7 @@
 
 .molecule-attachment-manager__dropzone-text {
   font-family: var(--font-family-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-sm-size, 12px);
   color: var(--color-on-surface-variant);
 }
 

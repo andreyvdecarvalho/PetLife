@@ -120,6 +120,7 @@ export const PetProfilePageContent: React.FC = () => {
         </div>
       </div>
 
+      <main className="pet-profile__main">
       <div className="pet-profile__grid">
         <aside className="pet-profile__aside">
           <div className="pet-profile__card">
@@ -368,6 +369,7 @@ export const PetProfilePageContent: React.FC = () => {
           </div>
         </section>
       </div>
+      </main>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Registrar Consulta Médica">
         {id && (
