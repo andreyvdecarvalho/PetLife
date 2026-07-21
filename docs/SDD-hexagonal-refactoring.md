@@ -14,12 +14,12 @@ Implementar as correções arquiteturais mapeadas no `hexagonal_refactoring_plan
 - [x] **ArchUnit:** Criar `HexagonalArchitectureTest` no pacote `auth` garantindo ausência de dependências do Spring no Core.
 
 ### 1.2 FASE 2: Módulo `pet`
-- [ ] Ajustar pacotes do domínio.
-- [ ] Limpar as 6 entidades principais removendo anotações `@Entity` e movendo para a camada de infraestrutura as implementações JPA.
-- [ ] Criar `PetPersistenceAdapter` e `RoutineActivityPersistenceAdapter`.
-- [ ] **TDD:** Testar novos adapters e garantir que comportamentos transacionais permanecem corretos.
-- [ ] Extrair paginação Spring Data (`Pageable`, `Page`) das interfaces de Port.
-- [ ] Extrair criação de PDF e uploads S3 dos Use Cases.
+- [x] Ajustar pacotes do domínio.
+- [x] Limpar as 6 entidades principais removendo anotações `@Entity` e movendo para a camada de infraestrutura as implementações JPA.
+- [x] Criar `PetPersistenceAdapter` e `RoutineActivityPersistenceAdapter`.
+- [x] **TDD:** Testar novos adapters e garantir que comportamentos transacionais permanecem corretos.
+- [x] Extrair paginação Spring Data (`Pageable`, `Page`) das interfaces de Port.
+- [x] Extrair criação de PDF e uploads S3 dos Use Cases.
 
 ### 1.3 FASE 3: Módulos `medication` e `notification`
 - [ ] Isolar repositórios JPA no módulo `medication`.
