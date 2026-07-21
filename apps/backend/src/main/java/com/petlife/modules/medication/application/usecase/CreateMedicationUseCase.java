@@ -1,7 +1,7 @@
 package com.petlife.modules.medication.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.Medication;
@@ -54,7 +54,9 @@ public class CreateMedicationUseCase {
         }
 
         Medication medication = new Medication();
-        medication.setPet(pet);
+        var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
+        petJpa.setId(pet.getId());
+        medication.setPetEntity(petJpa);
         medication.setName(request.name());
         medication.setDosage(request.dosage());
         medication.setFrequency(request.frequency());
@@ -183,7 +185,7 @@ public class CreateMedicationUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPet().getId(),
+                med.getPetEntity().getId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

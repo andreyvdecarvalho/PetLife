@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.infrastructure.dto;
 
-import com.petlife.modules.pet.entity.GroomingType;
+import com.petlife.modules.pet.domain.entity.GroomingType;
 import lombok.Getter;
 import lombok.Setter;
 

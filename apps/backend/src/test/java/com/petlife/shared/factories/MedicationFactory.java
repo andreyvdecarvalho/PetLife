@@ -1,6 +1,6 @@
 package com.petlife.shared.factories;
 
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.domain.entity.*;
 import net.datafaker.Faker;
 
@@ -22,7 +22,16 @@ public class MedicationFactory {
 
     public static Medication makeMedication(Pet pet, Consumer<Medication> overrides) {
         Medication medication = new Medication();
-        medication.setPet(pet);
+        var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
+        petJpa.setId(pet.getId());
+        
+        if (pet.getUser() != null) {
+            var userJpa = new com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity();
+            userJpa.setId(pet.getUser().getId());
+            petJpa.setUser(userJpa);
+        }
+        
+        medication.setPetEntity(petJpa);
         medication.setName(faker.lorem().word());
         medication.setDosage("1 comprimido");
         medication.setFrequency(MedicationFrequency.DAILY);

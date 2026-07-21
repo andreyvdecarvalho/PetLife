@@ -1,7 +1,7 @@
 package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.VaccinationPort;
-import com.petlife.modules.pet.entity.Vaccination;
+import com.petlife.modules.pet.domain.entity.Vaccination;
 import com.petlife.modules.pet.infrastructure.dto.VaccinationResponse;
 import com.petlife.shared.exception.BusinessException;
 import java.time.OffsetDateTime;

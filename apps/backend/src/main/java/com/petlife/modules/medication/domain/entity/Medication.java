@@ -1,6 +1,6 @@
 package com.petlife.modules.medication.domain.entity;
 
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,7 +30,9 @@ public class Medication extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false, foreignKey = @ForeignKey(name = "fk_medication_pet"))
-    private Pet pet;
+    private com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity petEntity;
+
+
 
     @Column(name = "name", nullable = false, length = 200)
     private String name;

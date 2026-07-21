@@ -2,7 +2,7 @@ package com.petlife.modules.medication.application.usecase;
 
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.medication.domain.entity.MedicationAdministration;
@@ -51,7 +51,7 @@ class GetMedicationAdherenceUseCaseTest {
         user = UserFactory.make(u -> u.setId(UUID.randomUUID()));
         pet = PetFactory.make(p -> {
             p.setId(UUID.randomUUID());
-            p.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+            p.setUser(user);
         });
         medication = MedicationFactory.makeMedication(pet, m -> m.setId(UUID.randomUUID()));
     }
@@ -88,7 +88,7 @@ class GetMedicationAdherenceUseCaseTest {
         });
 
         given(petRepository.findById(petId)).willReturn(Optional.of(pet));
-        given(administrationRepository.findByMedicationPetId(petId)).willReturn(
+        given(administrationRepository.findByMedicationPetEntityId(petId)).willReturn(
                 List.of(doseTaken, doseSkipped, doseLate, dosePendingPast, dosePendingFuture)
         );
 
@@ -112,7 +112,7 @@ class GetMedicationAdherenceUseCaseTest {
         UUID userId = user.getId();
 
         given(petRepository.findById(petId)).willReturn(Optional.of(pet));
-        given(administrationRepository.findByMedicationPetId(petId)).willReturn(List.of());
+        given(administrationRepository.findByMedicationPetEntityId(petId)).willReturn(List.of());
 
         AdherenceResponse response = getMedicationAdherenceUseCase.execute(petId, userId);
 
@@ -133,3 +133,4 @@ class GetMedicationAdherenceUseCaseTest {
                 .hasMessageContaining("Este pet não pertence ao usuário autenticado.");
     }
 }
+

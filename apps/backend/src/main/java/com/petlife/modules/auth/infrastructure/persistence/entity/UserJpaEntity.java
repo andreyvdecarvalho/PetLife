@@ -2,7 +2,7 @@ package com.petlife.modules.auth.infrastructure.persistence.entity;
 
 import com.petlife.modules.auth.domain.entity.Timezone;
 import com.petlife.modules.auth.domain.entity.UserPlan;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -64,7 +64,7 @@ public class UserJpaEntity extends BaseEntity {
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Pet> pets = new ArrayList<>();
+    private List<com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity> pets = new ArrayList<>();
 
     @Column(name = "fcm_token")
     private String fcmToken;

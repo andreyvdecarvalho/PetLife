@@ -4,9 +4,9 @@ import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.WeightRecord;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.WeightRecord;
 import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.shared.exception.BusinessException;
@@ -61,7 +61,7 @@ class CreateConsultationUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
         pet.setName("Rex");
         pet.setWeightKg(BigDecimal.valueOf(10.0));
     }
@@ -229,3 +229,4 @@ class CreateConsultationUseCaseTest {
         assertEquals("INVALID_DATE", exception.getCode());
     }
 }
+

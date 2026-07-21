@@ -16,5 +16,5 @@ public interface MedicationAdministrationRepositoryPort {
     void deleteAll(Iterable<? extends MedicationAdministration> administrations);
     List<MedicationAdministration> findByMedicationIdAndStatusAndScheduledTimeAfter(
             UUID medicationId, MedicationAdministrationStatus status, OffsetDateTime time);
-    List<MedicationAdministration> findByMedicationPetId(UUID petId);
+    List<MedicationAdministration> findByMedicationPetEntityId(UUID petId);
 }

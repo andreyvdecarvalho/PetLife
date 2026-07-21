@@ -2,8 +2,8 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdateConsultationRequest;
 import com.petlife.modules.auth.domain.entity.User;
@@ -53,7 +53,7 @@ class UpdateConsultationUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
 
         consultation = new Consultation();
         consultation.setId(consultationId);
@@ -117,7 +117,7 @@ class UpdateConsultationUseCaseTest {
     void shouldThrowExceptionWhenUserNotOwner() {
         User otherUser = new User();
         otherUser.setId(UUID.randomUUID());
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(otherUser));
+        pet.setUser(otherUser);
 
         UpdateConsultationRequest req = new UpdateConsultationRequest();
         when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
@@ -150,3 +150,4 @@ class UpdateConsultationUseCaseTest {
                 updateConsultationUseCase.execute(petId, consultationId, userId, req));
     }
 }
+

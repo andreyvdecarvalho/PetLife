@@ -7,14 +7,13 @@ import com.petlife.modules.medication.infrastructure.persistence.MedicationAdmin
 import com.petlife.modules.notification.application.usecase.EnqueueNotificationUseCase;
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.Vaccination;
-import com.petlife.modules.pet.infrastructure.persistence.ConsultationJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.JpaGroomingRepository;
-import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.VaccinationRepository;
+import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
+import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.application.port.VaccinationPort;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.Vaccination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,11 +27,11 @@ import java.util.List;
 @Slf4j
 public class NotificationScheduler {
 
-    private final VaccinationRepository vaccinationRepository;
-    private final ConsultationJpaRepository consultationRepository;
-    private final JpaGroomingRepository groomingRepository;
+    private final VaccinationPort vaccinationRepository;
+    private final ConsultationRepositoryPort consultationRepository;
+    private final GroomingRepositoryPort groomingRepository;
     private final MedicationAdministrationJpaRepository administrationRepository;
-    private final PetJpaRepository petRepository;
+    private final PetRepositoryPort petRepository;
     private final EnqueueNotificationUseCase enqueueNotificationUseCase;
 
     @Scheduled(cron = "0 0 * * * *")
@@ -109,13 +108,13 @@ public class NotificationScheduler {
 
         for (MedicationAdministration admin : lateAdmin) {
             Medication med = admin.getMedication();
-            if (med != null && med.getPet() != null && med.getPet().getUser() != null) {
+            if (med != null && med.getPetEntity() != null && med.getPetEntity().getUser() != null) {
                 NotificationPayload payload = new NotificationPayload(
-                        med.getPet().getUser().getId(),
+                        med.getPetEntity().getUser().getId(),
                         NotificationType.MEDICATION_LATE,
                         "Medicamento Atrasado",
                         "A dose do medicamento " + med.getName() + " para o pet " 
-                                + med.getPet().getName() + " está atrasada.",
+                                + med.getPetEntity().getName() + " está atrasada.",
                         admin.getId()
                 );
                 enqueueNotificationUseCase.execute(payload);
@@ -127,9 +126,9 @@ public class NotificationScheduler {
     public void checkPetBirthdays() {
         log.info("Running scheduled check for pet birthdays");
         LocalDate today = LocalDate.now();
-        List<Pet> pets = petRepository.findPetsByBirthday(today.getMonthValue(), today.getDayOfMonth());
+        List<com.petlife.modules.pet.domain.entity.Pet> pets = petRepository.findPetsByBirthday(today.getMonthValue(), today.getDayOfMonth());
 
-        for (Pet pet : pets) {
+        for (com.petlife.modules.pet.domain.entity.Pet pet : pets) {
             if (pet.getUser() != null) {
                 NotificationPayload payload = new NotificationPayload(
                         pet.getUser().getId(),

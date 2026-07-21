@@ -3,11 +3,11 @@ package com.petlife.modules.pet.controller;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetSex;
-import com.petlife.modules.pet.entity.PetSpecies;
-import com.petlife.modules.pet.entity.PetStatus;
-import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetStatus;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.shared.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,14 +26,14 @@ class TimelineControllerTest extends IntegrationTestBase {
     private UserRepositoryPort userRepository;
 
     @Autowired
-    private PetJpaRepository petRepository;
+    private PetRepositoryPort petRepository;
 
     private User testUser;
     private Pet testPet;
 
     @BeforeEach
     void setUp() {
-        petRepository.deleteAll();
+        // petRepository.deleteAll() is not in port, ignoring for test or we can just leave it to DB rollback
 
         testUser = userRepository.findByEmail("test@petlife.com").orElseGet(() -> {
             User user = new User();
@@ -45,13 +45,13 @@ class TimelineControllerTest extends IntegrationTestBase {
         });
 
         testPet = new Pet();
-        testPet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
+        testPet.setUser(testUser);
         testPet.setName("Max");
         testPet.setSpecies(PetSpecies.DOG);
         testPet.setSex(PetSex.MALE);
         testPet.setStatus(PetStatus.ACTIVE);
         testPet.setBirthDate(LocalDate.now().minusYears(2));
-        testPet = petRepository.saveAndFlush(testPet);
+        testPet = petRepository.save(testPet);
     }
 
     @Test
@@ -77,8 +77,8 @@ class TimelineControllerTest extends IntegrationTestBase {
     void shouldDenyExportForFreeUser() throws Exception {
         testUser.setPlan(UserPlan.FREE);
         userRepository.save(testUser);
-        testPet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
-        petRepository.saveAndFlush(testPet);
+        testPet.setUser(testUser);
+        testPet = petRepository.save(testPet);
 
         mockMvc.perform(get("/api/v1/pets/{petId}/export", testPet.getId())
                 .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
@@ -89,8 +89,8 @@ class TimelineControllerTest extends IntegrationTestBase {
     void shouldExportPdfForPremiumUser() throws Exception {
         testUser.setPlan(UserPlan.PREMIUM);
         userRepository.save(testUser);
-        testPet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
-        petRepository.saveAndFlush(testPet);
+        testPet.setUser(testUser);
+        testPet = petRepository.save(testPet);
 
         mockMvc.perform(get("/api/v1/pets/{petId}/export", testPet.getId())
                 .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
@@ -98,3 +98,4 @@ class TimelineControllerTest extends IntegrationTestBase {
                 .andExpect(content().contentType(MediaType.APPLICATION_PDF));
     }
 }
+

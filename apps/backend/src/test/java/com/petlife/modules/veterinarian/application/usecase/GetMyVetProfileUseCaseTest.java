@@ -62,3 +62,5 @@ class GetMyVetProfileUseCaseTest {
                 .hasMessageContaining("Perfil de veterinário não encontrado");
     }
 }
+
+

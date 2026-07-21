@@ -1,11 +1,4 @@
-package com.petlife.modules.pet.entity;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+package com.petlife.modules.pet.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,14 +11,23 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "consultation")
 @Getter
 @Setter
-public class Consultation {
+public class ConsultationJpaEntity {
 
     @Id
     @GeneratedValue
@@ -33,7 +35,7 @@ public class Consultation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false, foreignKey = @ForeignKey(name = "fk_consultation_pet"))
-    private Pet pet;
+    private PetJpaEntity pet;
 
     @Column(name = "date", nullable = false)
     private OffsetDateTime date;
@@ -69,9 +71,11 @@ public class Consultation {
     @Column(name = "attachments", columnDefinition = "jsonb")
     private List<String> attachments = new ArrayList<>();
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 }

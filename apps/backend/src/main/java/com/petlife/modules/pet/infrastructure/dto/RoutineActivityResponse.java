@@ -1,8 +1,8 @@
 package com.petlife.modules.pet.infrastructure.dto;
 
-import com.petlife.modules.pet.entity.RoutineActivity;
-import com.petlife.modules.pet.entity.RoutineActivityStatus;
-import com.petlife.modules.pet.entity.RoutineActivityType;
+import com.petlife.modules.pet.domain.entity.RoutineActivity;
+import com.petlife.modules.pet.domain.entity.RoutineActivityStatus;
+import com.petlife.modules.pet.domain.entity.RoutineActivityType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

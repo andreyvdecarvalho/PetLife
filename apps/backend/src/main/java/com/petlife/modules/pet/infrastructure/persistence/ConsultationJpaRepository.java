@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.infrastructure.persistence;
 
-import com.petlife.modules.pet.entity.Consultation;
+import com.petlife.modules.pet.infrastructure.persistence.entity.ConsultationJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ConsultationJpaRepository extends JpaRepository<Consultation, UUID> {
-    List<Consultation> findByPetIdOrderByDateDesc(UUID petId);
-    List<Consultation> findByDateBetween(OffsetDateTime start, OffsetDateTime end);
-    List<Consultation> findByFollowUpDate(LocalDate followUpDate);
+public interface ConsultationJpaRepository extends JpaRepository<ConsultationJpaEntity, UUID> {
+    List<ConsultationJpaEntity> findByPetIdOrderByDateDesc(UUID petId);
+    List<ConsultationJpaEntity> findByDateBetween(OffsetDateTime start, OffsetDateTime end);
+    List<ConsultationJpaEntity> findByFollowUpDate(LocalDate followUpDate);
 }

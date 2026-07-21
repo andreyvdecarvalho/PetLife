@@ -2,14 +2,14 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.RoutineActivityRepositoryPort;
-import com.petlife.modules.pet.entity.RoutineActivity;
+import com.petlife.modules.pet.domain.entity.RoutineActivity;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 
 import java.time.LocalDate;
 import java.util.List;

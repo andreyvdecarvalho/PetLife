@@ -7,12 +7,12 @@ import com.petlife.modules.pet.application.port.GetPetWeightHistoryPort;
 import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.VaccinationPort;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.TimelineEventType;
-import com.petlife.modules.pet.entity.Vaccination;
-import com.petlife.modules.pet.entity.WeightRecord;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.TimelineEventType;
+import com.petlife.modules.pet.domain.entity.Vaccination;
+import com.petlife.modules.pet.domain.entity.WeightRecord;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;
 import com.petlife.shared.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -125,7 +125,7 @@ public class GetPetTimelineUseCase {
         }
 
         // 5. Medication Events (Start and End)
-        List<Medication> medications = medicationRepositoryPort.findByPetId(petId);
+        List<Medication> medications = medicationRepositoryPort.findByPetEntityId(petId);
         for (Medication m : medications) {
             // Start Event
             events.add(TimelineEventResponse.builder()

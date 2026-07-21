@@ -1,5 +1,7 @@
-package com.petlife.modules.pet.entity;
+package com.petlife.modules.pet.infrastructure.persistence.entity;
 
+import com.petlife.modules.pet.domain.entity.RoutineActivityStatus;
+import com.petlife.modules.pet.domain.entity.RoutineActivityType;
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,11 +23,11 @@ import java.time.LocalTime;
 @Table(name = "routine_activities")
 @Getter
 @Setter
-public class RoutineActivity extends BaseEntity {
+public class RoutineActivityJpaEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
-    private Pet pet;
+    private PetJpaEntity pet;
 
     @Column(name = "title", nullable = false)
     private String title;

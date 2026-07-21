@@ -1,7 +1,7 @@
 package com.petlife.modules.veterinarian.entity;
 
 import com.petlife.modules.auth.domain.entity.User;
-import com.petlife.modules.pet.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

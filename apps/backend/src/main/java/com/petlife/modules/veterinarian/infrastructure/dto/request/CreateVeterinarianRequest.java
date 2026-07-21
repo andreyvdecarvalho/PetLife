@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.request;
 
-import com.petlife.modules.pet.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
 import com.petlife.modules.veterinarian.entity.Modality;
 import com.petlife.modules.veterinarian.entity.PaymentType;
 import jakarta.validation.constraints.NotBlank;

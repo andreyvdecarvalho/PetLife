@@ -5,9 +5,9 @@ import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetStatus;
-import com.petlife.modules.pet.entity.WeightRecord;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.PetStatus;
+import com.petlife.modules.pet.domain.entity.WeightRecord;
 import com.petlife.modules.pet.infrastructure.dto.CreatePetRequest;
 import com.petlife.modules.pet.infrastructure.dto.PetResponse;
 import com.petlife.shared.exception.BusinessException;
@@ -46,7 +46,7 @@ public class CreatePetUseCase {
         }
 
         Pet pet = new Pet();
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
         pet.setName(request.name());
         pet.setSpecies(request.species());
         pet.setBreed(request.breed());

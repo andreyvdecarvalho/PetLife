@@ -1,5 +1,6 @@
-package com.petlife.modules.pet.entity;
+package com.petlife.modules.pet.infrastructure.persistence.entity;
 
+import com.petlife.modules.pet.domain.entity.GroomingType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,7 +30,7 @@ import java.util.UUID;
 @Table(name = "groomings")
 @Getter
 @Setter
-public class Grooming {
+public class GroomingJpaEntity {
 
     @Id
     @GeneratedValue
@@ -37,7 +38,7 @@ public class Grooming {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false, foreignKey = @ForeignKey(name = "fk_grooming_pet"))
-    private Pet pet;
+    private PetJpaEntity pet;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)

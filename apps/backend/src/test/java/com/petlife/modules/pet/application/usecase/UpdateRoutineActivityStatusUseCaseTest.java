@@ -1,8 +1,8 @@
 package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.RoutineActivityRepositoryPort;
-import com.petlife.modules.pet.entity.RoutineActivity;
-import com.petlife.modules.pet.entity.RoutineActivityStatus;
+import com.petlife.modules.pet.domain.entity.RoutineActivity;
+import com.petlife.modules.pet.domain.entity.RoutineActivityStatus;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

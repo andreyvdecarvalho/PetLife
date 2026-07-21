@@ -1,7 +1,7 @@
 package com.petlife.modules.medication.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
@@ -31,7 +31,7 @@ public class ListMedicationsUseCase {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
-        List<Medication> medications = medicationRepository.findByPetId(petId);
+        List<Medication> medications = medicationRepository.findByPetEntityId(petId);
 
         return medications.stream()
                 .map(this::mapToResponse)
@@ -54,7 +54,7 @@ public class ListMedicationsUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPet().getId(),
+                med.getPetEntity().getId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

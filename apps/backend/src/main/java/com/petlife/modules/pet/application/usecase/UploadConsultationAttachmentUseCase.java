@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
-import com.petlife.modules.pet.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Consultation;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.shared.exception.BusinessException;
 

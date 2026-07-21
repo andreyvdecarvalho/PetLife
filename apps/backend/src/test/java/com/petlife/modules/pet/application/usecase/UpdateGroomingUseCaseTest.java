@@ -3,9 +3,9 @@ package com.petlife.modules.pet.application.usecase;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.GroomingType;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.GroomingType;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.GroomingResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdateGroomingRequest;
 import com.petlife.shared.exception.BusinessException;
@@ -54,7 +54,7 @@ class UpdateGroomingUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
 
         grooming = new Grooming();
         grooming.setId(groomingId);
@@ -113,3 +113,4 @@ class UpdateGroomingUseCaseTest {
         assertEquals("GROOMING_NOT_FOUND", exception.getCode());
     }
 }
+

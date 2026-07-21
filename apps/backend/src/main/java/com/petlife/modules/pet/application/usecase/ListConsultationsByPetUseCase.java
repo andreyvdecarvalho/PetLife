@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.shared.exception.BusinessException;
 

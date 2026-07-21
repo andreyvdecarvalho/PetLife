@@ -3,7 +3,7 @@ package com.petlife.modules.pet.infrastructure.controller;
 import com.petlife.modules.pet.application.usecase.CreateRoutineActivityUseCase;
 import com.petlife.modules.pet.application.usecase.ListRoutineActivitiesByPetUseCase;
 import com.petlife.modules.pet.application.usecase.UpdateRoutineActivityStatusUseCase;
-import com.petlife.modules.pet.entity.RoutineActivity;
+import com.petlife.modules.pet.domain.entity.RoutineActivity;
 import com.petlife.modules.pet.infrastructure.dto.CreateRoutineActivityRequest;
 import com.petlife.modules.pet.infrastructure.dto.RoutineActivityResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdateRoutineActivityStatusRequest;

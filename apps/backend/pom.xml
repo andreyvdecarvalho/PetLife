@@ -25,6 +25,7 @@
         <flyway.user></flyway.user>
         <flyway.password></flyway.password>
         <flyway.version>10.20.0</flyway.version>
+        <lombok.version>1.18.34</lombok.version>
     </properties>
 
     <dependencies>

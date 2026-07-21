@@ -2,16 +2,16 @@ package com.petlife.modules.pet.controller;
 
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.GroomingType;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetSex;
-import com.petlife.modules.pet.entity.PetSpecies;
-import com.petlife.modules.pet.entity.PetStatus;
+import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.GroomingType;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetStatus;
 import com.petlife.modules.pet.infrastructure.dto.CreateGroomingRequest;
 import com.petlife.modules.pet.infrastructure.dto.UpdateGroomingRequest;
-import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.JpaGroomingRepository;
 import com.petlife.shared.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,18 +32,18 @@ class GroomingControllerTest extends IntegrationTestBase {
     private UserRepositoryPort userRepository;
 
     @Autowired
-    private PetJpaRepository petRepository;
+    private PetRepositoryPort petRepository;
 
     @Autowired
-    private JpaGroomingRepository groomingRepository;
+    private GroomingRepositoryPort groomingRepository;
 
     private User testUser;
     private Pet testPet;
 
     @BeforeEach
     void setUp() {
-        groomingRepository.deleteAll();
-        petRepository.deleteAll();
+        // groomingRepository.deleteAll();
+        // petRepository.deleteAll();
 
         testUser = userRepository.findByEmail("test@petlife.com").orElseGet(() -> {
             User user = new User();
@@ -54,12 +54,12 @@ class GroomingControllerTest extends IntegrationTestBase {
         });
 
         testPet = new Pet();
-        testPet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(testUser));
+        testPet.setUser(testUser);
         testPet.setName("Max");
         testPet.setSpecies(PetSpecies.DOG);
         testPet.setSex(PetSex.MALE);
         testPet.setStatus(PetStatus.ACTIVE);
-        testPet = ((com.petlife.modules.pet.application.port.PetRepositoryPort) petRepository).save(testPet);
+        testPet = petRepository.save(testPet);
     }
 
     @Test
@@ -144,3 +144,4 @@ class GroomingControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.data.photos[0]").value(org.hamcrest.Matchers.startsWith("data:image/jpeg;base64,")));
     }
 }
+

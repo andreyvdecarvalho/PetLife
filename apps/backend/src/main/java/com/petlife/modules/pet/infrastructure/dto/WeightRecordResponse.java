@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.infrastructure.dto;
 
-import com.petlife.modules.pet.entity.WeightRecord;
+import com.petlife.modules.pet.domain.entity.WeightRecord;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;

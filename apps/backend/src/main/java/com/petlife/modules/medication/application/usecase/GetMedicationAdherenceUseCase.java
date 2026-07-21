@@ -1,7 +1,7 @@
 package com.petlife.modules.medication.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.MedicationAdministration;
 import com.petlife.modules.medication.domain.entity.MedicationAdministrationStatus;
@@ -32,7 +32,7 @@ public class GetMedicationAdherenceUseCase {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
-        List<MedicationAdministration> administrations = administrationRepository.findByMedicationPetId(petId);
+        List<MedicationAdministration> administrations = administrationRepository.findByMedicationPetEntityId(petId);
 
         long totalDoses = administrations.size();
         long takenDoses = 0;

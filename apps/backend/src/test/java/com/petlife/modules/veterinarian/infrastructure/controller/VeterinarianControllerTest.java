@@ -230,3 +230,4 @@ class VeterinarianControllerTest extends IntegrationTestBase {
                 .andExpect(status().isOk());
     }
 }
+

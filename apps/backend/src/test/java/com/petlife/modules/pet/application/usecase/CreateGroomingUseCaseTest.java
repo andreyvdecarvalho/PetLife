@@ -3,9 +3,9 @@ package com.petlife.modules.pet.application.usecase;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.GroomingType;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.GroomingType;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.CreateGroomingRequest;
 import com.petlife.modules.pet.infrastructure.dto.GroomingResponse;
 import com.petlife.shared.exception.BusinessException;
@@ -51,7 +51,7 @@ class CreateGroomingUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
     }
 
     @Test
@@ -111,3 +111,4 @@ class CreateGroomingUseCaseTest {
         assertEquals("FORBIDDEN_PET_ACCESS", exception.getCode());
     }
 }
+

@@ -2,8 +2,8 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.WeightRecord;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.WeightRecord;
 import com.petlife.modules.pet.infrastructure.dto.PetResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdatePetRequest;
 import com.petlife.shared.exception.BusinessException;

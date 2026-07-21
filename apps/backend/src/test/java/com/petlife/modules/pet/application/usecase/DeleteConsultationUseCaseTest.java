@@ -3,8 +3,8 @@ package com.petlife.modules.pet.application.usecase;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class DeleteConsultationUseCaseTest {
     void setUp() {
         userId = UUID.randomUUID(); petId = UUID.randomUUID(); consultationId = UUID.randomUUID();
         user = new User(); user.setId(userId);
-        pet = new Pet(); pet.setId(petId); pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet = new Pet(); pet.setId(petId); pet.setUser(user);
         consultation = new Consultation(); consultation.setId(consultationId); consultation.setPet(pet);
     }
 
@@ -53,9 +53,10 @@ class DeleteConsultationUseCaseTest {
     @Test
     void shouldThrowExceptionWhenUserDoesNotOwnPet() {
         User anotherUser = new User(); anotherUser.setId(UUID.randomUUID());
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(anotherUser));
+        pet.setUser(anotherUser);
         when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
         assertThatThrownBy(() -> deleteConsultationUseCase.execute(petId, consultationId, userId))
                 .isInstanceOf(BusinessException.class).hasMessageContaining("autenticado");
     }
 }
+

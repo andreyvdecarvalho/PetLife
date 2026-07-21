@@ -1,4 +1,4 @@
-package com.petlife.modules.pet.entity;
+package com.petlife.modules.pet.domain.entity;
 
 public enum PetSpecies {
     DOG,

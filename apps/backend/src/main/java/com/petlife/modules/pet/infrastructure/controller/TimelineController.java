@@ -2,7 +2,7 @@ package com.petlife.modules.pet.infrastructure.controller;
 
 import com.petlife.modules.pet.application.usecase.ExportPetMedicalPassUseCase;
 import com.petlife.modules.pet.application.usecase.GetPetTimelineUseCase;
-import com.petlife.modules.pet.entity.TimelineEventType;
+import com.petlife.modules.pet.domain.entity.TimelineEventType;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;
 import com.petlife.shared.response.ApiResponse;
 import lombok.RequiredArgsConstructor;

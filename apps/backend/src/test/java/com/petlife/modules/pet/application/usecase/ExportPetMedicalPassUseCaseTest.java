@@ -3,8 +3,8 @@ package com.petlife.modules.pet.application.usecase;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.TimelineEventType;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.TimelineEventType;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class ExportPetMedicalPassUseCaseTest {
 
         pet = new Pet();
         pet.setId(petId);
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
         pet.setName("Rex");
         pet.setBirthDate(LocalDate.now().minusYears(2));
     }
@@ -79,7 +79,7 @@ class ExportPetMedicalPassUseCaseTest {
     @Test
     void shouldThrowForbiddenExceptionForFreeUser() {
         user.setPlan(UserPlan.FREE); // Free user
-        pet.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        pet.setUser(user);
 
         when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
 
@@ -119,3 +119,4 @@ class ExportPetMedicalPassUseCaseTest {
         assertTrue(pdfBytes.length > 0);
     }
 }
+

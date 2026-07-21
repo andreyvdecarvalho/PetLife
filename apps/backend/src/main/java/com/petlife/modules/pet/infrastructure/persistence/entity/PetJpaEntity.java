@@ -1,15 +1,12 @@
-package com.petlife.modules.pet.entity;
+package com.petlife.modules.pet.infrastructure.persistence.entity;
 
-import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSize;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetStatus;
 import com.petlife.shared.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -22,11 +19,11 @@ import java.time.LocalDate;
 @Table(name = "pets")
 @Getter
 @Setter
-public class Pet extends BaseEntity {
+public class PetJpaEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity user;
+    private UserJpaEntity user;
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;

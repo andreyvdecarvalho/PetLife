@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.application.port;
 
-import com.petlife.modules.pet.entity.RoutineActivity;
+import com.petlife.modules.pet.domain.entity.RoutineActivity;
 
 import java.time.LocalDate;
 import java.util.List;

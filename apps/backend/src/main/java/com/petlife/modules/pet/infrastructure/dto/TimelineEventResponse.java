@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.infrastructure.dto;
 
-import com.petlife.modules.pet.entity.TimelineEventType;
+import com.petlife.modules.pet.domain.entity.TimelineEventType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

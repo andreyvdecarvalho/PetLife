@@ -64,3 +64,4 @@ class ListFavoriteVetsUseCaseTest {
         assertThat(responses).isEmpty();
     }
 }
+

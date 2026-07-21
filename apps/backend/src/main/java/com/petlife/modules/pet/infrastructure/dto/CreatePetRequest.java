@@ -1,8 +1,8 @@
 package com.petlife.modules.pet.infrastructure.dto;
 
-import com.petlife.modules.pet.entity.PetSex;
-import com.petlife.modules.pet.entity.PetSize;
-import com.petlife.modules.pet.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSize;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;

@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.response;
 
-import com.petlife.modules.pet.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
 import com.petlife.modules.veterinarian.entity.AvailabilityStatus;
 import com.petlife.modules.veterinarian.entity.CrmvStatus;
 import com.petlife.modules.veterinarian.entity.Modality;

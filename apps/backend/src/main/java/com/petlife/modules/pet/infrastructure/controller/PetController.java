@@ -82,10 +82,10 @@ public class PetController {
     @Operation(summary = "Listar pets do tutor autenticado (paginado)")
     public ApiResponse<List<PetResponse>> list(
             @AuthenticationPrincipal Jwt jwt,
-            @RequestParam(value = "status", required = false) com.petlife.modules.pet.entity.PetStatus status,
+            @RequestParam(value = "status", required = false) com.petlife.modules.pet.domain.entity.PetStatus status,
             @PageableDefault(size = 10) Pageable pageable) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return getPetsUseCase.execute(userId, status, pageable);
+        return getPetsUseCase.execute(userId, status, pageable.getPageNumber(), pageable.getPageSize());
     }
 
     @GetMapping("/{id}")
