@@ -125,7 +125,7 @@ public class GetPetTimelineUseCase {
         }
 
         // 5. Medication Events (Start and End)
-        List<Medication> medications = medicationRepositoryPort.findByPetEntityId(petId);
+        List<Medication> medications = medicationRepositoryPort.findByPetId(petId);
         for (Medication m : medications) {
             // Start Event
             events.add(TimelineEventResponse.builder()

@@ -31,7 +31,7 @@ public class ListMedicationsUseCase {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
-        List<Medication> medications = medicationRepository.findByPetEntityId(petId);
+        List<Medication> medications = medicationRepository.findByPetId(petId);
 
         return medications.stream()
                 .map(this::mapToResponse)
@@ -42,8 +42,8 @@ public class ListMedicationsUseCase {
         List<MedicationAdministrationResponse> adminResponses = med.getAdministrations() == null ? List.of() :
             med.getAdministrations().stream().map(admin -> new MedicationAdministrationResponse(
                 admin.getId(),
-                admin.getMedication().getId(),
-                admin.getMedication().getName(),
+                admin.getMedicationId(),
+                admin.getMedicationName(),
                 admin.getScheduledTime(),
                 admin.getAdministeredAt(),
                 admin.getStatus(),
@@ -54,7 +54,7 @@ public class ListMedicationsUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPetEntity().getId(),
+                med.getPetId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

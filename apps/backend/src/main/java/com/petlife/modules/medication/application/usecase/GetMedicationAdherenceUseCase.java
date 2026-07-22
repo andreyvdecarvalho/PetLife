@@ -32,7 +32,7 @@ public class GetMedicationAdherenceUseCase {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
-        List<MedicationAdministration> administrations = administrationRepository.findByMedicationPetEntityId(petId);
+        List<MedicationAdministration> administrations = administrationRepository.findByMedicationPetId(petId);
 
         long totalDoses = administrations.size();
         long takenDoses = 0;

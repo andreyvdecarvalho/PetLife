@@ -54,9 +54,7 @@ public class CreateMedicationUseCase {
         }
 
         Medication medication = new Medication();
-        var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
-        petJpa.setId(pet.getId());
-        medication.setPetEntity(petJpa);
+        medication.setPetId(pet.getId());
         medication.setName(request.name());
         medication.setDosage(request.dosage());
         medication.setFrequency(request.frequency());
@@ -173,8 +171,8 @@ public class CreateMedicationUseCase {
         List<MedicationAdministrationResponse> adminResponses = med.getAdministrations() == null ? List.of() :
             med.getAdministrations().stream().map(admin -> new MedicationAdministrationResponse(
                 admin.getId(),
-                admin.getMedication().getId(),
-                admin.getMedication().getName(),
+                admin.getMedicationId(),
+                admin.getMedicationName(),
                 admin.getScheduledTime(),
                 admin.getAdministeredAt(),
                 admin.getStatus(),
@@ -185,7 +183,7 @@ public class CreateMedicationUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPetEntity().getId(),
+                med.getPetId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

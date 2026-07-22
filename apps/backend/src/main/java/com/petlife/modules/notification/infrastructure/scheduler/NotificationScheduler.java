@@ -1,9 +1,8 @@
 package com.petlife.modules.notification.infrastructure.scheduler;
 
-import com.petlife.modules.medication.domain.entity.Medication;
+import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.MedicationAdministration;
 import com.petlife.modules.medication.domain.entity.MedicationAdministrationStatus;
-import com.petlife.modules.medication.infrastructure.persistence.MedicationAdministrationJpaRepository;
 import com.petlife.modules.notification.application.usecase.EnqueueNotificationUseCase;
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
@@ -30,7 +29,7 @@ public class NotificationScheduler {
     private final VaccinationPort vaccinationRepository;
     private final ConsultationRepositoryPort consultationRepository;
     private final GroomingRepositoryPort groomingRepository;
-    private final MedicationAdministrationJpaRepository administrationRepository;
+    private final MedicationAdministrationRepositoryPort administrationRepository;
     private final PetRepositoryPort petRepository;
     private final EnqueueNotificationUseCase enqueueNotificationUseCase;
 
@@ -46,7 +45,7 @@ public class NotificationScheduler {
                         vac.getPet().getUser().getId(),
                         NotificationType.VACCINATION_DUE,
                         "Lembrete de Vacina",
-                        "A vacina " + vac.getVaccineName() + " para o pet " 
+                        "A vacina " + vac.getVaccineName() + " para o pet "
                                 + vac.getPet().getName() + " está agendada para amanhã.",
                         vac.getId()
                 );
@@ -107,14 +106,13 @@ public class NotificationScheduler {
                 .findByStatusAndScheduledTimeBefore(MedicationAdministrationStatus.PENDING, now);
 
         for (MedicationAdministration admin : lateAdmin) {
-            Medication med = admin.getMedication();
-            if (med != null && med.getPetEntity() != null && med.getPetEntity().getUser() != null) {
+            if (admin.getPetOwnerId() != null) {
                 NotificationPayload payload = new NotificationPayload(
-                        med.getPetEntity().getUser().getId(),
+                        admin.getPetOwnerId(),
                         NotificationType.MEDICATION_LATE,
                         "Medicamento Atrasado",
-                        "A dose do medicamento " + med.getName() + " para o pet " 
-                                + med.getPetEntity().getName() + " está atrasada.",
+                        "A dose do medicamento " + admin.getMedicationName()
+                                + " está atrasada.",
                         admin.getId()
                 );
                 enqueueNotificationUseCase.execute(payload);
@@ -126,7 +124,8 @@ public class NotificationScheduler {
     public void checkPetBirthdays() {
         log.info("Running scheduled check for pet birthdays");
         LocalDate today = LocalDate.now();
-        List<com.petlife.modules.pet.domain.entity.Pet> pets = petRepository.findPetsByBirthday(today.getMonthValue(), today.getDayOfMonth());
+        List<com.petlife.modules.pet.domain.entity.Pet> pets =
+                petRepository.findPetsByBirthday(today.getMonthValue(), today.getDayOfMonth());
 
         for (com.petlife.modules.pet.domain.entity.Pet pet : pets) {
             if (pet.getUser() != null) {

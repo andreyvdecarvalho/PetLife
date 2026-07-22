@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface MedicationRepositoryPort {
     Medication save(Medication medication);
     Optional<Medication> findById(UUID id);
-    List<Medication> findByPetEntityId(UUID petId);
-    List<Medication> findByPetEntityIdAndStatus(UUID petId, MedicationStatus status);
+    List<Medication> findByPetId(UUID petId);
+    List<Medication> findByPetIdAndStatus(UUID petId, MedicationStatus status);
 }
