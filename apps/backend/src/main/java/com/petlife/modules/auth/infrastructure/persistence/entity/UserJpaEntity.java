@@ -2,7 +2,7 @@ package com.petlife.modules.auth.infrastructure.persistence.entity;
 
 import com.petlife.modules.auth.domain.entity.Timezone;
 import com.petlife.modules.auth.domain.entity.UserPlan;
-import com.petlife.modules.pet.domain.entity.Pet;
+
 import com.petlife.shared.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

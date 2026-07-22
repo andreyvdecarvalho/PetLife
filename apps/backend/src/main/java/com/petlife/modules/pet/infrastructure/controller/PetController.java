@@ -21,8 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -83,9 +82,11 @@ public class PetController {
     public ApiResponse<List<PetResponse>> list(
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(value = "status", required = false) com.petlife.modules.pet.domain.entity.PetStatus status,
-            @PageableDefault(size = 10) Pageable pageable) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return getPetsUseCase.execute(userId, status, pageable.getPageNumber(), pageable.getPageSize());
+        var result = getPetsUseCase.execute(userId, status, page, size);
+        return ApiResponse.paged(result.content(), result.meta());
     }
 
     @GetMapping("/{id}")
@@ -123,7 +124,7 @@ public class PetController {
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return getPetWeightHistoryUseCase.execute(userId, id);
+        return ApiResponse.of(getPetWeightHistoryUseCase.execute(userId, id));
     }
 
     @PutMapping("/{id}/weight-history/{weightId}")

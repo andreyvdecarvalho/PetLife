@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.persistence.adapter;
 
-import com.petlife.modules.veterinarian.entity.VetSchedule;
+import com.petlife.modules.veterinarian.domain.entity.VetSchedule;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VetScheduleJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +28,10 @@ class VetSchedulePersistenceAdapterTest {
     @Test
     void save() {
         VetSchedule entity = new VetSchedule();
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any())).thenReturn(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity));
         VetSchedule saved = adapter.save(entity);
-        assertEquals(entity, saved);
-        verify(repository, times(1)).save(entity);
+        assertEquals(entity.getId(), saved.getId());
+        verify(repository, times(1)).save(any());
     }
 
     @Test
@@ -39,28 +39,28 @@ class VetSchedulePersistenceAdapterTest {
         UUID id = UUID.randomUUID();
         UUID vetId = UUID.randomUUID();
         VetSchedule entity = new VetSchedule();
-        when(repository.findByIdAndVeterinarianId(id, vetId)).thenReturn(Optional.of(entity));
+        when(repository.findByIdAndVeterinarianId(id, vetId)).thenReturn(Optional.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         Optional<VetSchedule> result = adapter.findByIdAndVeterinarianId(id, vetId);
         assertTrue(result.isPresent());
-        assertEquals(entity, result.get());
+        assertEquals(entity.getId(), result.get().getId());
     }
 
     @Test
     void findByVeterinarianId() {
         UUID vetId = UUID.randomUUID();
         VetSchedule entity = new VetSchedule();
-        when(repository.findByVeterinarianId(vetId)).thenReturn(List.of(entity));
+        when(repository.findByVeterinarianId(vetId)).thenReturn(List.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         List<VetSchedule> result = adapter.findByVeterinarianId(vetId);
         assertEquals(1, result.size());
-        assertEquals(entity, result.get(0));
+        assertEquals(entity.getId(), result.get(0).getId());
     }
 
     @Test
     void delete() {
         VetSchedule entity = new VetSchedule();
         adapter.delete(entity);
-        verify(repository, times(1)).delete(entity);
+        verify(repository, times(1)).delete(any());
     }
 }

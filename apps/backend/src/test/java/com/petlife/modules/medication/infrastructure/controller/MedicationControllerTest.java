@@ -45,8 +45,6 @@ class MedicationControllerTest extends IntegrationTestBase {
     @Autowired
     private MedicationAdministrationRepositoryPort administrationRepository;
 
-    @Autowired
-    private com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository petJpaRepository;
 
     private User user;
     private Pet pet;
@@ -82,8 +80,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("GET /api/v1/pets/{petId}/medications - Deve listar medicamentos")
     void shouldListMedications() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        med.setPetEntity(petJpaRepository.findById(pet.getId()).orElseThrow());
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         mockMvc.perform(get("/api/v1/pets/{petId}/medications", pet.getId())
                         .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
@@ -96,11 +93,10 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("PATCH /api/v1/medications/doses/{doseId} - Deve atualizar status da dose")
     void shouldUpdateDoseStatus() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        med.setPetEntity(petJpaRepository.findById(pet.getId()).orElseThrow());
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         MedicationAdministration dose = MedicationFactory.makeAdministration(med);
-        administrationRepository.save(dose);
+        dose = administrationRepository.save(dose);
 
         UpdateAdministrationRequest request = new UpdateAdministrationRequest(MedicationAdministrationStatus.TAKEN, null);
 
@@ -117,8 +113,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("PATCH /api/v1/medications/{id}/stop - Deve parar tratamento")
     void shouldStopMedication() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        med.setPetEntity(petJpaRepository.findById(pet.getId()).orElseThrow());
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         MedicationAdministration dose = MedicationFactory.makeAdministration(med, d -> {
             d.setStatus(MedicationAdministrationStatus.PENDING);
@@ -136,8 +131,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("GET /api/v1/pets/{petId}/medications/adherence - Deve retornar aderência")
     void shouldGetAdherence() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        med.setPetEntity(petJpaRepository.findById(pet.getId()).orElseThrow());
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         MedicationAdministration dose = MedicationFactory.makeAdministration(med, d -> {
             d.setStatus(MedicationAdministrationStatus.TAKEN);

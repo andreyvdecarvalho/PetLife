@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
-import java.util.UUID;
+
 
 @Component
 @RequiredArgsConstructor

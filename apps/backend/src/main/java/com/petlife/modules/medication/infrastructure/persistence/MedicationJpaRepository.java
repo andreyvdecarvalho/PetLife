@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface MedicationJpaRepository extends JpaRepository<MedicationJpaEntity, UUID> {
-    List<MedicationJpaEntity> findByPetId(UUID petId);
-    List<MedicationJpaEntity> findByPetIdAndStatus(UUID petId, MedicationStatus status);
+    List<MedicationJpaEntity> findByPetEntityId(UUID petId);
+    List<MedicationJpaEntity> findByPetEntityIdAndStatus(UUID petId, MedicationStatus status);
 }

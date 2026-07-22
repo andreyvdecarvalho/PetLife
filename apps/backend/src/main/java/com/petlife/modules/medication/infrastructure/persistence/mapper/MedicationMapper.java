@@ -64,6 +64,11 @@ public class MedicationMapper {
         if (domain.getPetId() != null) {
             PetJpaEntity pet = new PetJpaEntity();
             pet.setId(domain.getPetId());
+            if (domain.getPetOwnerId() != null) {
+                var user = new com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity();
+                user.setId(domain.getPetOwnerId());
+                pet.setUser(user);
+            }
             entity.setPetEntity(pet);
         }
 

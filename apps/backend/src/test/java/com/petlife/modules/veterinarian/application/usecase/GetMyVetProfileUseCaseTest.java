@@ -2,7 +2,7 @@ package com.petlife.modules.veterinarian.application.usecase;
 
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ class GetMyVetProfileUseCaseTest {
         user.setId(userId);
         veterinarian = new Veterinarian();
         veterinarian.setId(UUID.randomUUID());
-        veterinarian.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        veterinarian.setUser(user);
         veterinarian.setCrmvNumber("12345");
         veterinarian.setFullName("Dr. Teste");
     }

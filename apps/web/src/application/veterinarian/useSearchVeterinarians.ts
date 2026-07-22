@@ -1,26 +1,6 @@
 import { useState, useCallback } from 'react';
-import api from '../../infrastructure/http/api';
+import { veterinarianApi, SearchParams, PageResponse } from '../../infrastructure/http/veterinarian.api';
 import type { Veterinarian } from '../../domain/models/Veterinarian';
-
-interface SearchParams {
-  lat?: number;
-  lng?: number;
-  radiusKm?: number;
-  modality?: string;
-  specialty?: string;
-  emergency?: boolean;
-  page?: number;
-  size?: number;
-}
-
-interface PageResponse<T> {
-  content: T[];
-  pageNumber: number;
-  pageSize: number;
-  totalElements: number;
-  totalPages: number;
-  last: boolean;
-}
 
 export function useSearchVeterinarians() {
   const [loading, setLoading] = useState(false);
@@ -31,9 +11,9 @@ export function useSearchVeterinarians() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<PageResponse<Veterinarian>>('/veterinarians/search', { params });
-      setData(response.data);
-      return response.data;
+      const result = await veterinarianApi.search(params);
+      setData(result);
+      return result;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao buscar veterinários.');
       throw err;

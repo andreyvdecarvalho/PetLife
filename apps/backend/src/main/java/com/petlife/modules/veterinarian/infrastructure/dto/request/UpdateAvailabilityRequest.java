@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.request;
 
-import com.petlife.modules.veterinarian.entity.AvailabilityStatus;
+import com.petlife.modules.veterinarian.domain.entity.AvailabilityStatus;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateAvailabilityRequest(

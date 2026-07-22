@@ -1,4 +1,4 @@
-package com.petlife.modules.pet.entity;
+package com.petlife.modules.pet.domain.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

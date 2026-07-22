@@ -34,13 +34,13 @@ public class MedicationPersistenceAdapter implements MedicationRepositoryPort {
 
     @Override
     public List<Medication> findByPetId(UUID petId) {
-        return repository.findByPetId(petId).stream()
+        return repository.findByPetEntityId(petId).stream()
                 .map(mapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
     public List<Medication> findByPetIdAndStatus(UUID petId, MedicationStatus status) {
-        return repository.findByPetIdAndStatus(petId, status).stream()
+        return repository.findByPetEntityIdAndStatus(petId, status).stream()
                 .map(mapper::toDomain).collect(Collectors.toList());
     }
 }

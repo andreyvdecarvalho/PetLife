@@ -76,7 +76,7 @@ class UpdateMedicationUseCaseTest {
         medication.setId(medId);
         var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
         petJpa.setId(pet.getId());
-        medication.setPetEntity(petJpa);
+        medication.setPetId(pet.getId());
         medication.setStatus(MedicationStatus.ACTIVE);
         medication.setFrequency(MedicationFrequency.DAILY);
         medication.setStartDate(LocalDate.now());
@@ -167,7 +167,7 @@ class UpdateMedicationUseCaseTest {
         anotherPet.setId(UUID.randomUUID());
         var anotherPetJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
         anotherPetJpa.setId(anotherPet.getId());
-        medication.setPetEntity(anotherPetJpa);
+        medication.setPetId(anotherPet.getId());
 
         UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));

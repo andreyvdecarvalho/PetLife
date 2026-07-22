@@ -14,28 +14,24 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-
 /**
  * Configuração de JWT (Encoder + Decoder) — separada por SRP.
- * Utiliza par de chaves RSA (RS256) configuradas via RsaKeyConfig.
  */
 @Configuration
 @RequiredArgsConstructor
+@org.springframework.boot.context.properties.EnableConfigurationProperties(RsaKeyProperties.class)
 public class JwtConfig {
 
-    private final RSAPublicKey publicKey;
-    private final RSAPrivateKey privateKey;
+    private final RsaKeyProperties rsaKeys;
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(this.publicKey).build();
+        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(this.publicKey).privateKey(this.privateKey).build();
+        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }

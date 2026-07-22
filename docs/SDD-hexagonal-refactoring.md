@@ -45,17 +45,17 @@ Implementar as correções arquiteturais mapeadas no `hexagonal_refactoring_plan
       → `NotificationController` extrai `page`/`size` via `@RequestParam` e repassa ao Use Case.
 
 ### 1.4 FASE 4: Módulo `veterinarian` e Shared Config
-- [ ] Restaurar pacote `domain/entity` no módulo Veterinarian.
-- [ ] Corrigir `MockGeocodingAdapter`.
-- [ ] Refatorar a geração efêmera de par de chaves RSA (`RsaKeyConfig`).
+- [x] Restaurar pacote `domain/entity` no módulo Veterinarian.
+- [x] Corrigir `MockGeocodingAdapter`.
+- [x] Refatorar a geração efêmera de par de chaves RSA (`RsaKeyConfig`).
 
 ## 2. Escopo de Atuação (Frontend)
 
 ### 2.1 Adapters e Hooks
-- [ ] **TDD:** Criar testes para os novos arquivos `veterinarian.api.ts` e `routine.api.ts`.
-- [ ] Substituir acesso direto de `api` (axios) dentro dos hooks de `veterinarian` e `routine`.
-- [ ] Corrigir inversão de DIP em `usePushNotifications` injetando o hook `useToast` ou callback similar, evitando importação de componente da camada de Presentation.
-- [ ] Mover manipulação direta de DOM do `useExportMedicalPass` para uma camada de infra (BrowserAdapter).
+- [x] **TDD:** Criar testes para os novos arquivos `veterinarian.api.ts` e `routine.api.ts`.
+- [x] Substituir acesso direto de `api` (axios) dentro dos hooks de `veterinarian` e `routine`.
+- [x] Corrigir inversão de DIP em `usePushNotifications` injetando o hook `useToast` ou callback similar, evitando importação de componente da camada de Presentation.
+- [x] Mover manipulação direta de DOM do `useExportMedicalPass` para uma camada de infra (BrowserAdapter).
 
 ## 3. Diretrizes de Execução TDD (Red-Green-Refactor)
 Para cada refatoração:

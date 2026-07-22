@@ -1,18 +1,13 @@
-package com.petlife.modules.veterinarian.entity;
+package com.petlife.modules.veterinarian.infrastructure.persistence.entity;
 
-import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity;
 import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.veterinarian.domain.entity.AvailabilityStatus;
+import com.petlife.modules.veterinarian.domain.entity.CrmvStatus;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.PaymentType;
 import com.petlife.shared.entity.BaseEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -25,11 +20,11 @@ import java.util.List;
 @Table(name = "veterinarians")
 @Getter
 @Setter
-public class Veterinarian extends BaseEntity {
+public class VeterinarianJpaEntity extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity user;
+    private UserJpaEntity user;
 
     @Column(name = "crmv_number", nullable = false, unique = true, length = 20)
     private String crmvNumber;
@@ -84,11 +79,11 @@ public class Veterinarian extends BaseEntity {
     private String websiteUrl;
 
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<VetAddress> addresses = new ArrayList<>();
+    private List<VetAddressJpaEntity> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<VetSchedule> schedules = new ArrayList<>();
+    private List<VetScheduleJpaEntity> schedules = new ArrayList<>();
 
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<VetFavorite> favorites = new ArrayList<>();
+    private List<VetFavoriteJpaEntity> favorites = new ArrayList<>();
 }

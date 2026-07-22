@@ -3,8 +3,8 @@ package com.petlife.modules.veterinarian.application.usecase;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VetAddressRepositoryPort;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
-import com.petlife.modules.veterinarian.entity.VetAddress;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.VetAddress;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class DeleteVetAddressUseCaseTest {
         
         veterinarian = new Veterinarian();
         veterinarian.setId(UUID.randomUUID());
-        veterinarian.setUser(com.petlife.modules.auth.infrastructure.persistence.mapper.UserMapper.toJpaEntity(user));
+        veterinarian.setUser(user);
         
         address = new VetAddress();
         address.setId(addressId);

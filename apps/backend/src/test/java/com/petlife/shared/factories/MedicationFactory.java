@@ -31,7 +31,7 @@ public class MedicationFactory {
             petJpa.setUser(userJpa);
         }
         
-        medication.setPetEntity(petJpa);
+        medication.setPetId(pet.getId()); if (pet.getUser() != null) medication.setPetOwnerId(pet.getUser().getId());
         medication.setName(faker.lorem().word());
         medication.setDosage("1 comprimido");
         medication.setFrequency(MedicationFrequency.DAILY);
@@ -52,6 +52,11 @@ public class MedicationFactory {
     public static MedicationAdministration makeAdministration(Medication medication, Consumer<MedicationAdministration> overrides) {
         MedicationAdministration administration = new MedicationAdministration();
         administration.setMedication(medication);
+        if (medication != null) {
+            administration.setMedicationId(medication.getId());
+            administration.setMedicationName(medication.getName());
+            administration.setPetOwnerId(medication.getPetOwnerId());
+        }
         administration.setScheduledTime(OffsetDateTime.now(ZoneOffset.UTC).plusHours(2));
         administration.setStatus(MedicationAdministrationStatus.PENDING);
         administration.setCreatedAt(LocalDateTime.now());

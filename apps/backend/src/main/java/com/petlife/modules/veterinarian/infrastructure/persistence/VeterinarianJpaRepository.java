@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.persistence;
 
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.infrastructure.persistence.entity.VeterinarianJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -15,9 +15,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface VeterinarianJpaRepository extends JpaRepository<Veterinarian, UUID>,
-        JpaSpecificationExecutor<Veterinarian> {
-    Optional<Veterinarian> findByUserId(UUID userId);
+public interface VeterinarianJpaRepository extends JpaRepository<VeterinarianJpaEntity, UUID>,
+        JpaSpecificationExecutor<VeterinarianJpaEntity> {
+    Optional<VeterinarianJpaEntity> findByUserId(UUID userId);
     boolean existsByCrmvNumber(String crmvNumber);
 
     @Query(value = """
@@ -37,7 +37,7 @@ public interface VeterinarianJpaRepository extends JpaRepository<Veterinarian, U
             )) <= COALESCE(:radiusKm, 10.0)
           )
     """, nativeQuery = true)
-    Page<Veterinarian> searchVeterinarians(
+    Page<VeterinarianJpaEntity> searchVeterinarians(
         @Param("latitude") BigDecimal latitude,
         @Param("longitude") BigDecimal longitude,
         @Param("radiusKm") Double radiusKm,

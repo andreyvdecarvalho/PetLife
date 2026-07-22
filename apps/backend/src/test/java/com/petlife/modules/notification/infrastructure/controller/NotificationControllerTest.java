@@ -2,7 +2,7 @@ package com.petlife.modules.notification.infrastructure.controller;
 
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
-import com.petlife.modules.notification.domain.entity.NotificationMessage;
+
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import com.petlife.modules.notification.infrastructure.persistence.NotificationMessageJpaRepository;
 import com.petlife.shared.IntegrationTestBase;
@@ -38,7 +38,7 @@ class NotificationControllerTest extends IntegrationTestBase {
     @Test
     @DisplayName("GET /api/v1/notifications - Deve retornar lista paginada de notificacoes")
     void shouldGetPagedNotifications() throws Exception {
-        NotificationMessage msg = new NotificationMessage();
+        com.petlife.modules.notification.infrastructure.persistence.entity.NotificationMessageJpaEntity msg = new com.petlife.modules.notification.infrastructure.persistence.entity.NotificationMessageJpaEntity();
         msg.setUserId(user.getId());
         msg.setType(NotificationType.SYSTEM);
         msg.setTitle("System Alert");
@@ -57,7 +57,7 @@ class NotificationControllerTest extends IntegrationTestBase {
     @Test
     @DisplayName("PATCH /api/v1/notifications/{id}/read - Deve marcar notificacao como lida")
     void shouldMarkNotificationAsRead() throws Exception {
-        NotificationMessage msg = new NotificationMessage();
+        com.petlife.modules.notification.infrastructure.persistence.entity.NotificationMessageJpaEntity msg = new com.petlife.modules.notification.infrastructure.persistence.entity.NotificationMessageJpaEntity();
         msg.setUserId(user.getId());
         msg.setType(NotificationType.SYSTEM);
         msg.setTitle("System Alert");
@@ -74,7 +74,7 @@ class NotificationControllerTest extends IntegrationTestBase {
     @Test
     @DisplayName("PATCH /api/v1/notifications/read-all - Deve marcar todas como lidas")
     void shouldMarkAllNotificationsAsRead() throws Exception {
-        NotificationMessage msg1 = new NotificationMessage();
+        com.petlife.modules.notification.infrastructure.persistence.entity.NotificationMessageJpaEntity msg1 = new com.petlife.modules.notification.infrastructure.persistence.entity.NotificationMessageJpaEntity();
         msg1.setUserId(user.getId());
         msg1.setType(NotificationType.SYSTEM);
         msg1.setTitle("Alert 1");

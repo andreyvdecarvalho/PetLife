@@ -78,7 +78,7 @@ class GetPetTimelineUseCaseTest {
         when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(Collections.emptyList());
-        when(medicationRepositoryPort.findByPetEntityId(petId)).thenReturn(Collections.emptyList());
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(Collections.emptyList());
 
         List<TimelineEventResponse> response = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
 
@@ -95,7 +95,7 @@ class GetPetTimelineUseCaseTest {
         when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(Collections.emptyList());
-        when(medicationRepositoryPort.findByPetEntityId(petId)).thenReturn(Collections.emptyList());
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(Collections.emptyList());
 
         List<TimelineEventResponse> response = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
 
@@ -123,7 +123,7 @@ class GetPetTimelineUseCaseTest {
         when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(List.of(c));
         when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(Collections.emptyList());
-        when(medicationRepositoryPort.findByPetEntityId(petId)).thenReturn(Collections.emptyList());
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(Collections.emptyList());
 
         List<TimelineEventResponse> response = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
 
@@ -151,7 +151,7 @@ class GetPetTimelineUseCaseTest {
         when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(List.of(c));
         when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(Collections.emptyList());
-        when(medicationRepositoryPort.findByPetEntityId(petId)).thenReturn(Collections.emptyList());
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(Collections.emptyList());
 
         List<TimelineEventResponse> response = getPetTimelineUseCase.execute(
                 petId, userId, List.of(TimelineEventType.VACCINE), 0, 20
@@ -211,7 +211,7 @@ class GetPetTimelineUseCaseTest {
         when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(List.of(grooming));
         when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(List.of(weight));
-        when(medicationRepositoryPort.findByPetEntityId(petId)).thenReturn(List.of(med));
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(List.of(med));
 
         List<TimelineEventResponse> response = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
 
@@ -236,7 +236,7 @@ class GetPetTimelineUseCaseTest {
         when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(consultations);
         when(groomingRepositoryPort.findAllByPetId(petId)).thenReturn(Collections.emptyList());
         when(getPetWeightHistoryPort.getWeightHistory(petId)).thenReturn(Collections.emptyList());
-        when(medicationRepositoryPort.findByPetEntityId(petId)).thenReturn(Collections.emptyList());
+        when(medicationRepositoryPort.findByPetId(petId)).thenReturn(Collections.emptyList());
 
         List<TimelineEventResponse> page0 = getPetTimelineUseCase.execute(petId, userId, null, 0, 20);
         List<TimelineEventResponse> page1 = getPetTimelineUseCase.execute(petId, userId, null, 1, 20);

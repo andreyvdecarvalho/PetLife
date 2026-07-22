@@ -1,12 +1,7 @@
-package com.petlife.modules.veterinarian.entity;
+package com.petlife.modules.veterinarian.infrastructure.persistence.entity;
 
 import com.petlife.shared.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,11 +11,11 @@ import java.math.BigDecimal;
 @Table(name = "vet_addresses")
 @Getter
 @Setter
-public class VetAddress extends BaseEntity {
+public class VetAddressJpaEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "veterinarian_id", nullable = false)
-    private Veterinarian veterinarian;
+    private VeterinarianJpaEntity veterinarian;
 
     @Column(name = "label", nullable = false, length = 100)
     private String label;

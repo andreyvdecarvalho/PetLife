@@ -18,6 +18,6 @@ public class ForgotPasswordUseCase {
             return;
         }
 
-        String resetToken = tokenService.generatePasswordResetToken(user);
+        tokenService.generatePasswordResetToken(user);
     }
 }

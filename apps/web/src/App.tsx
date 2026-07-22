@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import { ToastProvider } from './components/molecules/Toast';
+import { ToastProvider, useToast } from './components/molecules/Toast';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
@@ -30,7 +30,15 @@ import './index.css';
 
 const PushNotificationManager: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  usePushNotifications(isAuthenticated);
+  const { showToast } = useToast();
+
+  usePushNotifications({
+    isAuthenticated,
+    onNotificationReceived: (title, body) => {
+      showToast(`${title} - ${body}`, 'info');
+    }
+  });
+
   return null;
 };
 

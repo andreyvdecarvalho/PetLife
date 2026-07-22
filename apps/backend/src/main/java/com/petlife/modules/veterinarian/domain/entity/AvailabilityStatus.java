@@ -1,4 +1,4 @@
-package com.petlife.modules.veterinarian.entity;
+package com.petlife.modules.veterinarian.domain.entity;
 
 public enum AvailabilityStatus {
     AVAILABLE,

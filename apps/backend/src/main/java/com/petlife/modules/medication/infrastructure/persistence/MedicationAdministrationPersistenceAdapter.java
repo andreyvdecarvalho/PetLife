@@ -54,7 +54,7 @@ public class MedicationAdministrationPersistenceAdapter implements MedicationAdm
 
     @Override
     public List<MedicationAdministration> findByMedicationPetId(UUID petId) {
-        return repository.findByMedicationPetId(petId)
+        return repository.findByMedicationPetEntityId(petId)
                 .stream().map(mapper::toDomain).collect(Collectors.toList());
     }
 

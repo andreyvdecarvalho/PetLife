@@ -5,7 +5,7 @@ import com.petlife.modules.auth.application.dto.GoogleLoginRequest;
 import com.petlife.modules.auth.application.dto.TokenResponse;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.domain.entity.UserPlan;
-import com.petlife.shared.exception.BusinessException;
+
 import com.petlife.modules.auth.application.port.OAuthProviderPort;
 import com.petlife.modules.auth.application.port.TokenGeneratorPort;
 import com.petlife.modules.auth.application.port.OAuthProviderPort.GoogleUserInfo;

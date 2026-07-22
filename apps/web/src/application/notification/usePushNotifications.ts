@@ -2,10 +2,13 @@ import { useEffect, useState, useCallback } from 'react';
 import { getToken, onMessage } from 'firebase/messaging';
 import { messaging } from '../../infrastructure/firebase/firebase';
 import { notificationApi } from '../../infrastructure/http/notification.api';
-import { useToast } from '../../components/molecules/Toast';
 
-export const usePushNotifications = (isAuthenticated: boolean) => {
-  const { showToast } = useToast();
+export interface UsePushNotificationsProps {
+  isAuthenticated: boolean;
+  onNotificationReceived?: (title: string, body: string) => void;
+}
+
+export const usePushNotifications = ({ isAuthenticated, onNotificationReceived }: UsePushNotificationsProps) => {
   const [permissionGranted, setPermissionGranted] = useState<boolean>(false);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
 
@@ -58,8 +61,8 @@ export const usePushNotifications = (isAuthenticated: boolean) => {
       if (msg) {
         const unsubscribe = onMessage(msg, (payload) => {
           console.log('Message received in foreground:', payload);
-          if (payload.notification) {
-            showToast(`${payload.notification.title} - ${payload.notification.body}`, 'info');
+          if (payload.notification && onNotificationReceived) {
+            onNotificationReceived(payload.notification.title || '', payload.notification.body || '');
           }
         });
         return unsubscribe;
@@ -74,7 +77,7 @@ export const usePushNotifications = (isAuthenticated: boolean) => {
     return () => {
       if (unsub) unsub();
     };
-  }, [permissionGranted, showToast]);
+  }, [permissionGranted, onNotificationReceived]);
 
   return { requestPermissionAndRegister, fcmToken, permissionGranted };
 };

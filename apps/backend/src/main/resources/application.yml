@@ -43,3 +43,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
+

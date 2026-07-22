@@ -10,7 +10,7 @@ import com.petlife.modules.pet.infrastructure.dto.CreateVaccinationRequest;
 import com.petlife.modules.pet.domain.entity.PetSex;
 import com.petlife.modules.pet.domain.entity.PetSpecies;
 import com.petlife.modules.pet.domain.entity.PetStatus;
-import com.petlife.modules.pet.domain.entity.Vaccination;
+
 import com.petlife.shared.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +31,6 @@ class VaccinationControllerTest extends IntegrationTestBase {
     @Autowired
     private PetRepositoryPort petRepository;
 
-    @Autowired
-    private VaccinationPort vaccinationRepository;
 
     @Autowired
     private ObjectMapper objectMapper;

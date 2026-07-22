@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.request;
 
-import com.petlife.modules.veterinarian.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
 import lombok.Builder;
 
 import java.math.BigDecimal;

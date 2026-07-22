@@ -5,7 +5,7 @@ import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.application.dto.UserResponse;
 import com.petlife.shared.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 import java.util.UUID;
 
 @RequiredArgsConstructor

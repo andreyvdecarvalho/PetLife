@@ -20,5 +20,5 @@ public interface MedicationAdministrationJpaRepository extends JpaRepository<Med
     List<MedicationAdministrationJpaEntity> findByMedicationIdAndStatusAndScheduledTimeAfter(
             UUID medicationId, MedicationAdministrationStatus status, OffsetDateTime time);
 
-    List<MedicationAdministrationJpaEntity> findByMedicationPetId(UUID petId);
+    List<MedicationAdministrationJpaEntity> findByMedicationPetEntityId(UUID petId);
 }

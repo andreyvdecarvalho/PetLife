@@ -88,7 +88,7 @@ class GetMedicationAdherenceUseCaseTest {
         });
 
         given(petRepository.findById(petId)).willReturn(Optional.of(pet));
-        given(administrationRepository.findByMedicationPetEntityId(petId)).willReturn(
+        given(administrationRepository.findByMedicationPetId(petId)).willReturn(
                 List.of(doseTaken, doseSkipped, doseLate, dosePendingPast, dosePendingFuture)
         );
 
@@ -112,7 +112,7 @@ class GetMedicationAdherenceUseCaseTest {
         UUID userId = user.getId();
 
         given(petRepository.findById(petId)).willReturn(Optional.of(pet));
-        given(administrationRepository.findByMedicationPetEntityId(petId)).willReturn(List.of());
+        given(administrationRepository.findByMedicationPetId(petId)).willReturn(List.of());
 
         AdherenceResponse response = getMedicationAdherenceUseCase.execute(petId, userId);
 

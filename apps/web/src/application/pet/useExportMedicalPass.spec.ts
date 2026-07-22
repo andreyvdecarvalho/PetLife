@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useExportMedicalPass } from './useExportMedicalPass';
 import { timelineApi } from '../../infrastructure/http/timeline.api';
+import { downloadBlob } from '../../infrastructure/browser/DownloadAdapter';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 vi.mock('../../infrastructure/http/timeline.api', () => ({
@@ -9,16 +10,13 @@ vi.mock('../../infrastructure/http/timeline.api', () => ({
   },
 }));
 
+vi.mock('../../infrastructure/browser/DownloadAdapter', () => ({
+  downloadBlob: vi.fn(),
+}));
+
 describe('useExportMedicalPass Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Safe mock for URL operations
-    window.URL.createObjectURL = vi.fn().mockReturnValue('mock-url');
-    window.URL.revokeObjectURL = vi.fn();
-    
-    // Prevent JSDom from navigating when clicking the download link
-    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -31,9 +29,6 @@ describe('useExportMedicalPass Hook', () => {
       data: mockBlob
     });
 
-    const appendSpy = vi.spyOn(document.body, 'appendChild');
-    const removeSpy = vi.spyOn(document.body, 'removeChild');
-
     const { result } = renderHook(() => useExportMedicalPass());
 
     let success;
@@ -45,12 +40,7 @@ describe('useExportMedicalPass Hook', () => {
     expect(success).toBe(true);
     expect(result.current.isExporting).toBe(false);
     expect(result.current.exportError).toBeNull();
-
-    expect(appendSpy).toHaveBeenCalled();
-    expect(removeSpy).toHaveBeenCalled();
-
-    appendSpy.mockRestore();
-    removeSpy.mockRestore();
+    expect(downloadBlob).toHaveBeenCalledWith(mockBlob, 'prontuario_pet-123.pdf');
   });
 
   it('should handle export error and set message', async () => {
