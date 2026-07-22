@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.application.port.VaccinationPort;
+
 import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.CreateVaccinationRequest;
 import com.petlife.modules.pet.domain.entity.PetSex;
