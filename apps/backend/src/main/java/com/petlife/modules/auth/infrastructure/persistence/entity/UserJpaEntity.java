@@ -35,7 +35,7 @@ public class UserJpaEntity extends BaseEntity {
     @Column(name = "password_hash", length = 60)
     private String passwordHash;
 
-    @Column(name = "avatar_url", length = 500)
+    @Column(name = "avatar_url", columnDefinition = "TEXT")
     private String avatarUrl;
 
     @Column(name = "nickname", length = 100)
