@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import com.petlife.modules.veterinarian.infrastructure.persistence.entity.VeterinarianJpaEntity;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +44,7 @@ public class VeterinarianPersistenceAdapter implements VeterinarianRepositoryPor
     @Override
     public com.petlife.shared.domain.PageResult<Veterinarian> search(
             com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest request) {
-        Page<com.petlife.modules.veterinarian.infrastructure.persistence.entity.VeterinarianJpaEntity> page = repository.searchVeterinarians(
+        Page<VeterinarianJpaEntity> page = repository.searchVeterinarians(
                 request.latitude(),
                 request.longitude(),
                 request.radiusKm(),

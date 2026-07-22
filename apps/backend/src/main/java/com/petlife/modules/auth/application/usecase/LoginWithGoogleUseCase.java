@@ -27,7 +27,8 @@ public class LoginWithGoogleUseCase {
         if (user == null) {
             user = new User();
             user.setEmail(googleInfo.email());
-            user.setName(googleInfo.name() != null && !googleInfo.name().isBlank() ? googleInfo.name() : "Tutor Google");
+            user.setName(googleInfo.name() != null && !googleInfo.name().isBlank() ? 
+                googleInfo.name() : "Tutor Google");
             user.setAvatarUrl(googleInfo.avatarUrl());
             user.setPlan(UserPlan.FREE);
             user.setEmailVerified(true);

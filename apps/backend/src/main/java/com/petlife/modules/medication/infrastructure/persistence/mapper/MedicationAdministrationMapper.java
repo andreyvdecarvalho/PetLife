@@ -2,6 +2,7 @@ package com.petlife.modules.medication.infrastructure.persistence.mapper;
 
 import com.petlife.modules.medication.domain.entity.MedicationAdministration;
 import com.petlife.modules.medication.infrastructure.persistence.entity.MedicationAdministrationJpaEntity;
+import com.petlife.modules.medication.infrastructure.persistence.entity.MedicationJpaEntity;
 import org.springframework.stereotype.Component;
 
 
@@ -49,7 +50,7 @@ public class MedicationAdministrationMapper {
         entity.setSkippedReason(domain.getSkippedReason());
 
         if (domain.getMedicationId() != null) {
-            com.petlife.modules.medication.infrastructure.persistence.entity.MedicationJpaEntity med = new com.petlife.modules.medication.infrastructure.persistence.entity.MedicationJpaEntity();
+            MedicationJpaEntity med = new MedicationJpaEntity();
             med.setId(domain.getMedicationId());
             if (domain.getMedicationName() != null) {
                 med.setName(domain.getMedicationName()); 

@@ -95,7 +95,8 @@ public class AuthController {
         try {
             return ApiResponse.of(uploadUserPhotoUseCase.execute(userId, file.getBytes(), file.getSize()));
         } catch (java.io.IOException e) {
-            throw com.petlife.shared.exception.BusinessException.badRequest("FILE_READ_ERROR", "Falha ao ler o arquivo.");
+            throw com.petlife.shared.exception.BusinessException.badRequest("FILE_READ_ERROR", 
+                "Falha ao ler o arquivo.");
         }
     }
 

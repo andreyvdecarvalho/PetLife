@@ -23,7 +23,8 @@ public class RefreshTokenUseCase {
 
         UUID userId = UUID.fromString(userIdStr);
         var user = userRepository.findById(userId)
-                .orElseThrow(() -> BusinessException.unauthorized("AUTH_INVALID_REFRESH_TOKEN", "Usuário não encontrado."));
+                .orElseThrow(() -> BusinessException.unauthorized("AUTH_INVALID_REFRESH_TOKEN", 
+                    "Usuário não encontrado."));
 
         if (user.getDeletedAt() != null) {
             throw BusinessException.unauthorized("AUTH_INVALID_REFRESH_TOKEN", "Usuário não encontrado.");

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import com.petlife.modules.notification.application.usecase.PagedResult;
 
 @Service
 @RequiredArgsConstructor
@@ -18,16 +19,21 @@ public class SearchVeterinariansUseCase {
 
     private final VeterinarianRepositoryPort veterinarianRepository;
 
-    public com.petlife.modules.notification.application.usecase.PagedResult<VeterinarianResponse> execute(SearchVeterinariansRequest request) {
+    public PagedResult<VeterinarianResponse> execute(
+            SearchVeterinariansRequest request) {
         var vetPage = veterinarianRepository.search(request);
         
         List<VeterinarianResponse> content = vetPage.getContent().stream()
                 .map(VeterinarianResponse::fromEntity)
                 .toList();
 
-        return new com.petlife.modules.notification.application.usecase.PagedResult<>(
+        return new PagedResult<>(
             content,
-            new PageMeta(vetPage.getPageNumber(), vetPage.getPageSize(), vetPage.getTotalElements(), vetPage.getTotalPages())
+            new PageMeta(
+                vetPage.getPageNumber(), 
+                vetPage.getPageSize(), 
+                vetPage.getTotalElements(), 
+                vetPage.getTotalPages())
         );
     }
 }

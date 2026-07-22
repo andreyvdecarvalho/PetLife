@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public class VeterinarianMapper {
 
     public static VeterinarianJpaEntity toJpaEntity(Veterinarian domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         VeterinarianJpaEntity jpa = new VeterinarianJpaEntity();
         jpa.setId(domain.getId());
         jpa.setCreatedAt(domain.getCreatedAt());
@@ -43,7 +45,9 @@ public class VeterinarianMapper {
     }
 
     public static Veterinarian toDomain(VeterinarianJpaEntity jpa) {
-        if (jpa == null) return null;
+        if (jpa == null) {
+            return null;
+        }
         Veterinarian domain = new Veterinarian();
         domain.setId(jpa.getId());
         domain.setCreatedAt(jpa.getCreatedAt());
@@ -88,7 +92,9 @@ public class VeterinarianMapper {
     }
 
     public static VetAddressJpaEntity toJpaEntity(VetAddress domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         VetAddressJpaEntity jpa = new VetAddressJpaEntity();
         jpa.setId(domain.getId());
         jpa.setCreatedAt(domain.getCreatedAt());
@@ -110,7 +116,9 @@ public class VeterinarianMapper {
     }
 
     public static VetAddress toDomain(VetAddressJpaEntity jpa) {
-        if (jpa == null) return null;
+        if (jpa == null) {
+            return null;
+        }
         VetAddress domain = new VetAddress();
         domain.setId(jpa.getId());
         domain.setCreatedAt(jpa.getCreatedAt());
@@ -130,7 +138,9 @@ public class VeterinarianMapper {
     }
 
     public static VetScheduleJpaEntity toJpaEntity(VetSchedule domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         VetScheduleJpaEntity jpa = new VetScheduleJpaEntity();
         jpa.setId(domain.getId());
         jpa.setCreatedAt(domain.getCreatedAt());
@@ -143,7 +153,9 @@ public class VeterinarianMapper {
     }
 
     public static VetSchedule toDomain(VetScheduleJpaEntity jpa) {
-        if (jpa == null) return null;
+        if (jpa == null) {
+            return null;
+        }
         VetSchedule domain = new VetSchedule();
         domain.setId(jpa.getId());
         domain.setCreatedAt(jpa.getCreatedAt());
@@ -156,7 +168,9 @@ public class VeterinarianMapper {
     }
 
     public static VetFavoriteJpaEntity toJpaEntity(VetFavorite domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         VetFavoriteJpaEntity jpa = new VetFavoriteJpaEntity();
         jpa.setId(domain.getId());
         jpa.setCreatedAt(domain.getCreatedAt());
@@ -171,7 +185,9 @@ public class VeterinarianMapper {
     }
 
     public static VetFavorite toDomain(VetFavoriteJpaEntity jpa) {
-        if (jpa == null) return null;
+        if (jpa == null) {
+            return null;
+        }
         VetFavorite domain = new VetFavorite();
         domain.setId(jpa.getId());
         domain.setCreatedAt(jpa.getCreatedAt());
@@ -186,7 +202,9 @@ public class VeterinarianMapper {
     }
 
     public static Veterinarian toDomainShallow(VeterinarianJpaEntity jpa) {
-        if (jpa == null) return null;
+        if (jpa == null) {
+            return null;
+        }
         Veterinarian domain = new Veterinarian();
         domain.setId(jpa.getId());
         domain.setCreatedAt(jpa.getCreatedAt());

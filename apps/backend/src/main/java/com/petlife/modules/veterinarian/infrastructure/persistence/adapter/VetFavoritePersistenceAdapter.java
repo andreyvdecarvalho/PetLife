@@ -3,6 +3,7 @@ package com.petlife.modules.veterinarian.infrastructure.persistence.adapter;
 import com.petlife.modules.veterinarian.application.port.VetFavoriteRepositoryPort;
 import com.petlife.modules.veterinarian.domain.entity.VetFavorite;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VetFavoriteJpaRepository;
+import com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,17 +19,22 @@ public class VetFavoritePersistenceAdapter implements VetFavoriteRepositoryPort 
 
     @Override
     public VetFavorite save(VetFavorite favorite) {
-        return com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toDomain(repository.save(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(favorite)));
+        return VeterinarianMapper.toDomain(
+            repository.save(VeterinarianMapper.toJpaEntity(favorite))
+        );
     }
 
     @Override
     public List<VetFavorite> findByUserId(UUID userId) {
-        return repository.findByUserId(userId).stream().map(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper::toDomain).collect(java.util.stream.Collectors.toList());
+        return repository.findByUserId(userId).stream()
+            .map(VeterinarianMapper::toDomain)
+            .collect(java.util.stream.Collectors.toList());
     }
 
     @Override
     public Optional<VetFavorite> findByUserIdAndVeterinarianId(UUID userId, UUID veterinarianId) {
-        return repository.findByUserIdAndVeterinarianId(userId, veterinarianId).map(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper::toDomain);
+        return repository.findByUserIdAndVeterinarianId(userId, veterinarianId)
+            .map(VeterinarianMapper::toDomain);
     }
 
     @Override
@@ -38,6 +44,6 @@ public class VetFavoritePersistenceAdapter implements VetFavoriteRepositoryPort 
 
     @Override
     public void delete(VetFavorite favorite) {
-        repository.delete(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(favorite));
+        repository.delete(VeterinarianMapper.toJpaEntity(favorite));
     }
 }

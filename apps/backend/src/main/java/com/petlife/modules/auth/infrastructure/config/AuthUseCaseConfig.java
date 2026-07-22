@@ -70,7 +70,8 @@ public class AuthUseCaseConfig {
     public ForgotPasswordUseCase forgotPasswordUseCase(
             UserRepositoryPort userRepositoryPort,
             TokenGeneratorPort tokenGeneratorPort) {
-        return new ForgotPasswordUseCase(userRepositoryPort, tokenGeneratorPort); // Wait, ForgotPassword needs to generate a reset token.
+        return new ForgotPasswordUseCase(userRepositoryPort, tokenGeneratorPort); 
+        // Wait, ForgotPassword needs to generate a reset token.
     }
 
     @Bean

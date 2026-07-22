@@ -26,7 +26,8 @@ public class GoogleOAuthAdapter implements OAuthProviderPort {
             JsonNode json = objectMapper.readTree(response);
 
             if (json.has("error")) {
-                throw BusinessException.unauthorized("INVALID_GOOGLE_TOKEN", "O token do Google fornecido é inválido ou expirou.");
+                throw BusinessException.unauthorized("INVALID_GOOGLE_TOKEN", 
+                    "O token do Google fornecido é inválido ou expirou.");
             }
 
             String email = json.get("email").asText();
@@ -35,7 +36,8 @@ public class GoogleOAuthAdapter implements OAuthProviderPort {
 
             return new GoogleUserInfo(email, name, avatarUrl);
         } catch (Exception e) {
-            throw BusinessException.unauthorized("INVALID_GOOGLE_TOKEN", "Falha ao validar o token com o Google: " + e.getMessage());
+            throw BusinessException.unauthorized("INVALID_GOOGLE_TOKEN", 
+                "Falha ao validar o token com o Google: " + e.getMessage());
         }
     }
 }

@@ -6,7 +6,9 @@ import com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity;
 public class UserMapper {
 
     public static User toDomain(UserJpaEntity jpa) {
-        if (jpa == null) return null;
+        if (jpa == null) {
+            return null;
+        }
         
         User user = new User();
         user.setId(jpa.getId());
@@ -29,7 +31,9 @@ public class UserMapper {
     }
 
     public static UserJpaEntity toJpaEntity(User domain) {
-        if (domain == null) return null;
+        if (domain == null) {
+            return null;
+        }
         
         UserJpaEntity jpa = new UserJpaEntity();
         jpa.setId(domain.getId());
