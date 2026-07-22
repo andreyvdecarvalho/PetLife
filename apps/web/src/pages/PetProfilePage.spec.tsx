@@ -27,11 +27,35 @@ vi.mock('../application/pet/useTimeline', () => ({
   }),
 }));
 
+vi.mock('../application/pet/useGetPetById', () => ({
+  useGetPetById: () => ({
+    pet: {
+      id: '1',
+      name: 'Max',
+      breed: 'Golden Retriever',
+      birthDate: new Date(new Date().getFullYear() - 3, 0, 1).toISOString(),
+      weightKg: 32,
+      sex: 'MALE',
+      photoUrl: null
+    },
+    loading: false,
+    error: null,
+  }),
+}));
+
 vi.mock('../application/pet/useExportMedicalPass', () => ({
   useExportMedicalPass: () => ({
     isExporting: false,
     exportError: null,
     exportMedicalPass: vi.fn(),
+  }),
+}));
+
+vi.mock('../application/pet/useDeletePet', () => ({
+  useDeletePet: () => ({
+    isDeleting: false,
+    deleteError: null,
+    deletePet: vi.fn(),
   }),
 }));
 
