@@ -6,7 +6,15 @@ import com.petlife.modules.pet.domain.entity.PetSize;
 import com.petlife.modules.pet.domain.entity.PetSpecies;
 import com.petlife.modules.pet.domain.entity.PetStatus;
 import com.petlife.shared.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;

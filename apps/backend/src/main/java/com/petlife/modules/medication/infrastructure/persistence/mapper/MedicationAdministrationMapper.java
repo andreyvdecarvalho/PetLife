@@ -25,7 +25,7 @@ public class MedicationAdministrationMapper {
         if (entity.getMedication() != null) {
             domain.setMedicationId(entity.getMedication().getId());
             domain.setMedicationName(entity.getMedication().getName());
-            if (entity.getMedication().getPetEntity() != null
+            if (entity.getMedication().getPetEntity() != null 
                     && entity.getMedication().getPetEntity().getUser() != null) {
                 domain.setPetOwnerId(entity.getMedication().getPetEntity().getUser().getId());
             }
@@ -51,7 +51,9 @@ public class MedicationAdministrationMapper {
         if (domain.getMedicationId() != null) {
             com.petlife.modules.medication.infrastructure.persistence.entity.MedicationJpaEntity med = new com.petlife.modules.medication.infrastructure.persistence.entity.MedicationJpaEntity();
             med.setId(domain.getMedicationId());
-            if (domain.getMedicationName() != null) med.setName(domain.getMedicationName());
+            if (domain.getMedicationName() != null) {
+                med.setName(domain.getMedicationName()); 
+            }
             if (domain.getPetOwnerId() != null) {
                 var pet = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
                 var user = new com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity();

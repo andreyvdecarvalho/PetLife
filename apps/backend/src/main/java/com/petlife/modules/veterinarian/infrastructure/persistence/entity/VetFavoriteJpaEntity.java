@@ -2,7 +2,12 @@ package com.petlife.modules.veterinarian.infrastructure.persistence.entity;
 
 import com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity;
 import com.petlife.shared.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+
 import lombok.Getter;
 import lombok.Setter;
 
