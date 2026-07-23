@@ -13,6 +13,8 @@ import com.petlife.modules.veterinarian.infrastructure.persistence.entity.Veteri
 
 import java.util.Optional;
 import java.util.UUID;
+import com.petlife.shared.domain.PageResult;
+import com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest;
 
 @Component
 @RequiredArgsConstructor
@@ -42,8 +44,7 @@ public class VeterinarianPersistenceAdapter implements VeterinarianRepositoryPor
     }
 
     @Override
-    public com.petlife.shared.domain.PageResult<Veterinarian> search(
-            com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest request) {
+    public PageResult<Veterinarian> search(SearchVeterinariansRequest request) {
         Page<VeterinarianJpaEntity> page = repository.searchVeterinarians(
                 request.latitude(),
                 request.longitude(),
@@ -54,7 +55,7 @@ public class VeterinarianPersistenceAdapter implements VeterinarianRepositoryPor
                 PageRequest.of(request.page(), request.size())
         );
         var content = page.map(VeterinarianMapper::toDomain).getContent();
-        return new com.petlife.shared.domain.PageResult<>(
+        return new PageResult<>(
                 content,
                 page.getNumber(),
                 page.getSize(),

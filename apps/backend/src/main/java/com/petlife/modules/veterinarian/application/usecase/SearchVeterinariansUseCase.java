@@ -20,10 +20,13 @@ public class SearchVeterinariansUseCase {
     private final VeterinarianRepositoryPort veterinarianRepository;
 
     public PagedResult<VeterinarianResponse> execute(
-            SearchVeterinariansRequest request) {
+            SearchVeterinariansRequest request
+    ) {
         var vetPage = veterinarianRepository.search(request);
         
-        List<VeterinarianResponse> content = vetPage.getContent().stream()
+        List<VeterinarianResponse> content = vetPage
+                .getContent()
+                .stream()
                 .map(VeterinarianResponse::fromEntity)
                 .toList();
 
