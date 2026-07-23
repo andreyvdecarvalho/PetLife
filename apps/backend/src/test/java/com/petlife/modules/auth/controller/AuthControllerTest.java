@@ -1,10 +1,10 @@
 package com.petlife.modules.auth.controller;
 
-import com.petlife.modules.auth.dto.GoogleLoginRequest;
-import com.petlife.modules.auth.dto.LoginRequest;
-import com.petlife.modules.auth.dto.RegisterRequest;
-import com.petlife.modules.auth.dto.UpdateProfileRequest;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.application.dto.GoogleLoginRequest;
+import com.petlife.modules.auth.application.dto.LoginRequest;
+import com.petlife.modules.auth.application.dto.RegisterRequest;
+import com.petlife.modules.auth.application.dto.UpdateProfileRequest;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.shared.IntegrationTestBase;
 import com.petlife.shared.factories.UserFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -27,13 +27,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private org.springframework.security.oauth2.jwt.JwtEncoder jwtEncoder;
+
+    @org.springframework.test.context.bean.override.mockito.MockitoBean
+    private com.petlife.modules.auth.application.port.OAuthProviderPort oauthProviderPort;
 
     @Nested
     @DisplayName("POST /api/v1/auth/register")
@@ -128,7 +131,10 @@ class AuthControllerTest extends IntegrationTestBase {
         @Test
         @DisplayName("Deve autenticar tutor com sucesso via Google e retornar tokens")
         void shouldAuthenticateWithGoogle() throws Exception {
-            var request = new GoogleLoginRequest("dummyHeader.eyJlbWFpbCI6Imdvb2dsZS50dXRvckBwZXRsaWZlLmNvbSIsIm5hbWUiOiJHb29nbGUgVHV0b3IiLCJwaWN0dXJlIjoiaHR0cDovL2dvb2dsZS51cmwvYXZhdGFyIn0.dummySignature");
+            var request = new GoogleLoginRequest("valid_dummy_token");
+
+            org.mockito.Mockito.when(oauthProviderPort.getGoogleUserInfo("valid_dummy_token"))
+                    .thenReturn(new com.petlife.modules.auth.application.port.OAuthProviderPort.GoogleUserInfo("google.tutor@petlife.com", "Google Tutor", "http://google.url/avatar"));
 
             mockMvc.perform(post("/api/v1/auth/google")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -143,10 +149,13 @@ class AuthControllerTest extends IntegrationTestBase {
         void shouldReturn400ForInvalidGoogleToken() throws Exception {
             var request = new GoogleLoginRequest("token-invalido");
 
+            org.mockito.Mockito.when(oauthProviderPort.getGoogleUserInfo("token-invalido"))
+                    .thenThrow(com.petlife.shared.exception.BusinessException.unauthorized("AUTH_INVALID_GOOGLE_TOKEN", "Token inválido"));
+
             mockMvc.perform(post("/api/v1/auth/google")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isUnauthorized())
                     .andExpect(jsonPath("$.error.code").value("AUTH_INVALID_GOOGLE_TOKEN"));
         }
     }
@@ -161,7 +170,7 @@ class AuthControllerTest extends IntegrationTestBase {
             var user = UserFactory.make();
             userRepository.save(user);
 
-            var request = new com.petlife.modules.auth.dto.ForgotPasswordRequest(user.getEmail());
+            var request = new com.petlife.modules.auth.application.dto.ForgotPasswordRequest(user.getEmail());
 
             mockMvc.perform(post("/api/v1/auth/forgot-password")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -172,7 +181,7 @@ class AuthControllerTest extends IntegrationTestBase {
         @Test
         @DisplayName("Deve retornar 204 silenciosamente se o e-mail não existir")
         void shouldReturn204SilentlyIfEmailDoesNotExist() throws Exception {
-            var request = new com.petlife.modules.auth.dto.ForgotPasswordRequest("inexistente@petlife.com");
+            var request = new com.petlife.modules.auth.application.dto.ForgotPasswordRequest("inexistente@petlife.com");
 
             mockMvc.perform(post("/api/v1/auth/forgot-password")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -202,7 +211,7 @@ class AuthControllerTest extends IntegrationTestBase {
 
             var resetToken = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).getTokenValue();
 
-            var request = new com.petlife.modules.auth.dto.ResetPasswordRequest(resetToken, "NovaSenha@123");
+            var request = new com.petlife.modules.auth.application.dto.ResetPasswordRequest(resetToken, "NovaSenha@123");
 
             mockMvc.perform(post("/api/v1/auth/reset-password")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -230,13 +239,13 @@ class AuthControllerTest extends IntegrationTestBase {
 
             var resetToken = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).getTokenValue();
 
-            var request = new com.petlife.modules.auth.dto.ResetPasswordRequest(resetToken, "NovaSenha@123");
+            var request = new com.petlife.modules.auth.application.dto.ResetPasswordRequest(resetToken, "NovaSenha@123");
 
             mockMvc.perform(post("/api/v1/auth/reset-password")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.error.code").value("AUTH_INVALID_TOKEN"));
+                    .andExpect(jsonPath("$.error.code").value("AUTH_INVALID_RESET_TOKEN"));
         }
     }
 
@@ -268,7 +277,7 @@ class AuthControllerTest extends IntegrationTestBase {
             var user = UserFactory.make();
             userRepository.save(user);
 
-            var request = new UpdateProfileRequest("Novo Nome", user.getEmail(), "http://avatar.url", "Apelido", "11999999999", com.petlife.modules.auth.entity.Timezone.AMERICA_SAO_PAULO);
+            var request = new UpdateProfileRequest("Novo Nome", user.getEmail(), "http://avatar.url", "Apelido", "11999999999", com.petlife.modules.auth.domain.entity.Timezone.AMERICA_SAO_PAULO);
 
             mockMvc.perform(put("/api/v1/auth/me")
                             .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail())))

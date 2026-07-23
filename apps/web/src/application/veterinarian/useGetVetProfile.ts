@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import api from '../../infrastructure/http/api';
+import { veterinarianApi } from '../../infrastructure/http/veterinarian.api';
 import type { Veterinarian } from '../../domain/models/Veterinarian';
 
 export function useGetVetProfile() {
@@ -11,9 +11,9 @@ export function useGetVetProfile() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<Veterinarian>(`/veterinarians/${id}`);
-      setVet(response.data);
-      return response.data;
+      const data = await veterinarianApi.getProfile(id);
+      setVet(data);
+      return data;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao carregar perfil do veterinário.');
       throw err;

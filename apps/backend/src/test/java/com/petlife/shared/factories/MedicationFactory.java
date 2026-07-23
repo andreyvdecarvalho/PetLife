@@ -1,6 +1,6 @@
 package com.petlife.shared.factories;
 
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.domain.entity.*;
 import net.datafaker.Faker;
 
@@ -22,7 +22,16 @@ public class MedicationFactory {
 
     public static Medication makeMedication(Pet pet, Consumer<Medication> overrides) {
         Medication medication = new Medication();
-        medication.setPet(pet);
+        var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
+        petJpa.setId(pet.getId());
+        
+        if (pet.getUser() != null) {
+            var userJpa = new com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity();
+            userJpa.setId(pet.getUser().getId());
+            petJpa.setUser(userJpa);
+        }
+        
+        medication.setPetId(pet.getId()); if (pet.getUser() != null) medication.setPetOwnerId(pet.getUser().getId());
         medication.setName(faker.lorem().word());
         medication.setDosage("1 comprimido");
         medication.setFrequency(MedicationFrequency.DAILY);
@@ -43,6 +52,11 @@ public class MedicationFactory {
     public static MedicationAdministration makeAdministration(Medication medication, Consumer<MedicationAdministration> overrides) {
         MedicationAdministration administration = new MedicationAdministration();
         administration.setMedication(medication);
+        if (medication != null) {
+            administration.setMedicationId(medication.getId());
+            administration.setMedicationName(medication.getName());
+            administration.setPetOwnerId(medication.getPetOwnerId());
+        }
         administration.setScheduledTime(OffsetDateTime.now(ZoneOffset.UTC).plusHours(2));
         administration.setStatus(MedicationAdministrationStatus.PENDING);
         administration.setCreatedAt(LocalDateTime.now());

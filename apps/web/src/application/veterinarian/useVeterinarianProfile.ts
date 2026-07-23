@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import api from '../../infrastructure/http/api';
+import { veterinarianApi } from '../../infrastructure/http/veterinarian.api';
 import type { Veterinarian } from '../../domain/models/Veterinarian';
 
 export function useVeterinarianProfile() {
@@ -10,8 +10,7 @@ export function useVeterinarianProfile() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<Veterinarian>('/veterinarians', data);
-      return response.data;
+      return await veterinarianApi.createProfile(data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao criar perfil');
       throw err;
@@ -24,8 +23,7 @@ export function useVeterinarianProfile() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<Veterinarian>('/veterinarians/me');
-      return response.data;
+      return await veterinarianApi.getMyProfile();
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao obter perfil.');
       throw err;
@@ -38,8 +36,7 @@ export function useVeterinarianProfile() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.put<Veterinarian>('/veterinarians/me', data);
-      return response.data;
+      return await veterinarianApi.updateProfile(data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao atualizar perfil.');
       throw err;
@@ -51,7 +48,7 @@ export function useVeterinarianProfile() {
   const updateAvailability = async (status: 'AVAILABLE' | 'UNAVAILABLE') => {
     setLoading(true);
     try {
-      await api.patch('/veterinarians/me/availability', { status });
+      await veterinarianApi.updateAvailability(status);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao atualizar disponibilidade.');
       throw err;
@@ -63,7 +60,7 @@ export function useVeterinarianProfile() {
   const updateEmergency = async (emergencyOnDuty: boolean) => {
     setLoading(true);
     try {
-      await api.patch('/veterinarians/me/emergency', { emergencyOnDuty });
+      await veterinarianApi.updateEmergency(emergencyOnDuty);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao atualizar plantão.');
       throw err;

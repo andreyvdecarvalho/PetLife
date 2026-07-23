@@ -8,8 +8,6 @@ import com.petlife.shared.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -17,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -36,9 +36,11 @@ public class NotificationController {
     @Operation(summary = "Obter lista de notificações do tutor (paginada)")
     public ApiResponse<List<NotificationResponse>> getNotifications(
             @AuthenticationPrincipal Jwt jwt,
-            @PageableDefault(size = 20) Pageable pageable) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
         UUID userId = UUID.fromString(jwt.getSubject());
-        return getNotificationsUseCase.execute(userId, pageable);
+        var result = getNotificationsUseCase.execute(userId, page, size);
+        return ApiResponse.paged(result.content(), result.meta());
     }
 
     @PatchMapping("/{id}/read")

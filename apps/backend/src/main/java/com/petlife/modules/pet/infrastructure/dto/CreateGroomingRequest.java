@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.infrastructure.dto;
 
-import com.petlife.modules.pet.entity.GroomingType;
+import com.petlife.modules.pet.domain.entity.GroomingType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

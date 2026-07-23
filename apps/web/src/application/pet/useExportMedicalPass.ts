@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { timelineApi } from '../../infrastructure/http/timeline.api';
+import { downloadBlob } from '../../infrastructure/browser/DownloadAdapter';
 
 export function useExportMedicalPass() {
   const [isExporting, setIsExporting] = useState(false);
@@ -15,14 +16,7 @@ export function useExportMedicalPass() {
     try {
       const response = await timelineApi.exportPdf(petId, startDate, endDate);
       const blob = response.data;
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `prontuario_${petId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode?.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      downloadBlob(blob, `prontuario_${petId}.pdf`);
       return true;
     } catch (err: any) {
       if (err.response?.data instanceof Blob && err.response.data.type === 'application/json') {

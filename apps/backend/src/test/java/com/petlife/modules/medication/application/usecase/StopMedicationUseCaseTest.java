@@ -1,7 +1,7 @@
 package com.petlife.modules.medication.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.Medication;
@@ -83,3 +83,4 @@ class StopMedicationUseCaseTest {
                 .hasMessageContaining("Este pet não pertence ao usuário autenticado.");
     }
 }
+

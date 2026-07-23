@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.response;
 
-import com.petlife.modules.veterinarian.entity.VetSchedule;
+import com.petlife.modules.veterinarian.domain.entity.VetSchedule;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -17,9 +17,9 @@ public record VetScheduleResponse(
         return new VetScheduleResponse(
             entity.getId(),
             entity.getDayOfWeek(),
-            entity.getOpenTime(),
-            entity.getCloseTime(),
-            entity.isActive()
+            entity.getStartTime(),
+            entity.getEndTime(),
+            entity.isAvailable()
         );
     }
 }

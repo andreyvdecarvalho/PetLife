@@ -1,6 +1,6 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.pet.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
 import com.petlife.shared.exception.BusinessException;
 import java.util.Arrays;
 import java.util.List;

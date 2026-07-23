@@ -10,11 +10,19 @@ import java.util.UUID;
 
 public interface MedicationAdministrationRepositoryPort {
     MedicationAdministration save(MedicationAdministration administration);
-    <S extends MedicationAdministration> List<S> saveAll(Iterable<S> administrations);
+    List<MedicationAdministration> saveAll(List<MedicationAdministration> administrations);
     Optional<MedicationAdministration> findById(UUID id);
     void delete(MedicationAdministration administration);
-    void deleteAll(Iterable<? extends MedicationAdministration> administrations);
+    void deleteAll(List<MedicationAdministration> administrations);
     List<MedicationAdministration> findByMedicationIdAndStatusAndScheduledTimeAfter(
             UUID medicationId, MedicationAdministrationStatus status, OffsetDateTime time);
     List<MedicationAdministration> findByMedicationPetId(UUID petId);
+
+    /**
+     * Retorna administrações com o status informado cujo horário agendado
+     * seja anterior ao instante fornecido. Usado pelo NotificationScheduler
+     * para detectar doses atrasadas sem acessar o JpaRepository diretamente.
+     */
+    List<MedicationAdministration> findByStatusAndScheduledTimeBefore(
+            MedicationAdministrationStatus status, OffsetDateTime time);
 }

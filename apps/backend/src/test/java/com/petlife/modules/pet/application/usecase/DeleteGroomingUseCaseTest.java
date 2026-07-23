@@ -1,10 +1,10 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.Pet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,3 +50,4 @@ class DeleteGroomingUseCaseTest {
         verify(groomingRepositoryPort).delete(grooming);
     }
 }
+

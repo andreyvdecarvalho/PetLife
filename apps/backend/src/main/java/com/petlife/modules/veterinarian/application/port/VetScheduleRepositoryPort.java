@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.application.port;
 
-import com.petlife.modules.veterinarian.entity.VetSchedule;
+import com.petlife.modules.veterinarian.domain.entity.VetSchedule;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,9 +1,9 @@
 package com.petlife.shared.factories;
 
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetSex;
-import com.petlife.modules.pet.entity.PetSpecies;
-import com.petlife.modules.pet.entity.PetStatus;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetStatus;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 

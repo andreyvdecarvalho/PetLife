@@ -4,6 +4,7 @@ import { VaccinationsTab } from '../../organisms/VaccinationsTab';
 import { Modal } from '../../molecules/Modal';
 import { ConsultationForm } from '../../organisms/ConsultationForm';
 import { useTimeline } from '../../../application/pet/useTimeline';
+import { useGetPetById } from '../../../application/pet/useGetPetById';
 import { useExportMedicalPass } from '../../../application/pet/useExportMedicalPass';
 import { useDeletePet } from '../../../application/pet/useDeletePet';
 import { useToast } from '../../molecules/Toast';
@@ -30,6 +31,7 @@ export const PetProfilePageContent: React.FC = () => {
 
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { pet, loading: loadingPet, error: petError } = useGetPetById(id);
   const { events, isLoading, error: timelineError, hasMore, fetchTimeline } = useTimeline();
   const { isExporting, exportError, exportMedicalPass } = useExportMedicalPass();
   const { isDeleting, deletePet } = useDeletePet();
@@ -88,6 +90,22 @@ export const PetProfilePageContent: React.FC = () => {
     }
   };
 
+  if (loadingPet) {
+    return (
+      <div className="pet-profile animate-fade-in" style={{ display: 'flex', justifyContent: 'center', padding: '48px' }}>
+        <p>Carregando perfil do pet...</p>
+      </div>
+    );
+  }
+
+  if (petError || !pet) {
+    return (
+      <div className="pet-profile animate-fade-in" style={{ display: 'flex', justifyContent: 'center', padding: '48px', color: 'var(--color-error)' }}>
+        <p>Pet não encontrado ou erro ao carregar.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="pet-profile animate-fade-in">
       <div className="pet-profile__header-row">
@@ -127,31 +145,41 @@ export const PetProfilePageContent: React.FC = () => {
             <div className="pet-profile__card-blob"></div>
             
             <div className="pet-profile__avatar-container">
-              <img 
-                alt="Max" 
-                className="pet-profile__avatar" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB84xkd7Mi62jZm1xSkIdQ7bSTD9bf2WPHQaNnroEICjqKLPzaBUtaj61a0fWiA_LTm64QiOiCyrQyvZWs7g5819q2etrJfYfmndaJOtCyMXAZZa2G04m3q-laOEp6PGum3rozS-zQmKYFA_U-W7vRzehxWJhfqQj4lFemuWXMULK2fMiVlBNdOBUC8sJflJK2LalIbDXjO7LsLhj2oQL_p-8I97iS5LuRrbOHkFsL_dU07YCUTKprrurY0QOW8aBnRDtP9lBs98as" 
-              />
+              {pet.photoUrl ? (
+                <img 
+                  alt={pet.name} 
+                  className="pet-profile__avatar" 
+                  src={pet.photoUrl} 
+                />
+              ) : (
+                <div className="pet-profile__avatar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-surface-container-lowest)', color: 'var(--color-on-surface)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '48px' }}>pets</span>
+                </div>
+              )}
               <div className="pet-profile__favorite-badge">
                 <span className="material-symbols-outlined filled">favorite</span>
               </div>
             </div>
 
-            <h3 className="pet-profile__pet-name">Max</h3>
-            <p className="pet-profile__pet-breed">Golden Retriever</p>
+            <h3 className="pet-profile__pet-name">{pet.name}</h3>
+            <p className="pet-profile__pet-breed">{pet.breed || 'Sem raça definida'}</p>
 
             <div className="pet-profile__stats-row">
               <div className="pet-profile__stat-box">
                 <span className="pet-profile__stat-label">Idade</span>
-                <span className="pet-profile__stat-value">3 Anos</span>
+                <span className="pet-profile__stat-value">
+                  {pet.birthDate ? `${new Date().getFullYear() - new Date(pet.birthDate).getFullYear()} Anos` : 'N/A'}
+                </span>
               </div>
               <div className="pet-profile__stat-box">
                 <span className="pet-profile__stat-label">Peso</span>
-                <span className="pet-profile__stat-value">32 kg</span>
+                <span className="pet-profile__stat-value">{pet.weightKg ? `${pet.weightKg} kg` : 'N/A'}</span>
               </div>
               <div className="pet-profile__stat-box">
                 <span className="pet-profile__stat-label">Sexo</span>
-                <span className="pet-profile__stat-value">Macho</span>
+                <span className="pet-profile__stat-value">
+                  {pet.sex === 'MALE' ? 'Macho' : pet.sex === 'FEMALE' ? 'Fêmea' : 'Não Sei'}
+                </span>
               </div>
             </div>
           </div>

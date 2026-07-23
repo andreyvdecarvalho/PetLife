@@ -1,11 +1,11 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.response;
 
-import com.petlife.modules.pet.entity.PetSpecies;
-import com.petlife.modules.veterinarian.entity.AvailabilityStatus;
-import com.petlife.modules.veterinarian.entity.CrmvStatus;
-import com.petlife.modules.veterinarian.entity.Modality;
-import com.petlife.modules.veterinarian.entity.PaymentType;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.veterinarian.domain.entity.AvailabilityStatus;
+import com.petlife.modules.veterinarian.domain.entity.CrmvStatus;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.PaymentType;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import lombok.Builder;
 import lombok.Data;
 

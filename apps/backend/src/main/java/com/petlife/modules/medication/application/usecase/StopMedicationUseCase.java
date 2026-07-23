@@ -32,7 +32,7 @@ public class StopMedicationUseCase {
         Medication medication = medicationRepository.findById(id)
                 .orElseThrow(() -> BusinessException.notFound("MEDICATION_NOT_FOUND", "Medicamento não encontrado."));
 
-        if (!medication.getPet().getUser().getId().equals(userId)) {
+        if (!medication.getPetOwnerId().equals(userId)) {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
@@ -56,8 +56,8 @@ public class StopMedicationUseCase {
         List<MedicationAdministrationResponse> adminResponses = med.getAdministrations() == null ? List.of() :
             med.getAdministrations().stream().map(admin -> new MedicationAdministrationResponse(
                 admin.getId(),
-                admin.getMedication().getId(),
-                admin.getMedication().getName(),
+                admin.getMedicationId(),
+                admin.getMedicationName(),
                 admin.getScheduledTime(),
                 admin.getAdministeredAt(),
                 admin.getStatus(),
@@ -68,7 +68,7 @@ public class StopMedicationUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPet().getId(),
+                med.getPetId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

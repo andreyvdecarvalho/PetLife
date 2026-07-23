@@ -11,7 +11,7 @@ import com.petlife.modules.medication.infrastructure.dto.MedicationAdministratio
 import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
 import com.petlife.modules.medication.infrastructure.dto.UpdateMedicationRequest;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.shared.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class UpdateMedicationUseCase {
         Medication medication = medicationRepository.findById(medicationId)
                 .orElseThrow(() -> BusinessException.notFound("MEDICATION_NOT_FOUND", "Medicação não encontrada."));
 
-        if (!medication.getPet().getId().equals(petId)) {
+        if (!medication.getPetId().equals(petId)) {
             throw BusinessException.badRequest("MEDICATION_PET_MISMATCH", "Esta medicação não pertence a este pet.");
         }
 
@@ -235,8 +235,8 @@ public class UpdateMedicationUseCase {
         List<MedicationAdministrationResponse> adminResponses = med.getAdministrations() == null ? List.of() :
             med.getAdministrations().stream().map(admin -> new MedicationAdministrationResponse(
                 admin.getId(),
-                admin.getMedication().getId(),
-                admin.getMedication().getName(),
+                admin.getMedicationId(),
+                admin.getMedicationName(),
                 admin.getScheduledTime(),
                 admin.getAdministeredAt(),
                 admin.getStatus(),
@@ -247,7 +247,7 @@ public class UpdateMedicationUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPet().getId(),
+                med.getPetId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

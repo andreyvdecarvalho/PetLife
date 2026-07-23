@@ -2,8 +2,8 @@ package com.petlife.modules.veterinarian.application.usecase;
 
 import com.petlife.modules.veterinarian.application.port.VetScheduleRepositoryPort;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
-import com.petlife.modules.veterinarian.entity.VetSchedule;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.VetSchedule;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SetVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VetScheduleResponse;
 import com.petlife.shared.exception.BusinessException;
@@ -34,9 +34,9 @@ public class SetVetScheduleUseCase {
         VetSchedule schedule = new VetSchedule();
         schedule.setVeterinarian(vet);
         schedule.setDayOfWeek(request.dayOfWeek());
-        schedule.setOpenTime(request.openTime());
-        schedule.setCloseTime(request.closeTime());
-        schedule.setActive(request.isActive());
+        schedule.setStartTime(request.openTime());
+        schedule.setEndTime(request.closeTime());
+        schedule.setAvailable(request.isActive());
 
         VetSchedule saved = vetScheduleRepository.save(schedule);
 

@@ -1,19 +1,17 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
-import com.petlife.modules.veterinarian.entity.Modality;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
-import com.petlife.shared.response.ApiResponse;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,21 +35,21 @@ class SearchVeterinariansUseCaseTest {
                 .latitude(BigDecimal.valueOf(-23.5))
                 .longitude(BigDecimal.valueOf(-46.6))
                 .radiusKm(10.0)
-                .modality(Modality.CLINIC)
+                .modality(Modality.IN_PERSON)
                 .page(0)
                 .size(10)
                 .build();
 
         Veterinarian vet = new Veterinarian();
         vet.setCrmvNumber("12345");
-        Page<Veterinarian> page = new PageImpl<>(List.of(vet), PageRequest.of(0, 10), 1);
+        com.petlife.shared.domain.PageResult<Veterinarian> page = new com.petlife.shared.domain.PageResult<>(List.of(vet), 0, 10, 1L, 1);
 
         when(veterinarianRepository.search(any(SearchVeterinariansRequest.class))).thenReturn(page);
 
-        ApiResponse<List<VeterinarianResponse>> response = useCase.execute(request);
+        com.petlife.modules.notification.application.usecase.PagedResult<VeterinarianResponse> response = useCase.execute(request);
 
         assertEquals(1, response.meta().total());
         assertEquals(1, response.meta().totalPages());
-        assertEquals("12345", response.data().get(0).getCrmvNumber());
+        assertEquals("12345", response.content().get(0).getCrmvNumber());
     }
 }

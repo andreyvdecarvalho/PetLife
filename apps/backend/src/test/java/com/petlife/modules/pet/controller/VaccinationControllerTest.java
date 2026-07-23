@@ -1,15 +1,16 @@
 package com.petlife.modules.pet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetSex;
-import com.petlife.modules.pet.entity.PetSpecies;
-import com.petlife.modules.pet.entity.PetStatus;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
+
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.CreateVaccinationRequest;
-import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.VaccinationRepository;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetStatus;
+
 import com.petlife.shared.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VaccinationControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
-    private PetJpaRepository petRepository;
+    private PetRepositoryPort petRepository;
 
-    @Autowired
-    private VaccinationRepository vaccinationRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -41,8 +40,8 @@ class VaccinationControllerTest extends IntegrationTestBase {
 
     @BeforeEach
     void setUp() {
-        vaccinationRepository.deleteAll();
-        petRepository.deleteAll();
+        // vaccinationRepository.deleteAll();
+        // petRepository.deleteAll();
         
         testUser = userRepository.findByEmail("test@petlife.com").orElseGet(() -> {
             User user = new User();
@@ -58,7 +57,7 @@ class VaccinationControllerTest extends IntegrationTestBase {
         testPet.setSpecies(PetSpecies.DOG);
         testPet.setSex(PetSex.MALE);
         testPet.setStatus(PetStatus.ACTIVE);
-        testPet = ((com.petlife.modules.pet.application.port.PetRepositoryPort) petRepository).save(testPet);
+        testPet = petRepository.save(testPet);
     }
 
     @Test
@@ -91,3 +90,4 @@ class VaccinationControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.data").isArray());
     }
 }
+

@@ -1,17 +1,17 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.GetPetWeightHistoryPort;
 import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.VaccinationPort;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.TimelineEventType;
-import com.petlife.modules.pet.entity.Vaccination;
-import com.petlife.modules.pet.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.TimelineEventType;
+import com.petlife.modules.pet.domain.entity.Vaccination;
+import com.petlife.modules.pet.domain.entity.Grooming;
 import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;
 import java.math.BigDecimal;
@@ -192,7 +192,7 @@ class GetPetTimelineUseCaseTest {
         grooming.setPhotos(List.of("photo.jpg"));
 
         // Weight
-        com.petlife.modules.pet.entity.WeightRecord weight = new com.petlife.modules.pet.entity.WeightRecord();
+        com.petlife.modules.pet.domain.entity.WeightRecord weight = new com.petlife.modules.pet.domain.entity.WeightRecord();
         weight.setId(UUID.randomUUID());
         weight.setWeightKg(BigDecimal.valueOf(15.5));
         weight.setRecordedAt(OffsetDateTime.now().minusDays(3));
@@ -247,3 +247,4 @@ class GetPetTimelineUseCaseTest {
         assertEquals(0, page2.size());
     }
 }
+

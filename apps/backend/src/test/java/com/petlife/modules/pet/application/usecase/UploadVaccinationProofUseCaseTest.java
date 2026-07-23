@@ -1,9 +1,9 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.pet.application.port.VaccinationPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.Vaccination;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Vaccination;
 import com.petlife.modules.pet.infrastructure.dto.VaccinationResponse;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,3 +83,4 @@ class UploadVaccinationProofUseCaseTest {
         assertEquals("FILE_EMPTY", exception.getCode());
     }
 }
+

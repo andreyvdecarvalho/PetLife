@@ -1,9 +1,9 @@
 package com.petlife.modules.medication.infrastructure.controller;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.*;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MedicationControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private PetRepositoryPort petRepository;
@@ -45,6 +45,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @Autowired
     private MedicationAdministrationRepositoryPort administrationRepository;
 
+
     private User user;
     private Pet pet;
 
@@ -52,9 +53,9 @@ class MedicationControllerTest extends IntegrationTestBase {
     void setUp() {
         objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
         user = UserFactory.make();
-        userRepository.save(user);
+        user = userRepository.save(user);
         pet = PetFactory.make(p -> p.setUser(user));
-        petRepository.save(pet);
+        pet = petRepository.save(pet);
     }
 
     @Test
@@ -79,7 +80,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("GET /api/v1/pets/{petId}/medications - Deve listar medicamentos")
     void shouldListMedications() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         mockMvc.perform(get("/api/v1/pets/{petId}/medications", pet.getId())
                         .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
@@ -92,10 +93,10 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("PATCH /api/v1/medications/doses/{doseId} - Deve atualizar status da dose")
     void shouldUpdateDoseStatus() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         MedicationAdministration dose = MedicationFactory.makeAdministration(med);
-        administrationRepository.save(dose);
+        dose = administrationRepository.save(dose);
 
         UpdateAdministrationRequest request = new UpdateAdministrationRequest(MedicationAdministrationStatus.TAKEN, null);
 
@@ -112,7 +113,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("PATCH /api/v1/medications/{id}/stop - Deve parar tratamento")
     void shouldStopMedication() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         MedicationAdministration dose = MedicationFactory.makeAdministration(med, d -> {
             d.setStatus(MedicationAdministrationStatus.PENDING);
@@ -130,7 +131,7 @@ class MedicationControllerTest extends IntegrationTestBase {
     @DisplayName("GET /api/v1/pets/{petId}/medications/adherence - Deve retornar aderência")
     void shouldGetAdherence() throws Exception {
         Medication med = MedicationFactory.makeMedication(pet);
-        medicationRepository.save(med);
+        med = medicationRepository.save(med);
 
         MedicationAdministration dose = MedicationFactory.makeAdministration(med, d -> {
             d.setStatus(MedicationAdministrationStatus.TAKEN);
@@ -145,3 +146,4 @@ class MedicationControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.data.takenDoses").value(1));
     }
 }
+

@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.dto.response;
 
-import com.petlife.modules.veterinarian.entity.VetAddress;
+import com.petlife.modules.veterinarian.domain.entity.VetAddress;
 
 import java.math.BigDecimal;
 import java.util.UUID;

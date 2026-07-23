@@ -25,7 +25,7 @@ public class UpdateMedicationAdministrationUseCase {
         MedicationAdministration administration = administrationRepository.findById(doseId)
                 .orElseThrow(() -> BusinessException.notFound("DOSE_NOT_FOUND", "Dose não encontrada."));
 
-        if (!administration.getMedication().getPet().getUser().getId().equals(userId)) {
+        if (!administration.getPetOwnerId().equals(userId)) {
             throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
@@ -50,8 +50,8 @@ public class UpdateMedicationAdministrationUseCase {
     private MedicationAdministrationResponse mapToResponse(MedicationAdministration admin) {
         return new MedicationAdministrationResponse(
                 admin.getId(),
-                admin.getMedication().getId(),
-                admin.getMedication().getName(),
+                admin.getMedicationId(),
+                admin.getMedicationName(),
                 admin.getScheduledTime(),
                 admin.getAdministeredAt(),
                 admin.getStatus(),

@@ -2,8 +2,8 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.RoutineActivityRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.RoutineActivity;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.RoutineActivity;
 import com.petlife.modules.pet.infrastructure.dto.CreateRoutineActivityRequest;
 import com.petlife.shared.exception.BusinessException;
 import lombok.RequiredArgsConstructor;

@@ -1,16 +1,16 @@
 package com.petlife.modules.pet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetSex;
-import com.petlife.modules.pet.entity.PetSpecies;
-import com.petlife.modules.pet.entity.PetStatus;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
+import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.PetSex;
+import com.petlife.modules.pet.domain.entity.PetSpecies;
+import com.petlife.modules.pet.domain.entity.PetStatus;
 import com.petlife.modules.pet.infrastructure.dto.CreateConsultationRequest;
-import com.petlife.modules.pet.infrastructure.persistence.ConsultationJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
 import com.petlife.shared.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,13 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ConsultationControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
-    private PetJpaRepository petRepository;
+    private PetRepositoryPort petRepository;
 
     @Autowired
-    private ConsultationJpaRepository consultationRepository;
+    private ConsultationRepositoryPort consultationRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -49,8 +49,8 @@ class ConsultationControllerTest extends IntegrationTestBase {
     void setUp() {
         objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
         objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        consultationRepository.deleteAll();
-        petRepository.deleteAll();
+        // consultationRepository.deleteAll();
+        // petRepository.deleteAll();
 
         testUser = userRepository.findByEmail("test@petlife.com").orElseGet(() -> {
             User user = new User();
@@ -66,7 +66,7 @@ class ConsultationControllerTest extends IntegrationTestBase {
         testPet.setSpecies(PetSpecies.DOG);
         testPet.setSex(PetSex.MALE);
         testPet.setStatus(PetStatus.ACTIVE);
-        testPet = ((com.petlife.modules.pet.application.port.PetRepositoryPort) petRepository).save(testPet);
+        testPet = petRepository.save(testPet);
     }
 
     @Test
@@ -155,3 +155,4 @@ class ConsultationControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.data.attachments").isEmpty());
     }
 }
+

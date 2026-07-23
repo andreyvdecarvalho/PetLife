@@ -10,8 +10,8 @@ import com.petlife.modules.medication.domain.entity.MedicationStatus;
 import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
 import com.petlife.modules.medication.infrastructure.dto.UpdateMedicationRequest;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +74,9 @@ class UpdateMedicationUseCaseTest {
 
         medication = new Medication();
         medication.setId(medId);
-        medication.setPet(pet);
+        var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
+        petJpa.setId(pet.getId());
+        medication.setPetId(pet.getId());
         medication.setStatus(MedicationStatus.ACTIVE);
         medication.setFrequency(MedicationFrequency.DAILY);
         medication.setStartDate(LocalDate.now());
@@ -163,7 +165,9 @@ class UpdateMedicationUseCaseTest {
     void shouldThrowExceptionWhenMedicationPetMismatch() {
         Pet anotherPet = new Pet();
         anotherPet.setId(UUID.randomUUID());
-        medication.setPet(anotherPet);
+        var anotherPetJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
+        anotherPetJpa.setId(anotherPet.getId());
+        medication.setPetId(anotherPet.getId());
 
         UpdateMedicationRequest req = new UpdateMedicationRequest("A", "B", null, null, null, null, null);
         when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
@@ -224,3 +228,4 @@ class UpdateMedicationUseCaseTest {
         verify(administrationRepository).saveAll(adminsCaptor.capture());
     }
 }
+

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
-import com.petlife.modules.pet.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Consultation;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.shared.exception.BusinessException;
 

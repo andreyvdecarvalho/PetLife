@@ -1,8 +1,8 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
-import com.petlife.modules.veterinarian.entity.AvailabilityStatus;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.AvailabilityStatus;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateAvailabilityRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
 import com.petlife.shared.exception.BusinessException;

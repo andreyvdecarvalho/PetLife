@@ -7,7 +7,7 @@ import com.petlife.modules.veterinarian.application.usecase.SearchVeterinariansU
 import com.petlife.modules.veterinarian.application.usecase.SetVetScheduleUseCase;
 import com.petlife.modules.veterinarian.application.usecase.ToggleFavoriteVetUseCase;
 import com.petlife.modules.veterinarian.application.usecase.UpdateAvailabilityUseCase;
-import com.petlife.modules.veterinarian.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.AddVetAddressRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.CreateVeterinarianRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest;
@@ -138,7 +138,8 @@ public class VeterinarianController {
                 .size(size)
                 .build();
                 
-        return searchVeterinariansUseCase.execute(request);
+        var result = searchVeterinariansUseCase.execute(request);
+        return ApiResponse.paged(result.content(), result.meta());
     }
 
     @GetMapping("/me")

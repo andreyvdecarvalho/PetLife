@@ -1,10 +1,10 @@
 package com.petlife.modules.pet.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.entity.UserPlan;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.domain.entity.UserPlan;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.TimelineEventType;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.TimelineEventType;
 import com.petlife.modules.pet.infrastructure.dto.TimelineEventResponse;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,6 +79,7 @@ class ExportPetMedicalPassUseCaseTest {
     @Test
     void shouldThrowForbiddenExceptionForFreeUser() {
         user.setPlan(UserPlan.FREE); // Free user
+        pet.setUser(user);
 
         when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
 
@@ -118,3 +119,4 @@ class ExportPetMedicalPassUseCaseTest {
         assertTrue(pdfBytes.length > 0);
     }
 }
+

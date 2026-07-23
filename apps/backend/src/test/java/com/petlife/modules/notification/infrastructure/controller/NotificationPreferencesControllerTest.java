@@ -1,7 +1,7 @@
 package com.petlife.modules.notification.infrastructure.controller;
 
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.notification.infrastructure.dto.DeviceTokenRequest;
 import com.petlife.modules.notification.infrastructure.dto.NotificationPreferencesRequest;
 import com.petlife.shared.IntegrationTestBase;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NotificationPreferencesControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     private User user;
 

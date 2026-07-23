@@ -1,19 +1,19 @@
 package com.petlife.modules.veterinarian.infrastructure.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlife.modules.auth.entity.User;
-import com.petlife.modules.auth.repository.UserRepository;
-import com.petlife.modules.veterinarian.entity.AvailabilityStatus;
-import com.petlife.modules.veterinarian.entity.Modality;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.auth.domain.entity.User;
+import com.petlife.modules.auth.application.port.UserRepositoryPort;
+import com.petlife.modules.veterinarian.domain.entity.AvailabilityStatus;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.AddVetAddressRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.CreateVeterinarianRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SetVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateAvailabilityRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetAddressRequest;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VeterinarianJpaRepository;
-import com.petlife.modules.veterinarian.entity.VetAddress;
-import com.petlife.modules.veterinarian.entity.VetFavorite;
+import com.petlife.modules.veterinarian.domain.entity.VetAddress;
+import com.petlife.modules.veterinarian.domain.entity.VetFavorite;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VetAddressJpaRepository;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VetFavoriteJpaRepository;
 import com.petlife.shared.IntegrationTestBase;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VeterinarianControllerTest extends IntegrationTestBase {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryPort userRepository;
 
     @Autowired
     private VeterinarianJpaRepository veterinarianRepository;
@@ -67,9 +67,9 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         testVet.setFullName("Test Vet");
         testVet.setCrmvState("SP");
         testVet.setCrmvNumber("12345");
-        testVet.setModalities(java.util.List.of(Modality.CLINIC));
+        testVet.setModalities(java.util.List.of(Modality.IN_PERSON));
         testVet.setAvailabilityStatus(AvailabilityStatus.AVAILABLE);
-        testVet = veterinarianRepository.save(testVet);
+        testVet = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toDomain(veterinarianRepository.save(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(testVet)));
     }
 
     @Test
@@ -78,7 +78,7 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         request.setCrmvState("SP");
         request.setCrmvNumber("CRMV-SP-12345");
         request.setFullName("Test Vet");
-        request.setModalities(java.util.List.of(Modality.HOME_VISIT));
+        request.setModalities(java.util.List.of(Modality.HOME_CARE));
 
         mockMvc.perform(post("/api/v1/veterinarians")
                         .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail())))
@@ -153,7 +153,7 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         mockMvc.perform(get("/api/v1/veterinarians/search")
                         .param("lat", "-23.5")
                         .param("lng", "-46.6")
-                        .param("modality", "CLINIC")
+                        .param("modality", "IN_PERSON")
                         .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
                 .andExpect(status().isOk());
     }
@@ -174,7 +174,9 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         VetFavorite favorite = new VetFavorite();
         favorite.setUser(testUser);
         favorite.setVeterinarian(testVet);
-        vetFavoriteRepository.save(favorite);
+        var favJpa = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(favorite);
+        favJpa.setVeterinarian(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(testVet));
+        vetFavoriteRepository.save(favJpa);
 
         mockMvc.perform(get("/api/v1/veterinarians/favorites")
                         .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
@@ -192,7 +194,9 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         address.setCity("Old City");
         address.setPostalCode("00000-000");
         address.setPrimary(false);
-        address = vetAddressRepository.saveAndFlush(address);
+        var addressJpa = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(address);
+        addressJpa.setVeterinarian(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(testVet));
+        address = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toDomain(vetAddressRepository.saveAndFlush(addressJpa));
 
         UpdateVetAddressRequest request = UpdateVetAddressRequest.builder()
                 .label("Clinica Nova")
@@ -223,10 +227,13 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         address.setCity("Delete City");
         address.setPostalCode("11111-111");
         address.setPrimary(false);
-        address = vetAddressRepository.saveAndFlush(address);
+        var addressJpa = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(address);
+        addressJpa.setVeterinarian(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(testVet));
+        address = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toDomain(vetAddressRepository.saveAndFlush(addressJpa));
 
         mockMvc.perform(delete("/api/v1/veterinarians/address/{id}", address.getId())
                         .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
                 .andExpect(status().isOk());
     }
 }
+

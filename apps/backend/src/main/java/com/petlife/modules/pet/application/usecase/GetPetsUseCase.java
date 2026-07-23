@@ -1,19 +1,20 @@
 package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.PetStatus;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.PetStatus;
 import com.petlife.modules.pet.infrastructure.dto.PetResponse;
-import com.petlife.shared.response.ApiResponse;
+import com.petlife.shared.domain.PageResult;
+
 import com.petlife.shared.response.PageMeta;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
+
+import com.petlife.modules.notification.application.usecase.PagedResult;
 
 @Component
 @RequiredArgsConstructor
@@ -23,25 +24,25 @@ public class GetPetsUseCase {
     private final PetRepositoryPort petRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponse<List<PetResponse>> execute(UUID userId, PetStatus status, Pageable pageable) {
-        Page<Pet> page;
+    public PagedResult<PetResponse> execute(UUID userId, PetStatus status, int page, int size) {
+        PageResult<Pet> pageResult;
         if (status != null) {
-            page = petRepository.findByUserIdAndStatus(userId, status, pageable);
+            pageResult = petRepository.findByUserIdAndStatus(userId, status, page, size);
         } else {
-            page = petRepository.findByUserIdAndStatusNot(userId, PetStatus.ARCHIVED, pageable);
+            pageResult = petRepository.findByUserIdAndStatusNot(userId, PetStatus.ARCHIVED, page, size);
         }
 
-        List<PetResponse> content = page.getContent().stream()
+        List<PetResponse> content = pageResult.getContent().stream()
                 .map(PetResponse::fromEntity)
                 .toList();
 
         PageMeta meta = new PageMeta(
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages()
+                pageResult.getPageNumber(),
+                pageResult.getPageSize(),
+                pageResult.getTotalElements(),
+                pageResult.getTotalPages()
         );
 
-        return ApiResponse.paged(content, meta);
+        return new PagedResult<>(content, meta);
     }
 }

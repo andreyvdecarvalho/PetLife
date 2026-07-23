@@ -1,7 +1,7 @@
 package com.petlife.modules.veterinarian.infrastructure.persistence.adapter;
 
-import com.petlife.modules.veterinarian.entity.Modality;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.Modality;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterinariansRequest;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VeterinarianJpaRepository;
 import org.junit.jupiter.api.Test;
@@ -9,8 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
@@ -36,32 +35,32 @@ class VeterinarianPersistenceAdapterTest {
     @Test
     void save() {
         Veterinarian entity = new Veterinarian();
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any())).thenReturn(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity));
         Veterinarian saved = adapter.save(entity);
-        assertEquals(entity, saved);
-        verify(repository, times(1)).save(entity);
+        assertEquals(entity.getId(), saved.getId());
+        verify(repository, times(1)).save(any());
     }
 
     @Test
     void findById() {
         UUID id = UUID.randomUUID();
         Veterinarian entity = new Veterinarian();
-        when(repository.findById(id)).thenReturn(Optional.of(entity));
+        when(repository.findById(id)).thenReturn(Optional.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         Optional<Veterinarian> result = adapter.findById(id);
         assertTrue(result.isPresent());
-        assertEquals(entity, result.get());
+        assertEquals(entity.getId(), result.get().getId());
     }
 
     @Test
     void findByUserId() {
         UUID userId = UUID.randomUUID();
         Veterinarian entity = new Veterinarian();
-        when(repository.findByUserId(userId)).thenReturn(Optional.of(entity));
+        when(repository.findByUserId(userId)).thenReturn(Optional.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         Optional<Veterinarian> result = adapter.findByUserId(userId);
         assertTrue(result.isPresent());
-        assertEquals(entity, result.get());
+        assertEquals(entity.getId(), result.get().getId());
     }
 
     @Test
@@ -78,7 +77,7 @@ class VeterinarianPersistenceAdapterTest {
                 .latitude(BigDecimal.ZERO)
                 .longitude(BigDecimal.ZERO)
                 .radiusKm(10.0)
-                .modality(Modality.CLINIC)
+                .modality(Modality.IN_PERSON)
                 .specialty("Geral")
                 .emergencyOnDuty(true)
                 .page(0)
@@ -86,21 +85,21 @@ class VeterinarianPersistenceAdapterTest {
                 .build();
 
         Veterinarian vet = new Veterinarian();
-        Page<Veterinarian> page = new PageImpl<>(List.of(vet));
+        org.springframework.data.domain.Page<com.petlife.modules.veterinarian.infrastructure.persistence.entity.VeterinarianJpaEntity> page = new org.springframework.data.domain.PageImpl<>(List.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(vet)));
 
         when(repository.searchVeterinarians(
                 eq(BigDecimal.ZERO),
                 eq(BigDecimal.ZERO),
                 eq(10.0),
-                eq("CLINIC"),
+                eq("IN_PERSON"),
                 eq("Geral"),
                 eq(true),
                 any(PageRequest.class)
         )).thenReturn(page);
 
-        Page<Veterinarian> result = adapter.search(request);
+        com.petlife.shared.domain.PageResult<Veterinarian> result = adapter.search(request);
 
         assertEquals(1, result.getContent().size());
-        assertEquals(vet, result.getContent().get(0));
+        assertEquals(vet.getId(), result.getContent().get(0).getId());
     }
 }

@@ -3,18 +3,14 @@ package com.petlife.modules.notification.application.usecase;
 import com.petlife.modules.notification.application.port.NotificationMessageRepositoryPort;
 import com.petlife.modules.notification.domain.entity.NotificationMessage;
 import com.petlife.modules.notification.domain.entity.NotificationType;
-import com.petlife.modules.notification.infrastructure.dto.NotificationResponse;
-import com.petlife.shared.response.ApiResponse;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +29,6 @@ class GetNotificationsUseCaseTest {
     @DisplayName("Deve obter lista paginada de notificacoes")
     void shouldGetPagedNotifications() {
         UUID userId = UUID.randomUUID();
-        Pageable pageable = PageRequest.of(0, 10);
 
         NotificationMessage msg = new NotificationMessage();
         msg.setId(UUID.randomUUID());
@@ -42,13 +37,16 @@ class GetNotificationsUseCaseTest {
         msg.setBody("Test Body");
         msg.setType(NotificationType.SYSTEM);
 
-        Page<NotificationMessage> page = new PageImpl<>(List.of(msg), pageable, 1);
-        given(messageRepository.findByUserId(userId, pageable)).willReturn(page);
+        var pagedResult = new com.petlife.modules.notification.application.usecase.PagedResult<>(
+                List.of(msg),
+                new com.petlife.shared.response.PageMeta(0, 10, 1L, 1)
+        );
+        given(messageRepository.findByUserId(userId, 0, 10)).willReturn(pagedResult);
 
-        ApiResponse<List<NotificationResponse>> response = getNotificationsUseCase.execute(userId, pageable);
+        var response = getNotificationsUseCase.execute(userId, 0, 10);
 
-        assertThat(response.data()).hasSize(1);
-        assertThat(response.data().get(0).title()).isEqualTo("Test Title");
+        assertThat(response.content()).hasSize(1);
+        assertThat(response.content().get(0).title()).isEqualTo("Test Title");
         assertThat(response.meta().total()).isEqualTo(1);
     }
 }

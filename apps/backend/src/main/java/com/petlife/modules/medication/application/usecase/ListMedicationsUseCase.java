@@ -1,7 +1,7 @@
 package com.petlife.modules.medication.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
-import com.petlife.modules.pet.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.medication.application.port.MedicationRepositoryPort;
 import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.medication.infrastructure.dto.MedicationResponse;
@@ -42,8 +42,8 @@ public class ListMedicationsUseCase {
         List<MedicationAdministrationResponse> adminResponses = med.getAdministrations() == null ? List.of() :
             med.getAdministrations().stream().map(admin -> new MedicationAdministrationResponse(
                 admin.getId(),
-                admin.getMedication().getId(),
-                admin.getMedication().getName(),
+                admin.getMedicationId(),
+                admin.getMedicationName(),
                 admin.getScheduledTime(),
                 admin.getAdministeredAt(),
                 admin.getStatus(),
@@ -54,7 +54,7 @@ public class ListMedicationsUseCase {
 
         return new MedicationResponse(
                 med.getId(),
-                med.getPet().getId(),
+                med.getPetId(),
                 med.getName(),
                 med.getDosage(),
                 med.getFrequency(),

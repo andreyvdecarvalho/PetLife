@@ -3,19 +3,20 @@ package com.petlife.modules.notification.infrastructure.scheduler;
 import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.medication.domain.entity.MedicationAdministration;
 import com.petlife.modules.medication.domain.entity.MedicationAdministrationStatus;
-import com.petlife.modules.medication.infrastructure.persistence.MedicationAdministrationJpaRepository;
+
 import com.petlife.modules.notification.application.usecase.EnqueueNotificationUseCase;
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
-import com.petlife.modules.pet.entity.Consultation;
-import com.petlife.modules.pet.entity.Grooming;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.Vaccination;
-import com.petlife.modules.pet.infrastructure.persistence.ConsultationJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.JpaGroomingRepository;
-import com.petlife.modules.pet.infrastructure.persistence.PetJpaRepository;
-import com.petlife.modules.pet.infrastructure.persistence.VaccinationRepository;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
+import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.application.port.VaccinationPort;
+import com.petlife.modules.pet.domain.entity.Consultation;
+
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Vaccination;
+import com.petlife.modules.auth.domain.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,15 +39,19 @@ import static org.mockito.Mockito.verify;
 class NotificationSchedulerTest {
 
     @Mock
-    private VaccinationRepository vaccinationRepository;
+    private VaccinationPort vaccinationRepository;
+
     @Mock
-    private ConsultationJpaRepository consultationRepository;
+    private ConsultationRepositoryPort consultationRepository;
+
     @Mock
-    private JpaGroomingRepository groomingRepository;
+    private GroomingRepositoryPort groomingRepository;
+
     @Mock
-    private MedicationAdministrationJpaRepository administrationRepository;
+    private com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort administrationRepository;
+
     @Mock
-    private PetJpaRepository petRepository;
+    private PetRepositoryPort petRepository;
     @Mock
     private EnqueueNotificationUseCase enqueueNotificationUseCase;
 
@@ -117,11 +122,19 @@ class NotificationSchedulerTest {
     void checkLateMedicationsShouldEnqueueNotifications() {
         Medication med = new Medication();
         med.setName("Antibiotico");
-        med.setPet(pet);
+        var petJpa = new com.petlife.modules.pet.infrastructure.persistence.entity.PetJpaEntity();
+        petJpa.setId(pet.getId());
+        // Map user to userJpaEntity
+        var userJpa = new com.petlife.modules.auth.infrastructure.persistence.entity.UserJpaEntity();
+        userJpa.setId(pet.getUser().getId());
+        petJpa.setUser(userJpa);
+        petJpa.setName(pet.getName());
+        med.setPetId(pet.getId()); med.setPetOwnerId(pet.getUser().getId());
 
         MedicationAdministration admin = new MedicationAdministration();
         admin.setId(UUID.randomUUID());
-        admin.setMedication(med);
+        admin.setMedicationName(med.getName());
+        admin.setPetOwnerId(pet.getUser().getId());
 
         given(administrationRepository.findByStatusAndScheduledTimeBefore(eq(MedicationAdministrationStatus.PENDING), any()))
                 .willReturn(List.of(admin));
@@ -153,3 +166,4 @@ class NotificationSchedulerTest {
         assertThat(payload.title()).isEqualTo("Feliz Aniversário!");
     }
 }
+

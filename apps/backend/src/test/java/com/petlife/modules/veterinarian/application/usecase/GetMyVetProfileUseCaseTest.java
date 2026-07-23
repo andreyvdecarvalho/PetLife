@@ -1,8 +1,8 @@
 package com.petlife.modules.veterinarian.application.usecase;
 
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.modules.veterinarian.application.port.VeterinarianRepositoryPort;
-import com.petlife.modules.veterinarian.entity.Veterinarian;
+import com.petlife.modules.veterinarian.domain.entity.Veterinarian;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,3 +62,5 @@ class GetMyVetProfileUseCaseTest {
                 .hasMessageContaining("Perfil de veterinário não encontrado");
     }
 }
+
+

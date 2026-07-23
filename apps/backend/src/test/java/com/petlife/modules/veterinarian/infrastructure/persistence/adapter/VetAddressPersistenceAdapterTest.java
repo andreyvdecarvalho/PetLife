@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.persistence.adapter;
 
-import com.petlife.modules.veterinarian.entity.VetAddress;
+import com.petlife.modules.veterinarian.domain.entity.VetAddress;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VetAddressJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +28,10 @@ class VetAddressPersistenceAdapterTest {
     @Test
     void save() {
         VetAddress entity = new VetAddress();
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any())).thenReturn(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity));
         VetAddress saved = adapter.save(entity);
-        assertEquals(entity, saved);
-        verify(repository, times(1)).save(entity);
+        assertEquals(entity.getId(), saved.getId());
+        verify(repository, times(1)).save(any());
     }
 
     @Test
@@ -39,28 +39,28 @@ class VetAddressPersistenceAdapterTest {
         UUID id = UUID.randomUUID();
         UUID vetId = UUID.randomUUID();
         VetAddress entity = new VetAddress();
-        when(repository.findByIdAndVeterinarianId(id, vetId)).thenReturn(Optional.of(entity));
+        when(repository.findByIdAndVeterinarianId(id, vetId)).thenReturn(Optional.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         Optional<VetAddress> result = adapter.findByIdAndVeterinarianId(id, vetId);
         assertTrue(result.isPresent());
-        assertEquals(entity, result.get());
+        assertEquals(entity.getId(), result.get().getId());
     }
 
     @Test
     void findByVeterinarianId() {
         UUID vetId = UUID.randomUUID();
         VetAddress entity = new VetAddress();
-        when(repository.findByVeterinarianId(vetId)).thenReturn(List.of(entity));
+        when(repository.findByVeterinarianId(vetId)).thenReturn(List.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         List<VetAddress> result = adapter.findByVeterinarianId(vetId);
         assertEquals(1, result.size());
-        assertEquals(entity, result.get(0));
+        assertEquals(entity.getId(), result.get(0).getId());
     }
 
     @Test
     void delete() {
         VetAddress entity = new VetAddress();
         adapter.delete(entity);
-        verify(repository, times(1)).delete(entity);
+        verify(repository, times(1)).delete(any());
     }
 }

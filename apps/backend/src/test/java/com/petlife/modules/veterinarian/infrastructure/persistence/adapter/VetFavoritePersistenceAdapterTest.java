@@ -1,6 +1,6 @@
 package com.petlife.modules.veterinarian.infrastructure.persistence.adapter;
 
-import com.petlife.modules.veterinarian.entity.VetFavorite;
+import com.petlife.modules.veterinarian.domain.entity.VetFavorite;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VetFavoriteJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,21 +28,21 @@ class VetFavoritePersistenceAdapterTest {
     @Test
     void save() {
         VetFavorite entity = new VetFavorite();
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any())).thenReturn(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity));
         VetFavorite saved = adapter.save(entity);
-        assertEquals(entity, saved);
-        verify(repository, times(1)).save(entity);
+        assertEquals(entity.getId(), saved.getId());
+        verify(repository, times(1)).save(any());
     }
 
     @Test
     void findByUserId() {
         UUID userId = UUID.randomUUID();
         VetFavorite entity = new VetFavorite();
-        when(repository.findByUserId(userId)).thenReturn(List.of(entity));
+        when(repository.findByUserId(userId)).thenReturn(List.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         List<VetFavorite> result = adapter.findByUserId(userId);
         assertEquals(1, result.size());
-        assertEquals(entity, result.get(0));
+        assertEquals(entity.getId(), result.get(0).getId());
     }
 
     @Test
@@ -50,11 +50,11 @@ class VetFavoritePersistenceAdapterTest {
         UUID userId = UUID.randomUUID();
         UUID vetId = UUID.randomUUID();
         VetFavorite entity = new VetFavorite();
-        when(repository.findByUserIdAndVeterinarianId(userId, vetId)).thenReturn(Optional.of(entity));
+        when(repository.findByUserIdAndVeterinarianId(userId, vetId)).thenReturn(Optional.of(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(entity)));
         
         Optional<VetFavorite> result = adapter.findByUserIdAndVeterinarianId(userId, vetId);
         assertTrue(result.isPresent());
-        assertEquals(entity, result.get());
+        assertEquals(entity.getId(), result.get().getId());
     }
 
     @Test
@@ -71,6 +71,6 @@ class VetFavoritePersistenceAdapterTest {
     void delete() {
         VetFavorite entity = new VetFavorite();
         adapter.delete(entity);
-        verify(repository, times(1)).delete(entity);
+        verify(repository, times(1)).delete(any());
     }
 }

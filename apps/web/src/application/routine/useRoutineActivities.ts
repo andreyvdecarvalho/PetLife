@@ -1,26 +1,7 @@
 import { useState, useCallback } from 'react';
-import api from '../../infrastructure/http/api';
+import { routineApi, RoutineActivity, CreateRoutineActivityData } from '../../infrastructure/http/routine.api';
 
-export interface RoutineActivity {
-  id: string;
-  petId: string;
-  title: string;
-  description: string;
-  activityDate: string;
-  activityTime: string;
-  type: 'WALK' | 'FEEDING' | 'GENERIC';
-  status: 'PENDING' | 'COMPLETED' | 'SCHEDULED';
-  createdAt: string;
-}
-
-export interface CreateRoutineActivityData {
-  title: string;
-  description?: string;
-  activityDate: string;
-  activityTime?: string;
-  type: 'WALK' | 'FEEDING' | 'GENERIC';
-  status: 'PENDING' | 'COMPLETED' | 'SCHEDULED';
-}
+export type { RoutineActivity, CreateRoutineActivityData };
 
 export function useRoutineActivities(petId: string) {
   const [activities, setActivities] = useState<RoutineActivity[]>([]);
@@ -32,9 +13,8 @@ export function useRoutineActivities(petId: string) {
     try {
       setLoading(true);
       setError(null);
-      const url = date ? `/pets/${petId}/activities?date=${date}` : `/pets/${petId}/activities`;
-      const response = await api.get(url);
-      setActivities(response.data.data);
+      const data = await routineApi.fetchActivities(petId, date);
+      setActivities(data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao buscar atividades');
     } finally {
@@ -46,8 +26,7 @@ export function useRoutineActivities(petId: string) {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.post(`/pets/${petId}/activities`, data);
-      const newActivity = response.data.data;
+      const newActivity = await routineApi.addActivity(petId, data);
       setActivities(prev => [...prev, newActivity].sort((a, b) => a.activityTime.localeCompare(b.activityTime)));
       return newActivity;
     } catch (err: any) {
@@ -62,8 +41,7 @@ export function useRoutineActivities(petId: string) {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.patch(`/activities/${id}/status`, { status });
-      const updatedActivity = response.data.data;
+      const updatedActivity = await routineApi.updateStatus(id, status);
       setActivities(prev => prev.map(a => a.id === id ? updatedActivity : a));
       return updatedActivity;
     } catch (err: any) {

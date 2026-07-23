@@ -2,9 +2,9 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
 import com.petlife.modules.pet.application.port.VaccinationPort;
-import com.petlife.modules.pet.entity.Pet;
-import com.petlife.modules.pet.entity.Vaccination;
-import com.petlife.modules.auth.entity.User;
+import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.Vaccination;
+import com.petlife.modules.auth.domain.entity.User;
 import com.petlife.shared.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,3 +65,4 @@ class DeleteVaccinationUseCaseTest {
                 .isInstanceOf(BusinessException.class).hasMessageContaining("autenticado");
     }
 }
+
