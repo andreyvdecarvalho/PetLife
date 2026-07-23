@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.RabbitMQContainer;
 
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -32,8 +33,12 @@ public abstract class IntegrationTestBase {
             .withUsername("petlife")
             .withPassword("petlife_test");
 
+    @SuppressWarnings("resource")
+    protected static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:4.0-alpine");
+
     static {
         postgres.start();
+        rabbitmq.start();
     }
 
     @DynamicPropertySource
@@ -43,6 +48,8 @@ public abstract class IntegrationTestBase {
         registry.add("spring.datasource.password", postgres::getPassword);
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "validate");
         registry.add("spring.flyway.enabled", () -> "true");
+        registry.add("spring.rabbitmq.host", rabbitmq::getHost);
+        registry.add("spring.rabbitmq.port", rabbitmq::getAmqpPort);
     }
 
     protected MockMvc mockMvc;

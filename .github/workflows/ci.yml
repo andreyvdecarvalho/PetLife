@@ -29,6 +29,13 @@ jobs:
           cache: 'maven'
           cache-dependency-path: apps/backend/pom.xml
 
+      - name: Generate RSA Keys for Tests
+        working-directory: apps/backend
+        run: |
+          mkdir -p src/main/resources/certs
+          openssl genrsa -out src/main/resources/certs/private.pem 2048
+          openssl rsa -in src/main/resources/certs/private.pem -pubout -out src/main/resources/certs/public.pem
+
       - name: Compile
         working-directory: apps/backend
         run: mvn compile -B -q
@@ -45,9 +52,6 @@ jobs:
         id: run-tests
         working-directory: apps/backend
         run: mvn verify -B
-        env:
-          DOCKER_HOST: unix:///var/run/docker.sock
-          TESTCONTAINERS_RYUK_DISABLED: "true"
 
       - name: JaCoCo Coverage Gate (≥ 85%)
         working-directory: apps/backend
@@ -71,6 +75,11 @@ jobs:
           print(f'{covered/total*100:.1f}' if total > 0 else '0')
           ")
           echo "Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 85" | bc -l) )); then
+            echo "❌ Coverage $COVERAGE% below 85%"
+            exit 1
+          fi
+          echo "✅ Coverage $COVERAGE%"
 
       - name: Upload JaCoCo report
         uses: actions/upload-artifact@v4
@@ -198,6 +207,13 @@ jobs:
       - name: Install Playwright browsers
         working-directory: apps/web
         run: pnpm playwright install --with-deps chromium
+
+      - name: Generate RSA Keys for E2E
+        working-directory: apps/backend
+        run: |
+          mkdir -p src/main/resources/certs
+          openssl genrsa -out src/main/resources/certs/private.pem 2048
+          openssl rsa -in src/main/resources/certs/private.pem -pubout -out src/main/resources/certs/public.pem
 
       - name: Build backend JAR
         working-directory: apps/backend
