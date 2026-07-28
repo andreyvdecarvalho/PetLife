@@ -26,7 +26,7 @@ public class OpenStreetMapGeocodingAdapter implements GeocodingPort {
     public GeocodingResult geocode(String zipCode, String number, String addressLine) {
         try {
             String query = String.format("%s %s %s", addressLine, number, zipCode);
-            String url = UriComponentsBuilder.fromHttpUrl("https://nominatim.openstreetmap.org/search")
+            String url = UriComponentsBuilder.fromUriString("https://nominatim.openstreetmap.org/search")
                     .queryParam("q", query)
                     .queryParam("format", "json")
                     .queryParam("limit", 1)

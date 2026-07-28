@@ -8,7 +8,7 @@ import com.petlife.modules.notification.application.port.NotificationPreferences
 import com.petlife.modules.notification.domain.entity.NotificationMessage;
 import com.petlife.modules.notification.domain.entity.NotificationPreferences;
 import com.petlife.modules.notification.domain.entity.NotificationType;
-import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
+import com.petlife.modules.notification.application.dto.NotificationPayload;
 import com.petlife.shared.factories.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

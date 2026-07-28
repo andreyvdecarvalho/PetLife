@@ -2,7 +2,6 @@ package com.petlife.config;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.util.Map;
@@ -22,10 +21,10 @@ public class RateLimitingConfig {
     }
 
     private Bucket newBucket(String ip) {
-        Bandwidth limit = Bandwidth.classic(
-            5,
-            Refill.intervally(5, Duration.ofMinutes(5))
-        );
+        Bandwidth limit = Bandwidth.builder()
+            .capacity(5)
+            .refillIntervally(5, Duration.ofMinutes(5))
+            .build();
         return Bucket.builder().addLimit(limit).build();
     }
 

@@ -2,7 +2,7 @@ package com.petlife.modules.notification.application.usecase;
 
 import com.petlife.modules.notification.application.port.NotificationPublisherPort;
 import com.petlife.modules.notification.domain.entity.NotificationType;
-import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
+import com.petlife.modules.notification.application.dto.NotificationPayload;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
