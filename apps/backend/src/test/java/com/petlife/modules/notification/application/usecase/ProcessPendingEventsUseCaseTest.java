@@ -4,7 +4,6 @@ import com.petlife.modules.medication.domain.entity.Medication;
 import com.petlife.modules.medication.domain.entity.MedicationAdministration;
 import com.petlife.modules.medication.domain.entity.MedicationAdministrationStatus;
 
-import com.petlife.modules.notification.application.usecase.EnqueueNotificationUseCase;
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import com.petlife.modules.notification.application.dto.NotificationPayload;
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
