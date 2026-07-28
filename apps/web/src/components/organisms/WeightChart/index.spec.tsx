@@ -21,9 +21,9 @@ describe('WeightChart', () => {
 
   it('should render chart if data is provided and sort them', () => {
     const mockData = [
-      { id: '1', weightKg: 10, recordedAt: '2023-01-01T10:00:00Z', notes: '' },
-      { id: '2', weightKg: 12, recordedAt: '2023-03-01T10:00:00Z', notes: '' },
-      { id: '3', weightKg: 11, recordedAt: '2023-02-01T10:00:00Z', notes: '' }, // Fora de ordem de propósito para testar o sort
+      { id: '1', petId: 'pet-1', weightKg: 10, measuredAt: '2023-01-01T10:00:00Z', createdAt: '2023-01-01T10:00:00Z' },
+      { id: '2', petId: 'pet-1', weightKg: 12, measuredAt: '2023-03-01T10:00:00Z', createdAt: '2023-03-01T10:00:00Z' },
+      { id: '3', petId: 'pet-1', weightKg: 11, measuredAt: '2023-02-01T10:00:00Z', createdAt: '2023-02-01T10:00:00Z' }, // Fora de ordem de propósito para testar o sort
     ];
 
     const { container } = render(<WeightChart data={mockData} />);
