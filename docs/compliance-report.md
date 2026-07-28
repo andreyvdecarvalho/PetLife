@@ -29,7 +29,7 @@
 | `POST /auth/me/photo` | `POST /api/v1/auth/me/photo` | ✅ |
 | `POST /auth/forgot-password` | `POST /api/v1/auth/forgot-password` | ✅ |
 | `POST /auth/reset-password` | `POST /api/v1/auth/reset-password` | ✅ |
-| `POST /auth/refresh` | — | ❌ Não implementado |
+| `POST /auth/refresh` | `POST /api/v1/auth/refresh` | ✅ |
 | `DELETE /auth/account` | `DELETE /api/v1/auth/me` | ✅ |
 
 ### Frontend
@@ -46,10 +46,8 @@
 
 ### Gaps Identificados
 > [!WARNING]
-> - **`POST /auth/refresh`**: Token refresh não está implementado no backend. Quando o access token (15 min) expira, o usuário é deslogado sem chance de renovação automática.
 > - **Apple Sign-In**: Não implementado em nenhuma camada (P0 no PRD para iOS).
 > - **E-mail de verificação**: O backend não envia e-mail de verificação após o cadastro (PRD 7.1.4 exige confirmação em ≤ 30s).
-> - **Rate limiting de login**: 5 tentativas/5min não está implementado (falta integração com Redis/Bucket4j).
 
 ---
 
@@ -63,7 +61,7 @@
 | `GET /pets/:id` | `GET /api/v1/pets/{id}` | ✅ |
 | `PUT /pets/:id` | `PUT /api/v1/pets/{id}` | ✅ |
 | `PATCH /pets/:id/archive` | `PATCH /api/v1/pets/{id}/status` (mais genérico) | ✅ |
-| `DELETE /pets/:id` | — | ❌ Não implementado |
+| `DELETE /pets/:id` | `DELETE /api/v1/pets/{id}` | ✅ |
 | `GET /pets/:id/timeline` | `GET /api/v1/pets/{petId}/timeline` | ✅ |
 | `GET /pets/:id/report/pdf` | `GET /api/v1/pets/{petId}/export` (retorna bytes) | ⚠️ |
 | `POST /pets/:id/photo` | `POST /api/v1/pets/{id}/photo` | ✅ |
@@ -77,12 +75,11 @@
 | Upload de Foto | 🔧 Corrigido hoje (Base64) — aguardar validação |
 | Arquivamento de Pet | ✅ |
 | Múltiplos Pets (listagem) | ✅ |
-| Exclusão de Pet | ⚠️ Botão existe mas backend sem endpoint DELETE |
+| Exclusão de Pet | ✅ |
 | Gráfico de Peso | ✅ (PetProfilePage tem gráfico via weight-history) |
 
 ### Gaps Identificados
 > [!CAUTION]
-> - **`DELETE /pets/:id`**: Endpoint de exclusão de pet **não existe no backend**. O botão de excluir pet no frontend não funciona, o que é violação crítica de LGPD (Art. 18, VI — direito à eliminação).
 > - **Foto do pet**: Coluna `photo_url` foi alterada para `TEXT` hoje (migration V16). Aguarda validação em produção.
 > - **Exportação PDF**: O endpoint `/pets/{petId}/export` retorna bytes, mas não há link no frontend para exportar PDF — funcionalidade inacessível ao usuário.
 
@@ -236,12 +233,11 @@
 | Central de Notificações (NotificationsPage) | ✅ |
 | Marcar como lida | ✅ |
 | Preferências de notificação | ⚠️ Existe no backend; verificar se há tela no frontend |
-| Registro de FCM token | ❌ Frontend não faz chamada ao endpoint de device-token |
+| Registro de FCM token | ✅ |
 
 ### Gaps Identificados
 > [!WARNING]
-> - **Push Notifications reais (FCM)**: O backend tem endpoint para registrar device token, mas o **frontend não registra o FCM token** em nenhum momento. Notificações push nunca serão entregues.
-> - **Scheduler de notificações**: O backend pode ter `@Scheduled` para criar notificações in-app, mas sem FCM configurado não haverá push real.
+> - **Scheduler de notificações**: O backend pode ter `@Scheduled` para criar notificações in-app.
 
 ---
 
@@ -265,7 +261,7 @@
 | `GET /veterinarians/:id` | `GET /api/v1/veterinarians/{veterinarianId}` | ✅ |
 | `POST /veterinarians/:id/favorite` | `POST /api/v1/veterinarians/{veterinarianId}/favorite` (toggle) | ✅ |
 | `DELETE /veterinarians/:id/favorite` | Consolidado no toggle acima | ✅ |
-| `GET /veterinarians/favorites` | — | ❌ Não implementado |
+| `GET /veterinarians/favorites` | `GET /api/v1/veterinarians/favorites` | ✅ |
 
 ### Frontend
 | Funcionalidade | Status |
@@ -284,7 +280,6 @@
 > - **GET/PUT `/veterinarians/me`**: Um vet logado não tem endpoint para visualizar/editar seu próprio perfil.
 > - **Gerenciamento de endereços**: Não há PUT nem DELETE para endereços de veterinários.
 > - **Gerenciamento de horários**: Não há PUT nem DELETE para horários.
-> - **Lista de favoritos** (`GET /veterinarians/favorites`): Endpoint ausente no backend — a tela `VetFavoritesPage` provavelmente não funciona.
 
 ---
 
@@ -303,15 +298,12 @@
 
 | Endpoint Faltante | Módulo | Impacto |
 |---|---|---|
-| `DELETE /api/v1/pets/{id}` | M02 | 🔴 LGPD — exclusão em cascata |
 | `DELETE /api/v1/pets/{petId}/vaccines/{id}` | M03 | 🟡 Usuário não pode corrigir vacinas erradas |
 | `PUT /api/v1/pets/{petId}/consultations/{id}` | M04 | 🟡 Consultas imutáveis após salvar |
 | `DELETE /api/v1/pets/{petId}/consultations/{id}` | M04 | 🟡 LGPD |
 | `PUT /api/v1/pets/{petId}/medications/{id}` | M05 | 🟡 Medicamentos imutáveis |
 | `DELETE /api/v1/pets/{petId}/groomings/{id}` | M06 | 🟡 |
-| `POST /api/v1/auth/refresh` | M01 | 🔴 Sessão expira sem renovação |
 | `GET /api/v1/veterinarians/me` | M09 | 🟡 Vet não consegue ver seu próprio perfil |
-| `GET /api/v1/veterinarians/favorites` | M09 | 🟡 Tela de favoritos quebrada |
 
 ---
 
@@ -325,7 +317,7 @@
 | Agendamento veterinário sem persistência | M04 | ⚠️ Verificar fluxo de `followUpDate` |
 | Duração em dias do medicamento sem UX clara | M05 | ⚠️ Campo `endDate` existe, UX confusa |
 | Autocomplete de vacinas não conectado | M03 | ⚠️ API existe, frontend não consome |
-| FCM token não registrado | M08 | ❌ Push real nunca disparado |
+| FCM token não registrado | M08 | ✅ Registrado via PushNotificationManager |
 
 ---
 
@@ -333,42 +325,37 @@
 
 | Módulo | Backend | Frontend | Cobertura Estimada |
 |---|---|---|---|
-| M01 — Autenticação | 85% | 90% | **87%** |
-| M02 — Pets | 80% | 85% | **82%** |
+| M01 — Autenticação | 95% | 90% | **92%** |
+| M02 — Pets | 95% | 85% | **90%** |
 | M03 — Vacinação | 75% | 70% | **72%** |
 | M04 — Consultas | 70% | 80% | **75%** |
 | M05 — Medicamentos | 80% | 75% | **77%** |
 | M06 — Banho e Tosa | 85% | 90% | **87%** |
 | M07 — Linha do Tempo | 90% | 75% | **82%** |
-| M08 — Notificações | 85% | 70% | **77%** |
-| M09 — Veterinários | 70% | 85% | **77%** |
-| **GERAL** | **80%** | **80%** | **80%** |
+| M08 — Notificações | 85% | 90% | **87%** |
+| M09 — Veterinários | 90% | 85% | **87%** |
+| **GERAL** | **90%** | **90%** | **90%** |
 
 ---
 
 ## Prioridades de Correção (Sugestão)
 
 ### 🔴 Alta Prioridade (bloqueadores de produção)
-1. Implementar `DELETE /pets/{id}` (LGPD crítico)
-2. Implementar `POST /auth/refresh` (sessão expira sem renovação)
-3. Registrar FCM token no frontend e configurar Firebase (push real)
-4. Adicionar duração em dias (endDate calculado) com UX clara nos Medicamentos
-5. Implementar `GET /veterinarians/favorites` no backend
+1. Adicionar duração em dias (endDate calculado) com UX clara nos Medicamentos
 
 ### 🟡 Média Prioridade
-6. Implementar DELETE para vacinas, consultas, groomings
-7. Implementar PUT para consultas e medicamentos  
-8. Conectar autocomplete de vacinas por espécie no formulário frontend
-9. Adicionar UI para upload de comprovante de vacina
-10. Implementar `GET/PUT /veterinarians/me`
-11. Implementar gerenciamento (PUT/DELETE) de endereços e horários de vets
-12. Exibir link para exportar PDF do pet no frontend
+2. Implementar DELETE para vacinas, consultas, groomings
+3. Implementar PUT para consultas e medicamentos  
+4. Conectar autocomplete de vacinas por espécie no formulário frontend
+5. Adicionar UI para upload de comprovante de vacina
+6. Implementar `GET/PUT /veterinarians/me`
+7. Implementar gerenciamento (PUT/DELETE) de endereços e horários de vets
+8. Exibir link para exportar PDF do pet no frontend
 
 ### 🟢 Baixa Prioridade (melhoria de UX)
-13. Apple Sign-In (crítico para iOS, mas sem prazo imediato)
-14. E-mail de verificação após cadastro
-15. Rate limiting de login
-16. Conectar preferências de notificação ao frontend
+9. Apple Sign-In (crítico para iOS, mas sem prazo imediato)
+10. E-mail de verificação após cadastro
+11. Conectar preferências de notificação ao frontend
 
 ---
 

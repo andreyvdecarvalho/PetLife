@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+import com.petlife.config.RateLimitingConfig;
 
 import java.util.UUID;
 
@@ -60,6 +62,7 @@ public class AuthController {
     private final UploadUserPhotoUseCase uploadUserPhotoUseCase;
     private final DeleteUserAccountUseCase deleteUserAccountUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final RateLimitingConfig rateLimitingConfig;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,7 +73,16 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Autenticar tutor")
-    public ApiResponse<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ApiResponse<TokenResponse> login(
+            @Valid @RequestBody LoginRequest request,
+            HttpServletRequest httpRequest) {
+        String clientIp = httpRequest.getRemoteAddr();
+        if (!rateLimitingConfig.tryConsume(clientIp)) {
+            throw com.petlife.shared.exception.BusinessException.tooManyRequests(
+                "TOO_MANY_LOGIN_ATTEMPTS",
+                "Muitas tentativas de login. Aguarde 5 minutos."
+            );
+        }
         return ApiResponse.of(loginUserUseCase.execute(request));
     }
 

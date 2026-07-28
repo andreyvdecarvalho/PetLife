@@ -34,4 +34,8 @@ public class BusinessException extends RuntimeException {
     public static BusinessException unauthorized(String code, String message) {
         return new BusinessException(code, message, HttpStatus.UNAUTHORIZED);
     }
+
+    public static BusinessException tooManyRequests(String code, String message) {
+        return new BusinessException(code, message, HttpStatus.TOO_MANY_REQUESTS);
+    }
 }
