@@ -21,4 +21,24 @@ public class UpdateMedicationRequest {
     private Integer customFrequencyHours;
     private LocalDate endDate;
     private List<String> timesOfDay;
+    private String prescribedBy;
+    private String reason;
+
+    public UpdateMedicationRequest(
+        String name,
+        String dosage,
+        MedicationFrequency frequency,
+        MedicationType medicationType,
+        Integer customFrequencyHours,
+        LocalDate endDate,
+        List<String> timesOfDay
+    ) {
+        this.name = name;
+        this.dosage = dosage;
+        this.frequency = frequency;
+        this.medicationType = medicationType;
+        this.customFrequencyHours = customFrequencyHours;
+        this.endDate = endDate;
+        this.timesOfDay = timesOfDay;
+    }
 }

@@ -22,6 +22,8 @@ public record MedicationResponse(
     List<String> timesOfDay,
     MedicationStatus status,
     List<MedicationAdministrationResponse> administrations,
+    String prescribedBy,
+    String reason,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {}

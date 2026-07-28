@@ -66,6 +66,21 @@ export function useVaccinations(petId: string) {
     }
   };
 
+  const deleteVaccination = async (vaccineId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await vaccinationApi.deleteVaccination(petId, vaccineId);
+      await fetchVaccinations();
+      return true;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao deletar vacina');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     vaccinations,
     loading,
@@ -73,6 +88,7 @@ export function useVaccinations(petId: string) {
     fetchVaccinations,
     addVaccination,
     updateVaccination,
-    uploadProof
+    uploadProof,
+    deleteVaccination
   };
 }

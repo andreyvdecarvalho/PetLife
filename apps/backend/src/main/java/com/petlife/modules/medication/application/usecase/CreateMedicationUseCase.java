@@ -65,6 +65,8 @@ public class CreateMedicationUseCase {
         medication.setEndDate(request.endDate());
         medication.setTimesOfDay(request.timesOfDay());
         medication.setStatus(MedicationStatus.ACTIVE);
+        medication.setPrescribedBy(request.prescribedBy());
+        medication.setReason(request.reason());
 
         Medication savedMedication = medicationRepository.save(medication);
 
@@ -194,6 +196,8 @@ public class CreateMedicationUseCase {
                 med.getTimesOfDay(),
                 med.getStatus(),
                 adminResponses,
+                med.getPrescribedBy(),
+                med.getReason(),
                 med.getCreatedAt(),
                 med.getUpdatedAt()
         );

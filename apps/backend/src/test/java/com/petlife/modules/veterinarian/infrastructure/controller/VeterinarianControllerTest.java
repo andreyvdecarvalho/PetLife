@@ -11,6 +11,7 @@ import com.petlife.modules.veterinarian.infrastructure.dto.request.CreateVeterin
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SetVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateAvailabilityRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetAddressRequest;
+import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.persistence.VeterinarianJpaRepository;
 import com.petlife.modules.veterinarian.domain.entity.VetAddress;
 import com.petlife.modules.veterinarian.domain.entity.VetFavorite;
@@ -41,6 +42,9 @@ class VeterinarianControllerTest extends IntegrationTestBase {
 
     @Autowired
     private VetFavoriteJpaRepository vetFavoriteRepository;
+
+    @Autowired
+    private com.petlife.modules.veterinarian.infrastructure.persistence.VetScheduleJpaRepository vetScheduleRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -232,6 +236,74 @@ class VeterinarianControllerTest extends IntegrationTestBase {
         address = com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toDomain(vetAddressRepository.saveAndFlush(addressJpa));
 
         mockMvc.perform(delete("/api/v1/veterinarians/address/{id}", address.getId())
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateMyProfile_ShouldReturnUpdatedProfile() throws Exception {
+        createVetProfile();
+
+        com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVeterinarianRequest request = 
+            com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVeterinarianRequest.builder()
+                .fullName("Test Vet Updated")
+                .bio("New Bio")
+                .phone("11999999999")
+                .build();
+
+        mockMvc.perform(put("/api/v1/veterinarians/me")
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail())))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.fullName").value("Test Vet Updated"))
+                .andExpect(jsonPath("$.data.bio").value("New Bio"))
+                .andExpect(jsonPath("$.data.phone").value("11999999999"));
+    }
+
+    @Test
+    void updateSchedule_ShouldReturnUpdatedSchedule() throws Exception {
+        createVetProfile();
+        
+        var scheduleJpa = new com.petlife.modules.veterinarian.infrastructure.persistence.entity.VetScheduleJpaEntity();
+        scheduleJpa.setVeterinarian(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(testVet));
+        scheduleJpa.setDayOfWeek(java.time.DayOfWeek.MONDAY);
+        scheduleJpa.setStartTime(LocalTime.of(9, 0));
+        scheduleJpa.setEndTime(LocalTime.of(18, 0));
+        scheduleJpa.setAvailable(true);
+        scheduleJpa = vetScheduleRepository.saveAndFlush(scheduleJpa);
+
+        UpdateVetScheduleRequest request = new UpdateVetScheduleRequest(
+                java.time.DayOfWeek.TUESDAY,
+                LocalTime.of(10, 0),
+                LocalTime.of(19, 0),
+                false
+        );
+
+        mockMvc.perform(put("/api/v1/veterinarians/schedule/{id}", scheduleJpa.getId())
+                        .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail())))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.dayOfWeek").value("TUESDAY"))
+                .andExpect(jsonPath("$.data.openTime").value("10:00:00"))
+                .andExpect(jsonPath("$.data.closeTime").value("19:00:00"))
+                .andExpect(jsonPath("$.data.isActive").value(false));
+    }
+
+    @Test
+    void deleteSchedule_ShouldReturnOk() throws Exception {
+        createVetProfile();
+
+        var scheduleJpa = new com.petlife.modules.veterinarian.infrastructure.persistence.entity.VetScheduleJpaEntity();
+        scheduleJpa.setVeterinarian(com.petlife.modules.veterinarian.infrastructure.persistence.mapper.VeterinarianMapper.toJpaEntity(testVet));
+        scheduleJpa.setDayOfWeek(java.time.DayOfWeek.MONDAY);
+        scheduleJpa.setStartTime(LocalTime.of(9, 0));
+        scheduleJpa.setEndTime(LocalTime.of(18, 0));
+        scheduleJpa.setAvailable(true);
+        scheduleJpa = vetScheduleRepository.saveAndFlush(scheduleJpa);
+
+        mockMvc.perform(delete("/api/v1/veterinarians/schedule/{id}", scheduleJpa.getId())
                         .with(jwt().jwt(j -> j.subject(testUser.getId().toString()).claim("email", testUser.getEmail()))))
                 .andExpect(status().isOk());
     }

@@ -35,6 +35,7 @@ export const GroomingPageContent: React.FC = () => {
     addGrooming,
     updateGrooming,
     uploadPhoto,
+    deleteGrooming
   } = useGrooming(selectedPetId || '');
 
   useEffect(() => {
@@ -95,6 +96,16 @@ export const GroomingPageContent: React.FC = () => {
   const handleOpenEditModal = (grooming: Grooming) => {
     setSelectedGrooming(grooming);
     setIsFormOpen(true);
+  };
+
+  const handleDeleteGrooming = async (groomingId: string) => {
+    if (window.confirm('Deseja realmente excluir este serviço de estética?')) {
+      const success = await deleteGrooming(groomingId);
+      if (success) {
+        setIsFormOpen(false);
+        showToast('Serviço excluído com sucesso.', 'success');
+      }
+    }
   };
 
   const handleFormSuccess = async (
@@ -330,6 +341,7 @@ export const GroomingPageContent: React.FC = () => {
           grooming={selectedGrooming}
           onSuccess={handleFormSuccess}
           onCancel={() => setIsFormOpen(false)}
+          onDelete={selectedGrooming ? () => handleDeleteGrooming(selectedGrooming.id) : undefined}
         />
       </Modal>
     </div>

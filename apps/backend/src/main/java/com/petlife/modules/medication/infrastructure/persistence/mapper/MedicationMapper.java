@@ -41,6 +41,8 @@ public class MedicationMapper {
         domain.setEndDate(entity.getEndDate());
         domain.setTimesOfDay(new ArrayList<>(entity.getTimesOfDay()));
         domain.setStatus(entity.getStatus());
+        domain.setPrescribedBy(entity.getPrescribedBy());
+        domain.setReason(entity.getReason());
 
         if (entity.getAdministrations() != null) {
             domain.setAdministrations(entity.getAdministrations().stream()
@@ -81,6 +83,8 @@ public class MedicationMapper {
         entity.setEndDate(domain.getEndDate());
         entity.setTimesOfDay(new ArrayList<>(domain.getTimesOfDay()));
         entity.setStatus(domain.getStatus());
+        entity.setPrescribedBy(domain.getPrescribedBy());
+        entity.setReason(domain.getReason());
 
         if (domain.getAdministrations() != null) {
             entity.setAdministrations(domain.getAdministrations().stream()

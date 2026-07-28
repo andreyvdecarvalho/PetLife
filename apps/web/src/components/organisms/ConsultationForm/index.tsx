@@ -6,30 +6,34 @@ import { Button } from '../../atoms/Button';
 import { useToast } from '../../molecules/Toast';
 import './styles.css';
 
+import type { Consultation } from '../../../domain/pet/Consultation';
+
 interface ConsultationFormProps {
   petId: string;
+  initialData?: Consultation;
   onSuccess: () => void;
   onCancel: () => void;
+  onDelete?: () => void;
 }
 
-export const ConsultationForm: React.FC<ConsultationFormProps> = ({ petId, onSuccess, onCancel }) => {
-  const { addConsultation, uploadAttachments } = useConsultations(petId);
+export const ConsultationForm: React.FC<ConsultationFormProps> = ({ petId, initialData, onSuccess, onCancel, onDelete }) => {
+  const { addConsultation, updateConsultation, uploadAttachments } = useConsultations(petId);
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().substring(0, 16),
-    reason: '',
-    veterinarian: '',
-    clinic: '',
-    diagnosis: '',
-    prescriptions: '',
-    notes: '',
-    weightAtVisit: '',
-    followUpDate: '',
-    cost: '',
+    date: initialData?.date ? new Date(initialData.date).toISOString().substring(0, 16) : new Date().toISOString().substring(0, 16),
+    reason: initialData?.reason || '',
+    veterinarian: initialData?.veterinarian || '',
+    clinic: initialData?.clinic || '',
+    diagnosis: initialData?.diagnosis || '',
+    prescriptions: initialData?.prescriptions || '',
+    notes: initialData?.notes || '',
+    weightAtVisit: initialData?.weightAtVisit?.toString() || '',
+    followUpDate: initialData?.followUpDate || '',
+    cost: initialData?.cost?.toString() || '',
   });
 
   const handleChange = (field: keyof typeof formData, value: string) => {
@@ -58,7 +62,7 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ petId, onSuc
 
     setLoading(true);
     try {
-      const created = await addConsultation({
+      const payload = {
         date: new Date(formData.date).toISOString(),
         reason: formData.reason,
         veterinarian: formData.veterinarian || undefined,
@@ -69,17 +73,32 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ petId, onSuc
         weightAtVisit: formData.weightAtVisit ? Number(formData.weightAtVisit) : undefined,
         followUpDate: formData.followUpDate || undefined,
         cost: formData.cost ? Number(formData.cost) : undefined,
-      });
+      };
 
-      if (created) {
-        if (files.length > 0) {
-          const uploadSuccess = await uploadAttachments(created.id, files);
-          if (!uploadSuccess) showToast('Consulta salva, mas falhou ao enviar anexos.', 'error');
+      if (initialData) {
+        const success = await updateConsultation(initialData.id, payload);
+        if (success) {
+          if (files.length > 0) {
+            const uploadSuccess = await uploadAttachments(initialData.id, files);
+            if (!uploadSuccess) showToast('Consulta salva, mas falhou ao enviar anexos.', 'error');
+          }
+          showToast('Consulta médica atualizada com sucesso!', 'success');
+          onSuccess();
+        } else {
+          showToast('Erro ao atualizar consulta.', 'error');
         }
-        showToast('Consulta médica registrada com sucesso!', 'success');
-        onSuccess();
       } else {
-        showToast('Erro ao registrar consulta.', 'error');
+        const created = await addConsultation(payload);
+        if (created) {
+          if (files.length > 0) {
+            const uploadSuccess = await uploadAttachments(created.id, files);
+            if (!uploadSuccess) showToast('Consulta salva, mas falhou ao enviar anexos.', 'error');
+          }
+          showToast('Consulta médica registrada com sucesso!', 'success');
+          onSuccess();
+        } else {
+          showToast('Erro ao registrar consulta.', 'error');
+        }
       }
     } catch (err) {
       showToast('Erro de conexão.', 'error');
@@ -119,7 +138,12 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ petId, onSuc
 
       <div className="organism-consultation-form__actions">
         <Button type="button" variant="secondary" onClick={onCancel} disabled={loading} data-testid="btn-cancelar-consulta">Cancelar</Button>
-        <Button type="submit" disabled={loading} data-testid="btn-salvar-consulta">{loading ? 'Salvando...' : 'Registrar Consulta'}</Button>
+        {onDelete && (
+          <Button type="button" variant="danger" onClick={onDelete} disabled={loading}>
+            Excluir
+          </Button>
+        )}
+        <Button type="submit" disabled={loading} data-testid="btn-salvar-consulta">{loading ? 'Salvando...' : (initialData ? 'Salvar Alterações' : 'Registrar Consulta')}</Button>
       </div>
     </form>
   );

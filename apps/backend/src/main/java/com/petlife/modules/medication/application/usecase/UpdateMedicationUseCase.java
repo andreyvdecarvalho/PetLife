@@ -94,6 +94,13 @@ public class UpdateMedicationUseCase {
             scheduleChanged = true;
         }
 
+        if (request.getPrescribedBy() != null) {
+            medication.setPrescribedBy(request.getPrescribedBy());
+        }
+        if (request.getReason() != null) {
+            medication.setReason(request.getReason());
+        }
+
         if (medication.getFrequency() == MedicationFrequency.CUSTOM && medication.getCustomFrequencyHours() == null) {
             throw BusinessException.badRequest(
                     "INVALID_FREQUENCY", 
@@ -258,6 +265,8 @@ public class UpdateMedicationUseCase {
                 med.getTimesOfDay(),
                 med.getStatus(),
                 adminResponses,
+                med.getPrescribedBy(),
+                med.getReason(),
                 med.getCreatedAt(),
                 med.getUpdatedAt()
         );

@@ -15,7 +15,7 @@ interface VaccinationsTabProps {
 }
 
 export const VaccinationsTab: React.FC<VaccinationsTabProps> = ({ petId, species }) => {
-  const { vaccinations, loading, error, fetchVaccinations, addVaccination, updateVaccination, uploadProof } = useVaccinations(petId);
+  const { vaccinations, loading, error, fetchVaccinations, addVaccination, updateVaccination, uploadProof, deleteVaccination } = useVaccinations(petId);
   const { suggestions, fetchSuggestions } = useVaccineSuggestions(species);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingVaccine, setEditingVaccine] = useState<Vaccination | null>(null);
@@ -51,6 +51,15 @@ export const VaccinationsTab: React.FC<VaccinationsTabProps> = ({ petId, species
     }
     if (success) {
       setIsModalOpen(false);
+    }
+  };
+
+  const handleDelete = async (vaccineId: string) => {
+    if (window.confirm('Deseja realmente excluir esta vacina?')) {
+      const success = await deleteVaccination(vaccineId);
+      if (success) {
+        setIsModalOpen(false);
+      }
     }
   };
 
@@ -95,6 +104,7 @@ export const VaccinationsTab: React.FC<VaccinationsTabProps> = ({ petId, species
             suggestions={suggestions}
             onSubmit={handleSubmit}
             onCancel={() => setIsModalOpen(false)}
+            onDelete={editingVaccine ? () => handleDelete(editingVaccine.id) : undefined}
             loading={loading}
           />
 

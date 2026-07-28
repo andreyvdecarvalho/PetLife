@@ -27,9 +27,10 @@ interface GroomingFormProps {
   grooming?: Grooming;
   onSuccess: (data: CreateGroomingData, beforeFile: File | null, afterFile: File | null) => Promise<void>;
   onCancel: () => void;
+  onDelete?: () => void;
 }
 
-export const GroomingForm: React.FC<GroomingFormProps> = ({ grooming, onSuccess, onCancel }) => {
+export const GroomingForm: React.FC<GroomingFormProps> = ({ grooming, onSuccess, onCancel, onDelete }) => {
   const [beforeFile, setBeforeFile] = useState<File | null>(null);
   const [beforePreview, setBeforePreview] = useState<string | null>(
     grooming?.photos && grooming.photos[0] ? grooming.photos[0] : null
@@ -291,6 +292,17 @@ export const GroomingForm: React.FC<GroomingFormProps> = ({ grooming, onSuccess,
         >
           Cancelar
         </button>
+        {onDelete && (
+          <button
+            type="button"
+            onClick={onDelete}
+            className="organism-grooming-form__btn"
+            style={{ backgroundColor: 'var(--color-error)', color: '#ffffff', border: 'none', borderRadius: '12px', padding: '12px 24px', fontWeight: '600', cursor: 'pointer' }}
+            disabled={isSubmitting}
+          >
+            Excluir
+          </button>
+        )}
         <button
           type="submit"
           className="organism-grooming-form__btn organism-grooming-form__btn--primary"

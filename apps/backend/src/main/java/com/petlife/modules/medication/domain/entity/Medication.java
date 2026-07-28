@@ -29,6 +29,8 @@ public class Medication {
     private List<String> timesOfDay = new ArrayList<>();
     private MedicationStatus status = MedicationStatus.ACTIVE;
     private List<MedicationAdministration> administrations = new ArrayList<>();
+    private String prescribedBy;
+    private String reason;
 
     /**
      * ID do usuário dono do pet. Preenchido pelo adapter ao carregar a entidade

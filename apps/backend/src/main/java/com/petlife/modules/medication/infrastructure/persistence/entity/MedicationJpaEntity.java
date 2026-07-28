@@ -66,6 +66,12 @@ public class MedicationJpaEntity extends BaseEntity {
     @Column(name = "status", nullable = false, length = 50)
     private MedicationStatus status = MedicationStatus.ACTIVE;
 
+    @Column(name = "prescribed_by", length = 255)
+    private String prescribedBy;
+
+    @Column(name = "reason", length = 500)
+    private String reason;
+
     @OneToMany(mappedBy = "medication", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MedicationAdministrationJpaEntity> administrations = new ArrayList<>();
 }

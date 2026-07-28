@@ -14,6 +14,8 @@ import com.petlife.modules.veterinarian.infrastructure.dto.request.SearchVeterin
 import com.petlife.modules.veterinarian.infrastructure.dto.request.SetVetScheduleRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateAvailabilityRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetAddressRequest;
+import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVetScheduleRequest;
+import com.petlife.modules.veterinarian.infrastructure.dto.request.UpdateVeterinarianRequest;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VetAddressResponse;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VetScheduleResponse;
 import com.petlife.modules.veterinarian.infrastructure.dto.response.VeterinarianResponse;
@@ -42,6 +44,9 @@ import com.petlife.modules.veterinarian.application.usecase.GetMyVetProfileUseCa
 import com.petlife.modules.veterinarian.application.usecase.ListFavoriteVetsUseCase;
 import com.petlife.modules.veterinarian.application.usecase.UpdateVetAddressUseCase;
 import com.petlife.modules.veterinarian.application.usecase.DeleteVetAddressUseCase;
+import com.petlife.modules.veterinarian.application.usecase.UpdateVeterinarianProfileUseCase;
+import com.petlife.modules.veterinarian.application.usecase.UpdateVetScheduleUseCase;
+import com.petlife.modules.veterinarian.application.usecase.DeleteVetScheduleUseCase;
 
 import java.util.List;
 import java.math.BigDecimal;
@@ -64,6 +69,9 @@ public class VeterinarianController {
     private final ListFavoriteVetsUseCase listFavoriteVetsUseCase;
     private final UpdateVetAddressUseCase updateVetAddressUseCase;
     private final DeleteVetAddressUseCase deleteVetAddressUseCase;
+    private final UpdateVeterinarianProfileUseCase updateVeterinarianProfileUseCase;
+    private final UpdateVetScheduleUseCase updateVetScheduleUseCase;
+    private final DeleteVetScheduleUseCase deleteVetScheduleUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -148,6 +156,14 @@ public class VeterinarianController {
         return ApiResponse.of(getMyVetProfileUseCase.execute(UUID.fromString(jwt.getSubject())));
     }
 
+    @PutMapping("/me")
+    @Operation(summary = "Atualiza o perfil do veterinário logado")
+    public ApiResponse<VeterinarianResponse> updateMyProfile(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody @Valid UpdateVeterinarianRequest request) {
+        return ApiResponse.of(updateVeterinarianProfileUseCase.execute(UUID.fromString(jwt.getSubject()), request));
+    }
+
     @GetMapping("/favorites")
     @Operation(summary = "Lista os veterinários favoritados pelo usuário logado")
     public ApiResponse<List<VeterinarianResponse>> listFavorites(@AuthenticationPrincipal Jwt jwt) {
@@ -169,6 +185,24 @@ public class VeterinarianController {
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id) {
         deleteVetAddressUseCase.execute(UUID.fromString(jwt.getSubject()), id);
+        return ApiResponse.of(null);
+    }
+
+    @PutMapping("/schedule/{id}")
+    @Operation(summary = "Atualiza um horário de atendimento do veterinário")
+    public ApiResponse<VetScheduleResponse> updateSchedule(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateVetScheduleRequest request) {
+        return ApiResponse.of(updateVetScheduleUseCase.execute(UUID.fromString(jwt.getSubject()), id, request));
+    }
+
+    @DeleteMapping("/schedule/{id}")
+    @Operation(summary = "Remove um horário de atendimento do veterinário")
+    public ApiResponse<Void> deleteSchedule(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id) {
+        deleteVetScheduleUseCase.execute(UUID.fromString(jwt.getSubject()), id);
         return ApiResponse.of(null);
     }
 }
