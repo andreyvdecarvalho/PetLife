@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.javamail.JavaMailSender;
+import com.petlife.modules.auth.application.port.AppleOAuthPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -59,6 +62,12 @@ public abstract class IntegrationTestBase {
 
     @Autowired
     private WebApplicationContext context;
+
+    @MockBean
+    protected JavaMailSender mailSender;
+
+    @MockBean
+    protected AppleOAuthPort appleOAuthPort;
 
     @BeforeEach
     void setUpMockMvc() {
