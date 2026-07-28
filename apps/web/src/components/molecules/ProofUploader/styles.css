@@ -33,7 +33,7 @@
 }
 
 .molecule-proof-uploader__placeholder .material-symbols-outlined {
-  font-size: 32px;
+  font-size: var(--text-headline-lg-size);
 }
 
 .molecule-proof-uploader__img {
@@ -44,6 +44,6 @@
 
 .molecule-proof-uploader__error {
   color: var(--color-error-container);
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
   font-weight: 500;
 }

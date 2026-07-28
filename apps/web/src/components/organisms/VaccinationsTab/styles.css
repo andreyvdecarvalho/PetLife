@@ -13,7 +13,7 @@
 
 .organism-vaccinations-tab__title {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--text-body-lg-size);
   color: var(--color-on-surface);
 }
 
@@ -26,7 +26,7 @@
 
 .organism-vaccinations-tab__error {
   color: var(--color-error-container);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   padding: 12px;
   background-color: #ffebee;
   border-radius: var(--radius-xl, 12px);
@@ -48,6 +48,6 @@
 
 .organism-vaccinations-tab__proof-section h4 {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
   color: var(--color-on-surface);
 }

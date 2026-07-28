@@ -74,20 +74,20 @@
   gap: 4px;
   color: var(--color-on-surface-variant);
   font-family: var(--font-label);
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
   font-weight: 500;
   text-align: center;
 }
 
 .organism-pet-form__placeholder .material-symbols-outlined {
-  font-size: 32px;
+  font-size: var(--text-headline-lg-size);
   color: var(--color-primary-container);
 }
 
 .organism-pet-form__error {
   color: var(--color-error);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
   margin-top: 4px;
 }
 
@@ -115,7 +115,7 @@
   align-items: center;
   gap: var(--space-xs);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   color: var(--color-on-surface);
   cursor: pointer;
 }

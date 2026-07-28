@@ -35,7 +35,7 @@
 
 .molecule-modal-title {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--text-body-lg-size);
   color: var(--color-on-surface);
 }
 

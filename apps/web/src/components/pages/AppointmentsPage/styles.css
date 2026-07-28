@@ -220,7 +220,7 @@
 }
 
 .appointments-page__status-badge .material-symbols-outlined {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 /* Pet Info */
@@ -259,12 +259,12 @@
 }
 
 .appointments-page__pet-avatar-placeholder .material-symbols-outlined {
-  font-size: 24px;
+  font-size: var(--text-headline-md-size);
 }
 
 .appointments-page__pet-name {
   font-family: var(--font-headline);
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
   font-weight: 700;
   color: var(--color-on-surface);
   margin: 0;
@@ -294,7 +294,7 @@
 }
 
 .appointments-page__detail-item .material-symbols-outlined {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
   margin-top: 2px;
 }
 
@@ -359,7 +359,7 @@
 }
 
 .appointments-page__time-box .material-symbols-outlined {
-  font-size: 24px;
+  font-size: var(--text-headline-md-size);
 }
 
 .appointments-page__time-date {
@@ -442,7 +442,7 @@
 }
 
 .appointments-page__empty .material-symbols-outlined {
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
   opacity: 0.5;
 }
 

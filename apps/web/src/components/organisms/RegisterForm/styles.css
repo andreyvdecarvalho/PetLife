@@ -31,7 +31,7 @@
 
 .organism-register-header__icon-wrapper .material-symbols-outlined {
   color: var(--color-primary);
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
 }
 
 .organism-register-header__title {

@@ -233,7 +233,7 @@
 }
 
 .memories-page__hero-label .material-symbols-outlined {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 .memories-page__hero-label .text-tertiary {
@@ -434,7 +434,7 @@
 }
 
 .memories-page__category-chip .material-symbols-outlined {
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
 }
 
 .memories-page__card-time {
@@ -505,7 +505,7 @@
 }
 
 .memories-page__end-badge .material-symbols-outlined {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 /* FAB */
@@ -538,7 +538,7 @@
 }
 
 .memories-page__fab .material-symbols-outlined {
-  font-size: 24px;
+  font-size: var(--text-headline-md-size);
 }
 
 @media (min-width: 768px) {

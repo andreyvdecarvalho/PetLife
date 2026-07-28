@@ -263,7 +263,7 @@
 }
 
 .dashboard-page__app-icon-container .material-symbols-outlined {
-  font-size: 24px;
+  font-size: var(--text-headline-md-size);
 }
 
 .dashboard-page__app-info {
@@ -295,7 +295,7 @@
 }
 
 .dashboard-page__app-time-container .material-symbols-outlined {
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
 }
 
 .dashboard-page__app-badge {
@@ -403,7 +403,7 @@
 }
 
 .dashboard-page__stats-icon-wrapper .material-symbols-outlined {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 .dashboard-page__stats-title {
@@ -541,7 +541,7 @@
 
 .dashboard-page__stats-footer .material-symbols-outlined {
   color: var(--color-tertiary);
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 /* Modal Overlay & Content */
@@ -645,7 +645,7 @@
 .dashboard-page__action-title {
   display: block;
   font-weight: 600;
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   color: var(--color-on-surface);
   line-height: 1.2;
 }

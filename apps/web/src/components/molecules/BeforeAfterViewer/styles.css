@@ -72,7 +72,7 @@
 }
 
 .molecule-before-after-viewer__slider-button span {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
   transform: rotate(90deg);
 }
 

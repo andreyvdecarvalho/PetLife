@@ -118,7 +118,7 @@
 }
 
 .onboarding-page__floating .material-symbols-outlined {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
 }
 
 .onboarding-page__floating--favorite {
@@ -227,7 +227,7 @@
 }
 
 .onboarding-page__start-btn .material-symbols-outlined {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
   transition: transform 0.2s;
 }
 
@@ -329,7 +329,7 @@
 }
 
 .onboarding-page__photo-placeholder .material-symbols-outlined {
-  font-size: 32px;
+  font-size: var(--text-headline-lg-size);
 }
 
 .onboarding-page__photo-preview {
@@ -352,7 +352,7 @@
 }
 
 .onboarding-page__success-icon .material-symbols-outlined {
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
 }
 
 .onboarding-page__success-title {
