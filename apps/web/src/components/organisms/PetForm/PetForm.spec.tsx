@@ -2,11 +2,13 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { PetForm } from './index';
 import { useCreatePet } from '../../../application/pet/useCreatePet';
 import { useUpdatePet } from '../../../application/pet/useUpdatePet';
+import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import type { Pet } from '../../../domain/pet/Pet';
 
 vi.mock('../../../application/pet/useCreatePet');
 vi.mock('../../../application/pet/useUpdatePet');
+vi.mock('../../../application/pet/usePetWeightHistory');
 
 describe('PetForm Component', () => {
   const mockCreatePet = vi.fn();
@@ -44,6 +46,12 @@ describe('PetForm Component', () => {
       updatePet: mockUpdatePet,
       loading: false,
       error: null,
+    });
+    (usePetWeightHistory as any).mockReturnValue({
+      data: [],
+      loading: false,
+      deleteWeight: vi.fn(),
+      updateWeight: vi.fn(),
     });
   });
 
@@ -161,5 +169,51 @@ describe('PetForm Component', () => {
     await waitFor(() => {
       expect(mockOnSuccess).toHaveBeenCalled();
     });
+  });
+
+  it('should render weight history and allow editing and deleting', async () => {
+    const mockUpdateWeight = vi.fn().mockResolvedValue(true);
+    const mockDeleteWeight = vi.fn().mockResolvedValue(true);
+    
+    (usePetWeightHistory as any).mockReturnValue({
+      data: [{ id: 'w1', weightKg: 20.5, recordedAt: '2023-05-10T10:00:00Z' }],
+      loading: false,
+      deleteWeight: mockDeleteWeight,
+      updateWeight: mockUpdateWeight,
+    });
+
+    render(<PetForm pet={samplePet} onSuccess={mockOnSuccess} onCancel={mockOnCancel} />);
+
+    // Verifica renderização
+    expect(screen.getByText('Histórico de Peso')).toBeDefined();
+    expect(screen.getByText('20.5 kg')).toBeDefined();
+
+    // Botão Editar
+    const editBtn = screen.getByTitle('Editar');
+    fireEvent.click(editBtn);
+
+    // Altera valor e salva
+    const weightInputs = screen.getAllByRole('spinbutton');
+    expect(weightInputs.length).toBeGreaterThan(0);
+    fireEvent.change(weightInputs[0], { target: { value: '21.0' } });
+    
+    const saveBtn = screen.getByTitle('Salvar');
+    fireEvent.click(saveBtn);
+
+    await waitFor(() => {
+      expect(mockUpdateWeight).toHaveBeenCalledWith('w1', 21, expect.stringContaining('2023-05-10'));
+    });
+
+    // Simular botão Excluir com confirm mock
+    const confirmSpy = vi.spyOn(window, 'confirm').mockImplementation(() => true);
+    
+    const deleteBtn = screen.getByTitle('Excluir');
+    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(mockDeleteWeight).toHaveBeenCalledWith('w1');
+    });
+
+    confirmSpy.mockRestore();
   });
 });
