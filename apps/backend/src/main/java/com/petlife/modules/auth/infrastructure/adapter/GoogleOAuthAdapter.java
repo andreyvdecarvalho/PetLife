@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petlife.modules.auth.application.port.OAuthProviderPort;
 import com.petlife.shared.exception.BusinessException;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
+@Profile("!test")
 public class GoogleOAuthAdapter implements OAuthProviderPort {
 
     private final RestTemplate restTemplate;
