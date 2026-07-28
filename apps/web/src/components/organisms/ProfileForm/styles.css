@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: var(--text-headline-lg-size);
 }
 
 .danger-zone {
@@ -69,14 +69,14 @@
 
 .danger-zone-title {
   color: var(--color-error);
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 .danger-zone-desc {
   color: var(--color-on-surface-variant);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   line-height: 1.5;
   margin-bottom: 16px;
 }

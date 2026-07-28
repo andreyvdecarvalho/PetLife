@@ -66,7 +66,7 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-label);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -84,7 +84,7 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-label);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -246,7 +246,7 @@
 }
 
 .pet-profile__favorite-badge .material-symbols-outlined {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 .pet-profile__pet-name {
@@ -445,7 +445,7 @@
 }
 
 .pet-profile__new-record-btn .material-symbols-outlined {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
 }
 
 /* Timeline */
@@ -515,7 +515,7 @@
 }
 
 .pet-profile__timeline-node .material-symbols-outlined {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
 }
 
 /* Timeline Cards */
@@ -586,7 +586,7 @@
 }
 
 .pet-profile__card-trend .material-symbols-outlined {
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
 }
 
 .pet-profile__card-description {
@@ -623,7 +623,7 @@
 }
 
 .pet-profile__attachment-link .material-symbols-outlined {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
 }
 
 .pet-profile__attachment-link .material-symbols-outlined.text-primary {
@@ -647,7 +647,7 @@
 }
 
 .pet-profile__empty-tab .material-symbols-outlined {
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
   opacity: 0.5;
 }
 
@@ -751,7 +751,7 @@
   border-radius: var(--radius-full, 9999px);
   padding: 8px 24px;
   font-family: var(--font-label);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   font-weight: 600;
   color: var(--color-on-background);
   cursor: pointer;

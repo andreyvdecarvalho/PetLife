@@ -380,7 +380,7 @@
   gap: 4px;
   padding: 2px 10px;
   border-radius: var(--radius-full);
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
   font-weight: 600;
   font-family: var(--font-label);
   margin-top: 4px;

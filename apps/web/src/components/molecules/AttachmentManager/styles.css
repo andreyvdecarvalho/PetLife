@@ -6,7 +6,7 @@
 }
 
 .molecule-attachment-manager__label {
-  font-family: var(--font-family-secondary);
+  font-family: var(--font-label);
   font-size: var(--text-label-sm-size, 12px);
   font-weight: var(--font-weight-semibold);
   color: var(--color-on-surface);
@@ -37,13 +37,13 @@
 }
 
 .molecule-attachment-manager__upload-icon {
-  font-size: 32px;
+  font-size: var(--text-headline-lg-size);
   color: var(--color-primary);
   margin-bottom: var(--spacing-xs);
 }
 
 .molecule-attachment-manager__dropzone-text {
-  font-family: var(--font-family-secondary);
+  font-family: var(--font-label);
   font-size: var(--text-label-sm-size, 12px);
   color: var(--color-on-surface-variant);
 }
@@ -54,8 +54,8 @@
 }
 
 .molecule-attachment-manager__error {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-xs);
+  font-family: var(--font-label);
+  font-size: var(--text-label-sm-size);
   color: var(--color-error);
   margin-top: -4px;
 }
@@ -105,12 +105,12 @@
 }
 
 .molecule-attachment-manager__pdf-icon .material-symbols-outlined {
-  font-size: 28px;
+  font-size: var(--text-headline-lg-mobile-size);
 }
 
 .molecule-attachment-manager__filename {
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-xs);
+  font-family: var(--font-label);
+  font-size: var(--text-label-sm-size);
   color: var(--color-on-surface);
   text-align: center;
   width: 100%;
@@ -144,5 +144,5 @@
 }
 
 .molecule-attachment-manager__remove-btn .material-symbols-outlined {
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
 }

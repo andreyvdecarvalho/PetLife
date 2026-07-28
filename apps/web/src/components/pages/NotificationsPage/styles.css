@@ -47,7 +47,7 @@
   border: none;
   color: var(--color-primary);
   font-family: var(--font-label);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -70,7 +70,7 @@
   padding: 8px 16px;
   border-radius: var(--radius-full, 9999px);
   font-family: var(--font-label);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -89,7 +89,7 @@
 
 .notifications-page__error {
   color: var(--color-error);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   margin-bottom: 16px;
 }
 
@@ -110,13 +110,13 @@
 }
 
 .notifications-page__empty span {
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
   margin-bottom: 16px;
   opacity: 0.7;
 }
 
 .notifications-page__empty p {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
   font-weight: 500;
   margin: 0;
 }
@@ -156,7 +156,7 @@
 }
 
 .notifications-page__item-icon span {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
 }
 
 .notifications-page__item-content {
@@ -164,21 +164,21 @@
 }
 
 .notifications-page__item-title {
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
   font-weight: 600;
   color: var(--color-on-surface);
   margin: 0 0 4px 0;
 }
 
 .notifications-page__item-body {
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   color: var(--color-on-surface-variant);
   margin: 0 0 8px 0;
   line-height: 1.4;
 }
 
 .notifications-page__item-date {
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
   color: var(--color-outline);
 }
 

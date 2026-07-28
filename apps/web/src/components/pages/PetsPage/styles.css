@@ -93,7 +93,7 @@
   text-align: center;
   padding: 40px;
   color: var(--color-on-surface-variant);
-  font-family: var(--font-secondary);
+  font-family: var(--font-headline);
 }
 
 .pets-page__grid {
@@ -125,7 +125,7 @@
   justify-content: center;
   gap: 4px;
   padding: 8px;
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
 }
 
 .pets-page__action-btn--delete {

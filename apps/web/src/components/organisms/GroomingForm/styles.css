@@ -36,7 +36,7 @@
   cursor: pointer;
   font-family: var(--font-label, sans-serif);
   font-weight: 500;
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   color: var(--color-on-surface-variant, #49454f);
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -93,7 +93,7 @@
 
 .organism-grooming-form__upload-title {
   font-family: var(--font-label, sans-serif);
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
   font-weight: 600;
   color: var(--color-on-surface-variant, #49454f);
 }
@@ -124,11 +124,11 @@
   gap: 6px;
   color: var(--color-on-surface-variant, #49454f);
   font-family: var(--font-label, sans-serif);
-  font-size: 12px;
+  font-size: var(--text-label-sm-size);
 }
 
 .organism-grooming-form__upload-placeholder span.material-symbols-outlined {
-  font-size: 28px;
+  font-size: var(--text-headline-lg-mobile-size);
 }
 
 .organism-grooming-form__preview-img {
@@ -158,7 +158,7 @@
   padding: 10px 24px;
   border-radius: var(--radius-full, 100px);
   font-family: var(--font-label, sans-serif);
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;

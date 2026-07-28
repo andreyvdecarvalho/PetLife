@@ -23,7 +23,7 @@
 }
 
 .organism-login-header__icon-wrapper .material-symbols-outlined {
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
   color: var(--color-on-primary-container);
 }
 

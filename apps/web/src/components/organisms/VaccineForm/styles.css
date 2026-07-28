@@ -28,7 +28,7 @@
   background-color: var(--color-surface-container-lowest, #F1F5F9);
   color: var(--color-on-surface);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   resize: vertical;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .organism-vaccine-form__checkbox label {
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   color: var(--color-on-surface);
   cursor: pointer;
 }

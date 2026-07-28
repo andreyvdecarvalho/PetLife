@@ -43,7 +43,7 @@
   color: var(--color-on-surface-variant);
   opacity: 0.5;
   pointer-events: none;
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
 }
 
 .atom-input--with-icon-left {

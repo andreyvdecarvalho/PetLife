@@ -20,7 +20,7 @@
 }
 
 .organism-vaccine-list__empty .material-symbols-outlined {
-  font-size: 48px;
+  font-size: var(--text-display-lg-size);
   opacity: 0.5;
 }
 
@@ -64,7 +64,7 @@
 
 .organism-vaccine-list__title {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--text-body-md-size);
   font-weight: 600;
   color: var(--color-primary);
 }
@@ -73,7 +73,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: var(--text-label-md-size);
   color: var(--color-on-surface);
   opacity: 0.8;
 }

@@ -36,7 +36,7 @@
 
 .template-dashboard__logo .material-symbols-outlined {
   color: var(--color-primary);
-  font-size: 24px;
+  font-size: var(--text-headline-md-size);
 }
 
 .template-dashboard__logo-text {
@@ -129,7 +129,7 @@
 }
 
 .template-dashboard__logout-btn .material-symbols-outlined {
-  font-size: 18px;
+  font-size: var(--text-body-lg-size);
 }
 
 /* Layout Container */
@@ -174,7 +174,7 @@
 }
 
 .template-dashboard__sidebar-link .material-symbols-outlined {
-  font-size: 20px;
+  font-size: var(--text-body-lg-size);
 }
 
 .template-dashboard__sidebar-link:hover {
@@ -226,7 +226,7 @@
 }
 
 .template-dashboard__bottom-nav-link .material-symbols-outlined {
-  font-size: 24px;
+  font-size: var(--text-headline-md-size);
   transition: transform 0.2s;
 }
 
