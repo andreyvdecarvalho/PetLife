@@ -40,7 +40,8 @@ public class JwtConfig {
 
     @Bean
     public RSAPrivateKey rsaPrivateKey() throws Exception {
-        byte[] keyBytes = decodeKeyBytes(rsaKeys.privateKey(), "-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----");
+        byte[] keyBytes = decodeKeyBytes(
+                rsaKeys.privateKey(), "-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----");
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         return (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(spec);
     }
