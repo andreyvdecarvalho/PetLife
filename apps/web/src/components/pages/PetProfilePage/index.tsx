@@ -74,6 +74,7 @@ export const PetProfilePageContent: React.FC = () => {
   const observerTarget = useRef(null);
 
   useEffect(() => {
+    const currentTarget = observerTarget.current;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore && !isLoading) {
@@ -83,13 +84,13 @@ export const PetProfilePageContent: React.FC = () => {
       { threshold: 1.0 }
     );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
+    if (currentTarget) {
+      observer.observe(currentTarget);
     }
 
     return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
       }
     };
   }, [hasMore, isLoading, handleLoadMore]);
