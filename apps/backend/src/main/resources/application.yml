@@ -1,4 +1,7 @@
 spring:
+  mail:
+    host: ${SPRING_MAIL_HOST:localhost}
+    port: ${SPRING_MAIL_PORT:1025}
   application:
     name: petlife-backend
   datasource:
@@ -58,6 +61,9 @@ management:
   endpoint:
     health:
       show-details: always
+  health:
+    mail:
+      enabled: false
 
 
 rsa:

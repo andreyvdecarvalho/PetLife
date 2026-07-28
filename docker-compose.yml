@@ -64,6 +64,27 @@ services:
           cpus: "0.5"
 
   # ============================================================================
+  # Redis — Cache & Sessions
+  # ============================================================================
+  redis:
+    image: redis:7.4-alpine
+    container_name: petlife-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.5"
+
+  # ============================================================================
   # Backend — Spring Boot 4.1 + Java 21
   # ============================================================================
   backend:
@@ -83,6 +104,8 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER:-petlife}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-petlife_dev}
+      # Redis
+      REDIS_URL: redis://redis:6379
       # Hibernate
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
     ports:
@@ -91,6 +114,8 @@ services:
       postgres:
         condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
