@@ -1,6 +1,6 @@
 # Spec Driven Development (SDD-002): Completude de CRUD
 
-> **Status:** 🟡 Pendente | **Prioridade:** P1 — Features Incompletas
+> **Status:** ✅ Concluído | **Prioridade:** P1 — Features Incompletas
 > **Responsável:** Agente Implementador | **Sprint:** 2–3 (Semanas 2–4)
 > **Débitos cobertos:** DB-08 a DB-23
 
@@ -547,9 +547,9 @@ pnpm lint && pnpm typecheck && pnpm test
 
 ## 8. Atualizar após concluir
 
-- [ ] `docs/compliance-report.md` — marcar DB-08 a DB-23 como `✅`
-- [ ] `GEMINI.md` seção 8 — atualizar % por módulo
-- [ ] Criar PRs por módulo: `feat(m03): fecha DB-08 DB-09 DB-10`, `feat(m04): fecha DB-11 DB-12 DB-13 DB-14`, etc.
+- [x] `docs/compliance-report.md` — marcar DB-08 a DB-23 como `✅`
+- [x] `GEMINI.md` seção 8 — atualizar % por módulo
+- [x] Criar PRs por módulo: `feat(m03): fecha DB-08 DB-09 DB-10`, `feat(m04): fecha DB-11 DB-12 DB-13 DB-14`, etc.
 
 ---
 

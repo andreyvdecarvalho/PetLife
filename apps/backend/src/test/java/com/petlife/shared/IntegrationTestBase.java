@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.mail.javamail.JavaMailSender;
+import com.petlife.modules.auth.application.port.AppleOAuthPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -27,18 +30,23 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @Transactional
 public abstract class IntegrationTestBase {
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings("all")
     protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.4-alpine")
             .withDatabaseName("petlife_test")
             .withUsername("petlife")
             .withPassword("petlife_test");
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings("all")
     protected static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:4.0-alpine");
+
+    @SuppressWarnings("all")
+    protected static final org.testcontainers.containers.GenericContainer<?> redis = new org.testcontainers.containers.GenericContainer<>("redis:7.4.0-alpine")
+            .withExposedPorts(6379);
 
     static {
         postgres.start();
         rabbitmq.start();
+        redis.start();
     }
 
     @DynamicPropertySource
@@ -50,6 +58,9 @@ public abstract class IntegrationTestBase {
         registry.add("spring.flyway.enabled", () -> "true");
         registry.add("spring.rabbitmq.host", rabbitmq::getHost);
         registry.add("spring.rabbitmq.port", rabbitmq::getAmqpPort);
+        registry.add("spring.data.redis.host", redis::getHost);
+        registry.add("spring.data.redis.port", redis::getFirstMappedPort);
+        registry.add("spring.session.store-type", () -> "none"); // Optional: use "redis" if we want to test session persistence
     }
 
     protected MockMvc mockMvc;
@@ -59,6 +70,15 @@ public abstract class IntegrationTestBase {
 
     @Autowired
     private WebApplicationContext context;
+
+    @MockitoBean
+    protected JavaMailSender mailSender;
+
+    @MockitoBean
+    protected AppleOAuthPort appleOAuthPort;
+
+    @MockitoBean
+    protected com.petlife.modules.auth.application.port.OAuthProviderPort oAuthProviderPort;
 
     @BeforeEach
     void setUpMockMvc() {

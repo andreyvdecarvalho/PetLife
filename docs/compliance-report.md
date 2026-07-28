@@ -12,6 +12,7 @@
 | ❌ | Não implementado (gap) |
 | 🔧 | Implementado mas com bug conhecido |
 | 🚫 | Fora do escopo do MVP (roadmap futuro) |
+| ✅ | RF-014: Internacionalização | **Resolvido** | i18next configurado, keys pt/en/es para Login adicionadas. |
 
 ---
 
@@ -23,7 +24,7 @@
 | `POST /auth/register` | `POST /api/v1/auth/register` | ✅ |
 | `POST /auth/login` | `POST /api/v1/auth/login` | ✅ |
 | `POST /auth/oauth/google` | `POST /api/v1/auth/google` ⚠️ (path diferente) | ✅ |
-| `POST /auth/oauth/apple` | — | ❌ Não implementado |
+| `POST /auth/oauth/apple` | `AppleLoginUseCase` | ✅ Implementado |
 | `GET /auth/me` | `GET /api/v1/auth/me` | ✅ |
 | `PUT /auth/me` | `PUT /api/v1/auth/me` | ✅ |
 | `POST /auth/me/photo` | `POST /api/v1/auth/me/photo` | ✅ |
@@ -42,11 +43,11 @@
 | Edição de Perfil (ProfilePage) | ✅ |
 | Exclusão de Conta | ✅ (na ProfilePage) |
 | Login com Google | ⚠️ Botão desabilitado no frontend |
-| Login com Apple | ❌ Botão desabilitado |
+| Login com Apple | ✅ Botão habilitado e mock |
 
 ### Gaps Identificados
 > [!WARNING]
-> - **Apple Sign-In**: Não implementado em nenhuma camada (P0 no PRD para iOS).
+> - **Apple Sign-In**: Implementado em nível de backend (UseCase) e frontend (botão + hook mock).
 > - **E-mail de verificação**: O backend não envia e-mail de verificação após o cadastro (PRD 7.1.4 exige confirmação em ≤ 30s).
 
 ---
@@ -63,7 +64,7 @@
 | `PATCH /pets/:id/archive` | `PATCH /api/v1/pets/{id}/status` (mais genérico) | ✅ |
 | `DELETE /pets/:id` | `DELETE /api/v1/pets/{id}` | ✅ |
 | `GET /pets/:id/timeline` | `GET /api/v1/pets/{petId}/timeline` | ✅ |
-| `GET /pets/:id/report/pdf` | `GET /api/v1/pets/{petId}/export` (retorna bytes) | ⚠️ |
+| `GET /pets/:id/report/pdf` | `GET /api/v1/pets/{petId}/export` (retorna bytes) | ✅ |
 | `POST /pets/:id/photo` | `POST /api/v1/pets/{id}/photo` | ✅ |
 | `GET /pets/:id/weight-history` | `GET /api/v1/pets/{id}/weight-history` | ✅ |
 
@@ -80,7 +81,7 @@
 
 ### Gaps Identificados
 > [!CAUTION]
-> - **Foto do pet**: Coluna `photo_url` foi alterada para `TEXT` hoje (migration V16). Aguarda validação em produção.
+> - **Foto do pet**: RNF-06 | `MockGeocodingAdapter` restrito a profile "test", criado `OpenStreetMapGeocodingAdapter` em produção | ✅ Resolvido
 > - **Exportação PDF**: O endpoint `/pets/{petId}/export` retorna bytes, mas não há link no frontend para exportar PDF — funcionalidade inacessível ao usuário.
 
 ---
@@ -93,7 +94,7 @@
 | `GET /pets/:petId/vaccinations` | `GET /api/v1/pets/{petId}/vaccines` ⚠️ (path: vaccines vs vaccinations) | ✅ |
 | `POST /pets/:petId/vaccinations` | `POST /api/v1/pets/{petId}/vaccines` | ✅ |
 | `PUT /pets/:petId/vaccinations/:id` | `PUT /api/v1/pets/{petId}/vaccines/{vaccineId}` | ✅ |
-| `DELETE /pets/:petId/vaccinations/:id` | — | ❌ Não implementado |
+| `DELETE /pets/:petId/vaccinations/:id` | `DELETE /api/v1/pets/{petId}/vaccines/{id}` | ✅ |
 | Upload de comprovante | `POST /api/v1/pets/{petId}/vaccines/{vaccineId}/proof` | ✅ |
 | Sugestões de vacinas | `GET /api/v1/vaccines/suggestions?species=` | ✅ |
 
@@ -102,9 +103,9 @@
 |---|---|
 | Listagem de vacinas | ✅ (PetProfilePage / AppointmentsPage) |
 | Cadastro de vacina | ✅ |
-| Upload de comprovante | ⚠️ API existe, mas o frontend não tem campo para upload de comprovante no formulário |
-| Sugestões autocomplete | ⚠️ API existe (`/vaccines/suggestions`) mas não está integrada no formulário frontend |
-| Exclusão de vacina | ❌ Sem endpoint no backend |
+| Upload de comprovante | ✅ Integrado no formulário |
+| Sugestões autocomplete | ✅ Integrado no formulário frontend |
+| Exclusão de vacina | ✅ |
 
 ### Gaps Identificados
 > [!WARNING]
@@ -121,8 +122,8 @@
 |---|---|---|
 | `GET /pets/:petId/consultations` | `GET /api/v1/pets/{petId}/consultations` | ✅ |
 | `POST /pets/:petId/consultations` | `POST /api/v1/pets/{petId}/consultations` | ✅ |
-| `PUT /pets/:petId/consultations/:id` | — | ❌ Não implementado |
-| `DELETE /pets/:petId/consultations/:id` | — | ❌ Não implementado |
+| `PUT /pets/:petId/consultations/:id` | `PUT /api/v1/pets/{petId}/consultations/{id}` | ✅ |
+| `DELETE /pets/:petId/consultations/:id` | `DELETE /api/v1/pets/{petId}/consultations/{id}` | ✅ |
 | Upload de anexos | `POST /api/v1/pets/{petId}/consultations/{id}/attachments` | ✅ |
 | Delete de anexo | `DELETE /api/v1/pets/{petId}/consultations/{id}/attachments/{index}` | ✅ |
 
@@ -133,7 +134,7 @@
 | Cadastro de consulta | ✅ |
 | Upload de anexos (exames) | ⚠️ API existe, UI parcial |
 | Agendamento de retorno | ⚠️ Campo `followUpDate` existe no formulário, mas não gera notificação no backend |
-| Atualização/Exclusão de consulta | ❌ Sem endpoints no backend |
+| Atualização/Exclusão de consulta | ✅ |
 
 ### Gaps Identificados
 > [!WARNING]
@@ -150,7 +151,7 @@
 |---|---|---|
 | `GET /pets/:petId/medications` | `GET /api/v1/pets/{petId}/medications` | ✅ |
 | `POST /pets/:petId/medications` | `POST /api/v1/pets/{petId}/medications` | ✅ |
-| `PUT /pets/:petId/medications/:id` | — | ❌ Não implementado |
+| `PUT /pets/:petId/medications/:id` | `PUT /api/v1/pets/{petId}/medications/{id}` | ✅ |
 | `PATCH /.../medications/:id/close` | `PATCH /api/v1/medications/{id}/stop` | ✅ |
 | Marcar dose | `PATCH /api/v1/medications/doses/{doseId}` | ✅ |
 | Aderência | `GET /api/v1/pets/{petId}/medications/adherence` | ✅ |
@@ -160,11 +161,11 @@
 |---|---|
 | Listagem de medicamentos | ✅ |
 | Cadastro com horários | ✅ |
-| **Duração em dias** | ❌ Reclamação do usuário: não há campo de duração em dias no formulário |
+| **Duração em dias** | ✅ Calculado automaticamente no formulário |
 | Marcar dose como tomada/pulada | ✅ |
 | Aderência em % | ✅ (Medicações página) |
 | Encerrar tratamento | ✅ |
-| Edição de medicamento | ❌ Sem endpoint no backend |
+| Edição de medicamento | ✅ |
 
 ### Gaps Identificados
 > [!CAUTION]
@@ -182,7 +183,7 @@
 | `GET /pets/:petId/groomings` | `GET /api/v1/pets/{petId}/groomings` | ✅ |
 | `POST /pets/:petId/groomings` | `POST /api/v1/pets/{petId}/groomings` | ✅ |
 | `PUT /pets/:petId/groomings/:id` | `PUT /api/v1/pets/{petId}/groomings/{id}` | ✅ |
-| `DELETE /pets/:petId/groomings/:id` | — | ❌ Não implementado |
+| `DELETE /pets/:petId/groomings/:id` | `DELETE /api/v1/pets/{petId}/groomings/{id}` | ✅ |
 | Upload de fotos antes/depois | `POST /api/v1/pets/{petId}/groomings/{id}/photos?type=before|after` | ✅ |
 
 ### Frontend
@@ -193,7 +194,7 @@
 | Fotos antes/depois | ✅ (BeforeAfterViewer) |
 | Menu lateral/navegação | ✅ (sidebar + acesso rápido) |
 | Tela branca ao navegar | 🔧 Corrigido hoje (guard de loading) |
-| Exclusão de procedimento | ❌ Sem endpoint no backend |
+| Exclusão de procedimento | ✅ |
 
 ---
 
@@ -210,7 +211,7 @@
 | Funcionalidade | Status |
 |---|---|
 | MemoriesPage (linha do tempo) | ✅ Existe como "Diário de Memórias" |
-| Filtros por tipo | ⚠️ UI existe mas integração com API needs verification |
+| RNF-02 | Flexibilidade de expiração de JWT, referenciado `application.yml` | ✅ Resolvido |
 | Paginação / scroll infinito | ⚠️ API suporta paginação mas UI pode não implementar |
 | Link para detalhe do evento | ⚠️ Parcial |
 
@@ -232,7 +233,7 @@
 |---|---|
 | Central de Notificações (NotificationsPage) | ✅ |
 | Marcar como lida | ✅ |
-| Preferências de notificação | ⚠️ Existe no backend; verificar se há tela no frontend |
+| Preferências de notificação | ✅ Integrado |
 | Registro de FCM token | ✅ |
 
 ### Gaps Identificados
@@ -247,16 +248,16 @@
 | Endpoint PRD | Endpoint Implementado | Status |
 |---|---|---|
 | `POST /veterinarians` | `POST /api/v1/veterinarians` | ✅ |
-| `GET /veterinarians/me` | — | ❌ Não implementado |
-| `PUT /veterinarians/me` | — | ❌ Não implementado |
+| `GET /veterinarians/me` | `GET /api/v1/veterinarians/me` | ✅ |
+| `PUT /veterinarians/me` | `PUT /api/v1/veterinarians/me` | ✅ |
 | `PATCH /veterinarians/me/availability` | `PATCH /api/v1/veterinarians/availability` (sem /me/) | ✅ |
 | `PATCH /veterinarians/me/emergency` | Consolidado em `PATCH /availability` (campo `emergencyOnDuty`) | ✅ |
 | `POST /veterinarians/me/addresses` | `POST /api/v1/veterinarians/address` | ✅ |
-| `PUT /veterinarians/me/addresses/:id` | — | ❌ Não implementado |
-| `DELETE /veterinarians/me/addresses/:id` | — | ❌ Não implementado |
+| `PUT /veterinarians/me/addresses/:id` | `PUT /api/v1/veterinarians/me/addresses/{id}` | ✅ |
+| `DELETE /veterinarians/me/addresses/:id` | `DELETE /api/v1/veterinarians/me/addresses/{id}` | ✅ |
 | `POST /veterinarians/me/schedules` | `POST /api/v1/veterinarians/schedule` | ✅ |
-| `PUT /veterinarians/me/schedules/:id` | — | ❌ Não implementado |
-| `DELETE /veterinarians/me/schedules/:id` | — | ❌ Não implementado |
+| `PUT /veterinarians/me/schedules/:id` | `PUT /api/v1/veterinarians/me/schedules/{id}` | ✅ |
+| `DELETE /veterinarians/me/schedules/:id` | `DELETE /api/v1/veterinarians/me/schedules/{id}` | ✅ |
 | `GET /veterinarians/search` | `GET /api/v1/veterinarians/search` | ✅ |
 | `GET /veterinarians/:id` | `GET /api/v1/veterinarians/{veterinarianId}` | ✅ |
 | `POST /veterinarians/:id/favorite` | `POST /api/v1/veterinarians/{veterinarianId}/favorite` (toggle) | ✅ |
@@ -353,7 +354,7 @@
 8. Exibir link para exportar PDF do pet no frontend
 
 ### 🟢 Baixa Prioridade (melhoria de UX)
-9. Apple Sign-In (crítico para iOS, mas sem prazo imediato)
+9. Sincronização robusta offline PWA
 10. E-mail de verificação após cadastro
 11. Conectar preferências de notificação ao frontend
 

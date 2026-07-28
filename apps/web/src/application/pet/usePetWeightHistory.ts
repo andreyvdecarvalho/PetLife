@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { petApi } from '../../infrastructure/http/pet.api';
 import type { WeightRecordResponse } from '../../infrastructure/dto/WeightRecordResponse';
+import type { WeightRecord } from '../../domain/pet/WeightRecord';
 
 /**
  * Hook to fetch weight history for a pet.
  * Returns data, loading flag and error.
  */
 export function usePetWeightHistory(petId: string) {
-  const [data, setData] = useState<WeightRecordResponse[]>([]);
+  const [data, setData] = useState<WeightRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,7 +17,14 @@ export function usePetWeightHistory(petId: string) {
     petApi
       .getWeightHistory(petId)
       .then((response) => {
-        setData(response.data.data);
+        const mappedData: WeightRecord[] = response.data.data.map(item => ({
+          id: item.id || '',
+          petId: petId,
+          weightKg: item.weightKg,
+          measuredAt: item.recordedAt,
+          createdAt: item.recordedAt,
+        }));
+        setData(mappedData);
         setError(null);
       })
       .catch((err) => {

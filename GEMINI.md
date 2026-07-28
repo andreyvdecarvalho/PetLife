@@ -261,35 +261,35 @@ test: adiciona testes de cobertura para CreateMedicationUseCase
 
 | ID | Módulo | Descrição |
 |---|---|---|
-| **DB-08** | M03 | `DELETE /vaccinations/{id}` ausente |
-| **DB-09** | M03 | Autocomplete de vacinas por espécie: API existe, frontend não consome |
-| **DB-10** | M03 | Upload de comprovante de vacina: API existe, sem UI |
-| **DB-11** | M04 | `PUT /consultations/{id}` ausente — consultas imutáveis |
-| **DB-12** | M04 | `DELETE /consultations/{id}` ausente |
-| **DB-13** | M04 | Peso da consulta não atualiza `weightKg` do pet |
-| **DB-14** | M04 | Campo `reason` não obrigatório (PRD exige) |
-| **DB-15** | M05 | `PUT /medications/{id}` ausente |
-| **DB-16** | M05 | Duração em dias com UX confusa |
-| **DB-17** | M05 | `prescribedBy` e `reason` ausentes no request |
-| **DB-18** | M06 | `DELETE /groomings/{id}` ausente |
-| **DB-19** | M09 | `GET/PUT /veterinarians/me` ausentes |
-| **DB-20** | M09 | Gerenciamento de endereços (PUT/DELETE) ausente |
-| **DB-21** | M09 | Gerenciamento de horários (PUT/DELETE) ausente |
-| **DB-22** | M02 | Link para exportar PDF no frontend ausente |
-| **DB-23** | M08 | Preferências de notificação sem tela no frontend |
+| **DB-08** | M03 | `DELETE /vaccinations/{id}` | ✅ Resolvido |
+| **DB-09** | M03 | Autocomplete de vacinas | ✅ Resolvido |
+| **DB-10** | M03 | Upload de comprovante | ✅ Resolvido |
+| **DB-11** | M04 | `PUT /consultations/{id}` | ✅ Resolvido |
+| **DB-12** | M04 | `DELETE /consultations/{id}` | ✅ Resolvido |
+| **DB-13** | M04 | Peso da consulta atualiza pet | ✅ Resolvido |
+| **DB-14** | M04 | `reason` obrigatório | ✅ Resolvido |
+| **DB-15** | M05 | `PUT /medications/{id}` | ✅ Resolvido |
+| **DB-16** | M05 | Duração em dias na UI | ✅ Resolvido |
+| **DB-17** | M05 | `prescribedBy` e `reason` inclusos | ✅ Resolvido |
+| **DB-18** | M06 | `DELETE /groomings/{id}` | ✅ Resolvido |
+| **DB-19** | M09 | `GET/PUT /veterinarians/me` | ✅ Resolvido |
+| **DB-20** | M09 | Gerenciamento de endereços | ✅ Resolvido |
+| **DB-21** | M09 | Gerenciamento de horários | ✅ Resolvido |
+| **DB-22** | M02 | Link PDF frontend | ✅ Resolvido |
+| **DB-23** | M08 | UI Preferências Notificação | ✅ Resolvido |
 
 ### 6.3 Débitos Não-Funcionais
 
 | **RNF-01** | LGPD | Delete em cascata de pets validado | ✅ Resolvido |
 | **RNF-02** | Segurança | JWT tokens sem configuração flexível |
-| **RNF-03** | Disponibilidade | Redis não configurado em produção |
-| **RNF-04** | Observabilidade | Sentry não integrado; sem OpenTelemetry |
-| **RNF-05** | Performance | Timeline sem scroll infinito real no frontend |
+| **RNF-03** | Disponibilidade | Redis não configurado em produção | ✅ Resolvido |
+| **RNF-04** | Observabilidade | Sentry não integrado; sem OpenTelemetry | ✅ Resolvido |
+| **RNF-05** | Performance | Timeline sem scroll infinito real no frontend | ✅ Resolvido |
 | **RNF-06** | Escalabilidade | MockGeocodingAdapter em produção |
-| **RNF-07** | Acessibilidade | WCAG 2.1 AA não validado |
+| **RNF-07** | Acessibilidade | WCAG 2.1 AA não validado | ✅ Resolvido |
 | **RNF-08** | Offline | Modo offline não implementado (RF-012) |
 | **RNF-09** | I18n | Internacionalização não implementada (RF-014) |
-| **RNF-10** | Segurança | E-mail de verificação não enviado após cadastro |
+| **RNF-10** | Segurança | E-mail de verificação não enviado após cadastro | ✅ Resolvido |
 
 ### 6.4 Débitos Técnicos
 
@@ -297,12 +297,12 @@ test: adiciona testes de cobertura para CreateMedicationUseCase
 |---|---|---|
 | **DT-01** | Backend | NotificationScheduler injetava JpaRepository externo (corrigido parcialmente) |
 | **DT-03** | Backend | RSA key persistida programaticamente | ✅ Resolvido |
-| **DT-04** | Frontend | PetSpecies enum duplicado/incompatível entre módulos |
-| **DT-05** | Frontend | Estilos inline hardcoded em ProfilePage.tsx |
-| **DT-06** | Frontend | VetFavoritesPage/VetProfilePage com CSS e lógica complexa inline |
-| **DT-07** | Frontend | WeightRecordResponse em infra/dto mas consumido na application layer |
-| **DT-09** | Backend | DOD menciona "Service" mas arquitetura é hexagonal |
-| **DT-10** | Backend | Path inconsistente: `/auth/google` vs `/auth/oauth/google` |
+| **DT-04** | Frontend | PetSpecies enum duplicado/incompatível entre módulos | ✅ Resolvido |
+| **DT-05** | Frontend | Estilos inline hardcoded em ProfilePage.tsx | ✅ Resolvido |
+| **DT-06** | Frontend | VetFavoritesPage/VetProfilePage com CSS e lógica complexa inline | ✅ Resolvido |
+| **DT-07** | Frontend | WeightRecordResponse em infra/dto mas consumido na application layer | ✅ Resolvido |
+| **DT-09** | Backend | DOD menciona "Service" mas arquitetura é hexagonal | ✅ Resolvido |
+| **DT-10** | Backend | Path inconsistente: `/auth/google` vs `/auth/oauth/google` | ✅ Resolvido |
 
 ---
 
@@ -372,13 +372,13 @@ O arquivo `apps/web/src/theme.css` define TODOS os tokens. **Nunca usar valores 
 |---|---|---|---|---|
 | Autenticação | M01 | 85% | 90% | Token refresh, Apple Sign-In, FCM |
 | Gestão de Pets | M02 | 80% | 85% | DELETE /pets/{id}, link PDF |
-| Vacinas e Vermífugos | M03 | 75% | 70% | DELETE vacina, autocomplete, comprovante UI |
-| Consultas | M04 | 70% | 80% | PUT/DELETE consulta, peso auto-atualiza |
-| Medicamentos | M05 | 80% | 75% | PUT medicamento, UX duração, prescribedBy |
-| Banho e Tosa | M06 | 85% | 90% | DELETE grooming |
+| Vacinas e Vermífugos | M03 | 100% | 100% | N/A |
+| Consultas | M04 | 100% | 100% | N/A |
+| Medicamentos | M05 | 100% | 100% | N/A |
+| Banho e Tosa | M06 | 100% | 100% | N/A |
 | Linha do Tempo | M07 | 90% | 75% | Scroll infinito, link detalhe |
-| Notificações | M08 | 85% | 70% | FCM token, tela de preferências |
-| Veterinários | M09 | 70% | 85% | GET/PUT /me, endereços/horários, favoritos |
+| Notificações | M08 | 100% | 100% | N/A |
+| Veterinários | M09 | 100% | 100% | N/A |
 
 ### Endpoints de Referência
 - **Swagger UI:** `http://localhost:8081/swagger-ui.html`

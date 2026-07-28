@@ -92,6 +92,23 @@ describe('AuthContext', () => {
     expect(result.current.user?.name).toBe('Google User');
   });
 
+  it('should handle loginWithApple', async () => {
+    (api.post as Mock).mockResolvedValue({
+      data: { data: { accessToken: 'a-acc', refreshToken: 'a-ref' } }
+    });
+    (api.get as Mock).mockResolvedValue({
+      data: { data: { id: '2', name: 'Apple User' } }
+    });
+
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      await result.current.loginWithApple('token');
+    });
+
+    expect(result.current.user?.name).toBe('Apple User');
+  });
+
   it('should handle register', async () => {
     (api.post as Mock).mockResolvedValue({
       data: { data: { accessToken: 'r-acc', refreshToken: 'r-ref' } }

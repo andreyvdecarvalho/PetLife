@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { VaccinationsTab } from '../../organisms/VaccinationsTab';
 import { Modal } from '../../molecules/Modal';
@@ -63,13 +63,37 @@ export const PetProfilePageContent: React.FC = () => {
     }
   }, [exportError, showToast]);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (id) {
       const nextPage = page + 1;
       fetchTimeline(id, selectedFilter || undefined, nextPage, 20, true);
       setPage(nextPage);
     }
-  };
+  }, [id, page, fetchTimeline, selectedFilter]);
+
+  const observerTarget = useRef(null);
+
+  useEffect(() => {
+    const currentTarget = observerTarget.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoading) {
+          handleLoadMore();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasMore, isLoading, handleLoadMore]);
 
   const handleExport = async () => {
     if (!id) return;
@@ -405,15 +429,8 @@ export const PetProfilePageContent: React.FC = () => {
             })}
 
             {activeTab === 'history' && hasMore && events.length > 0 && (
-              <div className="pet-profile__load-more-container">
-                <button 
-                  className="pet-profile__load-more-btn"
-                  onClick={handleLoadMore}
-                  disabled={isLoading}
-                  data-testid="load-more-button"
-                >
-                  {isLoading ? 'Carregando...' : 'Carregar mais'}
-                </button>
+              <div className="pet-profile__load-more-container" ref={observerTarget}>
+                {isLoading && <span>Carregando...</span>}
               </div>
             )}
 

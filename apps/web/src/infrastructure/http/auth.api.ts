@@ -40,7 +40,10 @@ export const authApi = {
     api.post<{ data: TokenResponse }>('/auth/register', { name, email, password }),
 
   loginWithGoogle: (idToken: string) =>
-    api.post<{ data: TokenResponse }>('/auth/google', { idToken }),
+    api.post<{ data: TokenResponse }>('/auth/oauth/google', { idToken }),
+
+  loginWithApple: (idToken: string, email?: string, name?: string) =>
+    api.post<{ data: TokenResponse }>('/auth/oauth/apple', { idToken, email, name }),
 
   getProfile: () =>
     api.get<{ data: UserResponse }>('/auth/me'),

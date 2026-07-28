@@ -20,11 +20,17 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router-dom": "6.28.0",
-    "recharts": "3.8.1"
+    "recharts": "3.8.1",
+    "i18next": "^23.11.5",
+    "react-i18next": "^14.1.2",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "@sentry/react": "^8.0.0"
   },
   "devDependencies": {
     "@eslint/js": "9.16.0",
     "@playwright/test": "1.49.0",
+    "@axe-core/react": "^4.10.0",
+    "vitest-axe": "^0.1.0",
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
@@ -42,6 +48,7 @@
     "jsdom": "25.0.1",
     "typescript": "5.7.2",
     "vite": "6.4.3",
+    "vite-plugin-pwa": "^0.21.1",
     "vitest": "3.2.6"
   }
 }

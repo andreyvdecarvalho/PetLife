@@ -35,8 +35,6 @@ class AuthControllerTest extends IntegrationTestBase {
     @Autowired
     private org.springframework.security.oauth2.jwt.JwtEncoder jwtEncoder;
 
-    @org.springframework.test.context.bean.override.mockito.MockitoBean
-    private com.petlife.modules.auth.application.port.OAuthProviderPort oauthProviderPort;
 
     @Nested
     @DisplayName("POST /api/v1/auth/register")
@@ -169,10 +167,10 @@ class AuthControllerTest extends IntegrationTestBase {
         void shouldAuthenticateWithGoogle() throws Exception {
             var request = new GoogleLoginRequest("valid_dummy_token");
 
-            org.mockito.Mockito.when(oauthProviderPort.getGoogleUserInfo("valid_dummy_token"))
+            org.mockito.Mockito.when(oAuthProviderPort.getGoogleUserInfo("valid_dummy_token"))
                     .thenReturn(new com.petlife.modules.auth.application.port.OAuthProviderPort.GoogleUserInfo("google.tutor@petlife.com", "Google Tutor", "http://google.url/avatar"));
 
-            mockMvc.perform(post("/api/v1/auth/google")
+            mockMvc.perform(post("/api/v1/auth/oauth/google")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -185,10 +183,10 @@ class AuthControllerTest extends IntegrationTestBase {
         void shouldReturn400ForInvalidGoogleToken() throws Exception {
             var request = new GoogleLoginRequest("token-invalido");
 
-            org.mockito.Mockito.when(oauthProviderPort.getGoogleUserInfo("token-invalido"))
+            org.mockito.Mockito.when(oAuthProviderPort.getGoogleUserInfo("token-invalido"))
                     .thenThrow(com.petlife.shared.exception.BusinessException.unauthorized("AUTH_INVALID_GOOGLE_TOKEN", "Token inválido"));
 
-            mockMvc.perform(post("/api/v1/auth/google")
+            mockMvc.perform(post("/api/v1/auth/oauth/google")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isUnauthorized())

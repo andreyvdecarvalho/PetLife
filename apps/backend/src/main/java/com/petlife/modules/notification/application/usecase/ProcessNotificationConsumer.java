@@ -8,7 +8,7 @@ import com.petlife.modules.notification.application.port.NotificationPreferences
 import com.petlife.modules.notification.domain.entity.NotificationMessage;
 import com.petlife.modules.notification.domain.entity.NotificationPreferences;
 import com.petlife.modules.notification.domain.entity.NotificationType;
-import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
+import com.petlife.modules.notification.application.dto.NotificationPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,0 +1,1 @@
+package org.springframework.boot.web.client; import org.springframework.web.client.RestClient; @FunctionalInterface public interface RestClientCustomizer { void customize(RestClient.Builder restClientBuilder); }

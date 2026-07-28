@@ -1,5 +1,7 @@
 import api from './api';
-import type { Pet, PetSex, PetSize, PetSpecies, PetStatus } from '../../domain/pet/Pet';
+import type { Pet, PetSex, PetSize, PetStatus } from '../../domain/pet/Pet';
+import type { PetSpecies } from '../../domain/shared/Species';
+import type { WeightRecordResponse } from '../dto/WeightRecordResponse';
 
 export interface CreatePetData {
   name: string;
@@ -40,7 +42,7 @@ export const petApi = {
     ),
 
   getWeightHistory: (id: string) =>
-    api.get<{ data: { weightKg: number; recordedAt: string }[] }>(`/pets/${id}/weight-history`),
+    api.get<{ data: WeightRecordResponse[] }>(`/pets/${id}/weight-history`),
 
   getById: (id: string) =>
     api.get<{ data: Pet }>(`/pets/${id}`),

@@ -7,6 +7,8 @@ import com.petlife.modules.auth.application.port.UserRepositoryPort;
 import com.petlife.modules.auth.application.usecase.LoginUserUseCase;
 import com.petlife.modules.auth.application.usecase.RegisterUserUseCase;
 import com.petlife.modules.auth.application.usecase.RefreshTokenUseCase;
+import com.petlife.modules.auth.application.port.AppleOAuthPort;
+import com.petlife.modules.auth.application.usecase.AppleLoginUseCase;
 import com.petlife.modules.auth.application.usecase.LoginWithGoogleUseCase;
 import com.petlife.modules.auth.application.usecase.GetUserProfileUseCase;
 import com.petlife.modules.auth.application.usecase.UpdateUserProfileUseCase;
@@ -42,6 +44,14 @@ public class AuthUseCaseConfig {
             TokenGeneratorPort tokenGeneratorPort,
             OAuthProviderPort oAuthProviderPort) {
         return new LoginWithGoogleUseCase(userRepositoryPort, tokenGeneratorPort, oAuthProviderPort);
+    }
+
+    @Bean
+    public AppleLoginUseCase appleLoginUseCase(
+            UserRepositoryPort userRepositoryPort,
+            TokenGeneratorPort tokenGeneratorPort,
+            AppleOAuthPort appleOAuthPort) {
+        return new AppleLoginUseCase(userRepositoryPort, tokenGeneratorPort, appleOAuthPort);
     }
 
     @Bean
