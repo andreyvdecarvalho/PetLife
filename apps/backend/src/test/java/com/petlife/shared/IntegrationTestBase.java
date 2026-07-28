@@ -77,6 +77,9 @@ public abstract class IntegrationTestBase {
     @MockitoBean
     protected AppleOAuthPort appleOAuthPort;
 
+    @MockitoBean
+    protected com.petlife.modules.auth.application.port.OAuthProviderPort oAuthProviderPort;
+
     @BeforeEach
     void setUpMockMvc() {
         this.mockMvc = MockMvcBuilders
