@@ -282,14 +282,14 @@ test: adiciona testes de cobertura para CreateMedicationUseCase
 
 | **RNF-01** | LGPD | Delete em cascata de pets validado | ✅ Resolvido |
 | **RNF-02** | Segurança | JWT tokens sem configuração flexível |
-| **RNF-03** | Disponibilidade | Redis não configurado em produção |
-| **RNF-04** | Observabilidade | Sentry não integrado; sem OpenTelemetry |
-| **RNF-05** | Performance | Timeline sem scroll infinito real no frontend |
+| **RNF-03** | Disponibilidade | Redis não configurado em produção | ✅ Resolvido |
+| **RNF-04** | Observabilidade | Sentry não integrado; sem OpenTelemetry | ✅ Resolvido |
+| **RNF-05** | Performance | Timeline sem scroll infinito real no frontend | ✅ Resolvido |
 | **RNF-06** | Escalabilidade | MockGeocodingAdapter em produção |
-| **RNF-07** | Acessibilidade | WCAG 2.1 AA não validado |
+| **RNF-07** | Acessibilidade | WCAG 2.1 AA não validado | ✅ Resolvido |
 | **RNF-08** | Offline | Modo offline não implementado (RF-012) |
 | **RNF-09** | I18n | Internacionalização não implementada (RF-014) |
-| **RNF-10** | Segurança | E-mail de verificação não enviado após cadastro |
+| **RNF-10** | Segurança | E-mail de verificação não enviado após cadastro | ✅ Resolvido |
 
 ### 6.4 Débitos Técnicos
 

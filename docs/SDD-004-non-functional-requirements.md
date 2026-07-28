@@ -1,7 +1,7 @@
 # Spec Driven Development (SDD-004): Requisitos Não-Funcionais
 
-> **Status:** 🟡 Pendente | **Prioridade:** P3 — Requisitos Não-Funcionais
-> **Responsável:** Agente Implementador | **Sprint:** 5–6 (Semanas 5–6)
+> **Status:** Concluído ✅ | **Prioridade:** P3 — Requisitos Não-Funcionais
+> **Responsável:** Agente IA (Antigravity) | **Sprint:** 5–6 (Semanas 5–6)
 > **Débitos cobertos:** RNF-03, RNF-04, RNF-05, RNF-07, RNF-10
 
 ## Objetivo
