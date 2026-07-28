@@ -27,13 +27,13 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @Transactional
 public abstract class IntegrationTestBase {
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings("all")
     protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.4-alpine")
             .withDatabaseName("petlife_test")
             .withUsername("petlife")
             .withPassword("petlife_test");
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings("all")
     protected static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:4.0-alpine");
 
     static {
