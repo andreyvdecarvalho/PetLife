@@ -33,7 +33,8 @@ public class UpdateConsultationUseCase {
                 .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND", "Pet não encontrado."));
 
         if (!pet.getUser().getId().equals(userId)) {
-            throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
+            throw BusinessException.forbidden(
+                    "FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
         Consultation consultation = consultationRepositoryPort.findById(consultationId)
@@ -68,8 +69,9 @@ public class UpdateConsultationUseCase {
             // Atualiza peso do pet se esta consulta for a mais recente
             List<Consultation> consultations = consultationRepositoryPort.findAllByPetId(petId);
             boolean isLatest = consultations.isEmpty() || consultations.stream()
-                    .allMatch(c -> !c.getId().equals(consultationId) &&
-                            c.getDate().isBefore(consultation.getDate()) || c.getDate().isEqual(consultation.getDate()));
+                    .allMatch(c -> !c.getId().equals(consultationId)
+                            && (c.getDate().isBefore(consultation.getDate())
+                            || c.getDate().isEqual(consultation.getDate())));
 
             if (isLatest) {
                 pet.setWeightKg(request.getWeightAtVisit());

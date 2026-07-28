@@ -20,7 +20,8 @@ public class UpdateVeterinarianProfileUseCase {
     @Transactional
     public VeterinarianResponse execute(UUID userId, UpdateVeterinarianRequest request) {
         Veterinarian vet = veterinarianRepository.findByUserId(userId)
-                .orElseThrow(() -> BusinessException.notFound("VET_NOT_FOUND", "Perfil de veterinário não encontrado."));
+                .orElseThrow(() -> BusinessException.notFound(
+                        "VET_NOT_FOUND", "Perfil de veterinário não encontrado."));
 
         if (request.getFullName() != null) {
             vet.setFullName(request.getFullName());
