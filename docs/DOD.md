@@ -8,7 +8,7 @@ Este documento define os critérios de qualidade obrigatórios que qualquer func
 
 ### 1.1 Backend (Java / Spring Boot)
 - [x] O código segue rigidamente a convenção de nomenclatura Java (camelCase para métodos/variáveis, PascalCase para classes).
-- [x] Toda a lógica de negócio reside na camada **Service**, nunca em Controllers ou Repositories.
+- [x] Toda a lógica de negócio reside na camada **Application (Use Cases)**, nunca em Controllers, Adapters ou JpaRepositories. Imports de infraestrutura (`JpaRepository`, `Page<>`, `Pageable`, `ApiResponse<>`) são proibidos em Use Cases.
 - [x] Chaves primárias de novas tabelas/entidades utilizam obrigatoriamente `UUID` v4 gerado automaticamente.
 - [x] Entidades principais implementam auditoria (`createdAt` e `updatedAt`) via `@CreationTimestamp` e `@UpdateTimestamp`.
 - [x] Parâmetros de API e DTOs de entrada utilizam validações do `jakarta.validation` (`@NotNull`, `@NotBlank`, `@Size`, etc.) e são anotados com `@Valid` nos controllers.

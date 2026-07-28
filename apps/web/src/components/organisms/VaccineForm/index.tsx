@@ -10,6 +10,7 @@ interface VaccineFormProps {
   loading?: boolean;
   onSubmit: (data: CreateVaccinationData) => void;
   onCancel?: () => void;
+  onDelete?: () => void;
 }
 
 export const VaccineForm: React.FC<VaccineFormProps> = ({
@@ -17,7 +18,8 @@ export const VaccineForm: React.FC<VaccineFormProps> = ({
   suggestions = [],
   loading = false,
   onSubmit,
-  onCancel
+  onCancel,
+  onDelete
 }) => {
   const [formData, setFormData] = useState<CreateVaccinationData>({
     vaccineName: initialData?.vaccineName || '',
@@ -167,6 +169,11 @@ export const VaccineForm: React.FC<VaccineFormProps> = ({
         {onCancel && (
           <Button type="button" variant="secondary" onClick={onCancel}>
             Cancelar
+          </Button>
+        )}
+        {onDelete && (
+          <Button type="button" variant="danger" onClick={onDelete} disabled={loading}>
+            Excluir
           </Button>
         )}
         <Button type="submit" disabled={loading}>

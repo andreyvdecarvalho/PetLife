@@ -79,6 +79,8 @@ public class StopMedicationUseCase {
                 med.getTimesOfDay(),
                 med.getStatus(),
                 adminResponses,
+                med.getPrescribedBy(),
+                med.getReason(),
                 med.getCreatedAt(),
                 med.getUpdatedAt()
         );

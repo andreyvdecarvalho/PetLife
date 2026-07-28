@@ -30,5 +30,22 @@ public record CreateMedicationRequest(
     LocalDate endDate,
 
     @NotEmpty
-    List<String> timesOfDay
-) {}
+    List<String> timesOfDay,
+
+    String prescribedBy,
+
+    String reason
+) {
+    public CreateMedicationRequest(
+        String name,
+        String dosage,
+        MedicationFrequency frequency,
+        MedicationType medicationType,
+        Integer customFrequencyHours,
+        LocalDate startDate,
+        LocalDate endDate,
+        List<String> timesOfDay
+    ) {
+        this(name, dosage, frequency, medicationType, customFrequencyHours, startDate, endDate, timesOfDay, null, null);
+    }
+}

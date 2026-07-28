@@ -40,7 +40,7 @@ export const MedicationsPage: React.FC = () => {
 
   const {
     medications, adherence, fetchMedications, fetchAdherence,
-    createMedication, updateAdministration, stopMedication
+    createMedication, updateMedication, updateAdministration, stopMedication
   } = useMedications(selectedPetId || '');
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -96,7 +96,9 @@ export const MedicationsPage: React.FC = () => {
       name: newName, dosage: newDosage, frequency: newFrequency,
       medicationType: newMedicationType,
       customFrequencyHours: newFrequency === 'CUSTOM' ? newCustomHours : undefined,
-      startDate: newStartDate, endDate: computedEndDate, timesOfDay: newTimes,
+      startDate: newStartDate, endDate: computedEndDate,
+      durationDays: newDurationDays ? Number(newDurationDays) : undefined,
+      timesOfDay: newTimes,
     };
     const success = await createMedication(payload);
     if (success) {
@@ -105,6 +107,14 @@ export const MedicationsPage: React.FC = () => {
       setNewName(''); setNewDosage(''); setNewFrequency('DAILY'); setNewMedicationType('MEDICINE'); setNewTimes(['08:00']); setNewDurationDays('');
     }
   };
+
+  // Computed endDate from startDate + durationDays for preview
+  const computedEndDatePreview = React.useMemo(() => {
+    if (!newDurationDays || Number(newDurationDays) <= 0) return null;
+    const sDate = new Date(newStartDate);
+    sDate.setUTCDate(sDate.getUTCDate() + Number(newDurationDays));
+    return sDate.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+  }, [newStartDate, newDurationDays]);
 
   const handleSkipDoseSubmit = async () => {
     if (!skipDoseId) return;
@@ -275,6 +285,11 @@ export const MedicationsPage: React.FC = () => {
                   onChange={e => setNewDurationDays(e.target.value ? Number(e.target.value) : '')}
                   data-testid="input-duration"
                 />
+                {computedEndDatePreview && (
+                  <p style={{ fontSize: '0.8rem', color: 'var(--color-tertiary)', marginTop: '4px' }}>
+                    📅 Término previsto: <strong>{computedEndDatePreview}</strong>
+                  </p>
+                )}
               </div>
               <div className="medications-page__form-row">
                 <div className="molecule-form-field">

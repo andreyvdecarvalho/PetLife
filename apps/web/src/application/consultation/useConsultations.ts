@@ -66,5 +66,45 @@ export function useConsultations(petId: string) {
     }
   };
 
-  return { consultations, loading, error, fetchConsultations, addConsultation, uploadAttachments, deleteAttachment };
+  const updateConsultation = async (consultationId: string, data: CreateConsultationData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const updated = await consultationApi.update(petId, consultationId, data);
+      setConsultations(prev => prev.map(c => c.id === consultationId ? updated : c));
+      return true;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao atualizar consulta');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteConsultation = async (consultationId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await consultationApi.delete(petId, consultationId);
+      setConsultations(prev => prev.filter(c => c.id !== consultationId));
+      return true;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao deletar consulta');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    consultations,
+    loading,
+    error,
+    fetchConsultations,
+    addConsultation,
+    uploadAttachments,
+    deleteAttachment,
+    updateConsultation,
+    deleteConsultation
+  };
 }

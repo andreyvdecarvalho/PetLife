@@ -84,6 +84,31 @@ class CreateMedicationUseCaseTest {
     }
 
     @Test
+    @DisplayName("Deve cadastrar um medicamento com prescribedBy e reason com sucesso")
+    void shouldCreateMedicationWithPrescribedByAndReason() {
+        UUID petId = pet.getId();
+        UUID userId = user.getId();
+        CreateMedicationRequest request = new CreateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.DAILY, MedicationType.MEDICINE, null,
+                LocalDate.now(), LocalDate.now().plusDays(2), List.of("08:00", "20:00"),
+                "Dr. House", "Febre"
+        );
+
+        given(petRepository.findById(petId)).willReturn(Optional.of(pet));
+        given(medicationRepository.save(any(Medication.class))).willAnswer(invocation -> {
+            Medication med = invocation.getArgument(0);
+            med.setId(UUID.randomUUID());
+            return med;
+        });
+
+        MedicationResponse response = createMedicationUseCase.execute(petId, userId, request);
+
+        assertThat(response.name()).isEqualTo("Dipirona");
+        assertThat(response.prescribedBy()).isEqualTo("Dr. House");
+        assertThat(response.reason()).isEqualTo("Febre");
+    }
+
+    @Test
     @DisplayName("Deve lancar excecao se pet nao pertence ao usuario")
     void shouldThrowIfPetDoesNotBelongToUser() {
         UUID petId = pet.getId();

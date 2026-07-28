@@ -122,6 +122,42 @@ class AuthControllerTest extends IntegrationTestBase {
                     .andExpect(status().isUnauthorized())
                     .andExpect(jsonPath("$.error.code").value("AUTH_INVALID_CREDENTIALS"));
         }
+
+        @Test
+        @DisplayName("Deve bloquear após 5 tentativas de login consecutivas (Rate Limiting)")
+        void shouldBlockAfterFiveLoginAttempts() throws Exception {
+            var user = UserFactory.make(u -> {
+                u.setEmail("ratelimit.test@petlife.com");
+                u.setPasswordHash(passwordEncoder.encode("Senha@123"));
+            });
+            userRepository.save(user);
+
+            var request = new LoginRequest(user.getEmail(), "Senha@123");
+            String testIp = "192.168.10.20";
+
+            // First 5 requests should pass
+            for (int i = 0; i < 5; i++) {
+                mockMvc.perform(post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                                .with(req -> {
+                                    req.setRemoteAddr(testIp);
+                                    return req;
+                                }))
+                        .andExpect(status().isOk());
+            }
+
+            // 6th request should fail with 429 Too Many Requests
+            mockMvc.perform(post("/api/v1/auth/login")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                            .with(req -> {
+                                req.setRemoteAddr(testIp);
+                                return req;
+                            }))
+                    .andExpect(status().isTooManyRequests())
+                    .andExpect(jsonPath("$.error.code").value("TOO_MANY_LOGIN_ATTEMPTS"));
+        }
     }
 
     @Nested

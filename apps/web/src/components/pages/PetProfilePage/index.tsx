@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { VaccinationsTab } from '../../organisms/VaccinationsTab';
 import { Modal } from '../../molecules/Modal';
 import { ConsultationForm } from '../../organisms/ConsultationForm';
+import { consultationApi } from '../../../infrastructure/http/consultation.api';
 import { useTimeline } from '../../../application/pet/useTimeline';
 import { useGetPetById } from '../../../application/pet/useGetPetById';
 import { useExportMedicalPass } from '../../../application/pet/useExportMedicalPass';
@@ -26,6 +27,7 @@ export const PetProfilePageContent: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'history' | 'vaccines' | 'medications'>('history');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedConsultation, setSelectedConsultation] = useState<any | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<TimelineEventType[] | null>(null);
   const [page, setPage] = useState(0);
 
@@ -86,6 +88,37 @@ export const PetProfilePageContent: React.FC = () => {
         navigate('/');
       } catch (err) {
         showToast('Falha ao excluir o pet.', 'error');
+      }
+    }
+  };
+
+  const handleEventClick = async (event: any) => {
+    if (event.type === 'CONSULTATION' && event.id && id) {
+      try {
+        const list = await consultationApi.list(id);
+        const found = list.find((c: any) => c.id === event.id);
+        if (found) {
+          setSelectedConsultation(found);
+          setIsModalOpen(true);
+        }
+      } catch (err) {
+        showToast('Erro ao carregar detalhes da consulta.', 'error');
+      }
+    }
+  };
+
+  const handleDeleteConsultation = async (consultationId: string) => {
+    if (window.confirm('Tem certeza que deseja excluir esta consulta?')) {
+      try {
+        if (id) {
+          await consultationApi.delete(id, consultationId);
+          setIsModalOpen(false);
+          setSelectedConsultation(null);
+          showToast('Consulta excluída com sucesso.', 'success');
+          handleRefresh();
+        }
+      } catch (err) {
+        showToast('Falha ao excluir a consulta.', 'error');
       }
     }
   };
@@ -337,7 +370,7 @@ export const PetProfilePageContent: React.FC = () => {
                     <span className="material-symbols-outlined">{event.icon}</span>
                   </div>
                   
-                  <div className="pet-profile__timeline-card">
+                  <div className="pet-profile__timeline-card" onClick={() => handleEventClick(event)} style={{ cursor: event.type === 'CONSULTATION' ? 'pointer' : 'default' }}>
                     <div className="pet-profile__card-header">
                       <div>
                         <h4 className="pet-profile__card-title">{event.title}</h4>
@@ -399,15 +432,21 @@ export const PetProfilePageContent: React.FC = () => {
       </div>
       </main>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Registrar Consulta Médica">
+      <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setSelectedConsultation(null); }} title={selectedConsultation ? "Editar Consulta Médica" : "Registrar Consulta Médica"}>
         {id && (
           <ConsultationForm
             petId={id}
+            initialData={selectedConsultation || undefined}
             onSuccess={() => {
               setIsModalOpen(false);
+              setSelectedConsultation(null);
               handleRefresh();
             }}
-            onCancel={() => setIsModalOpen(false)}
+            onCancel={() => {
+              setIsModalOpen(false);
+              setSelectedConsultation(null);
+            }}
+            onDelete={selectedConsultation ? () => handleDeleteConsultation(selectedConsultation.id) : undefined}
           />
         )}
       </Modal>

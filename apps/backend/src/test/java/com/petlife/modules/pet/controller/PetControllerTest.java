@@ -504,5 +504,55 @@ class PetControllerTest extends IntegrationTestBase {
                     .andExpect(jsonPath("$.error.code").value("FORBIDDEN_PET_ACCESS"));
         }
     }
+
+    @Nested
+    @DisplayName("DELETE /api/v1/pets/{id}")
+    class DeletePet {
+
+        @Test
+        @DisplayName("Deve excluir pet com sucesso")
+        void shouldDeletePet() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            Pet pet = PetFactory.make(p -> p.setUser(user));
+            pet = petRepository.save(pet);
+
+            mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/pets/{id}", pet.getId())
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isNoContent());
+
+            org.junit.jupiter.api.Assertions.assertTrue(petRepository.findById(pet.getId()).isEmpty());
+        }
+
+        @Test
+        @DisplayName("Deve retornar 404 se o pet nao existir")
+        void shouldReturn404IfPetNotFound() throws Exception {
+            User user = UserFactory.make();
+            userRepository.save(user);
+
+            mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/pets/{id}", UUID.randomUUID())
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error.code").value("PET_NOT_FOUND"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 403 se o pet pertencer a outro tutor")
+        void shouldReturn403IfPetBelongsToOtherUser() throws Exception {
+            User user = UserFactory.make();
+            User otherUser = UserFactory.make();
+            userRepository.save(user);
+            userRepository.save(otherUser);
+
+            Pet otherPet = PetFactory.make(p -> p.setUser(otherUser));
+            otherPet = petRepository.save(otherPet);
+
+            mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/pets/{id}", otherPet.getId())
+                            .with(jwt().jwt(j -> j.subject(user.getId().toString()).claim("email", user.getEmail()))))
+                    .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.error.code").value("ACCESS_DENIED"));
+        }
+    }
 }
 

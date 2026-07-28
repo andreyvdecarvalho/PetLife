@@ -65,6 +65,8 @@ public class ListMedicationsUseCase {
                 med.getTimesOfDay(),
                 med.getStatus(),
                 adminResponses,
+                med.getPrescribedBy(),
+                med.getReason(),
                 med.getCreatedAt(),
                 med.getUpdatedAt()
         );

@@ -2,8 +2,10 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
 import com.petlife.modules.pet.domain.entity.Consultation;
 import com.petlife.modules.pet.domain.entity.Pet;
+import com.petlife.modules.pet.domain.entity.WeightRecord;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
 import com.petlife.modules.pet.infrastructure.dto.UpdateConsultationRequest;
 import com.petlife.shared.exception.BusinessException;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -21,6 +24,7 @@ public class UpdateConsultationUseCase {
 
     private final ConsultationRepositoryPort consultationRepositoryPort;
     private final PetRepositoryPort petRepositoryPort;
+    private final SaveWeightRecordPort saveWeightRecordPort;
 
     @Transactional
     public ConsultationResponse execute(
@@ -29,7 +33,8 @@ public class UpdateConsultationUseCase {
                 .orElseThrow(() -> BusinessException.notFound("PET_NOT_FOUND", "Pet não encontrado."));
 
         if (!pet.getUser().getId().equals(userId)) {
-            throw BusinessException.forbidden("FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
+            throw BusinessException.forbidden(
+                    "FORBIDDEN_PET_ACCESS", "Este pet não pertence ao usuário autenticado.");
         }
 
         Consultation consultation = consultationRepositoryPort.findById(consultationId)
@@ -53,6 +58,25 @@ public class UpdateConsultationUseCase {
         }
         if (request.getWeightAtVisit() != null) {
             consultation.setWeightAtVisit(request.getWeightAtVisit());
+
+            // Salva registro de peso histórico
+            WeightRecord weightRecord = new WeightRecord();
+            weightRecord.setPet(pet);
+            weightRecord.setWeightKg(request.getWeightAtVisit());
+            weightRecord.setRecordedAt(consultation.getDate());
+            saveWeightRecordPort.save(weightRecord);
+
+            // Atualiza peso do pet se esta consulta for a mais recente
+            List<Consultation> consultations = consultationRepositoryPort.findAllByPetId(petId);
+            boolean isLatest = consultations.isEmpty() || consultations.stream()
+                    .allMatch(c -> !c.getId().equals(consultationId)
+                            && (c.getDate().isBefore(consultation.getDate())
+                            || c.getDate().isEqual(consultation.getDate())));
+
+            if (isLatest) {
+                pet.setWeightKg(request.getWeightAtVisit());
+                petRepositoryPort.save(pet);
+            }
         }
         if (request.getFollowUpDate() != null) {
             consultation.setFollowUpDate(request.getFollowUpDate());
@@ -60,7 +84,7 @@ public class UpdateConsultationUseCase {
 
         Consultation saved = consultationRepositoryPort.save(consultation);
         log.info("Consulta {} atualizada com sucesso para o pet {}", consultationId, petId);
-        
+
         return mapToResponse(saved);
     }
 

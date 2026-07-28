@@ -1,0 +1,3 @@
+ALTER TABLE medication
+    ADD COLUMN IF NOT EXISTS prescribed_by VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS reason VARCHAR(500);

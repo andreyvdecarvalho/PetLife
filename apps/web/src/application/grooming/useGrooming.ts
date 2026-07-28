@@ -66,6 +66,21 @@ export function useGrooming(petId: string) {
     }
   };
 
+  const deleteGrooming = async (groomingId: string): Promise<boolean> => {
+    try {
+      setLoading(true);
+      setError(null);
+      await groomingApi.deleteGrooming(petId, groomingId);
+      await fetchGroomings();
+      return true;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao deletar banho e tosa');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     groomings,
     loading,
@@ -74,5 +89,6 @@ export function useGrooming(petId: string) {
     addGrooming,
     updateGrooming,
     uploadPhoto,
+    deleteGrooming
   };
 }

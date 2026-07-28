@@ -234,6 +234,7 @@ describe('MedicationsPage', () => {
         customFrequencyHours: undefined,
         startDate: '2026-07-20',
         endDate: '2026-07-30',
+        durationDays: 10,
         timesOfDay: ['08:00']
       });
       expect(mockShowToast).toHaveBeenCalledWith('Tratamento cadastrado com sucesso! ✨', 'success');

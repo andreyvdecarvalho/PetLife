@@ -110,6 +110,23 @@ class UpdateMedicationUseCaseTest {
     }
 
     @Test
+    void shouldUpdateMedicationPrescribedByAndReason() {
+        UpdateMedicationRequest req = new UpdateMedicationRequest(
+                "Dipirona", "5 gotas", MedicationFrequency.DAILY, null, null,
+                LocalDate.now().plusDays(5), List.of("08:00"), "Dr. Strange", "Dor de cabeça"
+        );
+
+        when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
+        when(medicationRepository.findById(medId)).thenReturn(Optional.of(medication));
+        when(medicationRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        MedicationResponse response = updateMedicationUseCase.execute(petId, medId, userId, req);
+
+        assertEquals("Dr. Strange", response.prescribedBy());
+        assertEquals("Dor de cabeça", response.reason());
+    }
+
+    @Test
     void shouldUpdateScheduleAndRecreateAdministrations() {
         UpdateMedicationRequest req = new UpdateMedicationRequest(
                 null, null, MedicationFrequency.WEEKLY, null, null, LocalDate.now().plusDays(20), List.of("10:00"));

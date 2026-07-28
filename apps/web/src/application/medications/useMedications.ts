@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { Medication, CreateMedicationData, UpdateAdministrationData, MedicationAdherence } from '../../domain/pet/Medication';
+import type { Medication, CreateMedicationData, UpdateMedicationData, UpdateAdministrationData, MedicationAdherence } from '../../domain/pet/Medication';
 import { medicationApi } from '../../infrastructure/http/medication.api';
 
 export function useMedications(petId: string) {
@@ -40,6 +40,9 @@ export function useMedications(petId: string) {
   const createMedication = (data: CreateMedicationData) =>
     runWithRefresh(() => medicationApi.createMedication(petId, data), 'Erro ao criar tratamento');
 
+  const updateMedication = (medicationId: string, data: UpdateMedicationData) =>
+    runWithRefresh(() => medicationApi.updateMedication(petId, medicationId, data), 'Erro ao atualizar tratamento');
+
   const updateAdministration = (doseId: string, data: UpdateAdministrationData) =>
     runWithRefresh(() => medicationApi.updateAdministration(doseId, data), 'Erro ao registrar dose');
 
@@ -48,6 +51,6 @@ export function useMedications(petId: string) {
 
   return {
     medications, adherence, loading, error,
-    fetchMedications, fetchAdherence, createMedication, updateAdministration, stopMedication
+    fetchMedications, fetchAdherence, createMedication, updateMedication, updateAdministration, stopMedication
   };
 }
