@@ -40,7 +40,24 @@ export interface CreateMedicationData {
   customFrequencyHours?: number;
   startDate: string;
   endDate?: string;
+  durationDays?: number;
   timesOfDay: string[];
+  prescribedBy?: string;
+  reason?: string;
+}
+
+export interface UpdateMedicationData {
+  name?: string;
+  dosage?: string;
+  frequency?: MedicationFrequency;
+  medicationType?: string;
+  customFrequencyHours?: number;
+  startDate?: string;
+  endDate?: string;
+  durationDays?: number;
+  timesOfDay?: string[];
+  prescribedBy?: string;
+  reason?: string;
 }
 
 export interface UpdateAdministrationData {

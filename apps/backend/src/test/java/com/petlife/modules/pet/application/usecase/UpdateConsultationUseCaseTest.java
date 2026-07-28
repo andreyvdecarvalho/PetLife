@@ -2,6 +2,7 @@ package com.petlife.modules.pet.application.usecase;
 
 import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
 import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.application.port.SaveWeightRecordPort;
 import com.petlife.modules.pet.domain.entity.Consultation;
 import com.petlife.modules.pet.domain.entity.Pet;
 import com.petlife.modules.pet.infrastructure.dto.ConsultationResponse;
@@ -31,6 +32,9 @@ class UpdateConsultationUseCaseTest {
 
     @Mock
     private PetRepositoryPort petRepositoryPort;
+
+    @Mock
+    private SaveWeightRecordPort saveWeightRecordPort;
 
     @InjectMocks
     private UpdateConsultationUseCase updateConsultationUseCase;
@@ -73,7 +77,9 @@ class UpdateConsultationUseCaseTest {
 
         when(petRepositoryPort.findById(petId)).thenReturn(Optional.of(pet));
         when(consultationRepositoryPort.findById(consultationId)).thenReturn(Optional.of(consultation));
+        when(consultationRepositoryPort.findAllByPetId(petId)).thenReturn(java.util.List.of());
         when(consultationRepositoryPort.save(any())).thenAnswer(i -> i.getArgument(0));
+        when(petRepositoryPort.save(any())).thenAnswer(i -> i.getArgument(0));
 
         ConsultationResponse response = updateConsultationUseCase.execute(petId, consultationId, userId, req);
 
@@ -85,6 +91,8 @@ class UpdateConsultationUseCaseTest {
         assertNotNull(response.getFollowUpDate());
 
         verify(consultationRepositoryPort).save(any());
+        verify(saveWeightRecordPort).save(any());
+        verify(petRepositoryPort).save(any());
     }
 
     @Test
