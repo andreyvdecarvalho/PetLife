@@ -2,57 +2,24 @@ import React, { useState } from 'react';
 import { DashboardLayout } from '../components/templates/DashboardLayout';
 import { ProfileForm } from '../components/organisms/ProfileForm';
 import { NotificationPreferencesForm } from '../components/organisms/NotificationPreferencesForm';
+import './ProfilePage.css';
 
 export const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'profile' | 'notifications'>('profile');
 
   return (
     <DashboardLayout>
-      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', marginBottom: '24px' }}>
-        <div
-          style={{
-            display: 'flex',
-            gap: '12px',
-            borderBottom: '1px solid var(--color-outline-variant)',
-            paddingBottom: '8px',
-          }}
-        >
+      <div className="profile-page-container">
+        <div className="profile-page-tabs">
           <button
             onClick={() => setActiveTab('profile')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color:
-                activeTab === 'profile'
-                  ? 'var(--color-primary)'
-                  : 'var(--color-on-surface-variant)',
-              fontWeight: activeTab === 'profile' ? 600 : 500,
-              cursor: 'pointer',
-              fontSize: 'var(--text-headline-md-size)',
-              fontFamily: 'var(--font-headline)',
-              padding: '8px 16px',
-              borderBottom: activeTab === 'profile' ? '2px solid var(--color-primary)' : 'none',
-            }}
+            className={`profile-page-tab ${activeTab === 'profile' ? 'profile-page-tab--active' : ''}`}
           >
             Meu Perfil
           </button>
           <button
             onClick={() => setActiveTab('notifications')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color:
-                activeTab === 'notifications'
-                  ? 'var(--color-primary)'
-                  : 'var(--color-on-surface-variant)',
-              fontWeight: activeTab === 'notifications' ? 600 : 500,
-              cursor: 'pointer',
-              fontSize: 'var(--text-headline-md-size)',
-              fontFamily: 'var(--font-headline)',
-              padding: '8px 16px',
-              borderBottom:
-                activeTab === 'notifications' ? '2px solid var(--color-primary)' : 'none',
-            }}
+            className={`profile-page-tab ${activeTab === 'notifications' ? 'profile-page-tab--active' : ''}`}
           >
             Notificações
           </button>

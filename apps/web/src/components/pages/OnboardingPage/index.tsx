@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FormField } from '../../molecules/FormField';
 import { Button } from '../../atoms/Button';
 import { useCreatePet } from '../../../application/pet/useCreatePet';
-import type { PetSpecies, PetSex } from '../../../domain/pet/Pet';
+import type { PetSex } from '../../../domain/pet/Pet';
+import type { PetSpecies } from '../../../domain/shared/Species';
 import './styles.css';
 
 export const OnboardingPageContent: React.FC = () => {

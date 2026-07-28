@@ -1,6 +1,6 @@
+import type { PetSpecies } from '../shared/Species';
 export type PetSex = 'MALE' | 'FEMALE' | 'UNKNOWN';
 export type PetSize = 'MINI' | 'SMALL' | 'MEDIUM' | 'LARGE' | 'GIANT';
-export type PetSpecies = 'DOG' | 'CAT' | 'BIRD' | 'FISH' | 'RODENT' | 'REPTILE' | 'OTHER';
 export type PetStatus = 'ACTIVE' | 'ARCHIVED' | 'DECEASED';
 
 export interface Pet {

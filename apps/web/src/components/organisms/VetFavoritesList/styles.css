@@ -1,0 +1,31 @@
+.organism-vet-favorites-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.organism-vet-favorites-list__error {
+  color: var(--color-error);
+  margin-bottom: 1rem;
+}
+
+.organism-vet-favorites-list__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.organism-vet-favorites-list__remove-btn {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: var(--color-error);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.organism-vet-favorites-list__remove-btn:hover {
+  background-color: var(--color-error-dark, #cc0000);
+}

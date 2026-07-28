@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import type { WeightRecordResponse } from '../../../infrastructure/dto/WeightRecordResponse';
+import type { WeightRecord } from '../../../domain/pet/WeightRecord';
 import './styles.css';
 
 interface WeightChartProps {
-  data: WeightRecordResponse[];
+  data: WeightRecord[];
 }
 
 export const WeightChart: React.FC<WeightChartProps> = ({ data }) => {
@@ -13,7 +13,7 @@ export const WeightChart: React.FC<WeightChartProps> = ({ data }) => {
     if (!data || data.length === 0) return [];
 
     // Sort ascending by date
-    const sorted = [...data].sort((a, b) => new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime());
+    const sorted = [...data].sort((a, b) => new Date(a.measuredAt).getTime() - new Date(b.measuredAt).getTime());
     
     // We want the last 5 records max for display
     const last5 = sorted.slice(-5);
@@ -21,7 +21,7 @@ export const WeightChart: React.FC<WeightChartProps> = ({ data }) => {
     const formatter = new Intl.DateTimeFormat('pt-BR', { month: 'short' });
 
     return last5.map((record, index) => {
-      const date = new Date(record.recordedAt);
+      const date = new Date(record.measuredAt);
       return {
         label: formatter.format(date).replace('.', ''),
         val: record.weightKg,
