@@ -2,7 +2,7 @@ package com.petlife.modules.notification.infrastructure.messaging;
 
 import com.petlife.modules.notification.application.port.NotificationPublisherPort;
 import com.petlife.modules.notification.infrastructure.config.RabbitConfig;
-import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
+import com.petlife.modules.notification.application.dto.NotificationPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

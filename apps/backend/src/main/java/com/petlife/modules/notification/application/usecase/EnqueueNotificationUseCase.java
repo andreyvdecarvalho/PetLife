@@ -1,7 +1,7 @@
 package com.petlife.modules.notification.application.usecase;
 
 import com.petlife.modules.notification.application.port.NotificationPublisherPort;
-import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
+import com.petlife.modules.notification.application.dto.NotificationPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

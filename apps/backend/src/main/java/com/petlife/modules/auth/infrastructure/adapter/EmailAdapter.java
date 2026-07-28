@@ -3,7 +3,7 @@ package com.petlife.modules.auth.infrastructure.adapter;
 import com.petlife.modules.auth.domain.port.EmailPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component

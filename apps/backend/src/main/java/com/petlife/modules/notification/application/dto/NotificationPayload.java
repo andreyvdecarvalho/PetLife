@@ -1,4 +1,4 @@
-package com.petlife.modules.notification.infrastructure.dto;
+package com.petlife.modules.notification.application.dto;
 
 import com.petlife.modules.notification.domain.entity.NotificationType;
 import java.io.Serializable;
