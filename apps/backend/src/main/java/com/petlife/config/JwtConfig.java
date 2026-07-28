@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -65,7 +66,7 @@ public class JwtConfig {
         String cleaned = input.replaceAll("\\s", "");
         // First try to base64 decode
         byte[] decoded = Base64.getDecoder().decode(cleaned);
-        String decodedStr = new String(decoded);
+        String decodedStr = new String(decoded, StandardCharsets.UTF_8);
         if (decodedStr.contains(header)) {
             String pemContent = decodedStr
                 .replace(header, "")
