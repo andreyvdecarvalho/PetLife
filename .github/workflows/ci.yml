@@ -181,6 +181,11 @@ jobs:
         ports:
           - 5672:5672
 
+      redis:
+        image: redis:7.4-alpine
+        ports:
+          - 6379:6379
+
     steps:
       - uses: actions/checkout@v4
 
@@ -242,6 +247,7 @@ jobs:
           SPRING_RABBITMQ_PASSWORD: guest
           SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP: false
           SPRING_RABBITMQ_LISTENER_DIRECT_AUTO_STARTUP: false
+          REDIS_URL: redis://127.0.0.1:6379
 
       - name: Start web dev server
         working-directory: apps/web
