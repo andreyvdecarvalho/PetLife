@@ -301,7 +301,7 @@ test: adiciona testes de cobertura para CreateMedicationUseCase
 | **DT-05** | Frontend | Estilos inline hardcoded em ProfilePage.tsx | ✅ Resolvido |
 | **DT-06** | Frontend | VetFavoritesPage/VetProfilePage com CSS e lógica complexa inline | ✅ Resolvido |
 | **DT-07** | Frontend | WeightRecordResponse em infra/dto mas consumido na application layer | ✅ Resolvido |
-| **DT-09** | Backend | DOD menciona "Service" mas arquitetura é hexagonal |
+| **DT-09** | Backend | DOD menciona "Service" mas arquitetura é hexagonal | ✅ Resolvido |
 | **DT-10** | Backend | Path inconsistente: `/auth/google` vs `/auth/oauth/google` | ✅ Resolvido |
 
 ---
