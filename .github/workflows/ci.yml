@@ -178,6 +178,9 @@ jobs:
 
       rabbitmq:
         image: rabbitmq:4.0-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: petlife
+          RABBITMQ_DEFAULT_PASS: petlife_dev
         ports:
           - 5672:5672
 
@@ -243,8 +246,8 @@ jobs:
           SPRING_JPA_HIBERNATE_DDL_AUTO: update
           SPRING_RABBITMQ_HOST: 127.0.0.1
           SPRING_RABBITMQ_PORT: 5672
-          SPRING_RABBITMQ_USERNAME: guest
-          SPRING_RABBITMQ_PASSWORD: guest
+          SPRING_RABBITMQ_USERNAME: petlife
+          SPRING_RABBITMQ_PASSWORD: petlife_dev
           SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP: false
           SPRING_RABBITMQ_LISTENER_DIRECT_AUTO_STARTUP: false
           REDIS_URL: redis://127.0.0.1:6379
