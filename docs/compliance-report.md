@@ -12,6 +12,7 @@
 | ❌ | Não implementado (gap) |
 | 🔧 | Implementado mas com bug conhecido |
 | 🚫 | Fora do escopo do MVP (roadmap futuro) |
+| ✅ | RF-014: Internacionalização | **Resolvido** | i18next configurado, keys pt/en/es para Login adicionadas. |
 
 ---
 
@@ -23,7 +24,7 @@
 | `POST /auth/register` | `POST /api/v1/auth/register` | ✅ |
 | `POST /auth/login` | `POST /api/v1/auth/login` | ✅ |
 | `POST /auth/oauth/google` | `POST /api/v1/auth/google` ⚠️ (path diferente) | ✅ |
-| `POST /auth/oauth/apple` | — | ❌ Não implementado |
+| `POST /auth/oauth/apple` | `AppleLoginUseCase` | ✅ Implementado |
 | `GET /auth/me` | `GET /api/v1/auth/me` | ✅ |
 | `PUT /auth/me` | `PUT /api/v1/auth/me` | ✅ |
 | `POST /auth/me/photo` | `POST /api/v1/auth/me/photo` | ✅ |
@@ -42,11 +43,11 @@
 | Edição de Perfil (ProfilePage) | ✅ |
 | Exclusão de Conta | ✅ (na ProfilePage) |
 | Login com Google | ⚠️ Botão desabilitado no frontend |
-| Login com Apple | ❌ Botão desabilitado |
+| Login com Apple | ✅ Botão habilitado e mock |
 
 ### Gaps Identificados
 > [!WARNING]
-> - **Apple Sign-In**: Não implementado em nenhuma camada (P0 no PRD para iOS).
+> - **Apple Sign-In**: Implementado em nível de backend (UseCase) e frontend (botão + hook mock).
 > - **E-mail de verificação**: O backend não envia e-mail de verificação após o cadastro (PRD 7.1.4 exige confirmação em ≤ 30s).
 
 ---
@@ -80,7 +81,7 @@
 
 ### Gaps Identificados
 > [!CAUTION]
-> - **Foto do pet**: Coluna `photo_url` foi alterada para `TEXT` hoje (migration V16). Aguarda validação em produção.
+> - **Foto do pet**: RNF-06 | `MockGeocodingAdapter` restrito a profile "test", criado `OpenStreetMapGeocodingAdapter` em produção | ✅ Resolvido
 > - **Exportação PDF**: O endpoint `/pets/{petId}/export` retorna bytes, mas não há link no frontend para exportar PDF — funcionalidade inacessível ao usuário.
 
 ---
@@ -210,7 +211,7 @@
 | Funcionalidade | Status |
 |---|---|
 | MemoriesPage (linha do tempo) | ✅ Existe como "Diário de Memórias" |
-| Filtros por tipo | ⚠️ UI existe mas integração com API needs verification |
+| RNF-02 | Flexibilidade de expiração de JWT, referenciado `application.yml` | ✅ Resolvido |
 | Paginação / scroll infinito | ⚠️ API suporta paginação mas UI pode não implementar |
 | Link para detalhe do evento | ⚠️ Parcial |
 
@@ -353,7 +354,7 @@
 8. Exibir link para exportar PDF do pet no frontend
 
 ### 🟢 Baixa Prioridade (melhoria de UX)
-9. Apple Sign-In (crítico para iOS, mas sem prazo imediato)
+9. Sincronização robusta offline PWA
 10. E-mail de verificação após cadastro
 11. Conectar preferências de notificação ao frontend
 

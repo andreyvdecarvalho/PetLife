@@ -7,44 +7,62 @@
 ## Objetivo
 Resolver as pendências funcionais, não-funcionais e técnicas restantes mapeadas no backlog do PetLife, deixando o sistema robusto, escalável e dentro dos padrões de Clean Architecture.
 
-## 1. FASE 1 — DB-06: Apple Sign-In (4h)
-### Contexto
-O fluxo de login social previu Google e Apple, mas apenas Google foi finalizado.
-### Solução
-- **Backend**: Implementar `AppleLoginUseCase` e validação do token JWT via JKWS oficial da Apple.
-- **Frontend**: Habilitar o botão de Apple Sign-In na UI e implementar o fluxo OAuth correspondente.
+### Fase 1: Finalizar Apple Sign-In (DB-06)
+**Status**: [X] Concluído
 
-## 2. FASE 2 — RNF-02: JWT Tokens com Configuração Flexível (2h)
-### Contexto
-Algumas configurações de expiração e secrets dos tokens JWT estão *hardcoded* ou pouco maleáveis.
-### Solução
-- **Backend**: Extrair as configurações para o `application.yml` (`jwt.access-token.expiration`, `jwt.refresh-token.expiration`) e injetar via `@Value` ou `@ConfigurationProperties`.
+1. **Backend**:
+   - Criar `AppleOAuthPort` em `domain/port`.
+   - Implementar `AppleOAuthAdapter` validando JWT via chaves públicas da Apple (`https://appleid.apple.com/auth/keys`) ou via Nimbus JOSE + JWT.
+   - Criar `AppleLoginUseCase` injetando porta do Apple e de User.
+   - Adicionar endpoint `POST /auth/oauth/apple` no `AuthController`.
 
-## 3. FASE 3 — RNF-06: Substituição do MockGeocodingAdapter (3h)
-### Contexto
-Atualmente, a aplicação usa `MockGeocodingAdapter` em produção.
-### Solução
-- **Backend**: Criar um `GoogleMapsGeocodingAdapter` (ou OpenStreetMapAdapter) implementando a porta `GeocodingPort` e usar profiles (`@Profile("!test")`) para ativá-lo em produção.
+2. **Frontend**:
+   - Implementar `useAppleLogin` hook.
+   - Adicionar botão de "Continuar com Apple" na UI do Login e Register.
+   - Integrar no fluxo de OAuth do AuthContext.
 
-## 4. FASE 4 — RNF-08: Suporte a Modo Offline PWA (6h)
-### Contexto
-Requisito RF-012 não atendido: O web app não possui modo offline real.
-### Solução
-- **Frontend**: Instalar e configurar o `vite-plugin-pwa`.
-- **Frontend**: Configurar estratégias de cache (Stale-while-revalidate) para chamadas de API de leitura (ex: listar pets) e *background sync* para operações de escrita.
+---
 
-## 5. FASE 5 — RNF-09: Internacionalização - I18n (4h)
-### Contexto
-Requisito RF-014 não atendido: O aplicativo suporta apenas português.
-### Solução
-- **Frontend**: Integrar `i18next` e `react-i18next`.
-- Criar arquivos de tradução (PT-BR, EN-US e ES) e abstrair strings visuais.
+### Fase 2: Flexibilização dos JWT Tokens (RNF-02)
+**Status**: [X] Concluído
 
-## 6. FASE 6 — DT-01: Correção do NotificationScheduler (2h)
-### Contexto
-`NotificationScheduler` injeta e usa o `JpaRepository` diretamente, burlando as regras de Clean Architecture.
-### Solução
-- **Backend**: Criar um ou mais Use Cases (`GetPendingNotificationsUseCase`, `ProcessNotificationUseCase`) no domínio e atualizar o Scheduler para utilizá-los, mantendo o Core agnóstico a banco de dados.
+- Mover configurações *hardcoded* de tempo de expiração do `JwtService` e de Refresh Token para variáveis no `application.yml`.
+- Referenciar variáveis de ambiente: `JWT_ACCESS_TOKEN_EXPIRATION_MINUTES`, `JWT_REFRESH_TOKEN_EXPIRATION_DAYS`.
+
+---
+
+### Fase 3: Substituição do MockGeocodingAdapter em Produção (RNF-06)
+**Status**: [X] Concluído
+
+- Adicionar anotação `@Profile("test")` no atual `MockGeocodingAdapter`.
+- Criar `OpenStreetMapGeocodingAdapter` ou `GoogleMapsGeocodingAdapter` (com anotação `@Profile("!test")`).
+- Implementar chamada real de API de Geocoding (ex: Nominatim do OSM não exige apiKey para requests de baixo volume).
+
+---
+
+### Fase 4: Modo Offline da PWA (RNF-08)
+**Status**: [X] Concluído
+
+- Adicionar dependência `vite-plugin-pwa` no frontend.
+- Configurar Service Worker no `vite.config.ts` com estratégias de cache `NetworkFirst` (API) e `CacheFirst` (assets estáticos).
+
+---
+
+### Fase 5: Internacionalização / I18n (RNF-09)
+**Status**: [X] Concluído
+
+- Adicionar `i18next` e `react-i18next`.
+- Prover *dictionaries* básicos para pt-BR, en-US e es-ES (foco primário em fluxo de Auth e NavBar).
+- Criar Hook `useLanguage` ou plugar no Context.
+
+---
+
+### Fase 6: Correção do NotificationScheduler (DT-01)
+**Status**: [X] Concluído
+
+- Criar `ProcessPendingEventsUseCase` no domínio de *Notification*.
+- Orquestrar a injeção das portas do Domínio de Pet, Vaccination e Medication diretamente nesse UseCase em vez de injetá-las no Scheduler (camada de infraestrutura).
+- Alterar o `NotificationScheduler` para chamar `processPendingEventsUseCase.checkUpcomingEvents()` e etc.
 
 ---
 *SDD-005 criado pela Antigravity AI — 28/07/2026*

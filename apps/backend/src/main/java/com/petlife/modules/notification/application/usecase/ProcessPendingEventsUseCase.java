@@ -1,0 +1,134 @@
+package com.petlife.modules.notification.application.usecase;
+
+import com.petlife.modules.medication.application.port.MedicationAdministrationRepositoryPort;
+import com.petlife.modules.medication.domain.entity.MedicationAdministration;
+import com.petlife.modules.medication.domain.entity.MedicationAdministrationStatus;
+import com.petlife.modules.notification.domain.entity.NotificationType;
+import com.petlife.modules.notification.infrastructure.dto.NotificationPayload;
+import com.petlife.modules.pet.application.port.ConsultationRepositoryPort;
+import com.petlife.modules.pet.application.port.GroomingRepositoryPort;
+import com.petlife.modules.pet.application.port.PetRepositoryPort;
+import com.petlife.modules.pet.application.port.VaccinationPort;
+import com.petlife.modules.pet.domain.entity.Consultation;
+import com.petlife.modules.pet.domain.entity.Grooming;
+import com.petlife.modules.pet.domain.entity.Vaccination;
+import com.petlife.modules.pet.domain.entity.Pet;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.List;
+
+@RequiredArgsConstructor
+@Slf4j
+public class ProcessPendingEventsUseCase {
+
+    private final VaccinationPort vaccinationRepository;
+    private final ConsultationRepositoryPort consultationRepository;
+    private final GroomingRepositoryPort groomingRepository;
+    private final MedicationAdministrationRepositoryPort administrationRepository;
+    private final PetRepositoryPort petRepository;
+    private final EnqueueNotificationUseCase enqueueNotificationUseCase;
+
+    public void checkUpcomingEvents() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Vaccination> vaccines = vaccinationRepository.findByReminderActiveTrueAndNextDoseDate(tomorrow);
+        for (Vaccination vac : vaccines) {
+            if (vac.getPet() != null && vac.getPet().getUser() != null) {
+                NotificationPayload payload = new NotificationPayload(
+                        vac.getPet().getUser().getId(),
+                        NotificationType.VACCINATION_DUE,
+                        "Lembrete de Vacina",
+                        "A vacina " + vac.getVaccineName() + " para o pet "
+                                + vac.getPet().getName() + " está agendada para amanhã.",
+                        vac.getId()
+                );
+                enqueueNotificationUseCase.execute(payload);
+            }
+        }
+
+        OffsetDateTime now = OffsetDateTime.now();
+        OffsetDateTime endOfTomorrow = now.plusDays(1);
+        List<Consultation> consultations = consultationRepository.findByDateBetween(now, endOfTomorrow);
+        for (Consultation con : consultations) {
+            if (con.getPet() != null && con.getPet().getUser() != null) {
+                NotificationPayload payload = new NotificationPayload(
+                        con.getPet().getUser().getId(),
+                        NotificationType.CONSULTATION_REMINDER,
+                        "Lembrete de Consulta",
+                        "A consulta do pet " + con.getPet().getName() + " é amanhã.",
+                        con.getId()
+                );
+                enqueueNotificationUseCase.execute(payload);
+            }
+        }
+
+        List<Consultation> followUps = consultationRepository.findByFollowUpDate(tomorrow);
+        for (Consultation con : followUps) {
+            if (con.getPet() != null && con.getPet().getUser() != null) {
+                NotificationPayload payload = new NotificationPayload(
+                        con.getPet().getUser().getId(),
+                        NotificationType.CONSULTATION_FOLLOWUP,
+                        "Retorno de Consulta",
+                        "O retorno da consulta do pet " + con.getPet().getName() + " está agendado para amanhã.",
+                        con.getId()
+                );
+                enqueueNotificationUseCase.execute(payload);
+            }
+        }
+
+        List<Grooming> groomings = groomingRepository.findByNextDate(tomorrow);
+        for (Grooming gro : groomings) {
+            if (gro.getPet() != null && gro.getPet().getUser() != null) {
+                NotificationPayload payload = new NotificationPayload(
+                        gro.getPet().getUser().getId(),
+                        NotificationType.GROOMING_REMINDER,
+                        "Lembrete de Banho & Tosa",
+                        "O banho/tosa do pet " + gro.getPet().getName() + " está agendada para amanhã.",
+                        gro.getId()
+                );
+                enqueueNotificationUseCase.execute(payload);
+            }
+        }
+    }
+
+    public void checkLateMedications() {
+        OffsetDateTime now = OffsetDateTime.now();
+        List<MedicationAdministration> lateAdmin = administrationRepository
+                .findByStatusAndScheduledTimeBefore(MedicationAdministrationStatus.PENDING, now);
+
+        for (MedicationAdministration admin : lateAdmin) {
+            if (admin.getPetOwnerId() != null) {
+                NotificationPayload payload = new NotificationPayload(
+                        admin.getPetOwnerId(),
+                        NotificationType.MEDICATION_LATE,
+                        "Medicamento Atrasado",
+                        "A dose do medicamento " + admin.getMedicationName()
+                                + " está atrasada.",
+                        admin.getId()
+                );
+                enqueueNotificationUseCase.execute(payload);
+            }
+        }
+    }
+
+    public void checkPetBirthdays() {
+        LocalDate today = LocalDate.now();
+        List<Pet> pets = petRepository.findPetsByBirthday(today.getMonthValue(), today.getDayOfMonth());
+
+        for (Pet pet : pets) {
+            if (pet.getUser() != null) {
+                NotificationPayload payload = new NotificationPayload(
+                        pet.getUser().getId(),
+                        NotificationType.PET_BIRTHDAY,
+                        "Feliz Aniversário!",
+                        "Parabéns para o pet " + pet.getName() + " pelo seu aniversário hoje!",
+                        pet.getId()
+                );
+                enqueueNotificationUseCase.execute(payload);
+            }
+        }
+    }
+}

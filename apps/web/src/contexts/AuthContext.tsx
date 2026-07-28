@@ -3,6 +3,7 @@ import type { UserResponse, UpdateProfileData } from '../infrastructure/http/aut
 import { useLogin } from '../application/auth/useLogin';
 import { useRegister } from '../application/auth/useRegister';
 import { useGoogleLogin } from '../application/auth/useGoogleLogin';
+import { useAppleLogin } from '../application/auth/useAppleLogin';
 import { useLogout } from '../application/auth/useLogout';
 import { useSession } from '../application/auth/useSession';
 import { useUpdateProfile } from '../application/user/useUpdateProfile';
@@ -18,6 +19,7 @@ interface AuthContextData {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: (idToken: string) => Promise<void>;
+  loginWithApple: (idToken: string, email?: string, name?: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   updateProfile: (data: UpdateProfileData, photoFile?: File) => Promise<void>;
@@ -42,6 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { login: loginUseCase } = useLogin();
   const { register: registerUseCase } = useRegister();
   const { loginWithGoogle: googleLoginUseCase } = useGoogleLogin();
+  const { loginWithApple: appleLoginUseCase } = useAppleLogin();
   const { logout: logoutUseCase } = useLogout(clearUser);
   const { updateProfile: updateProfileUseCase } = useUpdateProfile();
   const { deleteAccount: deleteAccountUseCase } = useDeleteAccount(clearUser);
@@ -66,6 +69,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userProfile);
   }, [googleLoginUseCase, setUser]);
 
+  const loginWithApple = useCallback(async (idToken: string, email?: string, name?: string) => {
+    const userProfile = await appleLoginUseCase(idToken, email, name);
+    setUser(userProfile);
+  }, [appleLoginUseCase, setUser]);
+
   const updateProfile = useCallback(async (data: UpdateProfileData, photoFile?: File) => {
     const updatedUser = await updateProfileUseCase(data, photoFile);
     setUser(updatedUser);
@@ -79,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: user !== null,
         login,
         loginWithGoogle,
+        loginWithApple,
         register,
         logout: logoutUseCase,
         updateProfile,

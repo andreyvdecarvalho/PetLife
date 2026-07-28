@@ -4,6 +4,8 @@ import com.petlife.modules.auth.application.usecase.DeleteUserAccountUseCase;
 import com.petlife.modules.auth.application.usecase.ForgotPasswordUseCase;
 import com.petlife.modules.auth.application.usecase.GetUserProfileUseCase;
 import com.petlife.modules.auth.application.usecase.LoginUserUseCase;
+import com.petlife.modules.auth.application.dto.AppleLoginRequest;
+import com.petlife.modules.auth.application.usecase.AppleLoginUseCase;
 import com.petlife.modules.auth.application.usecase.LoginWithGoogleUseCase;
 import com.petlife.modules.auth.application.usecase.RegisterUserUseCase;
 import com.petlife.modules.auth.application.usecase.ResetPasswordUseCase;
@@ -55,6 +57,7 @@ public class AuthController {
     private final RegisterUserUseCase registerUserUseCase;
     private final LoginUserUseCase loginUserUseCase;
     private final LoginWithGoogleUseCase loginWithGoogleUseCase;
+    private final AppleLoginUseCase appleLoginUseCase;
     private final ForgotPasswordUseCase forgotPasswordUseCase;
     private final ResetPasswordUseCase resetPasswordUseCase;
     private final GetUserProfileUseCase getUserProfileUseCase;
@@ -88,8 +91,14 @@ public class AuthController {
 
     @PostMapping("/oauth/google")
     @Operation(summary = "Autenticar ou cadastrar tutor via Google OAuth2")
-    public ApiResponse<TokenResponse> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
+    public ApiResponse<TokenResponse> loginWithGoogle(@Valid @RequestBody GoogleLoginRequest request) {
         return ApiResponse.of(loginWithGoogleUseCase.execute(request));
+    }
+
+    @Operation(summary = "Login com Apple", description = "Autentica usuário via token JWT da Apple.")
+    @PostMapping("/oauth/apple")
+    public ApiResponse<TokenResponse> loginWithApple(@Valid @RequestBody AppleLoginRequest request) {
+        return ApiResponse.of(appleLoginUseCase.execute(request));
     }
 
     @PostMapping("/refresh")
