@@ -40,7 +40,7 @@ export const authApi = {
     api.post<{ data: TokenResponse }>('/auth/register', { name, email, password }),
 
   loginWithGoogle: (idToken: string) =>
-    api.post<{ data: TokenResponse }>('/auth/google', { idToken }),
+    api.post<{ data: TokenResponse }>('/auth/oauth/google', { idToken }),
 
   getProfile: () =>
     api.get<{ data: UserResponse }>('/auth/me'),

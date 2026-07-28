@@ -86,7 +86,7 @@ public class AuthController {
         return ApiResponse.of(loginUserUseCase.execute(request));
     }
 
-    @PostMapping("/google")
+    @PostMapping("/oauth/google")
     @Operation(summary = "Autenticar ou cadastrar tutor via Google OAuth2")
     public ApiResponse<TokenResponse> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
         return ApiResponse.of(loginWithGoogleUseCase.execute(request));
