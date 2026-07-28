@@ -39,9 +39,14 @@ public abstract class IntegrationTestBase {
     @SuppressWarnings("all")
     protected static final RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:4.0-alpine");
 
+    @SuppressWarnings("all")
+    protected static final org.testcontainers.containers.GenericContainer<?> redis = new org.testcontainers.containers.GenericContainer<>("redis:7.4.0-alpine")
+            .withExposedPorts(6379);
+
     static {
         postgres.start();
         rabbitmq.start();
+        redis.start();
     }
 
     @DynamicPropertySource
@@ -53,6 +58,9 @@ public abstract class IntegrationTestBase {
         registry.add("spring.flyway.enabled", () -> "true");
         registry.add("spring.rabbitmq.host", rabbitmq::getHost);
         registry.add("spring.rabbitmq.port", rabbitmq::getAmqpPort);
+        registry.add("spring.data.redis.host", redis::getHost);
+        registry.add("spring.data.redis.port", redis::getFirstMappedPort);
+        registry.add("spring.session.store-type", () -> "none"); // Optional: use "redis" if we want to test session persistence
     }
 
     protected MockMvc mockMvc;
