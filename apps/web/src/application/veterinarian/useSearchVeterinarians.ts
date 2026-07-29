@@ -14,8 +14,8 @@ export function useSearchVeterinarians() {
       const result = await veterinarianApi.search(params);
       setData(result);
       return result;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao buscar veterinários.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao buscar veterinários.');
       throw err;
     } finally {
       setLoading(false);

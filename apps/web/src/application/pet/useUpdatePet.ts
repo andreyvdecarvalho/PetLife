@@ -24,7 +24,7 @@ export function useUpdatePet() {
         pet = photoResponse.data.data;
       }
       return pet;
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errMsg = err.response?.data?.error?.message || 'Falha ao atualizar pet e/ou enviar foto.';
       setError(errMsg);
       throw new Error(errMsg);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchVeterinarians } from '../../../application/veterinarian/useSearchVeterinarians';
 import { VetCard } from '../../molecules/VetCard';
+import { Skeleton } from '../../atoms/Skeleton';
 import './styles.css';
 
 export function VetSearchPage() {
@@ -105,7 +106,13 @@ export function VetSearchPage() {
       </section>
 
       {error && <p className="vet-search-page__error">{error}</p>}
-      {loading && <p className="vet-search-page__loading">Buscando veterinários...</p>}
+      {loading && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', padding: 'var(--space-md)' }}>
+          <Skeleton width="100%" height={120} variant="rectangular" />
+          <Skeleton width="100%" height={120} variant="rectangular" />
+          <Skeleton width="100%" height={120} variant="rectangular" />
+        </div>
+      )}
 
       <section className="vet-search-page__results">
         {!loading && !error && filteredData.map(vet => (

@@ -188,3 +188,16 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Variante de perigo — excluir/deletar (DT-02: remove inline style hardcoded) */
+.organism-grooming-form__btn--danger {
+  background-color: var(--color-error);
+  color: var(--color-on-error);
+  border: none;
+}
+
+.organism-grooming-form__btn--danger:hover:not(:disabled) {
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+  box-shadow: 0 4px 12px rgba(186, 26, 26, 0.25);
+}

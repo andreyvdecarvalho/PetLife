@@ -30,7 +30,7 @@ vi.mock('react-router-dom', async () => {
 
 // Mock PetCard
 vi.mock('../../molecules/PetCard', () => ({
-  PetCard: ({ pet, onClick }: any) => (
+  PetCard: ({ pet, onClick }: Record<string, unknown>) => (
     <div data-testid={`pet-card-${pet.id}`} onClick={onClick}>
       {pet.name}
     </div>

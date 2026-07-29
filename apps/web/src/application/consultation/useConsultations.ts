@@ -14,8 +14,8 @@ export function useConsultations(petId: string) {
       setError(null);
       const data = await consultationApi.list(petId);
       setConsultations(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao buscar consultas');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao buscar consultas');
     } finally {
       setLoading(false);
     }
@@ -28,8 +28,8 @@ export function useConsultations(petId: string) {
       const newConsultation = await consultationApi.create(petId, data);
       setConsultations(prev => [newConsultation, ...prev]);
       return newConsultation;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao adicionar consulta');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao adicionar consulta');
       return null;
     } finally {
       setLoading(false);
@@ -43,8 +43,8 @@ export function useConsultations(petId: string) {
       const updated = await consultationApi.uploadAttachments(petId, consultationId, files);
       setConsultations(prev => prev.map(c => c.id === consultationId ? updated : c));
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao enviar anexos');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao enviar anexos');
       return false;
     } finally {
       setLoading(false);
@@ -58,8 +58,8 @@ export function useConsultations(petId: string) {
       const updated = await consultationApi.deleteAttachment(petId, consultationId, index);
       setConsultations(prev => prev.map(c => c.id === consultationId ? updated : c));
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao deletar anexo');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao deletar anexo');
       return false;
     } finally {
       setLoading(false);
@@ -73,8 +73,8 @@ export function useConsultations(petId: string) {
       const updated = await consultationApi.update(petId, consultationId, data);
       setConsultations(prev => prev.map(c => c.id === consultationId ? updated : c));
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar consulta');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar consulta');
       return false;
     } finally {
       setLoading(false);
@@ -88,8 +88,8 @@ export function useConsultations(petId: string) {
       await consultationApi.delete(petId, consultationId);
       setConsultations(prev => prev.filter(c => c.id !== consultationId));
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao deletar consulta');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao deletar consulta');
       return false;
     } finally {
       setLoading(false);

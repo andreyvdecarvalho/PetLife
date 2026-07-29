@@ -22,7 +22,7 @@ export function useGetPets() {
       if (response.data.meta) {
         setMeta(response.data.meta);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errMsg = err.response?.data?.error?.message || 'Falha ao buscar pets.';
       setError(errMsg);
     } finally {

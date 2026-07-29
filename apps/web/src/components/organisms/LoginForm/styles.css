@@ -60,7 +60,7 @@
   overflow: hidden;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 480px) {
   .organism-login-card {
     padding-left: 2.5rem;
     padding-right: 2.5rem;

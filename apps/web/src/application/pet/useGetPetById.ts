@@ -14,7 +14,7 @@ export function useGetPetById(id: string | undefined) {
     try {
       const response = await petApi.getById(id);
       setPet(response.data.data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.response?.data?.error?.message || 'Erro ao carregar dados do pet.');
     } finally {
       setLoading(false);

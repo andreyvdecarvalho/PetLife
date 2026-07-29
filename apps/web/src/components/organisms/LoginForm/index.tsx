@@ -19,12 +19,12 @@ export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoogleLogin = async () => {
-    // TODO: Integrar Google OAuth SDK real (tarefa separada)
+    console.log('Login com Google clicado');
     console.warn('[PetLife] Login com Google ainda não implementado. Integração com SDK real pendente.');
   };
 
   const handleAppleLogin = async () => {
-    // TODO: Integrar Apple JS SDK real (tarefa separada)
+    console.log('Login com Apple clicado');
     console.warn('[PetLife] Login com Apple ainda não implementado. Integração com SDK real pendente.');
   };
 
@@ -55,7 +55,7 @@ export const LoginForm: React.FC = () => {
       await login(email, password);
       showToast('Login realizado com sucesso! ✨', 'success');
       navigate('/');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       const message = error.response?.data?.error?.message || 'E-mail ou senha incorretos.';
       showToast(message, 'error');

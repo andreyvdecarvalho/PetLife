@@ -14,8 +14,8 @@ export function useGetVetProfile() {
       const data = await veterinarianApi.getProfile(id);
       setVet(data);
       return data;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao carregar perfil do veterinário.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao carregar perfil do veterinário.');
       throw err;
     } finally {
       setLoading(false);

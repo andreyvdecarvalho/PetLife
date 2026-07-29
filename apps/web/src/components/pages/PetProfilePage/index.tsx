@@ -11,6 +11,7 @@ import { useDeletePet } from '../../../application/pet/useDeletePet';
 import { useToast } from '../../molecules/Toast';
 import { useAuth } from '../../../contexts/AuthContext';
 import type { TimelineEventType } from '../../../domain/pet/Timeline';
+import { Skeleton } from '../../atoms/Skeleton';
 import './styles.css';
 
 const FILTER_OPTIONS = [
@@ -27,7 +28,7 @@ export const PetProfilePageContent: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'history' | 'vaccines' | 'medications'>('history');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedConsultation, setSelectedConsultation] = useState<any | null>(null);
+  const [selectedConsultation, setSelectedConsultation] = useState<unknown | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<TimelineEventType[] | null>(null);
   const [page, setPage] = useState(0);
 
@@ -116,11 +117,11 @@ export const PetProfilePageContent: React.FC = () => {
     }
   };
 
-  const handleEventClick = async (event: any) => {
+  const handleEventClick = async (event: { id?: string; type: string }) => {
     if (event.type === 'CONSULTATION' && event.id && id) {
       try {
         const list = await consultationApi.list(id);
-        const found = list.find((c: any) => c.id === event.id);
+        const found = list.find((c: { id: string }) => c.id === event.id);
         if (found) {
           setSelectedConsultation(found);
           setIsModalOpen(true);
@@ -149,8 +150,26 @@ export const PetProfilePageContent: React.FC = () => {
 
   if (loadingPet) {
     return (
-      <div className="pet-profile animate-fade-in" style={{ display: 'flex', justifyContent: 'center', padding: '48px' }}>
-        <p>Carregando perfil do pet...</p>
+      <div className="pet-profile animate-fade-in" style={{ padding: 'var(--space-lg)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-xl)' }}>
+          <Skeleton width={120} height={32} />
+          <Skeleton width={80} height={32} />
+        </div>
+        <div className="pet-profile__grid">
+          <aside className="pet-profile__aside" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+            <Skeleton width="100%" height={300} variant="rectangular" />
+            <Skeleton width="100%" height={80} variant="rectangular" />
+            <Skeleton width="100%" height={48} variant="rectangular" borderRadius="var(--radius-full)" />
+          </aside>
+          <section className="pet-profile__content">
+            <Skeleton width="100%" height={48} variant="rectangular" />
+            <div style={{ marginTop: 'var(--space-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+              <Skeleton width="100%" height={120} variant="rectangular" />
+              <Skeleton width="100%" height={120} variant="rectangular" />
+              <Skeleton width="100%" height={120} variant="rectangular" />
+            </div>
+          </section>
+        </div>
       </div>
     );
   }
@@ -363,9 +382,10 @@ export const PetProfilePageContent: React.FC = () => {
 
           <div className="pet-profile__timeline">
             {activeTab === 'history' && isLoading && page === 0 && (
-              <div className="pet-profile__empty-tab">
-                <span className="material-symbols-outlined className='animate-spin'">sync</span>
-                <p>Carregando registros...</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                <Skeleton width="100%" height={120} variant="rectangular" />
+                <Skeleton width="100%" height={120} variant="rectangular" />
+                <Skeleton width="100%" height={120} variant="rectangular" />
               </div>
             )}
 

@@ -26,7 +26,7 @@ export function useTimeline() {
         setEvents(fetchedEvents);
       }
       setHasMore(fetchedEvents.length === size);
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errMsg = err.response?.data?.error?.message || 'Falha ao carregar linha do tempo.';
       setError(errMsg);
     } finally {

@@ -11,8 +11,8 @@ export function useVeterinarianProfile() {
     setError(null);
     try {
       return await veterinarianApi.createProfile(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao criar perfil');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao criar perfil');
       throw err;
     } finally {
       setLoading(false);
@@ -24,8 +24,8 @@ export function useVeterinarianProfile() {
     setError(null);
     try {
       return await veterinarianApi.getMyProfile();
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao obter perfil.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao obter perfil.');
       throw err;
     } finally {
       setLoading(false);
@@ -37,8 +37,8 @@ export function useVeterinarianProfile() {
     setError(null);
     try {
       return await veterinarianApi.updateProfile(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar perfil.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar perfil.');
       throw err;
     } finally {
       setLoading(false);
@@ -49,8 +49,8 @@ export function useVeterinarianProfile() {
     setLoading(true);
     try {
       await veterinarianApi.updateAvailability(status);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar disponibilidade.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar disponibilidade.');
       throw err;
     } finally {
       setLoading(false);
@@ -61,8 +61,8 @@ export function useVeterinarianProfile() {
     setLoading(true);
     try {
       await veterinarianApi.updateEmergency(emergencyOnDuty);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar plantão.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar plantão.');
       throw err;
     } finally {
       setLoading(false);

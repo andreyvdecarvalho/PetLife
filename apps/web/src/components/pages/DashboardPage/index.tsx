@@ -6,6 +6,7 @@ import { PetCard } from '../../molecules/PetCard';
 import { WeightChart } from '../../organisms/WeightChart';
 import { useGetPets } from '../../../application/pet/useGetPets';
 import type { Pet } from '../../../domain/pet/Pet';
+import { Skeleton } from '../../atoms/Skeleton';
 import './styles.css';
 import { usePetWeightHistory } from '../../../application/pet/usePetWeightHistory';
 
@@ -94,9 +95,11 @@ export const DashboardPageContent: React.FC = () => {
       <section className="dashboard-page__pets-section">
         <div className="dashboard-page__pets-scroll no-scrollbar">
           {isLoading && (
-            <span className="dashboard-page__loading-text" style={{ padding: '10px 20px', color: 'var(--color-on-surface-variant)' }}>
-              Carregando pets...
-            </span>
+            <div style={{ display: 'flex', gap: 'var(--space-md)', padding: '0 var(--space-md)' }}>
+              <Skeleton width={120} height={140} borderRadius="var(--radius-lg)" variant="rectangular" />
+              <Skeleton width={120} height={140} borderRadius="var(--radius-lg)" variant="rectangular" />
+              <Skeleton width={120} height={140} borderRadius="var(--radius-lg)" variant="rectangular" />
+            </div>
           )}
 
           {!isLoading && pets.map(pet => (
@@ -287,8 +290,8 @@ export const DashboardPageContent: React.FC = () => {
             {/* Chart */}
             <div className="dashboard-page__chart-container">
               {weightLoading ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '160px', color: 'var(--color-on-surface-variant)' }}>
-                  Carregando histórico...
+                <div style={{ padding: 'var(--space-md)' }}>
+                  <Skeleton width="100%" height={160} variant="rectangular" />
                 </div>
               ) : weightError ? (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '160px', color: 'var(--color-error)' }}>

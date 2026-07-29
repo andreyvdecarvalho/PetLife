@@ -12,7 +12,7 @@ export function useMedications(petId: string) {
     if (!petId) return;
     setLoading(true); setError(null);
     try { setMedications(await medicationApi.listMedications(petId)); }
-    catch (err: any) { setError(err.response?.data?.message || 'Erro ao buscar medicamentos'); }
+    catch (err: unknown) { setError((err as any).response?.data?.message || 'Erro ao buscar medicamentos'); }
     finally { setLoading(false); }
   }, [petId]);
 
@@ -20,7 +20,7 @@ export function useMedications(petId: string) {
     if (!petId) return;
     setLoading(true); setError(null);
     try { setAdherence(await medicationApi.getAdherence(petId)); }
-    catch (err: any) { setError(err.response?.data?.message || 'Erro ao buscar aderência'); }
+    catch (err: unknown) { setError((err as any).response?.data?.message || 'Erro ao buscar aderência'); }
     finally { setLoading(false); }
   }, [petId]);
 
@@ -31,8 +31,8 @@ export function useMedications(petId: string) {
       await fetchMedications();
       await fetchAdherence();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || errorMsg);
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || errorMsg);
       return false;
     } finally { setLoading(false); }
   };

@@ -18,7 +18,7 @@ export function useExportMedicalPass() {
       const blob = response.data;
       downloadBlob(blob, `prontuario_${petId}.pdf`);
       return true;
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err.response?.data instanceof Blob && err.response.data.type === 'application/json') {
         const text = await err.response.data.text();
         try {

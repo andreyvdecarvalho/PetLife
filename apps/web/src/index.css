@@ -4,6 +4,12 @@
 
 :root {
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Breakpoints como referência (usados em media queries) */
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
 }
 
 /* Reset Global */
@@ -53,6 +59,35 @@ button {
   font-family: var(--font-label);
 }
 
+/* ============================================
+   ACESSIBILIDADE — Focus Visible (WCAG 2.4.7)
+   Outline visível apenas para navegação por teclado
+   ============================================ */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Focus-visible específico para botões com border-radius-full */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 3px;
+  border-radius: var(--radius-full);
+}
+
+/* Focus-visible para links de navegação */
+a:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 input, select, textarea {
   font-family: var(--font-body);
   outline: none;
@@ -100,4 +135,34 @@ input, select, textarea {
 
 .animate-fade-in {
   animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================
+   ACESSIBILIDADE — Prefers Reduced Motion (WCAG 2.3.3)
+   Remove/reduz animações para usuários sensíveis
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVIDADE — Utilitários Desktop (1024px+)
+   ============================================ */
+@media (min-width: 1024px) {
+  body {
+    font-size: var(--text-body-md-size);
+  }
 }

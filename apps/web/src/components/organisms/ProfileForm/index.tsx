@@ -103,7 +103,7 @@ export const ProfileForm: React.FC = () => {
         timezone,
       }, photoFile || undefined);
       showToast('Perfil atualizado com sucesso! ✨', 'success');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       const message = error.response?.data?.error?.message || 'Erro ao atualizar perfil.';
       showToast(message, 'error');
@@ -118,7 +118,7 @@ export const ProfileForm: React.FC = () => {
       await deleteAccount();
       showToast('Sua conta foi excluída com sucesso.', 'success');
       // Redireciona automaticamente via context/AuthContext
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       showToast('Erro ao excluir conta. Tente novamente.', 'error');
     } finally {

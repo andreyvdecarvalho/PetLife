@@ -451,7 +451,7 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
                               }
                               await updateWeight(record.id, Number(editWeightValue), new Date(editWeightDate).toISOString());
                               setEditingWeightId(null);
-                            } catch (err: any) {
+                            } catch (err: unknown) {
                               alert(err.message);
                             }
                           }}
@@ -499,7 +499,7 @@ export const PetForm: React.FC<PetFormProps> = ({ pet, onSuccess, onCancel }) =>
                             if (window.confirm('Excluir este registro de peso?')) {
                               try {
                                 await deleteWeight(record.id);
-                              } catch (err: any) {
+                              } catch (err: unknown) {
                                 alert(err.message);
                               }
                             }

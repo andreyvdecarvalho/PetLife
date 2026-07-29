@@ -5,7 +5,7 @@ import React from 'react';
 
 // Mock the hook dependencies
 vi.mock('../../../application/grooming/useGroomingForm', () => ({
-  useGroomingForm: ({ initialValues, onSubmit }: any) => {
+  useGroomingForm: ({ initialValues, onSubmit }: Record<string, unknown>) => {
     return {
       type: initialValues?.type || 'BATH',
       setType: vi.fn(),
@@ -21,7 +21,7 @@ vi.mock('../../../application/grooming/useGroomingForm', () => ({
       setNotes: vi.fn(),
       errors: {},
       isSubmitting: false,
-      handleSubmit: (e: any) => {
+      handleSubmit: (e: Record<string, unknown>) => {
         e.preventDefault();
         onSubmit({
           type: initialValues?.type || 'BATH',

@@ -2,16 +2,17 @@
   background-color: var(--color-surface-container-lowest);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
-  padding: 16px;
+  border: 1px solid var(--color-surface-variant);
+  padding: var(--space-sm);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-xs);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .vet-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-modal);
 }
 
 .vet-card__header {
@@ -25,7 +26,7 @@
   height: 56px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: #F1F5F9;
+  background-color: var(--color-surface-container-low);
 }
 
 .vet-card__info {
@@ -44,7 +45,7 @@
 .vet-card__crmv {
   font-family: var(--font-headline);
   font-size: var(--text-label-md-size);
-  color: #64748B;
+  color: var(--color-on-surface-variant);
   margin: 0;
 }
 
@@ -58,18 +59,18 @@
   font-family: var(--font-headline);
   font-size: var(--text-label-sm-size);
   padding: 4px 8px;
-  background-color: #F1F5F9;
-  color: #475569;
-  border-radius: 12px;
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface-variant);
+  border-radius: var(--radius-full);
 }
 
 .vet-card__status {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
-  border-top: 1px solid #E2E8F0;
-  padding-top: 12px;
+  margin-top: var(--space-xs);
+  border-top: 1px solid var(--color-outline-variant);
+  padding-top: var(--space-xs);
 }
 
 .vet-card__availability {
@@ -79,11 +80,11 @@
 }
 
 .vet-card__availability--available {
-  color: #10B981;
+  color: var(--color-tertiary);
 }
 
 .vet-card__availability--unavailable {
-  color: #EF4444;
+  color: var(--color-error);
 }
 
 .vet-card__emergency-badge {
@@ -92,6 +93,6 @@
   font-size: var(--text-label-sm-size);
   padding: 4px 8px;
   background-color: var(--color-error-container);
-  color: #DC2626;
-  border-radius: 4px;
+  color: var(--color-on-error-container);
+  border-radius: var(--radius-sm);
 }

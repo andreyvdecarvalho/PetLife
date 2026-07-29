@@ -19,7 +19,7 @@ vi.mock('../../molecules/Toast', () => ({
 }));
 
 vi.mock('../../organisms/PetForm', () => ({
-  PetForm: ({ onSuccess, onCancel }: any) => (
+  PetForm: ({ onSuccess, onCancel }: Record<string, unknown>) => (
     <div data-testid="mock-pet-form">
       <button onClick={onSuccess}>Simulate Success</button>
       <button onClick={onCancel}>Simulate Cancel</button>

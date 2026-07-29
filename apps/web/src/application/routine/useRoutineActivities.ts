@@ -15,8 +15,8 @@ export function useRoutineActivities(petId: string) {
       setError(null);
       const data = await routineApi.fetchActivities(petId, date);
       setActivities(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao buscar atividades');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao buscar atividades');
     } finally {
       setLoading(false);
     }
@@ -29,8 +29,8 @@ export function useRoutineActivities(petId: string) {
       const newActivity = await routineApi.addActivity(petId, data);
       setActivities(prev => [...prev, newActivity].sort((a, b) => a.activityTime.localeCompare(b.activityTime)));
       return newActivity;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao criar atividade');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao criar atividade');
       return null;
     } finally {
       setLoading(false);
@@ -44,8 +44,8 @@ export function useRoutineActivities(petId: string) {
       const updatedActivity = await routineApi.updateStatus(id, status);
       setActivities(prev => prev.map(a => a.id === id ? updatedActivity : a));
       return updatedActivity;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar status da atividade');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar status da atividade');
       return null;
     } finally {
       setLoading(false);

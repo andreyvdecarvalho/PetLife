@@ -5,6 +5,7 @@ import { useDeletePet } from '../../../application/pet/useDeletePet';
 import { PetCard } from '../../molecules/PetCard';
 import { Button } from '../../atoms/Button';
 import { useToast } from '../../molecules/Toast';
+import { Pet } from '../../../domain/pet/Pet';
 import './styles.css';
 
 export const PetsPageContent: React.FC = () => {
@@ -18,7 +19,7 @@ export const PetsPageContent: React.FC = () => {
     fetchPets();
   }, [fetchPets]);
 
-  const handleEdit = (pet: any) => {
+  const handleEdit = (pet: Pet) => {
     navigate('/pets/new', { state: { pet } });
   };
 

@@ -43,7 +43,7 @@ export function usePetWeightHistory(petId: string) {
     try {
       await petApi.deleteWeightHistory(petId, weightId);
       setData(prev => prev.filter(w => w.id !== weightId));
-    } catch (err: any) {
+    } catch (err: unknown) {
       throw new Error(err.response?.data?.error?.message || 'Failed to delete weight record.');
     }
   };
@@ -52,7 +52,7 @@ export function usePetWeightHistory(petId: string) {
     try {
       await petApi.updateWeightHistory(petId, weightId, { weightKg, recordedAt });
       fetchHistory(); // Refresh to get sorted data
-    } catch (err: any) {
+    } catch (err: unknown) {
       throw new Error(err.response?.data?.error?.message || 'Failed to update weight record.');
     }
   };

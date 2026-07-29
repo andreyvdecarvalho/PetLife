@@ -1,27 +1,28 @@
 .organism-consultation-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--space-md);
   width: 100%;
 }
 
 .organism-consultation-form__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
 }
 
-@media (max-width: 768px) {
+/* Mobile-first: 2 colunas a partir de 768px */
+@media (min-width: 768px) {
   .organism-consultation-form__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 .organism-consultation-form__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-md);
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 
 .organism-consultation-form__actions button {
