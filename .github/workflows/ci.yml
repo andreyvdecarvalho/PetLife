@@ -239,7 +239,7 @@ jobs:
           nohup java -jar target/petlife-backend-1.0.0.jar --server.port=8080 > backend.log 2>&1 &
           sleep 5
         env:
-          SPRING_PROFILES_ACTIVE: test
+          SPRING_PROFILES_ACTIVE: test,e2e
           SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/petlife_test
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres

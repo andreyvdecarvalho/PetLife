@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("test")
+@Profile("e2e")
 public class MockAppleOAuthAdapter implements AppleOAuthPort {
     @Override
     public AppleUserInfo getAppleUserInfo(String idToken) {
