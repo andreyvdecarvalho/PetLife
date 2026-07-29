@@ -14,7 +14,7 @@ export const useNotificationPreferences = () => {
     try {
       const response = await notificationApi.getPreferences();
       setPreferences(response.data.data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Erro ao carregar preferências.');
     } finally {
       setIsLoading(false);
@@ -29,7 +29,7 @@ export const useNotificationPreferences = () => {
         const response = await notificationApi.updatePreferences(newPrefs);
         setPreferences(response.data.data);
         return true;
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError(err.message || 'Erro ao salvar preferências.');
         return false;
       } finally {
@@ -42,7 +42,7 @@ export const useNotificationPreferences = () => {
   const registerToken = useCallback(async (token: string) => {
     try {
       await notificationApi.registerDeviceToken(token);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Falha ao registrar token do dispositivo:', err);
     }
   }, []);

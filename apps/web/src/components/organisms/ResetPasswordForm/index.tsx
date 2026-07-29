@@ -44,7 +44,7 @@ export const ResetPasswordForm: React.FC = () => {
       await authApi.resetPassword(token, password);
       showToast('Senha redefinida com sucesso! ✨', 'success');
       navigate('/login');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       const message = err.response?.data?.error?.message || 'Token inválido ou expirado.';
       showToast(message, 'error');

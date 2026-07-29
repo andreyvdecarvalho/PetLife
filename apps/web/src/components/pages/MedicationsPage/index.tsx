@@ -6,6 +6,7 @@ import { useMedications } from '../../../application/medications/useMedications'
 import type { MedicationFrequency, MedicationAdministration } from '../../../domain/pet/Medication';
 import { FormField } from '../../molecules/FormField';
 import { Button } from '../../atoms/Button';
+import { Skeleton } from '../../atoms/Skeleton';
 import './styles.css';
 
 const AdherenceCircle: React.FC<{ rate: number }> = ({ rate }) => {
@@ -39,7 +40,7 @@ export const MedicationsPage: React.FC = () => {
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
 
   const {
-    medications, adherence, fetchMedications, fetchAdherence,
+    medications, adherence, loading, fetchMedications, fetchAdherence,
     createMedication, updateMedication, updateAdministration, stopMedication
   } = useMedications(selectedPetId || '');
 
@@ -183,7 +184,13 @@ export const MedicationsPage: React.FC = () => {
             </span>
           </div>
           <div className="medications-page__list">
-            {activeMedications.map(m => (
+            {loading && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                <Skeleton width="100%" height={120} variant="rectangular" />
+                <Skeleton width="100%" height={120} variant="rectangular" />
+              </div>
+            )}
+            {!loading && activeMedications.map(m => (
               <article key={m.id} className="medications-page__card">
                 <div className="medications-page__card-accent medications-page__card-accent--secondary"></div>
                 <div className="medications-page__card-header">
@@ -215,7 +222,14 @@ export const MedicationsPage: React.FC = () => {
         <section className="medications-page__section">
           <h2 className="medications-page__section-title">Próximas Doses</h2>
           <div className="medications-page__list">
-            {pendingOrRecentDoses.filter(d => d.status === 'PENDING' || d.status === 'LATE').map(dose => (
+            {loading && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+                <Skeleton width="100%" height={60} variant="rectangular" />
+                <Skeleton width="100%" height={60} variant="rectangular" />
+                <Skeleton width="100%" height={60} variant="rectangular" />
+              </div>
+            )}
+            {!loading && pendingOrRecentDoses.filter(d => d.status === 'PENDING' || d.status === 'LATE').map(dose => (
               <div key={dose.id} className="medications-page__dose-item">
                 <div className="medications-page__dose-info">
                   <p>{dose.medicationName}</p>

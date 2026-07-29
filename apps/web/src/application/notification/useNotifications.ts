@@ -14,7 +14,7 @@ export const useNotifications = () => {
       const response = await notificationApi.getNotifications(page);
       const data = response.data.data || [];
       setNotifications(prev => (page === 0 ? data : [...prev, ...data]));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Erro ao carregar notificações');
     } finally {
       setIsLoading(false);
@@ -27,7 +27,7 @@ export const useNotifications = () => {
       setNotifications(prev =>
         prev.map(n => (n.id === id ? { ...n, read: true } : n))
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
     }
   }, []);
@@ -36,7 +36,7 @@ export const useNotifications = () => {
     try {
       await notificationApi.markAllAsRead();
       setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
     }
   }, []);

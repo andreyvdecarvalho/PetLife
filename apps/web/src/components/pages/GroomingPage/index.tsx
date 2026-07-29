@@ -109,7 +109,7 @@ export const GroomingPageContent: React.FC = () => {
   };
 
   const handleFormSuccess = async (
-    values: any,
+    values: Record<string, unknown>,
     beforeFile: File | null,
     afterFile: File | null
   ) => {

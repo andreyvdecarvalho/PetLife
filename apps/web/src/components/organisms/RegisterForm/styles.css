@@ -108,7 +108,7 @@
   width: 1rem;
   height: 1rem;
   color: var(--color-primary);
-  background-color: #F1F5F9;
+  background-color: var(--color-surface-container-low);
   border: 1px solid var(--color-outline-variant);
   border-radius: var(--radius-sm, 0.25rem);
   cursor: pointer;

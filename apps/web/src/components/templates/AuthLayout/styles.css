@@ -10,16 +10,20 @@
   font-family: var(--font-body);
 }
 
-@media (min-width: 640px) {
+/* Smartphones médios e grandes (480px+) */
+@media (min-width: 480px) {
   .template-auth-layout {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
   }
 }
 
+/* Desktop (1024px+) — formulário centralizado com max-width */
 @media (min-width: 1024px) {
   .template-auth-layout {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    justify-content: center;
+    padding-top: var(--space-xl);
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
   }
 }

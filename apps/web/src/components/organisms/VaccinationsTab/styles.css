@@ -28,7 +28,7 @@
   color: var(--color-error-container);
   font-size: var(--text-label-md-size);
   padding: 12px;
-  background-color: #ffebee;
+  background-color: var(--color-error-container);
   border-radius: var(--radius-xl, 12px);
 }
 

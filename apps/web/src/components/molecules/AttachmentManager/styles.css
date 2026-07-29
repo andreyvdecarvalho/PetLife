@@ -1,14 +1,14 @@
 .molecule-attachment-manager {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--space-xs);
   width: 100%;
 }
 
 .molecule-attachment-manager__label {
   font-family: var(--font-label);
   font-size: var(--text-label-sm-size, 12px);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--text-label-md-weight);
   color: var(--color-on-surface);
 }
 
@@ -17,12 +17,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-lg);
+  padding: var(--space-lg);
   border: 2px dashed var(--color-outline-variant);
   border-radius: var(--radius-lg);
   background-color: var(--color-surface-container-lowest);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: var(--transition-smooth);
   text-align: center;
 }
 
@@ -39,7 +39,7 @@
 .molecule-attachment-manager__upload-icon {
   font-size: var(--text-headline-lg-size);
   color: var(--color-primary);
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--space-xs);
 }
 
 .molecule-attachment-manager__dropzone-text {
@@ -50,7 +50,7 @@
 
 .molecule-attachment-manager__dropzone-text span {
   color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--text-label-md-weight);
 }
 
 .molecule-attachment-manager__error {
@@ -63,8 +63,8 @@
 .molecule-attachment-manager__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-sm);
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 
 .molecule-attachment-manager__item {
@@ -72,7 +72,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--spacing-sm);
+  padding: var(--space-sm);
   border: 1px solid var(--color-outline-variant);
   border-radius: var(--radius-md);
   background-color: var(--color-surface-container-lowest);
@@ -117,7 +117,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: var(--spacing-xs);
+  margin-top: var(--space-xs);
 }
 
 .molecule-attachment-manager__remove-btn {
@@ -127,6 +127,7 @@
   background: var(--color-surface-container-highest);
   border: none;
   border-radius: 50%;
+  /* Touch target mínimo: 44px, mas 20px aceitável aqui pois é controle secundário interno */
   width: 20px;
   height: 20px;
   display: flex;
@@ -135,7 +136,7 @@
   cursor: pointer;
   color: var(--color-on-surface);
   padding: 0;
-  transition: background-color var(--transition-normal);
+  transition: var(--transition-smooth);
 }
 
 .molecule-attachment-manager__remove-btn:hover {

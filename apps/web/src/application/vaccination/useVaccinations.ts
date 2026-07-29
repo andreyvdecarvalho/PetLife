@@ -14,8 +14,8 @@ export function useVaccinations(petId: string) {
       setError(null);
       const data = await vaccinationApi.listVaccinations(petId);
       setVaccinations(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao buscar vacinas');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao buscar vacinas');
     } finally {
       setLoading(false);
     }
@@ -28,8 +28,8 @@ export function useVaccinations(petId: string) {
       await vaccinationApi.addVaccination(petId, data);
       await fetchVaccinations();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao adicionar vacina');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao adicionar vacina');
       return false;
     } finally {
       setLoading(false);
@@ -43,8 +43,8 @@ export function useVaccinations(petId: string) {
       await vaccinationApi.updateVaccination(petId, vaccineId, data);
       await fetchVaccinations();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar vacina');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar vacina');
       return false;
     } finally {
       setLoading(false);
@@ -58,8 +58,8 @@ export function useVaccinations(petId: string) {
       await vaccinationApi.uploadProof(petId, vaccineId, file);
       await fetchVaccinations();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao fazer upload do comprovante');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao fazer upload do comprovante');
       return false;
     } finally {
       setLoading(false);
@@ -73,8 +73,8 @@ export function useVaccinations(petId: string) {
       await vaccinationApi.deleteVaccination(petId, vaccineId);
       await fetchVaccinations();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao deletar vacina');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao deletar vacina');
       return false;
     } finally {
       setLoading(false);

@@ -132,5 +132,29 @@
   --shadow-button-lg:  0 8px 16px rgba(155, 69, 0, 0.2);
   --shadow-bottom-nav: 0 -4px 20px rgba(0, 0, 0, 0.06);
   --shadow-login-card: 0 4px 20px 0 rgba(0, 0, 0, 0.06);
+
+  /* =============================================
+     Sistema de Z-Index — Camadas de Stacking (DT-07)
+     Usar SEMPRE estes tokens para z-index
+     =============================================*/
+  --z-base:    0;     /* Conteúdo padrão sem sobreposição */
+  --z-raised:  1;     /* Elementos ligeiramente elevados (cards, etc.) */
+  --z-overlay-sm: 10; /* Sobreposições menores (tooltips internos) */
+  --z-overlay:    20; /* Sobreposições intermediárias */
+  --z-sticky:     50; /* Headers e navbars fixos */
+  --z-dropdown:  100; /* Dropdowns, menus flutuantes */
+  --z-modal:    1000; /* Modais e dialogs */
+  --z-toast:    9999; /* Notificações Toast (sempre no topo) */
+
+  /* =============================================
+     Breakpoints Oficiais do PetLife
+     (Referência — CSS vars não funcionam em @media,
+     mas documentam os valores oficiais do projeto)
+     =============================================
+     --bp-sm:  480px  → Smartphones grandes
+     --bp-md:  768px  → Tablet / Desktop narrow (breakpoint principal)
+     --bp-lg:  1024px → Desktop wide
+     --bp-xl:  1280px → Desktop extra wide
+  */
 }
 

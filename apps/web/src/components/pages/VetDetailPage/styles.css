@@ -1,11 +1,11 @@
 .vet-detail-page {
-  padding: var(--spacing-4);
+  padding: var(--space-sm);
   max-width: 800px;
   margin: 0 auto;
 }
 
 .vet-detail-page__header {
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-sm);
 
   max-width: var(--max-width);
   margin-left: auto;
@@ -16,25 +16,35 @@
 .vet-detail-page__content {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6);
+  gap: var(--space-md);
 }
 
 .vet-detail-page__profile-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--color-surface);
-  padding: var(--spacing-6);
+  background: var(--color-surface-container-lowest);
+  padding: var(--space-md);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-surface-variant);
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .vet-detail-page__profile-card {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
 }
 
 .vet-detail-page__photo, .vet-detail-page__photo-placeholder {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-sm);
   object-fit: cover;
 }
 
@@ -43,27 +53,27 @@
 }
 
 .vet-detail-page__name {
-  font-family: var(--font-family-heading);
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-md-size);
+  font-weight: var(--text-headline-md-weight);
   color: var(--color-on-surface);
-  margin-bottom: var(--spacing-1);
+  margin-bottom: var(--space-base);
 }
 
 .vet-detail-page__crmv {
-  color: var(--color-outline);
+  color: var(--color-on-surface-variant);
   font-size: var(--text-label-sm-size, 12px);
-  margin-bottom: var(--spacing-3);
+  margin-bottom: var(--space-xs);
 }
 
 .vet-detail-page__status {
   display: flex;
-  gap: var(--spacing-2);
+  gap: var(--space-xs);
   justify-content: center;
 }
 
 .vet-detail-page__availability {
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: var(--space-base) var(--space-xs);
   border-radius: var(--radius-sm);
   font-size: var(--text-label-sm-size);
   font-weight: 600;
@@ -82,31 +92,32 @@
 .vet-detail-page__emergency {
   background-color: var(--color-error);
   color: var(--color-on-error);
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: var(--space-base) var(--space-xs);
   border-radius: var(--radius-sm);
   font-size: var(--text-label-sm-size);
   font-weight: 600;
 }
 
 .vet-detail-page__info {
-  background: var(--color-surface);
-  padding: var(--spacing-6);
+  background: var(--color-surface-container-lowest);
+  padding: var(--space-md);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-surface-variant);
 }
 
 .vet-detail-page__section {
-  margin-bottom: var(--spacing-6);
+  margin-bottom: var(--space-md);
 }
 
 .vet-detail-page__section h3 {
-  font-family: var(--font-family-heading);
+  font-family: var(--font-headline);
   font-size: var(--text-body-lg-size, 18px);
   font-weight: 600;
   color: var(--color-on-surface);
-  margin-bottom: var(--spacing-2);
+  margin-bottom: var(--space-xs);
   border-bottom: 1px solid var(--color-outline-variant);
-  padding-bottom: var(--spacing-1);
+  padding-bottom: var(--space-base);
 }
 
 .vet-detail-page__section p {
@@ -117,20 +128,20 @@
 .vet-detail-page__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: var(--space-xs);
 }
 
 .vet-detail-page__chip {
   background-color: var(--color-surface-container-highest);
   color: var(--color-on-surface);
-  padding: 4px 12px;
-  border-radius: 16px;
+  padding: var(--space-base) var(--space-xs);
+  border-radius: var(--radius-full);
   font-size: var(--text-label-sm-size, 12px);
   font-weight: 500;
 }
 
 .vet-detail-page__loading, .vet-detail-page__error {
   text-align: center;
-  padding: var(--spacing-8);
+  padding: var(--space-lg);
   color: var(--color-on-surface);
 }

@@ -37,7 +37,7 @@ export const ForgotPasswordForm: React.FC = () => {
       await authApi.forgotPassword(email);
       setIsSuccess(true);
       showToast('Solicitação processada com sucesso! ✨', 'success');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       showToast('Ocorreu um erro ao processar. Tente novamente.', 'error');
     } finally {

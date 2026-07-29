@@ -17,7 +17,7 @@ export function useUpdatePetStatus() {
     try {
       const response = await petApi.updateStatus(id, status);
       return response.data.data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errMsg = err.response?.data?.error?.message || 'Falha ao atualizar status do pet.';
       setError(errMsg);
       throw new Error(errMsg);

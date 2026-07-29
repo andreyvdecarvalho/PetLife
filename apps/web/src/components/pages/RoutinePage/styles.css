@@ -261,7 +261,7 @@
   margin-top: var(--space-md);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 480px) {
   .routine-page__actions-grid {
     grid-template-columns: 1fr 1fr;
   }

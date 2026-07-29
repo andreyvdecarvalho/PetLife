@@ -93,7 +93,7 @@
   bottom: 10px;
   padding: 4px 8px;
   background-color: rgba(0, 0, 0, 0.6);
-  color: #ffffff;
+  color: var(--color-on-primary);
   font-family: var(--font-label, sans-serif);
   font-size: var(--text-label-sm-size, 12px);
   font-weight: var(--text-label-sm-weight, 500);

@@ -27,7 +27,7 @@ export function useCreatePet() {
       }
 
       return pet;
-    } catch (err: any) {
+    } catch (err: unknown) {
       const message = err.response?.data?.error?.message || 'Ocorreu um erro ao cadastrar o pet.';
       setError(message);
       throw new Error(message);

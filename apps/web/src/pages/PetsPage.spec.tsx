@@ -4,7 +4,7 @@ import { PetsPage } from './PetsPage';
 import React from 'react';
 
 vi.mock('../components/templates/DashboardLayout', () => ({
-  DashboardLayout: ({ children }: any) => <div data-testid="dashboard-layout">{children}</div>
+  DashboardLayout: ({ children }: Record<string, unknown>) => <div data-testid="dashboard-layout">{children}</div>
 }));
 
 vi.mock('../components/pages/PetsPage', () => ({

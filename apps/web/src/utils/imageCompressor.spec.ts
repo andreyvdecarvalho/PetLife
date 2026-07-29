@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { compressImage } from './imageCompressor';
 
 describe('imageCompressor utility', () => {
-  let originalFileReader: any;
-  let originalImage: any;
-  let originalCreateElement: any;
+  let originalFileReader: unknown;
+  let originalImage: unknown;
+  let originalCreateElement: unknown;
 
   beforeEach(() => {
     originalFileReader = globalThis.FileReader;

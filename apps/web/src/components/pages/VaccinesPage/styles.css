@@ -164,8 +164,8 @@
   bottom: 0;
   width: 6px;
 }
-.vaccines-page__card-accent--vaccine { background: #4caf50; }
-.vaccines-page__card-accent--dewormer { background: #ff9800; }
+.vaccines-page__card-accent--vaccine { background: var(--color-tertiary); }
+.vaccines-page__card-accent--dewormer { background: var(--color-primary-container); }
 
 .vaccines-page__card-header {
   display: flex;

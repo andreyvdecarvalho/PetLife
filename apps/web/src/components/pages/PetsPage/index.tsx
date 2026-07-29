@@ -18,7 +18,7 @@ export const PetsPageContent: React.FC = () => {
     fetchPets();
   }, [fetchPets]);
 
-  const handleEdit = (pet: any) => {
+  const handleEdit = (pet: Pet) => {
     navigate('/pets/new', { state: { pet } });
   };
 

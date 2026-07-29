@@ -7,7 +7,7 @@ vi.mock('recharts', async () => {
   const ActualRecharts = await vi.importActual('recharts');
   return {
     ...ActualRecharts as any,
-    ResponsiveContainer: ({ children }: any) => (
+    ResponsiveContainer: ({ children }: Record<string, unknown>) => (
       <div style={{ width: 800, height: 400 }}>{children}</div>
     ),
   };

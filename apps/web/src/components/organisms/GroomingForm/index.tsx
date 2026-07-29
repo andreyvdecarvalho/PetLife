@@ -296,8 +296,7 @@ export const GroomingForm: React.FC<GroomingFormProps> = ({ grooming, onSuccess,
           <button
             type="button"
             onClick={onDelete}
-            className="organism-grooming-form__btn"
-            style={{ backgroundColor: 'var(--color-error)', color: '#ffffff', border: 'none', borderRadius: '12px', padding: '12px 24px', fontWeight: '600', cursor: 'pointer' }}
+            className="organism-grooming-form__btn organism-grooming-form__btn--danger"
             disabled={isSubmitting}
           >
             Excluir

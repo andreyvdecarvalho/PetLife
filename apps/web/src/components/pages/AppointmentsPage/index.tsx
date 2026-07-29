@@ -5,6 +5,7 @@ import { useGetPets } from '../../../application/pet/useGetPets';
 import { consultationApi } from '../../../infrastructure/http/consultation.api';
 import { vaccinationApi } from '../../../infrastructure/http/vaccination.api';
 import { groomingApi } from '../../../infrastructure/http/grooming.api';
+import { Skeleton } from '../../atoms/Skeleton';
 import './styles.css';
 
 interface ConsolidatedAppointment {
@@ -133,9 +134,10 @@ export const AppointmentsPageContent: React.FC = () => {
 
       <div className="appointments-page__grid">
         {loading ? (
-          <div className="appointments-page__empty">
-            <span className="material-symbols-outlined spin">sync</span>
-            <p>Carregando agendamentos...</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+            <Skeleton width="100%" height={160} variant="rectangular" />
+            <Skeleton width="100%" height={160} variant="rectangular" />
+            <Skeleton width="100%" height={160} variant="rectangular" />
           </div>
         ) : filteredAppointments.length > 0 ? (
           filteredAppointments.map(app => {

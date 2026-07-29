@@ -14,8 +14,8 @@ export function useVetFavorites() {
       const data = await veterinarianApi.listFavorites();
       setFavorites(data);
       return data;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao buscar favoritos.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao buscar favoritos.');
       throw err;
     } finally {
       setLoading(false);
@@ -27,8 +27,8 @@ export function useVetFavorites() {
     setError(null);
     try {
       await veterinarianApi.addFavorite(vetId);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao favoritar.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao favoritar.');
       throw err;
     } finally {
       setLoading(false);
@@ -41,8 +41,8 @@ export function useVetFavorites() {
     try {
       await veterinarianApi.removeFavorite(vetId);
       setFavorites(prev => prev.filter(v => v.id !== vetId));
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao remover favorito.');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao remover favorito.');
       throw err;
     } finally {
       setLoading(false);

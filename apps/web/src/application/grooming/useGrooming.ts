@@ -14,8 +14,8 @@ export function useGrooming(petId: string) {
       setError(null);
       const data = await groomingApi.listGroomings(petId);
       setGroomings(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao buscar serviços de banho e tosa');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao buscar serviços de banho e tosa');
     } finally {
       setLoading(false);
     }
@@ -28,8 +28,8 @@ export function useGrooming(petId: string) {
       const result = await groomingApi.createGrooming(petId, data);
       await fetchGroomings();
       return result;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao adicionar serviço');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao adicionar serviço');
       return null;
     } finally {
       setLoading(false);
@@ -43,8 +43,8 @@ export function useGrooming(petId: string) {
       await groomingApi.updateGrooming(petId, groomingId, data);
       await fetchGroomings();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao atualizar serviço');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao atualizar serviço');
       return false;
     } finally {
       setLoading(false);
@@ -58,8 +58,8 @@ export function useGrooming(petId: string) {
       await groomingApi.uploadPhoto(petId, groomingId, file, type);
       await fetchGroomings();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao fazer upload da foto');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao fazer upload da foto');
       return false;
     } finally {
       setLoading(false);
@@ -73,8 +73,8 @@ export function useGrooming(petId: string) {
       await groomingApi.deleteGrooming(petId, groomingId);
       await fetchGroomings();
       return true;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao deletar banho e tosa');
+    } catch (err: unknown) {
+      setError((err as any).response?.data?.message || 'Erro ao deletar banho e tosa');
       return false;
     } finally {
       setLoading(false);
