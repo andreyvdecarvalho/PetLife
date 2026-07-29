@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("test")
+@Profile("e2e")
 public class MockGoogleOAuthAdapter implements OAuthProviderPort {
     @Override
     public GoogleUserInfo getGoogleUserInfo(String idToken) {
