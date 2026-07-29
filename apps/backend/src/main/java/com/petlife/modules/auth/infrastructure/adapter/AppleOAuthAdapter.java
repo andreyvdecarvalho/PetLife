@@ -5,9 +5,11 @@ import com.petlife.shared.exception.BusinessException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("!test")
 public class AppleOAuthAdapter implements AppleOAuthPort {
 
     private final JwtDecoder jwtDecoder;
