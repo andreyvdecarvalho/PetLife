@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { Input } from './index';
-
 describe('Input', () => {
   it('renders correctly', () => {
     render(<Input placeholder="Enter text" />);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { Button } from './index';
-
 describe('Button', () => {
   it('renders children correctly', () => {
     render(<Button>Click Me</Button>);
