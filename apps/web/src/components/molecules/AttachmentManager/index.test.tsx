@@ -50,8 +50,6 @@ describe('AttachmentManager', () => {
     render(<AttachmentManager files={[]} onFilesChange={mockOnFilesChange} />);
     
     const file = new File(['hello'], 'hello.png', { type: 'image/png' });
-    const input = screen.getByTestId('attachment-input') as HTMLInputElement;
-    // Wait, there is no test ID, I must select by type
     const inputEl = document.querySelector('input[type="file"]') as HTMLInputElement;
     
     fireEvent.change(inputEl, { target: { files: [file] } });
