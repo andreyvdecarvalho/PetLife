@@ -9,7 +9,7 @@ describe('AttachmentManager', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+    window.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
   });
 
   it('renders correctly with no files', () => {
